@@ -54,7 +54,7 @@ async function guard() {
       clearSyncedLocalState();
     }
 
-    const hydration = await hydrateCloudState();
+    const hydration = await hydrateCloudState({ force: userChanged });
     setLastSyncedUserId(userId);
 
     if ((userChanged || hydration.restored) && !alreadyReloaded) {

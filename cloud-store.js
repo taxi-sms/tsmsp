@@ -82,7 +82,18 @@ export function clearSyncedLocalState(prefix = "") {
   restoreLocalStorage({}, prefix);
 }
 
-export async function hydrateCloudState({ prefix = "" } = {}) {
+function hasLocalSyncedKeys(prefix = "") {
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (shouldIncludeKey(key, prefix)) return true;
+  }
+  return false;
+}
+
+export async function hydrateCloudState({ force = false, prefix = "" } = {}) {
+  if (!force && hasLocalSyncedKeys(prefix)) {
+    return { restored: false, reason: "local_data_exists" };
+  }
   const { data, error } = await supabase
     .from("app_state")
     .select("value")
