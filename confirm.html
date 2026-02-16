@@ -306,6 +306,9 @@ a{ color:var(--link); }
       save();
       syncDateSelect();
       render();
+      if(window.tsmsCloud && typeof window.tsmsCloud.backupNow === "function"){
+        window.tsmsCloud.backupNow();
+      }
       return;
     }
 
@@ -351,7 +354,7 @@ a{ color:var(--link); }
 </script>
 
 <script>
-  (function(){if('serviceWorker'in navigator&&location.protocol.indexOf('http')===0){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js?v=20260215-1').catch(function(){});});}})();
+  (function(){if('serviceWorker'in navigator&&location.protocol.indexOf('http')===0){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js?v=20260216-3').catch(function(){});});}})();
 </script>
 
 
