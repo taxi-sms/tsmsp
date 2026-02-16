@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>新規登録</title>
+  <style>
+    :root{ --bg:#F3F6F8; --surface-1:#FFFFFF; --surface-2:#EEF3F6; --border:#D5DEE6; --text-primary:#0F1720; --text-secondary:#344554; --text-muted:#5B6D7C; --accent:#2580ED; --link:#187FBF; }
+    :root[data-theme="dark"]{ --bg:#0F1417; --surface-1:#151C20; --surface-2:#1B242A; --border:#2A353D; --text-primary:#E6EEF3; --text-secondary:#B7C4CC; --text-muted:#8A949A; --accent:#3B95F0; --link:#58C2FF; }
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text-primary);font-family:"Noto Sans JP",sans-serif;}
+    a{color:var(--link);text-decoration:none;}
+    .header{position:sticky;top:0;z-index:20;height:60px;display:flex;align-items:center;padding:0 14px;border-bottom:2px solid var(--border);background:var(--surface-1);font-weight:900;font-size:22px;}
+    .main{padding:12px;max-width:520px;margin:0 auto;}
+    .section{border:2px solid var(--border);background:var(--surface-1);margin:10px 0;padding:10px;}
+    .title{font-weight:900;font-size:18px;margin:0 0 8px;}
+    .muted{font-size:13px;color:var(--text-muted);line-height:1.45;}
+    .field{display:grid;gap:6px;margin:12px 0;}
+    .label{font-size:13px;color:var(--text-muted);}
+    .input{width:100%;box-sizing:border-box;border:2px solid var(--border);padding:12px 10px;font-size:18px;background:var(--surface-2);color:var(--text-primary);}
+    .btn{appearance:none;border:2px solid var(--accent);background:var(--accent);color:#fff;padding:12px 10px;font-size:16px;font-weight:900;width:100%;}
+    .msg{margin-top:12px;border:2px solid var(--border);background:var(--surface-2);padding:10px;white-space:pre-wrap;font-size:14px;line-height:1.45;min-height:44px;}
+    .row{display:flex;gap:12px;margin-top:12px;flex-wrap:wrap;}
+  </style>
+  <meta name="theme-color" content="#ffffff">
+  <script>(function(){try{var t=localStorage.getItem("tsms_theme")==="dark"?"dark":"light";document.documentElement.setAttribute("data-theme",t);var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content",t==="dark"?"#0F1417":"#F3F6F8");}catch(e){}})();</script>
+</head>
+<body>
+  <header class="header">新規登録</header>
+  <main class="main">
+    <section class="section">
+      <h1 class="title">メールアドレスで登録</h1>
+      <div class="muted">登録後、確認メールが届きます。リンクを開いて認証完了後にログインしてください。</div>
+
+      <div class="field">
+        <label class="label" for="email">メール</label>
+        <input id="email" class="input" type="email" autocomplete="email" placeholder="you@example.com" />
+      </div>
+
+      <div class="field">
+        <label class="label" for="password">パスワード（8文字以上推奨）</label>
+        <input id="password" class="input" type="password" autocomplete="new-password" placeholder="********" />
+      </div>
+
+      <button id="btn" class="btn" type="button">登録してメール認証へ</button>
+      <div class="msg" id="msg"></div>
+
+      <div class="row">
+        <a href="./login.html">ログインはこちら</a>
+        <a href="./index.html">戻る</a>
+      </div>
+    </section>
+  </main>
+
+  <script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+    const SUPABASE_URL = "https://gsvehqeywmjqlvuzwvuo.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_PCpsmoo77V5L0YQfT2yKnA_QCEFpARJ";
+
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const $ = (id) => document.getElementById(id);
+    const setMsg = (t) => { $("msg").textContent = t || ""; };
+
+    $("btn").addEventListener("click", async () => {
+      setMsg("");
+      const email = $("email").value.trim();
+      const password = $("password").value;
+
+      if (!email || !password) return setMsg("メールとパスワードを入力してね。");
+
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: new URL("auth-callback.html", location.href).toString()
+        }
+      });
+
+      if (error) return setMsg("エラー: " + error.message);
+
+      setMsg("登録OK。\n確認メールを開いて認証してから、ログインしてください。");
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>設定</title>
+  <style>
+    :root{ --bg:#fff; --text:#111; --muted:#666; --border:#999; }
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
+      font-family:"Noto Sans JP", sans-serif;
+      font-size:18px;
+    }
+    .main{padding:12px;max-width:880px;margin:0 auto;}
+    .section{border:2px solid var(--border);background:#fff;margin:10px 0;padding:10px;}
+    .title{font-weight:900;font-size:16px;margin:0 0 8px 0;}
+    .note{font-size:12px;color:var(--muted);line-height:1.35;margin:6px 0 10px 0;}
+    .field{display:grid;gap:6px;margin-bottom:10px;}
+    .label{font-size:13px;color:var(--muted);}
+    .input{width:100%;box-sizing:border-box;border:2px solid var(--border);border-radius:0;padding:12px 10px;font-size:18px;background:#fff;}
+    .actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+    .btn{appearance:none;-webkit-appearance:none;border:2px solid var(--border);background:#fff;border-radius:0;padding:12px 8px;font-size:16px;min-height:52px;font-weight:900;}
+
+/* ---- TSMS Hamburger Menu (overlay) ---- */
+.tsms-header{
+  position:sticky; top:0; z-index:100;
+  height:60px; background:#fff;
+  border-bottom:2px solid #000;
+  display:flex; align-items:center;
+  padding:0 14px 0 56px;
+  font-weight:900; font-size:20px;
+}
+.header-to-report{
+  margin-left:auto;
+  border:2px solid #000;
+  padding:6px 10px;
+  font-size:14px;
+  font-weight:900;
+  color:#000;
+  text-decoration:none;
+  line-height:1.2;
+  background:#fff;
+}
+.tsms-hamburger{
+  position:absolute; left:14px; top:50%;
+  transform:translateY(-50%);
+  width:32px; height:24px;
+  display:flex; flex-direction:column; justify-content:space-between;
+  cursor:pointer; user-select:none;
+}
+.tsms-hamburger span{ height:3px; background:#000; display:block; }
+.tsms-menu{
+  position:fixed; top:0; left:0; height:100%; width:280px;
+  background:#fff; border-right:2px solid #000;
+  transform:translateX(-100%);
+  transition:transform .25s ease;
+  z-index:1000; padding-top:60px;
+}
+.tsms-menu.open{ transform:translateX(0); }
+.tsms-menu a{
+  display:block; padding:16px;
+  border-bottom:1px solid #ddd;
+  text-decoration:none; color:#000;
+  font-size:18px; font-weight:900;
+}
+.tsms-menu small{ display:block; margin-top:2px; font-size:12px; font-weight:700; color:#666; }
+.tsms-menu-bg{
+  position:fixed; inset:0;
+  background:rgba(0,0,0,.25);
+  opacity:0; pointer-events:none;
+  transition:opacity .2s ease;
+  z-index:900;
+}
+.tsms-menu-bg.show{ opacity:1; pointer-events:auto; }
+/* -------------------------------------- */
+/* ---- Theme tokens ---- */
+:root{
+  --bg:#F3F6F8;
+  --surface-1:#FFFFFF;
+  --surface-2:#EEF3F6;
+  --border:#D5DEE6;
+  --text-primary:#0F1720;
+  --text-secondary:#344554;
+  --text-muted:#5B6D7C;
+  --accent:#2580ED;
+  --accent-hover:#4DA3FF;
+  --link:#187FBF;
+}
+:root[data-theme="dark"]{
+  --bg:#0F1417;
+  --surface-1:#151C20;
+  --surface-2:#1B242A;
+  --border:#2A353D;
+  --text-primary:#E6EEF3;
+  --text-secondary:#B7C4CC;
+  --text-muted:#8A949A;
+  --accent:#3B95F0;
+  --accent-hover:#4DA3FF;
+  --link:#58C2FF;
+}
+html,body{ background:var(--bg)!important; color:var(--text-primary)!important; }
+a{ color:var(--link); }
+.tsms-header,.header,.app-header,.card,.wf-panel,.section,.date-switcher,.menu,.tsms-menu,.box{background:var(--surface-1)!important;border-color:var(--border)!important;color:var(--text-primary)!important;}
+.note,.wf-field-label,.label,.k,.idx,.desc,.wf-subnote,.wf-field-label{color:var(--text-muted)!important;}
+.tsms-menu a,.menu a,.header-to-report,.btn,.actionBtn,.key,.input,select,.key.small{background:var(--surface-2)!important;color:var(--text-primary)!important;border-color:var(--border)!important;}
+.menu small,.tsms-menu small{color:var(--text-muted)!important;}
+.btn.next{background:var(--accent)!important;border-color:var(--accent)!important;color:#fff!important;}
+.menu-bg,.tsms-menu-bg{background:rgba(15,23,32,.35)!important;}
+
+.hamburger span,.tsms-hamburger span{background:#58C2FF!important;}
+/* ---- Theme tokens end ---- */
+
+</style>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="TSMS">
+  <script>(function(){try{var t=localStorage.getItem("tsms_theme")==="dark"?"dark":"light";document.documentElement.setAttribute("data-theme",t);var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content",t==="dark"?"#0F1417":"#F3F6F8");}catch(e){}})();</script>
+
+<style id="tsms-bottom-nav-style">
+  body{padding-bottom:78px;}
+  .tsms-hamburger,.hamburger,.tsms-menu,.menu,.tsms-menu-bg,.menu-bg{display:none!important;}
+  .tsms-header,.header{padding-left:14px!important;}
+  .tsms-header::before,.header::before{content:"";display:inline-block;width:22px;height:22px;flex:0 0 22px;margin-right:8px;background:url('icon.png') center/contain no-repeat;}
+  .tsms-bottom-nav{position:fixed;left:0;right:0;bottom:0;z-index:1200;display:grid;grid-template-columns:repeat(5,1fr);background:var(--surface-1,#fff);border-top:2px solid var(--border,#ccc);padding-bottom:env(safe-area-inset-bottom);}
+  .tsms-bottom-nav a,.tsms-bottom-nav button{appearance:none;border:0;background:transparent;color:var(--text-secondary,#445);font:inherit;font-size:11px;font-weight:900;padding:8px 2px 9px;min-height:58px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-decoration:none;}
+  .tsms-bottom-nav .ico{width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;color:#58C2FF;}
+  .tsms-bottom-nav .ico svg{width:22px;height:22px;stroke:#58C2FF;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;display:block;}
+  .tsms-bottom-nav .active{color:var(--text-primary,#111);position:relative;}
+  .tsms-bottom-nav .active::before{content:"";position:absolute;top:0;left:14%;right:14%;height:2px;background:#58C2FF;}
+  .tsms-more-sheet{position:fixed;left:0;right:0;bottom:0;z-index:1300;background:var(--surface-1,#fff);border-top:2px solid var(--border,#ccc);transform:translateY(110%);transition:transform .2s ease;padding:12px 12px calc(12px + env(safe-area-inset-bottom));}
+  .tsms-more-sheet.show{transform:translateY(0);}
+  .tsms-more-sheet a{display:block;padding:12px;border:2px solid var(--border,#ccc);margin-top:8px;text-decoration:none;color:var(--text-primary,#111);background:var(--surface-2,#f5f5f5);font-weight:900;}
+  .tsms-more-bg{position:fixed;inset:0;background:rgba(0,0,0,.35);opacity:0;pointer-events:none;z-index:1250;transition:opacity .2s;}
+  .tsms-more-bg.show{opacity:1;pointer-events:auto;}
+</style>
+
+  <script type="module" src="auth-guard.js"></script>
+</head>
+<body>
+<nav class="tsms-menu" id="tsmsMenu" aria-label="サイドメニュー">
+  <a href="index.html">TOP<small>メニュー一覧</small></a>
+  <a href="report.html">日報入力<small>乗車データを入力</small></a>
+  <a href="confirm.html">入力確認<small>当日・過去のデータを確認</small></a>
+  <a href="detail.html">詳細確認<small>概算手取、集計結果など</small></a>
+  <a href="ops.html">出庫 / 帰庫 / 休憩<small>休憩タイマーなど</small></a>
+  <a href="sales.html">月間管理<small>当月、過去の売上確認</small></a>
+  <a href="settings.html">設定<small>歩率、締め期間、シフトなど</small></a>
+</nav>
+<div class="tsms-menu-bg" id="tsmsMenuBg" aria-hidden="true"></div>
+
+<header class="tsms-header">
+  <div class="tsms-hamburger" id="tsmsHamburger" role="button" tabindex="0" aria-label="メニュー"><span></span><span></span><span></span></div>
+  設定
+  <a class="header-to-report" href="report.html">入力画面へ</a>
+</header>
+
+<main class="main">
+  <section class="section">
+    <div class="title">歩率・計算設定</div>
+    <div class="note">詳細確認ページの概算計算で使う設定です。</div>
+
+    <div class="field">
+      <div class="label">表示モード</div>
+      <select class="input" id="themeMode">
+        <option value="light">ライトモード（Soft Light）</option>
+        <option value="dark">ダークモード（Soft Dark）</option>
+      </select>
+    </div>
+
+    <div class="field"><div class="label">消費税率（%）</div><input class="input" id="taxRate" inputmode="decimal"></div>
+    <div class="field"><div class="label">決済手数料率（%）</div><input class="input" id="feeRate" inputmode="decimal"></div>
+    <div class="field"><div class="label">GO手配料（円/件）</div><input class="input" id="goFeeYen" inputmode="numeric"></div>
+    <div class="field"><div class="label">歩率（%）</div><input class="input" id="walkRate" inputmode="decimal"></div>
+
+    <div class="actions" style="grid-template-columns:1fr;">
+      <button class="btn" id="btnSaveCalc" type="button">保存して詳細確認へ</button>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="title">締め期間・シフト</div>
+    <div class="note">現状ある分として保存だけ先に作成しています。</div>
+
+    <div class="field"><div class="label">締め開始日（1〜31）</div><input class="input" id="closeStartDay" inputmode="numeric"></div>
+    <div class="field"><div class="label">締め終了日（1〜31）</div><input class="input" id="closeEndDay" inputmode="numeric"></div>
+    <div class="field"><div class="label">シフトメモ</div><input class="input" id="shiftNote"></div>
+
+    <div class="actions">
+      <button class="btn" id="btnSaveShift" type="button">保存して月間管理へ</button>
+      <button class="btn" id="btnReset" type="button">初期値に戻す</button>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="title">バックアップ / 復元</div>
+    <div class="note">端末変更やブラウザデータ削除に備え、JSONファイルでデータを保存・復元できます。</div>
+    <div class="actions">
+      <button class="btn" id="btnExportBackup" type="button">バックアップを保存</button>
+      <button class="btn" id="btnImportBackup" type="button">バックアップから復元</button>
+    </div>
+    <input type="file" id="backupFileInput" accept="application/json,.json" style="display:none">
+  </section>
+
+
+</main>
+
+<script>
+(function(){
+  const KEY = "tsms_settings";
+  const defaults = { taxRate:10, feeRate:4, goFeeYen:100, walkRate:50, closeStartDay:16, closeEndDay:15, shiftNote:"" };
+
+  function load(){
+    try{
+      const x = JSON.parse(localStorage.getItem(KEY) || "null");
+      return Object.assign({}, defaults, (x && typeof x === "object") ? x : {});
+    }catch(_){ return Object.assign({}, defaults); }
+  }
+  function save(v){ localStorage.setItem(KEY, JSON.stringify(v)); }
+
+  const ids = ["themeMode","taxRate","feeRate","goFeeYen","walkRate","closeStartDay","closeEndDay","shiftNote"];
+  const BACKUP_KEYS = ["tsms_reports","ops","tsms_settings","tsms_sales_plan","tsms_report_current_day","tsms_holidays_jp_v1","tsms_theme"];
+  const els = Object.fromEntries(ids.map(id => [id, document.getElementById(id)]));
+
+  function applyTheme(mode){
+    const m = (mode === "dark") ? "dark" : "light";
+    document.documentElement.setAttribute("data-theme", m);
+    const themeMeta = document.querySelector('meta[name="theme-color"]');
+    if(themeMeta) themeMeta.setAttribute("content", m === "dark" ? "#0F1417" : "#F3F6F8");
+    localStorage.setItem("tsms_theme", m);
+  }
+
+  function fill(v){
+    const mode = localStorage.getItem("tsms_theme") || "light";
+    if(els.themeMode) els.themeMode.value = mode;
+    ids.filter(id=>id!=="themeMode").forEach(id => { if(els[id]) els[id].value = String(v[id] ?? ""); });
+  }
+  function values(){
+    const getNum = (id, fallback) => {
+      const el = els[id];
+      const n = Number((((el && el.value) || "") + "").trim());
+      return Number.isFinite(n) ? n : fallback;
+    };
+    const clamp = (v,min,max) => Math.min(max, Math.max(min, v));
+    return {
+      taxRate: clamp(getNum("taxRate", defaults.taxRate), 0, 100),
+      feeRate: clamp(getNum("feeRate", defaults.feeRate), 0, 100),
+      goFeeYen: Math.max(0, Math.round(getNum("goFeeYen", defaults.goFeeYen))),
+      walkRate: clamp(getNum("walkRate", defaults.walkRate), 0, 100),
+      closeStartDay: clamp(Math.round(getNum("closeStartDay", defaults.closeStartDay)), 1, 31),
+      closeEndDay: clamp(Math.round(getNum("closeEndDay", defaults.closeEndDay)), 1, 31),
+      shiftNote: ((((els.shiftNote && els.shiftNote.value) || "") + "").trim())
+    };
+  }
+
+  function persistCurrentSettings(){
+    const v = values();
+    save(v);
+    fill(v);
+    const mode = (els.themeMode && els.themeMode.value) ? els.themeMode.value : (localStorage.getItem("tsms_theme") || "light");
+    applyTheme(mode);
+    return v;
+  }
+
+  function buildBackupPayload(){
+    const data = {};
+    BACKUP_KEYS.forEach((k)=>{
+      const raw = localStorage.getItem(k);
+      if(raw !== null) data[k] = raw;
+    });
+    return {
+      schema: "tsms-backup-v1",
+      exportedAt: new Date().toISOString(),
+      data
+    };
+  }
+
+  function exportBackup(){
+    const payload = buildBackupPayload();
+    const blob = new Blob([JSON.stringify(payload, null, 2)], {type:"application/json"});
+    const a = document.createElement("a");
+    const now = new Date();
+    const stamp = `${now.getFullYear()}${String(now.getMonth()+1).padStart(2,"0")}${String(now.getDate()).padStart(2,"0")}-${String(now.getHours()).padStart(2,"0")}${String(now.getMinutes()).padStart(2,"0")}`;
+    a.href = URL.createObjectURL(blob);
+    a.download = `tsms-backup-${stamp}.json`;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 0);
+  }
+  function loadSupabaseConfig(){
+    try{
+      const raw = JSON.parse(localStorage.getItem(SUPABASE_KEY) || "null");
+      const cfg = (raw && typeof raw === "object") ? raw : {};
+      return {
+        url: String(cfg.url || "https://gsvehqeywmjqlvuzwvuo.supabase.co").trim(),
+        anonKey: sanitizeHeaderToken(cfg.anonKey || "sb_publishable_PCpsmoo77V5L0YQfT2yKnA_QCEFpARJ"),
+        deviceId: String(cfg.deviceId || uid()).trim()
+      };
+    }catch(_){
+      return { url:"https://gsvehqeywmjqlvuzwvuo.supabase.co", anonKey:"sb_publishable_PCpsmoo77V5L0YQfT2yKnA_QCEFpARJ", deviceId:uid() };
+    }
+    BACKUP_KEYS.forEach((k)=>{
+      if(Object.prototype.hasOwnProperty.call(payload.data, k)){
+        localStorage.setItem(k, String(payload.data[k]));
+      }
+    });
+    fill(load());
+    const mode = localStorage.getItem("tsms_theme") || "light";
+    applyTheme(mode);
+    if(els.themeMode) els.themeMode.value = mode;
+  }
+
+  const current = load();
+  fill(current);
+  applyTheme(localStorage.getItem("tsms_theme") || "light");
+  if(els.themeMode){
+    els.themeMode.addEventListener("change", ()=>{
+      applyTheme(els.themeMode.value);
+      save(values());
+    });
+  }
+  const btnSaveCalc = document.getElementById("btnSaveCalc");
+  const btnSaveShift = document.getElementById("btnSaveShift");
+  const btnReset = document.getElementById("btnReset");
+  if(btnSaveCalc) btnSaveCalc.addEventListener("click", ()=>{
+    try{
+      persistCurrentSettings();
+      location.href = "detail.html";
+    }catch(e){
+      alert("保存に失敗しました。入力内容をご確認ください。");
+    }
+  });
+  if(btnSaveShift) btnSaveShift.addEventListener("click", ()=>{
+    try{
+      persistCurrentSettings();
+      location.href = "sales.html";
+    }catch(e){
+      alert("保存に失敗しました。入力内容をご確認ください。");
+    }
+  });
+  if(btnReset) btnReset.addEventListener("click", ()=>{
+    if(!confirm("初期値に戻しますか？")) return;
+    fill(defaults);
+    save(defaults);
+    applyTheme("light");
+    if(els.themeMode) els.themeMode.value = "light";
+  });
+
+  const btnExport = document.getElementById("btnExportBackup");
+  const btnImport = document.getElementById("btnImportBackup");
+  const fileInput = document.getElementById("backupFileInput");
+  if(btnExport) btnExport.addEventListener("click", exportBackup);
+  if(btnImport && fileInput) btnImport.addEventListener("click", ()=> fileInput.click());
+  if(fileInput){
+    fileInput.addEventListener("change", async ()=>{
+      const file = fileInput.files && fileInput.files[0];
+      if(!file) return;
+      try{
+        const text = await file.text();
+        const payload = JSON.parse(text);
+        if(!confirm("バックアップを復元します。現在の保存データを上書きします。よろしいですか？")) return;
+        restoreBackupObject(payload);
+        alert("バックアップを復元しました");
+      }catch(err){
+        alert((err && err.message) ? err.message : "復元に失敗しました");
+      }finally{
+        fileInput.value = "";
+      }
+    });
+    if(!res.ok){
+      const msg = await res.text();
+      throw new Error(`アップロード失敗: ${res.status} ${msg}`);
+    }
+  }
+
+})();
+</script>
+
+<script>
+(function(){
+  const menu = document.getElementById("tsmsMenu");
+  const bg = document.getElementById("tsmsMenuBg");
+  const burger = document.getElementById("tsmsHamburger");
+  if(!menu || !bg || !burger) return;
+  function openMenu(){ menu.classList.add("open"); bg.classList.add("show"); }
+  function closeMenu(){ menu.classList.remove("open"); bg.classList.remove("show"); }
+  burger.addEventListener("click", openMenu);
+  burger.addEventListener("keydown", (e)=>{ if(e.key==="Enter"||e.key===" ") openMenu(); });
+  bg.addEventListener("click", closeMenu);
+  menu.querySelectorAll("a").forEach((a)=>a.addEventListener("click", closeMenu));
+})();
+</script>
+
+<script>
+  (function(){if('serviceWorker' in navigator && location.protocol.indexOf('http')===0){window.addEventListener('load', function(){navigator.serviceWorker.register('./sw.js?v=20260215-1').catch(function(){});});}})();
+</script>
+
+<nav class="tsms-bottom-nav" aria-label="ボトムメニュー">
+  <a href="report.html" data-tab="report"><span class="ico">📝</span><span>日報入力</span></a>
+  <a href="confirm.html" data-tab="confirm"><span class="ico">✅</span><span>入力確認</span></a>
+  <a href="detail.html" data-tab="detail"><span class="ico">📊</span><span>詳細確認</span></a>
+  <a href="ops.html" data-tab="ops"><span class="ico">🚕</span><span>出庫/帰庫</span></a>
+  <button type="button" id="tsmsMoreBtn"><span class="ico">⋯</span><span>その他</span></button>
+</nav>
+<div class="tsms-more-bg" id="tsmsMoreBg"></div>
+<div class="tsms-more-sheet" id="tsmsMoreSheet" aria-label="その他メニュー">
+  <a href="index.html">TOP</a>
+  <a href="sales.html">月間管理</a>
+  <a href="settings.html">設定</a>
+</div>
+<script>
+(function(){
+  var page=(location.pathname.split('/').pop()||'index.html').replace('.html','');
+  document.querySelectorAll('.tsms-bottom-nav [data-tab]').forEach(function(a){
+    if(a.getAttribute('data-tab')===page) a.classList.add('active');
+  });
+  var iconMap={
+    report:'<svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>',
+    confirm:'<svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="m8 12 3 3 5-6"/></svg>',
+    detail:'<svg viewBox="0 0 24 24"><path d="M4 19h16"/><rect x="6" y="10" width="3" height="6"/><rect x="11" y="7" width="3" height="9"/><rect x="16" y="5" width="3" height="11"/></svg>',
+    ops:'<svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="8" rx="2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/><path d="M6 8l2-3h8l2 3"/></svg>',
+    more:'<svg viewBox="0 0 24 24"><circle cx="6" cy="7" r="1.5"/><circle cx="6" cy="12" r="1.5"/><circle cx="6" cy="17" r="1.5"/><path d="M10 7h10M10 12h10M10 17h10"/></svg>'
+  };
+  document.querySelectorAll('.tsms-bottom-nav [data-tab]').forEach(function(a){
+    var k=a.getAttribute('data-tab');
+    var ico=a.querySelector('.ico');
+    if(ico && iconMap[k]) ico.innerHTML=iconMap[k];
+  });
+  var moreIco=document.querySelector('#tsmsMoreBtn .ico');
+  if(moreIco) moreIco.innerHTML=iconMap.more;
+  var btn=document.getElementById('tsmsMoreBtn');
+  var bg=document.getElementById('tsmsMoreBg');
+  var sheet=document.getElementById('tsmsMoreSheet');
+  function closeMore(){sheet.classList.remove('show');bg.classList.remove('show');}
+  if(btn&&bg&&sheet){
+    btn.addEventListener('click',function(){sheet.classList.add('show');bg.classList.add('show');});
+    bg.addEventListener('click',closeMore);
+  }
+  var guard = page==='report';
+  function isDirtyReport(){
+    var cash=document.getElementById('in_cash');
+    var credit=document.getElementById('in_credit');
+    var note=document.getElementById('in_note');
+    var hasVal=((cash&&cash.value)||(credit&&credit.value)||(note&&note.value));
+    var selected=document.querySelector('button[data-group].is-selected');
+    return !!(hasVal||selected);
+  }
+  document.querySelectorAll('.tsms-bottom-nav a, .tsms-more-sheet a').forEach(function(a){
+    a.addEventListener('click',function(e){
+      if(guard && isDirtyReport() && !confirm('入力を中止しますか？')){
+        e.preventDefault();
+      }
+      closeMore();
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
