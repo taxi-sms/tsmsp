@@ -246,6 +246,7 @@ bg.onclick = () => { menu.classList.remove("open"); bg.classList.remove("show");
 
 /* ===== Ops Logic ===== */
 const KEY = "ops";
+const REPORT_KEY = "tsms_reports";
 const CURRENT_DAY_KEY = "tsms_report_current_day";
 
 function nowISO(){ return new Date().toISOString(); }
@@ -440,11 +441,31 @@ btnBreakEnd.onclick = ()=>{
   render();
 };
 
-btnReset.onclick = ()=>{
-  if(!confirm("この日の出庫/帰庫/休憩を全てクリアしますか？")) return;
-  localStorage.removeItem(KEY);
-  localStorage.removeItem(CURRENT_DAY_KEY);
-  render();
+btnReset.onclick = async ()=>{
+  if(!confirm("この日の記録をクラウドへ保存してからクリアします。よろしいですか？")) return;
+
+  btnReset.disabled = true;
+  try{
+    if(window.tsmsCloud && typeof window.tsmsCloud.backupNow === "function") {
+      await window.tsmsCloud.backupNow();
+    }
+
+    if(window.tsmsCloud && typeof window.tsmsCloud.setSyncPaused === "function") {
+      window.tsmsCloud.setSyncPaused(true);
+    }
+    localStorage.removeItem(KEY);
+    localStorage.removeItem(CURRENT_DAY_KEY);
+    localStorage.removeItem(REPORT_KEY);
+    render();
+    alert("この日の記録をクリアしました");
+  }catch(e){
+    alert("クラウド保存に失敗したため、クリアを中止しました");
+  }finally{
+    if(window.tsmsCloud && typeof window.tsmsCloud.setSyncPaused === "function") {
+      window.tsmsCloud.setSyncPaused(false);
+    }
+    btnReset.disabled = false;
+  }
 };
 
 render();

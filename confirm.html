@@ -306,6 +306,9 @@ a{ color:var(--link); }
       save();
       syncDateSelect();
       render();
+      if(window.tsmsCloud && typeof window.tsmsCloud.backupNow === "function"){
+        window.tsmsCloud.backupNow();
+      }
       return;
     }
 
