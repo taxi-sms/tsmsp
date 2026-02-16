@@ -5,6 +5,7 @@ import {
   getLastSyncedUserId,
   hydrateCloudState,
   requestCloudBackup,
+  setCloudSyncPaused,
   setLastSyncedUserId
 } from "./cloud-store.js";
 
@@ -67,7 +68,8 @@ async function guard() {
 
     window.tsmsCloud = {
       backupNow: () => requestCloudBackup({ immediate: true }),
-      backupDebounced: () => requestCloudBackup({ immediate: false })
+      backupDebounced: () => requestCloudBackup({ immediate: false }),
+      setSyncPaused: (paused) => setCloudSyncPaused(paused)
     };
   } catch (_) {
     redirectToLogin();

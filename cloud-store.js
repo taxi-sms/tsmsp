@@ -18,6 +18,7 @@ let debounceTimer = null;
 let inFlight = false;
 let pendingAfterFlight = false;
 let dirtySinceLastBackup = false;
+let syncPaused = false;
 
 function shouldIncludeKey(key, prefix = "") {
   if (!key) return false;
@@ -146,6 +147,10 @@ async function runBackup() {
   }
 }
 
+export function setCloudSyncPaused(paused) {
+  syncPaused = !!paused;
+}
+
 export function requestCloudBackup({ immediate = false } = {}) {
   if (immediate) {
     if (debounceTimer) {
@@ -174,7 +179,7 @@ export function ensureCloudSyncRuntime({ debounce = 5000 } = {}) {
 
   Storage.prototype.setItem = function patchedSetItem(key, value) {
     const result = originalSetItem.call(this, key, value);
-    if (this === localStorage && shouldIncludeKey(String(key || ""))) {
+    if (!syncPaused && this === localStorage && shouldIncludeKey(String(key || ""))) {
       dirtySinceLastBackup = true;
       requestCloudBackup({ immediate: false });
     }
@@ -183,7 +188,7 @@ export function ensureCloudSyncRuntime({ debounce = 5000 } = {}) {
 
   Storage.prototype.removeItem = function patchedRemoveItem(key) {
     const result = originalRemoveItem.call(this, key);
-    if (this === localStorage && shouldIncludeKey(String(key || ""))) {
+    if (!syncPaused && this === localStorage && shouldIncludeKey(String(key || ""))) {
       dirtySinceLastBackup = true;
       requestCloudBackup({ immediate: false });
     }
@@ -193,7 +198,7 @@ export function ensureCloudSyncRuntime({ debounce = 5000 } = {}) {
   Storage.prototype.clear = function patchedClear() {
     const hadAny = SYNC_KEYS.some((k) => this.getItem(k) !== null);
     const result = originalClear.call(this);
-    if (this === localStorage && hadAny) {
+    if (!syncPaused && this === localStorage && hadAny) {
       dirtySinceLastBackup = true;
       requestCloudBackup({ immediate: false });
     }
@@ -201,7 +206,7 @@ export function ensureCloudSyncRuntime({ debounce = 5000 } = {}) {
   };
 
   const flushIfNeeded = () => {
-    if (!dirtySinceLastBackup) return;
+    if (syncPaused || !dirtySinceLastBackup) return;
     requestCloudBackup({ immediate: true });
   };
   window.addEventListener("pagehide", flushIfNeeded);
