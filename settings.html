@@ -288,18 +288,11 @@ a{ color:var(--link); }
     a.click();
     setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 0);
   }
-  function loadSupabaseConfig(){
-    try{
-      const raw = JSON.parse(localStorage.getItem(SUPABASE_KEY) || "null");
-      const cfg = (raw && typeof raw === "object") ? raw : {};
-      return {
-        url: String(cfg.url || "https://gsvehqeywmjqlvuzwvuo.supabase.co").trim(),
-        anonKey: sanitizeHeaderToken(cfg.anonKey || "sb_publishable_PCpsmoo77V5L0YQfT2yKnA_QCEFpARJ"),
-        deviceId: String(cfg.deviceId || uid()).trim()
-      };
-    }catch(_){
-      return { url:"https://gsvehqeywmjqlvuzwvuo.supabase.co", anonKey:"sb_publishable_PCpsmoo77V5L0YQfT2yKnA_QCEFpARJ", deviceId:uid() };
-    }
+  function restoreBackupObject(payload){
+    if(!payload || typeof payload !== "object") throw new Error("バックアップファイルの形式が不正です");
+    if(payload.schema !== "tsms-backup-v1") throw new Error("対応していないバックアップ形式です");
+    if(!payload.data || typeof payload.data !== "object") throw new Error("バックアップデータが見つかりません");
+
     BACKUP_KEYS.forEach((k)=>{
       if(Object.prototype.hasOwnProperty.call(payload.data, k)){
         localStorage.setItem(k, String(payload.data[k]));
@@ -368,10 +361,6 @@ a{ color:var(--link); }
         fileInput.value = "";
       }
     });
-    if(!res.ok){
-      const msg = await res.text();
-      throw new Error(`アップロード失敗: ${res.status} ${msg}`);
-    }
   }
 
 })();
