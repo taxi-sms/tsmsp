@@ -204,6 +204,15 @@ a{ color:var(--link); }
   </section>
 
 
+  <section class="section">
+    <div class="title">クラウドバックアップ / 復元</div>
+    <div class="note">ログイン中のアカウントにlocalStorage内容を保存します。復元後は画面を再読み込みします。</div>
+    <div class="actions">
+      <button class="btn" id="btnCloudBackup" type="button">クラウドへバックアップ</button>
+      <button class="btn" id="btnCloudRestore" type="button">クラウドから復元</button>
+    </div>
+  </section>
+
 </main>
 
 <script>
@@ -288,18 +297,11 @@ a{ color:var(--link); }
     a.click();
     setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 0);
   }
-  function loadSupabaseConfig(){
-    try{
-      const raw = JSON.parse(localStorage.getItem(SUPABASE_KEY) || "null");
-      const cfg = (raw && typeof raw === "object") ? raw : {};
-      return {
-        url: String(cfg.url || "https://gsvehqeywmjqlvuzwvuo.supabase.co").trim(),
-        anonKey: sanitizeHeaderToken(cfg.anonKey || "sb_publishable_PCpsmoo77V5L0YQfT2yKnA_QCEFpARJ"),
-        deviceId: String(cfg.deviceId || uid()).trim()
-      };
-    }catch(_){
-      return { url:"https://gsvehqeywmjqlvuzwvuo.supabase.co", anonKey:"sb_publishable_PCpsmoo77V5L0YQfT2yKnA_QCEFpARJ", deviceId:uid() };
-    }
+  function restoreBackupObject(payload){
+    if(!payload || typeof payload !== "object") throw new Error("バックアップファイルの形式が不正です");
+    if(payload.schema !== "tsms-backup-v1") throw new Error("対応していないバックアップ形式です");
+    if(!payload.data || typeof payload.data !== "object") throw new Error("バックアップデータが見つかりません");
+
     BACKUP_KEYS.forEach((k)=>{
       if(Object.prototype.hasOwnProperty.call(payload.data, k)){
         localStorage.setItem(k, String(payload.data[k]));
@@ -368,10 +370,6 @@ a{ color:var(--link); }
         fileInput.value = "";
       }
     });
-    if(!res.ok){
-      const msg = await res.text();
-      throw new Error(`アップロード失敗: ${res.status} ${msg}`);
-    }
   }
 
 })();
@@ -454,6 +452,46 @@ a{ color:var(--link); }
       closeMore();
     });
   });
+})();
+</script>
+
+
+<script type="module">
+import { cloudBackup, cloudRestore } from "./cloud-store.js";
+
+(function(){
+  const btnCloudBackup = document.getElementById("btnCloudBackup");
+  const btnCloudRestore = document.getElementById("btnCloudRestore");
+
+  if(btnCloudBackup){
+    btnCloudBackup.addEventListener("click", async ()=>{
+      btnCloudBackup.disabled = true;
+      try{
+        await cloudBackup();
+        alert("クラウドへバックアップしました");
+      }catch(err){
+        alert((err && err.message) ? err.message : "クラウドバックアップに失敗しました");
+      }finally{
+        btnCloudBackup.disabled = false;
+      }
+    });
+  }
+
+  if(btnCloudRestore){
+    btnCloudRestore.addEventListener("click", async ()=>{
+      if(!confirm("クラウドから復元します。現在の保存データを上書きします。よろしいですか？")) return;
+      btnCloudRestore.disabled = true;
+      try{
+        await cloudRestore();
+        alert("クラウドから復元しました。画面を再読み込みします");
+        location.reload();
+      }catch(err){
+        alert((err && err.message) ? err.message : "クラウド復元に失敗しました");
+      }finally{
+        btnCloudRestore.disabled = false;
+      }
+    });
+  }
 })();
 </script>
 
