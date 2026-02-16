@@ -1,5 +1,12 @@
 import { loadConfig, supabase } from "./supabase-client.js";
-import { ensureCloudSyncRuntime, requestCloudBackup } from "./cloud-store.js";
+import {
+  clearSyncedLocalState,
+  ensureCloudSyncRuntime,
+  getLastSyncedUserId,
+  hydrateCloudState,
+  requestCloudBackup,
+  setLastSyncedUserId
+} from "./cloud-store.js";
 
 const PUBLIC_PAGES = new Set(["login.html", "signup.html", "auth-callback.html"]);
 
@@ -28,12 +35,35 @@ async function guard() {
 
   try {
     const { data, error } = await supabase.auth.getSession();
-    if (error || !data?.session) {
+    const session = data?.session;
+    const userId = session?.user?.id || "";
+
+    if (error || !session || !userId) {
       redirectToLogin();
       return;
     }
 
     ensureCloudSyncRuntime();
+
+    const reloadMarker = `tsms_hydrated:${userId}:${location.pathname}`;
+    const alreadyReloaded = sessionStorage.getItem(reloadMarker) === "1";
+    const previousUserId = getLastSyncedUserId();
+    const userChanged = !!previousUserId && previousUserId !== userId;
+
+    if (userChanged) {
+      clearSyncedLocalState();
+    }
+
+    const hydration = await hydrateCloudState();
+    setLastSyncedUserId(userId);
+
+    if ((userChanged || hydration.restored) && !alreadyReloaded) {
+      sessionStorage.setItem(reloadMarker, "1");
+      location.reload();
+      return;
+    }
+
+    sessionStorage.removeItem(reloadMarker);
 
     window.tsmsCloud = {
       backupNow: () => requestCloudBackup({ immediate: true }),

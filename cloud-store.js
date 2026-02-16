@@ -1,6 +1,7 @@
 import { supabase } from "./supabase-client.js";
 
 const CLOUD_KEY = "localStorage_dump_v1";
+const LAST_SYNC_USER_KEY = "tsms_last_sync_user_id";
 const SYNC_KEYS = [
   "tsms_reports",
   "ops",
@@ -16,6 +17,7 @@ let debounceMs = 5000;
 let debounceTimer = null;
 let inFlight = false;
 let pendingAfterFlight = false;
+let dirtySinceLastBackup = false;
 
 function shouldIncludeKey(key, prefix = "") {
   if (!key) return false;
@@ -76,6 +78,38 @@ export async function cloudRestore(prefix = "") {
   restoreLocalStorage(data.value, prefix);
 }
 
+export function clearSyncedLocalState(prefix = "") {
+  restoreLocalStorage({}, prefix);
+}
+
+export async function hydrateCloudState({ prefix = "" } = {}) {
+  const { data, error } = await supabase
+    .from("app_state")
+    .select("value")
+    .eq("key", CLOUD_KEY)
+    .maybeSingle();
+
+  if (error) throw error;
+  if (!data?.value || typeof data.value !== "object") {
+    return { restored: false, reason: "cloud_data_missing" };
+  }
+
+  restoreLocalStorage(data.value, prefix);
+  return { restored: true, reason: "restored" };
+}
+
+export function getLastSyncedUserId() {
+  return localStorage.getItem(LAST_SYNC_USER_KEY) || "";
+}
+
+export function setLastSyncedUserId(userId) {
+  if (!userId) {
+    localStorage.removeItem(LAST_SYNC_USER_KEY);
+    return;
+  }
+  localStorage.setItem(LAST_SYNC_USER_KEY, String(userId));
+}
+
 async function runBackup() {
   if (inFlight) {
     pendingAfterFlight = true;
@@ -85,6 +119,7 @@ async function runBackup() {
   inFlight = true;
   try {
     await cloudBackup();
+    dirtySinceLastBackup = false;
   } catch (_) {
     // Non-blocking autosave: silently ignore transient errors.
   } finally {
@@ -129,6 +164,7 @@ export function ensureCloudSyncRuntime({ debounce = 5000 } = {}) {
   Storage.prototype.setItem = function patchedSetItem(key, value) {
     const result = originalSetItem.call(this, key, value);
     if (this === localStorage && shouldIncludeKey(String(key || ""))) {
+      dirtySinceLastBackup = true;
       requestCloudBackup({ immediate: false });
     }
     return result;
@@ -137,6 +173,7 @@ export function ensureCloudSyncRuntime({ debounce = 5000 } = {}) {
   Storage.prototype.removeItem = function patchedRemoveItem(key) {
     const result = originalRemoveItem.call(this, key);
     if (this === localStorage && shouldIncludeKey(String(key || ""))) {
+      dirtySinceLastBackup = true;
       requestCloudBackup({ immediate: false });
     }
     return result;
@@ -146,10 +183,20 @@ export function ensureCloudSyncRuntime({ debounce = 5000 } = {}) {
     const hadAny = SYNC_KEYS.some((k) => this.getItem(k) !== null);
     const result = originalClear.call(this);
     if (this === localStorage && hadAny) {
+      dirtySinceLastBackup = true;
       requestCloudBackup({ immediate: false });
     }
     return result;
   };
+
+  const flushIfNeeded = () => {
+    if (!dirtySinceLastBackup) return;
+    requestCloudBackup({ immediate: true });
+  };
+  window.addEventListener("pagehide", flushIfNeeded);
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") flushIfNeeded();
+  });
 
   autoSyncInstalled = true;
 }
