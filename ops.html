@@ -295,10 +295,21 @@ function defaultData(){
     returnAt: null,
     breakActive: false,
     breakStartAt: null,
-    breakSessions: [] // {start,end,minutes}
+    breakSessions: [], // {start,end,minutes}
+    shiftClosed: false
   };
 }
-function load(){ return safeParse() || defaultData(); }
+function normalizeData(raw){
+  const d = Object.assign(defaultData(), raw || {});
+  d.breakSessions = Array.isArray(d.breakSessions) ? d.breakSessions : [];
+  if(typeof d.shiftClosed !== "boolean") d.shiftClosed = !!d.returnAt;
+  if(d.shiftClosed && d.breakActive){
+    d.breakActive = false;
+    d.breakStartAt = null;
+  }
+  return d;
+}
+function load(){ return normalizeData(safeParse() || defaultData()); }
 
 function calcBreakTotal(d){
   return (d.breakSessions||[]).reduce((s,x)=>s+(Number(x.minutes)||0),0);
@@ -365,20 +376,28 @@ function render(){
   }
 
   // buttons state
-  const departMs = d.departAt ? new Date(d.departAt).getTime() : NaN;
-  const returnMs = d.returnAt ? new Date(d.returnAt).getTime() : NaN;
-  const running = !isNaN(departMs) && (isNaN(returnMs) || departMs >= returnMs);
+  const hasDepart = !!d.departAt;
+  const hasReturn = !!d.returnAt;
+  const running = hasDepart && !hasReturn && !d.shiftClosed;
 
-  btnDepart.disabled = running;
-  btnReturn.disabled = !running;
+  if(d.shiftClosed){
+    btnDepart.disabled = true;
+    btnReturn.disabled = true;
+  } else if(running){
+    btnDepart.disabled = true;
+    btnReturn.disabled = false;
+  } else {
+    btnDepart.disabled = false;
+    btnReturn.disabled = true;
+  }
 
-  btnBreakStart.disabled = d.breakActive;
-  btnBreakEnd.disabled = !d.breakActive;
+  btnBreakStart.disabled = d.shiftClosed || d.breakActive || !running;
+  btnBreakEnd.disabled = d.shiftClosed || !d.breakActive;
 
-  btnDepart.classList.toggle("next", !running);
-  btnReturn.classList.toggle("next", running);
-  btnBreakStart.classList.toggle("next", !d.breakActive);
-  btnBreakEnd.classList.toggle("next", d.breakActive);
+  btnDepart.classList.toggle("next", !btnDepart.disabled);
+  btnReturn.classList.toggle("next", !btnReturn.disabled);
+  btnBreakStart.classList.toggle("next", !btnBreakStart.disabled);
+  btnBreakEnd.classList.toggle("next", !btnBreakEnd.disabled);
 
   // list
   const sessions = d.breakSessions || [];
@@ -399,6 +418,8 @@ function render(){
 btnDepart.onclick = ()=>{
   const d = load();
   d.departAt = nowISO();
+  d.returnAt = null;
+  d.shiftClosed = false;
   if(!localStorage.getItem(CURRENT_DAY_KEY)){
     localStorage.setItem(CURRENT_DAY_KEY, localYmd());
   }
@@ -408,8 +429,25 @@ btnDepart.onclick = ()=>{
 };
 
 btnReturn.onclick = ()=>{
+  if(!confirm("帰庫しますか？")) return;
+
   const d = load();
-  d.returnAt = nowISO();
+  const end = nowISO();
+
+  if(d.breakActive && d.breakStartAt){
+    const minutes = minDiff(d.breakStartAt, end);
+    d.breakSessions = d.breakSessions || [];
+    d.breakSessions.push({
+      start: d.breakStartAt,
+      end,
+      minutes
+    });
+  }
+
+  d.breakActive = false;
+  d.breakStartAt = null;
+  d.returnAt = end;
+  d.shiftClosed = true;
   d.dayId = localStorage.getItem(CURRENT_DAY_KEY) || localYmd();
   save(d);
   render();
