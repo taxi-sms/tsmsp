@@ -10,7 +10,7 @@
     html,body{margin:0;padding:0;background:var(--bg);color:var(--text-primary);font-family:"Noto Sans JP",sans-serif;}
     a{color:var(--link);text-decoration:none;}
     .header{position:sticky;top:0;z-index:20;height:60px;display:flex;align-items:center;padding:0 14px;border-bottom:2px solid var(--border);background:var(--surface-1);font-weight:900;font-size:22px;}
-    .main{padding:12px;max-width:520px;margin:0 auto;}
+    .main{padding:12px;max-width:520px;margin:0 auto;min-height:calc(100vh - 60px);display:flex;flex-direction:column;justify-content:center;gap:16px;}
     .section{border:2px solid var(--border);background:var(--surface-1);margin:10px 0;padding:10px;}
     .title{font-weight:900;font-size:18px;margin:0 0 8px;}
     .field{display:grid;gap:6px;margin-bottom:12px;}
@@ -20,6 +20,9 @@
     .btn.secondary{margin-top:10px;background:var(--surface-2);border-color:var(--border);color:var(--text-primary);display:none;}
     .msg{margin-top:12px;border:2px solid var(--border);background:var(--surface-2);padding:10px;white-space:pre-wrap;font-size:14px;line-height:1.45;min-height:44px;}
     .row{display:flex;gap:12px;margin-top:12px;flex-wrap:wrap;}
+    .brand{display:flex;justify-content:center;align-items:flex-end;gap:8px;padding:6px 0 2px;}
+    .brand-main{font-weight:900;font-size:40px;letter-spacing:.04em;line-height:1;}
+    .brand-sub{font-size:14px;color:var(--text-muted);line-height:1.15;padding-bottom:4px;}
   </style>
   <meta name="theme-color" content="#ffffff">
   <script>(function(){try{var t=localStorage.getItem("tsms_theme")==="dark"?"dark":"light";document.documentElement.setAttribute("data-theme",t);var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content",t==="dark"?"#0F1417":"#F3F6F8");}catch(e){}})();</script>
@@ -27,6 +30,11 @@
 <body>
   <header class="header">ログイン</header>
   <main class="main">
+    <div class="brand" aria-label="アプリタイトル">
+      <div class="brand-main">TSMs</div>
+      <div class="brand-sub">ver.001</div>
+    </div>
+
     <section class="section">
       <h1 class="title">メールアドレスでログイン</h1>
 

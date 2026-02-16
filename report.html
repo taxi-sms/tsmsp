@@ -389,7 +389,7 @@ a{ color:var(--link); }
     clearForm();
   });
 
-  btnSubmit.addEventListener("click", () => {
+  btnSubmit.addEventListener("click", async () => {
     if (!state.rideType || !state.payMethod) {
       alert("乗車種別と支払方法を選んでください");
       return;
@@ -439,6 +439,14 @@ a{ color:var(--link); }
     }
 
     localStorage.setItem(REPORT_KEY, JSON.stringify(list));
+    if(window.tsmsCloud && typeof window.tsmsCloud.backupNow === "function"){
+      try{
+        await Promise.race([
+          window.tsmsCloud.backupNow(),
+          new Promise((resolve)=>setTimeout(resolve, 1200))
+        ]);
+      }catch(_){ }
+    }
     location.href = "confirm.html";
   });
 
@@ -498,7 +506,7 @@ a{ color:var(--link); }
 </script>
 
 <script>
-  (function(){if('serviceWorker' in navigator && location.protocol.indexOf('http')===0){window.addEventListener('load', function(){navigator.serviceWorker.register('./sw.js?v=20260215-1').catch(function(){});});}})();
+  (function(){if('serviceWorker' in navigator && location.protocol.indexOf('http')===0){window.addEventListener('load', function(){navigator.serviceWorker.register('./sw.js?v=20260216-2').catch(function(){});});}})();
 </script>
 
 
