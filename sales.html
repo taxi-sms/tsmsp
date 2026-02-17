@@ -206,7 +206,7 @@
 
   function toDayId(r){
     if(r&&r.dayId) return String(r.dayId);
-    const d=new Date(r?.createdAt||r?.at||Date.now());
+    const d=new Date(r?.ts||r?.createdAt||r?.at||Date.now());
     return isNaN(d)?'':ymd(d);
   }
 
@@ -244,15 +244,16 @@
       const cash=Number(r.cash)||0, credit=Number(r.credit)||0;
       gross += cash + credit;
       const pay=String(r.payMethod||'');
-      if(['QR','クレカ','電子M','GO pay','GO Pay','乗込GO Pay'].includes(pay)) feeBase += cash + credit;
+      if(['QR','クレカ','電子M'].includes(pay)) feeBase += cash + credit;
       const ride=String(r.rideType||'');
       if(ride==='GO' && !['GO pay','GO Pay','乗込GO Pay'].includes(pay)) goFeeCases += 1;
     });
-    const tax = gross * (Number(settings.taxRate)||0) / 100;
     const fee = feeBase * (Number(settings.feeRate)||0) / 100;
     const goFee = goFeeCases * (Number(settings.goFeeYen)||0);
-    const base = gross - tax - fee - goFee;
-    return Math.round(base * (Number(settings.walkRate)||0) / 100);
+    const salesInTax = gross - fee - goFee;
+    const taxRate = (Number(settings.taxRate)||0) / 100;
+    const salesExTax = salesInTax / (1 + taxRate);
+    return Math.round(salesExTax * (Number(settings.walkRate)||0) / 100);
   }
 
   function calcOpsDay(dayId){
@@ -356,7 +357,7 @@
           <button type="button" class="shift-btn ${SHIFT_CLASS[shift]}" data-day="${dayId}" ${pastLocked?'disabled':''}>${SHIFT_LABEL[shift]}</button>
         </td>
         <td class="date ${wkCls}">${d.getMonth()+1}/${d.getDate()}(${dowJa(d)})</td>
-        <td class="${(active && !pastLocked)?'':'muted'}"><input class="target-input" data-target="${dayId}" value="${(active && !pastLocked)?(row.target||''):''}" ${(active && !pastLocked)?'':'disabled'} inputmode="numeric"></td>
+        <td class="${active?'':'muted'}"><input class="target-input" data-target="${dayId}" value="${active?(row.target||''):''}" ${(active && !pastLocked)?'':'disabled'} inputmode="numeric"></td>
         <td class="${active?'':'muted'}">${active?fmtNum(result):'-'}</td>
         <td class="${active?'':'muted'}">${active?(diff>=0?`+${fmtNum(diff)}`:`-${fmtNum(Math.abs(diff))}`):'-'}</td>
         <td class="${active?'':'muted'}">${active?(opsData?opsData.depart:'--'):'-'}</td>
