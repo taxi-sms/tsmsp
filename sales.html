@@ -144,10 +144,13 @@
 <script>
 (function(){
   const REPORT_KEY='tsms_reports';
+  const REPORT_ARCHIVE_KEY='tsms_reports_archive';
   const OPS_KEY='ops';
   const SETTINGS_KEY='tsms_settings';
   const PLAN_KEY='tsms_sales_plan';
   const HOLIDAY_KEY='tsms_holidays_jp_v1';
+  const SALES_RESET_TOKEN_KEY='tsms_sales_reset_token';
+  const SALES_RESET_TOKEN='20260216-reset-1';
   const SHIFT_ORDER=['work','holiday','absence','part','furidashi','furikyu'];
   const SHIFT_LABEL={work:'出勤',holiday:'休日',absence:'欠勤',part:'バイト',furidashi:'振出',furikyu:'振休'};
   const SHIFT_CLASS={work:'s-work',holiday:'s-holiday',absence:'s-absence',part:'s-part',furidashi:'s-furidashi',furikyu:'s-furikyu'};
@@ -159,6 +162,14 @@
 
   function loadJson(k,f){try{const v=JSON.parse(localStorage.getItem(k)||'null');return v==null?f:v;}catch(_){return f;}}
   function saveJson(k,v){localStorage.setItem(k,JSON.stringify(v));}
+  function applySalesOneTimeReset(){
+    try{
+      const done = localStorage.getItem(SALES_RESET_TOKEN_KEY);
+      if(done === SALES_RESET_TOKEN) return;
+      localStorage.removeItem(PLAN_KEY);
+      localStorage.setItem(SALES_RESET_TOKEN_KEY, SALES_RESET_TOKEN);
+    }catch(_){ }
+  }
   function ymd(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
   function parseYmd(s){const [y,m,d]=String(s).split('-').map(Number);return new Date(y,m-1,d);}  
   function addDays(d,n){const x=new Date(d);x.setDate(x.getDate()+n);return x;}
@@ -195,11 +206,17 @@
 
   function toDayId(r){
     if(r&&r.dayId) return String(r.dayId);
-    const d=new Date(r?.createdAt||r?.at||Date.now());
+    const d=new Date(r?.ts||r?.createdAt||r?.at||Date.now());
     return isNaN(d)?'':ymd(d);
   }
 
   function getSettings(){ return Object.assign({}, defaults, loadJson(SETTINGS_KEY, {})); }
+
+  function getAllReports(){
+    const active = loadJson(REPORT_KEY, []);
+    const archived = loadJson(REPORT_ARCHIVE_KEY, []);
+    return ([]).concat(Array.isArray(active)?active:[], Array.isArray(archived)?archived:[]);
+  }
 
   function getPeriodForDate(date,startDay,endDay){
     const d = new Date(date.getFullYear(), date.getMonth(), date.getDate());
@@ -227,15 +244,16 @@
       const cash=Number(r.cash)||0, credit=Number(r.credit)||0;
       gross += cash + credit;
       const pay=String(r.payMethod||'');
-      if(['QR','クレカ','電子M','GO pay','GO Pay','乗込GO Pay'].includes(pay)) feeBase += cash + credit;
+      if(['QR','クレカ','電子M'].includes(pay)) feeBase += cash + credit;
       const ride=String(r.rideType||'');
       if(ride==='GO' && !['GO pay','GO Pay','乗込GO Pay'].includes(pay)) goFeeCases += 1;
     });
-    const tax = gross * (Number(settings.taxRate)||0) / 100;
     const fee = feeBase * (Number(settings.feeRate)||0) / 100;
     const goFee = goFeeCases * (Number(settings.goFeeYen)||0);
-    const base = gross - tax - fee - goFee;
-    return Math.round(base * (Number(settings.walkRate)||0) / 100);
+    const salesInTax = gross - fee - goFee;
+    const taxRate = (Number(settings.taxRate)||0) / 100;
+    const salesExTax = salesInTax / (1 + taxRate);
+    return Math.round(salesExTax * (Number(settings.walkRate)||0) / 100);
   }
 
   function calcOpsDay(dayId){
@@ -292,7 +310,7 @@
 
   function render(holidaySet){
     const settings=getSettings();
-    const reports=loadJson(REPORT_KEY,[]);
+    const reports=getAllReports();
     const plan=getPlan();
     const periods=buildPeriods(settings,reports);
 
@@ -313,10 +331,6 @@
       const dayId=ymd(d);
       if(!plan[dayId]) plan[dayId]={ shift:'work', target:'' };
 
-      // 1行だけデモデータ
-      if(idx===0 && !plan[dayId]._demo){
-        plan[dayId]={ shift:'work', target:'20000', _demo:true };
-      }
 
       const row=plan[dayId];
       const shift=row.shift;
@@ -343,7 +357,7 @@
           <button type="button" class="shift-btn ${SHIFT_CLASS[shift]}" data-day="${dayId}" ${pastLocked?'disabled':''}>${SHIFT_LABEL[shift]}</button>
         </td>
         <td class="date ${wkCls}">${d.getMonth()+1}/${d.getDate()}(${dowJa(d)})</td>
-        <td class="${(active && !pastLocked)?'':'muted'}"><input class="target-input" data-target="${dayId}" value="${(active && !pastLocked)?(row.target||''):''}" ${(active && !pastLocked)?'':'disabled'} inputmode="numeric"></td>
+        <td class="${active?'':'muted'}"><input class="target-input" data-target="${dayId}" value="${active?(row.target||''):''}" ${(active && !pastLocked)?'':'disabled'} inputmode="numeric"></td>
         <td class="${active?'':'muted'}">${active?fmtNum(result):'-'}</td>
         <td class="${active?'':'muted'}">${active?(diff>=0?`+${fmtNum(diff)}`:`-${fmtNum(Math.abs(diff))}`):'-'}</td>
         <td class="${active?'':'muted'}">${active?(opsData?opsData.depart:'--'):'-'}</td>
@@ -396,6 +410,7 @@
   });
 
   (async function init(){
+    applySalesOneTimeReset();
     holidaySet = await loadHolidaySet();
     render(holidaySet);
   })();
@@ -416,7 +431,7 @@
   menu.querySelectorAll("a").forEach((a)=>a.addEventListener("click", closeMenu));
 })();
 </script>
-<script>(function(){if('serviceWorker' in navigator && location.protocol.indexOf('http')===0){window.addEventListener('load', function(){navigator.serviceWorker.register('./sw.js?v=20260215-1').catch(function(){});});}})();</script>
+<script>(function(){if('serviceWorker' in navigator && location.protocol.indexOf('http')===0){window.addEventListener('load', function(){navigator.serviceWorker.register('./sw.js?v=20260216-3').catch(function(){});});}})();</script>
 
 <nav class="tsms-bottom-nav" aria-label="ボトムメニュー">
   <a href="report.html" data-tab="report"><span class="ico">📝</span><span>日報入力</span></a>
