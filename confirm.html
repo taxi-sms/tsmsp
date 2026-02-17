@@ -166,6 +166,7 @@ a{ color:var(--link); }
 <script>
 (function(){
   const KEY = "tsms_reports";
+  const ARCHIVE_KEY = "tsms_reports_archive";
   const CURRENT_DAY_KEY = "tsms_report_current_day";
   let allData = [];
   let selectedDayId = "";
@@ -183,14 +184,20 @@ a{ color:var(--link); }
       .replaceAll("'","&#39;");
   }
 
-  function save(){
-    localStorage.setItem(KEY, JSON.stringify(allData));
+  function saveActive(active){
+    localStorage.setItem(KEY, JSON.stringify(active));
   }
 
   function load(){
-    try { allData = JSON.parse(localStorage.getItem(KEY) || "[]"); }
-    catch (_) { allData = []; }
-    if(!Array.isArray(allData)) allData = [];
+    let active=[];
+    let archived=[];
+    try { active = JSON.parse(localStorage.getItem(KEY) || "[]"); }
+    catch (_) { active = []; }
+    try { archived = JSON.parse(localStorage.getItem(ARCHIVE_KEY) || "[]"); }
+    catch (_) { archived = []; }
+    if(!Array.isArray(active)) active = [];
+    if(!Array.isArray(archived)) archived = [];
+    allData = active.map((r)=>Object.assign({__source:"active"}, r)).concat(archived.map((r)=>Object.assign({__source:"archive"}, r)));
   }
 
   function fallbackDayIdFromTs(ts){
@@ -236,6 +243,14 @@ a{ color:var(--link); }
       return;
     }
 
+    const currentDay = localStorage.getItem(CURRENT_DAY_KEY) || "";
+    if(!currentDay){
+      const emptyOpt = document.createElement("option");
+      emptyOpt.value = "";
+      emptyOpt.textContent = "日付を選択";
+      sel.appendChild(emptyOpt);
+    }
+
     days.forEach((dayId)=>{
       const opt = document.createElement("option");
       opt.value = dayId;
@@ -243,10 +258,9 @@ a{ color:var(--link); }
       sel.appendChild(opt);
     });
 
-    const currentDay = localStorage.getItem(CURRENT_DAY_KEY) || "";
-    const picked = [selectedDayId, currentDay, days[0]].find((v)=> v && days.includes(v)) || days[0];
-    selectedDayId = picked;
-    sel.value = picked;
+    const picked = [selectedDayId, currentDay, currentDay ? days[0] : ""].find((v)=> v === "" || (v && days.includes(v)));
+    selectedDayId = (picked === undefined) ? (currentDay ? days[0] : "") : picked;
+    sel.value = selectedDayId;
     sel.disabled = false;
   }
 
@@ -301,9 +315,19 @@ a{ color:var(--link); }
     if(Number.isNaN(idx) || !allData[idx]) return;
 
     if(action === "delete"){
+      const row = allData[idx];
+      if(row && row.__source === "archive"){
+        alert("履歴データはここでは削除できません");
+        return;
+      }
       if(!confirm("削除してよろしいですか？")) return;
       allData.splice(idx, 1);
-      save();
+      const activeOnly = allData.filter((r)=> !r || r.__source !== "archive").map((r)=>{
+        const c = Object.assign({}, r);
+        delete c.__source;
+        return c;
+      });
+      saveActive(activeOnly);
       syncDateSelect();
       render();
       if(window.tsmsCloud && typeof window.tsmsCloud.backupNow === "function"){
@@ -313,7 +337,12 @@ a{ color:var(--link); }
     }
 
     if(action === "edit"){
-      const id = allData[idx].id;
+      const row = allData[idx];
+      if(row && row.__source === "archive"){
+        alert("履歴データは編集できません");
+        return;
+      }
+      const id = row && row.id;
       if(!id){
         alert("編集対象のIDがありません");
         return;

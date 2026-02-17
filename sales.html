@@ -144,6 +144,7 @@
 <script>
 (function(){
   const REPORT_KEY='tsms_reports';
+  const REPORT_ARCHIVE_KEY='tsms_reports_archive';
   const OPS_KEY='ops';
   const SETTINGS_KEY='tsms_settings';
   const PLAN_KEY='tsms_sales_plan';
@@ -210,6 +211,12 @@
   }
 
   function getSettings(){ return Object.assign({}, defaults, loadJson(SETTINGS_KEY, {})); }
+
+  function getAllReports(){
+    const active = loadJson(REPORT_KEY, []);
+    const archived = loadJson(REPORT_ARCHIVE_KEY, []);
+    return ([]).concat(Array.isArray(active)?active:[], Array.isArray(archived)?archived:[]);
+  }
 
   function getPeriodForDate(date,startDay,endDay){
     const d = new Date(date.getFullYear(), date.getMonth(), date.getDate());
@@ -302,7 +309,7 @@
 
   function render(holidaySet){
     const settings=getSettings();
-    const reports=loadJson(REPORT_KEY,[]);
+    const reports=getAllReports();
     const plan=getPlan();
     const periods=buildPeriods(settings,reports);
 

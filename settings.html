@@ -229,7 +229,7 @@ a{ color:var(--link); }
   function save(v){ localStorage.setItem(KEY, JSON.stringify(v)); }
 
   const ids = ["themeMode","taxRate","feeRate","goFeeYen","walkRate","closeStartDay","closeEndDay","shiftNote"];
-  const BACKUP_KEYS = ["tsms_reports","ops","tsms_settings","tsms_sales_plan","tsms_report_current_day","tsms_holidays_jp_v1","tsms_theme"];
+  const BACKUP_KEYS = ["tsms_reports","tsms_reports_archive","ops","tsms_settings","tsms_sales_plan","tsms_report_current_day","tsms_holidays_jp_v1","tsms_theme"];
   const els = Object.fromEntries(ids.map(id => [id, document.getElementById(id)]));
 
   function applyTheme(mode){

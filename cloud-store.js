@@ -4,6 +4,7 @@ const CLOUD_KEY = "localStorage_dump_v1";
 const LAST_SYNC_USER_KEY = "tsms_last_sync_user_id";
 const SYNC_KEYS = [
   "tsms_reports",
+  "tsms_reports_archive",
   "ops",
   "tsms_settings",
   "tsms_sales_plan",
