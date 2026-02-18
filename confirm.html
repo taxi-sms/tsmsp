@@ -262,10 +262,30 @@ a{ color:var(--link); }
       sel.appendChild(opt);
     });
 
-    const picked = [selectedDayId, currentDay, currentDay ? days[0] : ""].find((v)=> v === "" || (v && days.includes(v)));
-    selectedDayId = (picked === undefined) ? (currentDay ? days[0] : "") : picked;
-    sel.value = selectedDayId;
-    sel.disabled = false;
+    function todayLocalYmd(){
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
+const todayId = todayLocalYmd();
+const currentDay = localStorage.getItem(CURRENT_DAY_KEY) || "";
+
+// 優先順位：ユーザーが既に選択してる日 → currentDay → 今日 → 最新日(days[0])
+if (selectedDayId && days.includes(selectedDayId)) {
+  // そのまま
+} else if (currentDay && days.includes(currentDay)) {
+  selectedDayId = currentDay;
+} else if (days.includes(todayId)) {
+  selectedDayId = todayId;
+} else {
+  selectedDayId = days[0];
+}
+
+sel.value = selectedDayId;
+sel.disabled = false;
   }
 
   function filteredDataWithIndex(){
