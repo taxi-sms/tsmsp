@@ -232,40 +232,49 @@ a{ color:var(--link); }
   }
 
   function syncDateSelect(){
-    const sel = document.getElementById("confirmDateSelect");
-    if(!sel) return;
-    const days = availableDays();
-    sel.innerHTML = "";
+  const sel = document.getElementById("confirmDateSelect");
+  if(!sel) return;
 
-    if(!days.length){
-      const opt = document.createElement("option");
-      opt.value = "";
-      opt.textContent = "保存済みデータなし";
-      sel.appendChild(opt);
-      sel.disabled = true;
-      selectedDayId = "";
-      return;
-    }
+  const days = availableDays();
+  sel.innerHTML = "";
 
-    const currentDay = localStorage.getItem(CURRENT_DAY_KEY) || "";
-    if(!currentDay){
-      const emptyOpt = document.createElement("option");
-      emptyOpt.value = "";
-      emptyOpt.textContent = "日付を選択";
-      sel.appendChild(emptyOpt);
-    }
+  if(!days.length){
+    const opt = document.createElement("option");
+    opt.value = "";
+    opt.textContent = "保存済みデータなし";
+    sel.appendChild(opt);
+    sel.disabled = true;
+    selectedDayId = "";
+    return;
+  }
 
-    days.forEach((dayId)=>{
-      const opt = document.createElement("option");
-      opt.value = dayId;
-      opt.textContent = dayLabel(dayId);
-      sel.appendChild(opt);
-    });
+  const currentDay = localStorage.getItem(CURRENT_DAY_KEY) || "";
 
-    const picked = [selectedDayId, currentDay, currentDay ? days[0] : ""].find((v)=> v === "" || (v && days.includes(v)));
-    selectedDayId = (picked === undefined) ? (currentDay ? days[0] : "") : picked;
-    sel.value = selectedDayId;
-    sel.disabled = false;
+  // 常に空optionを入れる（安全対策）
+  const emptyOpt = document.createElement("option");
+  emptyOpt.value = "";
+  emptyOpt.textContent = "日付を選択";
+  sel.appendChild(emptyOpt);
+
+  days.forEach((dayId)=>{
+    const opt = document.createElement("option");
+    opt.value = dayId;
+    opt.textContent = dayLabel(dayId);
+    sel.appendChild(opt);
+  });
+
+  // 🔥 ここが変更点：currentDayを最優先固定
+  let nextDayId = "";
+
+  if(currentDay && days.includes(currentDay)){
+    nextDayId = currentDay;     // ← 勤務日が最優先
+  } else {
+    nextDayId = days[0];        // ← なければ最新日
+  }
+
+  selectedDayId = nextDayId;
+  sel.value = selectedDayId;
+  sel.disabled = false;
   }
 
   function filteredDataWithIndex(){
