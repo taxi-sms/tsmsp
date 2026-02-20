@@ -393,12 +393,19 @@ function syncDateSelect(){
   });
 
   const sel = document.getElementById("confirmDateSelect");
-  if(sel){
-    sel.addEventListener("change", ()=>{
-      selectedDayId = sel.value || "";
-      render();
-    });
-  }
+if(sel){
+  sel.addEventListener("change", ()=>{
+    selectedDayId = sel.value || "";
+
+    if(selectedDayId){
+      localStorage.setItem(CURRENT_DAY_KEY, selectedDayId);
+    }else{
+      localStorage.removeItem(CURRENT_DAY_KEY);
+    }
+
+    render();
+  });
+}
 
   load();
   syncDateSelect();
