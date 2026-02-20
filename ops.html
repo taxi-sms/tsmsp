@@ -244,6 +244,7 @@ bg.onclick = () => { menu.classList.remove("open"); bg.classList.remove("show");
 
 /* ===== Ops Logic ===== */
 const KEY = "ops";
+const OPS_ARCHIVE_KEY = "ops_archive_v1";
 const REPORT_KEY = "tsms_reports";
 const REPORT_ARCHIVE_KEY = "tsms_reports_archive";
 const CURRENT_DAY_KEY = "tsms_report_current_day";
@@ -310,6 +311,21 @@ function normalizeData(raw){
   return d;
 }
 function load(){ return normalizeData(safeParse() || defaultData()); }
+function loadOpsArchive(){
+  try{
+    const raw = localStorage.getItem(OPS_ARCHIVE_KEY);
+    if(!raw) return {};
+    const obj = JSON.parse(raw);
+    return (obj && typeof obj === "object") ? obj : {};
+  }catch(e){
+    return {};
+  }
+}
+function saveOpsArchive(archive){
+  try{
+    localStorage.setItem(OPS_ARCHIVE_KEY, JSON.stringify(archive || {}));
+  }catch(e){}
+}
 
 function calcBreakTotal(d){
   return (d.breakSessions||[]).reduce((s,x)=>s+(Number(x.minutes)||0),0);
@@ -492,7 +508,8 @@ btnReset.onclick = async ()=>{
     if(window.tsmsCloud && typeof window.tsmsCloud.setSyncPaused === "function") {
       window.tsmsCloud.setSyncPaused(true);
     }
-    const currentDayId = localStorage.getItem(CURRENT_DAY_KEY) || (load().dayId || localYmd());
+    const opsData = load();
+    const currentDayId = localStorage.getItem(CURRENT_DAY_KEY) || (opsData.dayId || localYmd());
     const activeRows = JSON.parse(localStorage.getItem(REPORT_KEY) || "[]");
     const archiveRows = JSON.parse(localStorage.getItem(REPORT_ARCHIVE_KEY) || "[]");
 
@@ -502,6 +519,12 @@ btnReset.onclick = async ()=>{
     const byId = new Map();
     (Array.isArray(archiveRows) ? archiveRows : []).forEach((r)=>{ if(r && r.id) byId.set(String(r.id), r); });
     todayRows.forEach((r)=>{ if(r && r.id) byId.set(String(r.id), r); });
+
+    if(opsData && (opsData.departAt || opsData.returnAt || (Array.isArray(opsData.breakSessions) && opsData.breakSessions.length))){
+      const archive = loadOpsArchive();
+      archive[String(currentDayId)] = Object.assign({}, opsData, { dayId: String(currentDayId) });
+      saveOpsArchive(archive);
+    }
 
     localStorage.removeItem(KEY);
     localStorage.removeItem(CURRENT_DAY_KEY);
