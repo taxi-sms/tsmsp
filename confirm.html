@@ -2,7 +2,11 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport"
+      content="width=device-width,
+               initial-scale=1,
+               maximum-scale=1,
+               user-scalable=no"/>
 <title>入力確認</title>
 <style>
   body{margin:0;font-family:"Noto Sans JP", sans-serif;background:#fff;color:#000}
@@ -228,20 +232,21 @@ a{ color:var(--link); }
   }
 
   function syncDateSelect(){
-    const sel = document.getElementById("confirmDateSelect");
-    if(!sel) return;
-    const days = availableDays();
-    sel.innerHTML = "";
+  const sel = document.getElementById("confirmDateSelect");
+  if(!sel) return;
 
-    if(!days.length){
-      const opt = document.createElement("option");
-      opt.value = "";
-      opt.textContent = "保存済みデータなし";
-      sel.appendChild(opt);
-      sel.disabled = true;
-      selectedDayId = "";
-      return;
-    }
+  const days = availableDays();
+  sel.innerHTML = "";
+
+  if(!days.length){
+    const opt = document.createElement("option");
+    opt.value = "";
+    opt.textContent = "保存済みデータなし";
+    sel.appendChild(opt);
+    sel.disabled = true;
+    selectedDayId = "";
+    return;
+  }
 
     const currentDay = localStorage.getItem(CURRENT_DAY_KEY) || "";
     if(!currentDay){
