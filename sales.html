@@ -390,6 +390,7 @@
     const days=periodDays(period);
     const todayId = todayYmd();
     const manual = getManual();
+    const reportedDaySet = new Set(reports.map((r)=>toDayId(r)).filter(Boolean));
 
     tbody.innerHTML='';
     let sumTarget=0,sumResult=0,sumDiff=0,sumWork=0,sumBreak=0;
@@ -406,6 +407,7 @@
       const pastLocked = dayId < todayId;
 
       const result=active?calcDayNet(dayId,reports,settings):0;
+      const hasTargetInput = row.target!=null && String(row.target).trim()!=='';
       const target=active?(Number(row.target)||0):0;
       const opsData=active?calcOpsDay(dayId):null;
       const workMin=opsData?opsData.workMin:0;
@@ -415,6 +417,8 @@
       const manualWorkMin=parseHmToMin(manualRow.work);
       const manualBreakMin=parseHmToMin(manualRow.break);
       const hasManualResult = manualRow.result!=null && String(manualRow.result).trim()!=='';
+      const hasReportedResult = reportedDaySet.has(dayId);
+      const hasResultInput = hasManualResult || hasReportedResult;
       const hasManualDepart = manualRow.depart!=null && String(manualRow.depart).trim()!=='';
       const hasManualWork = manualRow.work!=null && String(manualRow.work).trim()!=='';
       const hasManualBreak = manualRow.break!=null && String(manualRow.break).trim()!=='';
@@ -422,12 +426,13 @@
       const showWorkMin=(hasManualWork && Number.isFinite(manualWorkMin))?manualWorkMin:workMin;
       const showBreakMin=(hasManualBreak && Number.isFinite(manualBreakMin))?manualBreakMin:breakMin;
       const showDepart=hasManualDepart?manualRow.depart:(opsData?opsData.depart:'--');
-      const diff=showResult-target;
+      const shouldCalcDiff = active && hasTargetInput && hasResultInput;
+      const diff=shouldCalcDiff?(showResult-target):null;
       const hour=showWorkMin>0?Math.round(showResult/(showWorkMin/60)):0;
       const showHourText=(hasManualResult || hasManualWork || opsData)?fmtNum(hour):'--';
 
       if(active){
-        sumTarget+=target; sumResult+=showResult; sumDiff+=diff; sumWork+=showWorkMin; sumBreak+=showBreakMin;
+        sumTarget+=target; sumResult+=showResult; if(shouldCalcDiff) sumDiff+=diff; sumWork+=showWorkMin; sumBreak+=showBreakMin;
       }
 
       const tr=document.createElement('tr');
@@ -441,7 +446,7 @@
         <td class="date ${wkCls}">${d.getMonth()+1}/${d.getDate()}(${dowJa(d)})</td>
         <td class="${(active||manualEditMode)?'':'muted'}"><input class="target-input" data-target="${dayId}" value="${String(row.target||'').replace(/[^0-9]/g,'')}" ${((manualEditMode || active) && (manualEditMode || !pastLocked))?'':'disabled'} inputmode="numeric"></td>
         <td class="${(active||manualEditMode)?'':'muted'}">${manualEditMode?`<input class="manual-input" data-manual="result" data-day="${dayId}" value="${(manualRow.result!=null && String(manualRow.result).trim()!=='')?String(manualRow.result).replace(/[^0-9]/g,''):String(result)}" inputmode="numeric">`:(active?fmtNum(showResult):'-')}</td>
-        <td class="${active?'':'muted'}">${active?(diff>=0?`+${fmtNum(diff)}`:`-${fmtNum(Math.abs(diff))}`):'-'}</td>
+        <td class="${active?'':'muted'}">${active?(shouldCalcDiff?(diff>=0?`+${fmtNum(diff)}`:`-${fmtNum(Math.abs(diff))}`):'-'):'-'}</td>
         <td class="${(active||manualEditMode)?'':'muted'}">${manualEditMode?`<input class="manual-input time" data-manual="depart" data-day="${dayId}" value="${(manualRow.depart!=null && String(manualRow.depart).trim()!=='')?manualRow.depart:(showDepart==='--'?'':showDepart)}" placeholder="--:--">`:(active?showDepart:'-')}</td>
         <td class="${(active||manualEditMode)?'':'muted'}">${manualEditMode?`<input class="manual-input time" data-manual="work" data-day="${dayId}" value="${(manualRow.work!=null && String(manualRow.work).trim()!=='')?manualRow.work:(opsData?hm(workMin):'')}" placeholder="0:00">`:(active?(hasManualWork?hm(showWorkMin):(opsData?hm(showWorkMin):'--')):'-')}</td>
         <td class="${(active||manualEditMode)?'':'muted'}">${manualEditMode?`<input class="manual-input time" data-manual="break" data-day="${dayId}" value="${(manualRow.break!=null && String(manualRow.break).trim()!=='')?manualRow.break:(opsData?hm(breakMin):'')}" placeholder="0:00">`:(active?(hasManualBreak?hm(showBreakMin):(opsData?hm(showBreakMin):'--')):'-')}</td>
