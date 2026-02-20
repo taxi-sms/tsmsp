@@ -21,6 +21,9 @@
     .v{margin-left:auto;font-weight:500;text-align:right;white-space:nowrap;}
     .line.strong .k,
     .line.strong .v{font-weight:900;}
+    .date-switcher{border:2px solid var(--border);padding:10px;margin:0 0 12px 0;background:var(--surface-1);}
+    .date-switcher label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px;}
+    .date-switcher select{width:100%;box-sizing:border-box;border:2px solid var(--border);background:var(--surface-2);padding:10px;font-size:16px;color:var(--text-primary);}
 
 /* ---- TSMS Hamburger Menu (overlay) ---- */
 .tsms-header{
@@ -159,6 +162,11 @@ a{ color:var(--link); }
 </header>
 
 <main class="main">
+  <section class="date-switcher">
+    <label for="detailDateSelect">表示日付</label>
+    <select id="detailDateSelect" aria-label="表示日付"></select>
+  </section>
+
   <div class="note" id="targetDay"></div>
 
   <section class="section">
@@ -180,9 +188,13 @@ a{ color:var(--link); }
 <script>
 (function(){
   const REPORT_KEY = "tsms_reports";
+  const REPORT_ARCHIVE_KEY = "tsms_reports_archive";
   const OPS_KEY = "ops";
+  const OPS_ARCHIVE_KEY = "ops_archive_v1";
   const DAY_KEY = "tsms_report_current_day";
+  const CONFIRM_FORCE_EMPTY_KEY = "tsms_confirm_force_empty";
   const SETTINGS_KEY = "tsms_settings";
+  let selectedDayId = "";
 
   function loadJson(key, fallback){
     try{
@@ -222,14 +234,87 @@ a{ color:var(--link); }
     return `<div class="line${strong ? " strong" : ""}"><div class="k">${label}</div><div class="v">${value}</div></div>`;
   }
 
+  function loadReportsAll(){
+    const active = loadJson(REPORT_KEY, []);
+    const archived = loadJson(REPORT_ARCHIVE_KEY, []);
+    const a = Array.isArray(active) ? active : [];
+    const b = Array.isArray(archived) ? archived : [];
+    return a.concat(b);
+  }
+
+  function loadOpsByDayId(dayId){
+    const current = loadJson(OPS_KEY, {});
+    if(current && String(current.dayId || "") === String(dayId || "")) return current;
+    const archive = loadJson(OPS_ARCHIVE_KEY, {});
+    if(archive && typeof archive === "object" && archive[String(dayId)]) return archive[String(dayId)];
+    return {};
+  }
+
+  function hasOpsData(ops){
+    if(!ops || typeof ops !== "object") return false;
+    return !!(ops.departAt || ops.returnAt || (Array.isArray(ops.breakSessions) && ops.breakSessions.length));
+  }
+
+  function availableDays(){
+    const days = new Set();
+    loadReportsAll().forEach((r)=>{
+      const d = rowDayId(r);
+      if(d) days.add(d);
+    });
+    const opsCurrent = loadJson(OPS_KEY, {});
+    if(hasOpsData(opsCurrent)){
+      const d = String(opsCurrent.dayId || "");
+      if(d) days.add(d);
+    }
+    const opsArchive = loadJson(OPS_ARCHIVE_KEY, {});
+    if(opsArchive && typeof opsArchive === "object"){
+      Object.keys(opsArchive).forEach((k)=>{ if(k) days.add(String(k)); });
+    }
+    return Array.from(days).sort((a,b)=> b.localeCompare(a));
+  }
+
+  function syncDateSelect(){
+    const sel = document.getElementById("detailDateSelect");
+    if(!sel) return;
+    const days = availableDays();
+    const currentDay = localStorage.getItem(DAY_KEY) || "";
+    const forceEmpty = localStorage.getItem(CONFIRM_FORCE_EMPTY_KEY) === "1";
+    const today = localYmd();
+
+    sel.innerHTML = "";
+    const emptyOpt = document.createElement("option");
+    emptyOpt.value = "";
+    emptyOpt.textContent = "日付を選択";
+    sel.appendChild(emptyOpt);
+    days.forEach((dayId)=>{
+      const opt = document.createElement("option");
+      opt.value = dayId;
+      opt.textContent = dayId.replace(/-/g, "/");
+      sel.appendChild(opt);
+    });
+
+    let next = "";
+    if(!forceEmpty && currentDay && days.includes(currentDay)){
+      next = currentDay;
+    }else if(selectedDayId && days.includes(selectedDayId)){
+      next = selectedDayId;
+    }else if(!forceEmpty && days.includes(today)){
+      next = today;
+    }else if(!forceEmpty && days.length){
+      next = days[0];
+    }
+    selectedDayId = next;
+    sel.value = next;
+  }
+
   function render(){
     const now = new Date();
-    const dayId = localStorage.getItem(DAY_KEY) || localYmd(now);
-    const ops = loadJson(OPS_KEY, {});
-    const reports = loadJson(REPORT_KEY, []);
+    const dayId = selectedDayId;
+    const ops = loadOpsByDayId(dayId);
+    const reports = loadReportsAll();
     const settings = Object.assign({ taxRate:10, feeRate:4, goFeeYen:100, walkRate:50 }, loadJson(SETTINGS_KEY, {}));
 
-    document.getElementById("targetDay").textContent = `対象日: ${dayId.replace(/-/g, "/")}`;
+    document.getElementById("targetDay").textContent = dayId ? `対象日: ${dayId.replace(/-/g, "/")}` : "対象日: --";
 
     const departAt = ops.departAt || null;
     const departMs = departAt ? new Date(departAt).getTime() : NaN;
@@ -243,7 +328,7 @@ a{ color:var(--link); }
     }
     const workMin = Math.max(0, elapsedMin - breakMin);
 
-    const rows = (Array.isArray(reports) ? reports : []).filter(r => rowDayId(r) === dayId);
+    const rows = dayId ? reports.filter((r) => rowDayId(r) === dayId) : [];
     const tripCount = rows.length;
     const cashSum = rows.reduce((s,r)=> s + num(r.cash), 0);
     const creditSum = rows.reduce((s,r)=> s + num(r.credit), 0);
@@ -292,6 +377,21 @@ a{ color:var(--link); }
     ].join("");
   }
 
+  const sel = document.getElementById("detailDateSelect");
+  if(sel){
+    sel.addEventListener("change", ()=>{
+      selectedDayId = sel.value || "";
+      if(selectedDayId){
+        localStorage.setItem(DAY_KEY, selectedDayId);
+        localStorage.removeItem(CONFIRM_FORCE_EMPTY_KEY);
+      }else{
+        localStorage.removeItem(DAY_KEY);
+      }
+      render();
+    });
+  }
+
+  syncDateSelect();
   render();
   setInterval(render, 1000);
 })();
