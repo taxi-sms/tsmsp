@@ -435,12 +435,12 @@
           <button type="button" class="shift-btn ${SHIFT_CLASS[shift]}" data-day="${dayId}" ${pastLocked?'disabled':''}>${SHIFT_LABEL[shift]}</button>
         </td>
         <td class="date ${wkCls}">${d.getMonth()+1}/${d.getDate()}(${dowJa(d)})</td>
-        <td class="${active?'':'muted'}"><input class="target-input" data-target="${dayId}" value="${active?(row.target||''):''}" ${(active && !pastLocked)?'':'disabled'} inputmode="numeric"></td>
-        <td class="${(active||manualEditMode)?'':'muted'}">${manualEditMode?`<input class="manual-input" data-manual="result" data-day="${dayId}" value="${String(manualRow.result||'').replace(/[^0-9]/g,'')}" inputmode="numeric">`:(active?fmtNum(showResult):'-')}</td>
+        <td class="${(active||manualEditMode)?'':'muted'}"><input class="target-input" data-target="${dayId}" value="${String(row.target||'').replace(/[^0-9]/g,'')}" ${((manualEditMode || active) && (manualEditMode || !pastLocked))?'':'disabled'} inputmode="numeric"></td>
+        <td class="${(active||manualEditMode)?'':'muted'}">${manualEditMode?`<input class="manual-input" data-manual="result" data-day="${dayId}" value="${(manualRow.result!=null && String(manualRow.result).trim()!=='')?String(manualRow.result).replace(/[^0-9]/g,''):String(result)}" inputmode="numeric">`:(active?fmtNum(showResult):'-')}</td>
         <td class="${active?'':'muted'}">${active?(diff>=0?`+${fmtNum(diff)}`:`-${fmtNum(Math.abs(diff))}`):'-'}</td>
-        <td class="${(active||manualEditMode)?'':'muted'}">${manualEditMode?`<input class="manual-input time" data-manual="depart" data-day="${dayId}" value="${manualRow.depart||''}" placeholder="--:--">`:(active?showDepart:'-')}</td>
-        <td class="${(active||manualEditMode)?'':'muted'}">${manualEditMode?`<input class="manual-input time" data-manual="work" data-day="${dayId}" value="${manualRow.work||''}" placeholder="0:00">`:(active?(opsData?hm(showWorkMin):'--'):'-')}</td>
-        <td class="${(active||manualEditMode)?'':'muted'}">${manualEditMode?`<input class="manual-input time" data-manual="break" data-day="${dayId}" value="${manualRow.break||''}" placeholder="0:00">`:(active?(opsData?hm(showBreakMin):'--'):'-')}</td>
+        <td class="${(active||manualEditMode)?'':'muted'}">${manualEditMode?`<input class="manual-input time" data-manual="depart" data-day="${dayId}" value="${(manualRow.depart!=null && String(manualRow.depart).trim()!=='')?manualRow.depart:(showDepart==='--'?'':showDepart)}" placeholder="--:--">`:(active?showDepart:'-')}</td>
+        <td class="${(active||manualEditMode)?'':'muted'}">${manualEditMode?`<input class="manual-input time" data-manual="work" data-day="${dayId}" value="${(manualRow.work!=null && String(manualRow.work).trim()!=='')?manualRow.work:(opsData?hm(workMin):'')}" placeholder="0:00">`:(active?(opsData?hm(showWorkMin):'--'):'-')}</td>
+        <td class="${(active||manualEditMode)?'':'muted'}">${manualEditMode?`<input class="manual-input time" data-manual="break" data-day="${dayId}" value="${(manualRow.break!=null && String(manualRow.break).trim()!=='')?manualRow.break:(opsData?hm(breakMin):'')}" placeholder="0:00">`:(active?(opsData?hm(showBreakMin):'--'):'-')}</td>
         <td class="${active?'':'muted'}">${active?showHourText:'-'}</td>
       `;
       tbody.appendChild(tr);
