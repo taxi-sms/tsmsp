@@ -8,6 +8,7 @@ const SYNC_KEYS = [
   "ops",
   "tsms_settings",
   "tsms_sales_plan",
+  "tsms_sales_reset_token",
   "tsms_report_current_day",
   "tsms_holidays_jp_v1",
   "tsms_theme"

@@ -168,7 +168,7 @@
     try{
       const done = localStorage.getItem(SALES_RESET_TOKEN_KEY);
       if(done === SALES_RESET_TOKEN) return;
-      localStorage.removeItem(PLAN_KEY);
+      // Keep existing plan data. Only record migration marker.
       localStorage.setItem(SALES_RESET_TOKEN_KEY, SALES_RESET_TOKEN);
     }catch(_){ }
   }
@@ -295,7 +295,7 @@
   function getPlan(){ return loadJson(PLAN_KEY, {}); }
   function savePlan(p){ saveJson(PLAN_KEY, p); }
 
-  function buildPeriods(settings,reports){
+  function buildPeriods(settings,reports,plan){
     const set = new Map();
     const seed=[new Date()];
 
@@ -309,6 +309,14 @@
     const opsArch = loadJson(OPS_ARCHIVE_KEY, {});
     if(opsArch && typeof opsArch === 'object'){
       Object.keys(opsArch).forEach((k)=>{
+        const d=parseYmd(k);
+        if(!isNaN(d)) seed.push(d);
+      });
+    }
+
+    // plan（日別目標）の日付も seed に入れる
+    if(plan && typeof plan === 'object'){
+      Object.keys(plan).forEach((k)=>{
         const d=parseYmd(k);
         if(!isNaN(d)) seed.push(d);
       });
@@ -345,7 +353,7 @@
     const settings=getSettings();
     const reports=getAllReports();
     const plan=getPlan();
-    const periods=buildPeriods(settings,reports);
+    const periods=buildPeriods(settings,reports,plan);
 
     if(!monthSelect.options.length){
       monthSelect.innerHTML=periods.map(p=>`<option value="${periodId(p)}">${periodLabel(p)}</option>`).join('');
@@ -363,9 +371,10 @@
     days.forEach((d,idx)=>{
       const dayId=ymd(d);
       if(!plan[dayId]) plan[dayId]={ shift:'work', target:'' };
-
-
       const row=plan[dayId];
+      // Backfill legacy plan rows that were saved without shift/target fields.
+      if(!row.shift) row.shift='work';
+      if(row.target==null) row.target='';
       const shift=row.shift;
       const active=(shift==='work' || shift==='part' || shift==='furidashi');
       const pastLocked = dayId < todayId;
