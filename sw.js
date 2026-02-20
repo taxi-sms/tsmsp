@@ -1,4 +1,4 @@
-const CACHE_NAME = 'tsms-cache-v34';
+const CACHE_NAME = 'tsms-cache-v35';
 const ASSETS = [
   './',
   './index.html',
@@ -16,7 +16,8 @@ const ASSETS = [
   './icon.png',
   './icon-192.png',
   './icon-512.png',
-  './apple-touch-icon.png'
+  './apple-touch-icon.png',
+  './cache-version.js'
 ];
 
 self.addEventListener('install', (event) => {

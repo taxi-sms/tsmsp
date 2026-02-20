@@ -91,6 +91,7 @@ html,body{
   font-weight:900;
   min-height:64px;
 }
+.btn.action-main{ min-height:128px; }
 .btn.small{ font-size:14px; min-height:52px; padding:12px 10px; font-weight:800; }
 .btn.reset-final{ min-height:124px; line-height:1.3; }
 .btn.reset-final .warn{ display:block; color:#c00; font-size:13px; font-weight:900; margin-top:6px; }
@@ -117,6 +118,7 @@ html,body{
   .k{ width:110px; }
   .v{ font-size:18px; }
   .btn{ font-size:16px; min-height:58px; }
+  .btn.action-main{ min-height:116px; }
 }
 @media (min-width:768px){
   .k{ width:160px; }
@@ -222,10 +224,10 @@ a{ color:var(--link); }
     </div>
 
     <div class="actions">
-      <button class="btn" type="button" id="btn_depart">出庫（今）</button>
-      <button class="btn" type="button" id="btn_return">帰庫（今）</button>
-      <button class="btn" type="button" id="btn_breakStart">休憩開始</button>
-      <button class="btn" type="button" id="btn_breakEnd">休憩解除</button>
+      <button class="btn action-main" type="button" id="btn_depart">出庫（今）</button>
+      <button class="btn action-main" type="button" id="btn_return">帰庫（今）</button>
+      <button class="btn action-main" type="button" id="btn_breakStart">休憩開始</button>
+      <button class="btn action-main" type="button" id="btn_breakEnd">休憩解除</button>
 
       <button class="btn danger wide reset-final" type="button" id="btn_reset">この日の記録をクリア<br><span class="warn">（〆作業として一番最後に実行）</span></button>
     </div>
@@ -551,7 +553,7 @@ setInterval(()=>{ try{ updateBreakTimer(load()); }catch(e){} }, 1000);
 
 
   <script>
-    (function(){if('serviceWorker'in navigator&&location.protocol.indexOf('http')===0){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js?v=20260216-3').catch(function(){});});}})();
+    (function(){if('serviceWorker'in navigator&&location.protocol.indexOf('http')===0){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js?v=20260220-2').catch(function(){});});}})();
   </script>
 
 
@@ -616,5 +618,6 @@ setInterval(()=>{ try{ updateBreakTimer(load()); }catch(e){} }, 1000);
 })();
 </script>
 
+  <script src="./cache-version.js"></script>
 </body>
 </html>
