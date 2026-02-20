@@ -420,6 +420,7 @@ btnDepart.onclick = ()=>{
   d.departAt = nowISO();
   d.returnAt = null;
   d.shiftClosed = false;
+  localStorage.removeItem(CONFIRM_FORCE_EMPTY_KEY);
   if(!localStorage.getItem(CURRENT_DAY_KEY)){
     localStorage.setItem(CURRENT_DAY_KEY, localYmd());
   }
@@ -504,6 +505,7 @@ btnReset.onclick = async ()=>{
 
     localStorage.removeItem(KEY);
     localStorage.removeItem(CURRENT_DAY_KEY);
+    localStorage.setItem(CONFIRM_FORCE_EMPTY_KEY, "1");
     localStorage.setItem(REPORT_KEY, JSON.stringify(remainRows));
     localStorage.setItem(REPORT_ARCHIVE_KEY, JSON.stringify(Array.from(byId.values())));
     render();

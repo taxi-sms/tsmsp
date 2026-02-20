@@ -255,6 +255,7 @@ a{ color:var(--link); }
 (() => {
   const REPORT_KEY = "tsms_reports";
   const CURRENT_DAY_KEY = "tsms_report_current_day";
+  const CONFIRM_FORCE_EMPTY_KEY = "tsms_confirm_force_empty";
   const state = { rideType: "", payMethod: "", ticketSub: "" };
   const secTicket = document.getElementById("sec_ticketSub");
   const secAmounts = document.getElementById("sec_amounts");
@@ -443,6 +444,8 @@ a{ color:var(--link); }
     }
 
     localStorage.setItem(REPORT_KEY, JSON.stringify(list));
+    localStorage.setItem(CURRENT_DAY_KEY, entry.dayId);
+    localStorage.removeItem(CONFIRM_FORCE_EMPTY_KEY);
     if(window.tsmsCloud && typeof window.tsmsCloud.backupNow === "function"){
       try{
         await Promise.race([

@@ -240,13 +240,21 @@ function todayLocalYmd(){
   return `${y}-${m}-${day}`;
 }
 
+  function syncDateSelect(){
+    const sel = document.getElementById("confirmDateSelect");
+    if(!sel) return;
+
+    const days = availableDays();
+    const today = todayLocalYmd();
     const currentDay = localStorage.getItem(CURRENT_DAY_KEY) || "";
-    if(!currentDay){
-      const emptyOpt = document.createElement("option");
-      emptyOpt.value = "";
-      emptyOpt.textContent = "日付を選択";
-      sel.appendChild(emptyOpt);
-    }
+    const forceEmpty = localStorage.getItem(CONFIRM_FORCE_EMPTY_KEY) === "1";
+
+    sel.innerHTML = "";
+
+    const emptyOpt = document.createElement("option");
+    emptyOpt.value = "";
+    emptyOpt.textContent = "日付を選択";
+    sel.appendChild(emptyOpt);
 
     days.forEach((dayId)=>{
       const opt = document.createElement("option");
@@ -255,9 +263,19 @@ function todayLocalYmd(){
       sel.appendChild(opt);
     });
 
-    const picked = [selectedDayId, currentDay, currentDay ? days[0] : ""].find((v)=> v === "" || (v && days.includes(v)));
-    selectedDayId = (picked === undefined) ? (currentDay ? days[0] : "") : picked;
-    sel.value = selectedDayId;
+    let next = "";
+    if(!forceEmpty && currentDay && days.includes(currentDay)){
+      next = currentDay;
+    }else if(selectedDayId && days.includes(selectedDayId)){
+      next = selectedDayId;
+    }else if(!forceEmpty && days.includes(today)){
+      next = today;
+    }else if(!forceEmpty && days.length > 0){
+      next = days[0];
+    }
+
+    selectedDayId = next;
+    sel.value = next;
     sel.disabled = false;
   }
 
@@ -355,6 +373,7 @@ if(sel){
 
     if(selectedDayId){
       localStorage.setItem(CURRENT_DAY_KEY, selectedDayId);
+      localStorage.removeItem(CONFIRM_FORCE_EMPTY_KEY);
     }else{
       localStorage.removeItem(CURRENT_DAY_KEY);
     }
