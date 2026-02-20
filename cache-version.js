@@ -6,6 +6,11 @@
 
   function renderCacheName(name){
     if(!name) return;
+    var inline = document.getElementById('cacheVersionInline');
+    if(inline){
+      inline.textContent = name;
+      return;
+    }
     var el = document.createElement('div');
     el.textContent = name;
     el.setAttribute('aria-label', 'cache-version');
