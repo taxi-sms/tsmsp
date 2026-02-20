@@ -414,13 +414,17 @@
       const manualResult=Number(String(manualRow.result||'').replace(/[^0-9]/g,''));
       const manualWorkMin=parseHmToMin(manualRow.work);
       const manualBreakMin=parseHmToMin(manualRow.break);
-      const showResult=(manualEditMode && Number.isFinite(manualResult))?manualResult:result;
-      const showWorkMin=(manualEditMode && Number.isFinite(manualWorkMin))?manualWorkMin:workMin;
-      const showBreakMin=(manualEditMode && Number.isFinite(manualBreakMin))?manualBreakMin:breakMin;
-      const showDepart=(manualEditMode && manualRow.depart!=null && String(manualRow.depart).trim()!=='')?manualRow.depart:(opsData?opsData.depart:'--');
+      const hasManualResult = manualRow.result!=null && String(manualRow.result).trim()!=='';
+      const hasManualDepart = manualRow.depart!=null && String(manualRow.depart).trim()!=='';
+      const hasManualWork = manualRow.work!=null && String(manualRow.work).trim()!=='';
+      const hasManualBreak = manualRow.break!=null && String(manualRow.break).trim()!=='';
+      const showResult=(hasManualResult && Number.isFinite(manualResult))?manualResult:result;
+      const showWorkMin=(hasManualWork && Number.isFinite(manualWorkMin))?manualWorkMin:workMin;
+      const showBreakMin=(hasManualBreak && Number.isFinite(manualBreakMin))?manualBreakMin:breakMin;
+      const showDepart=hasManualDepart?manualRow.depart:(opsData?opsData.depart:'--');
       const diff=showResult-target;
       const hour=showWorkMin>0?Math.round(showResult/(showWorkMin/60)):0;
-      const showHourText=(manualEditMode || opsData)?fmtNum(hour):'--';
+      const showHourText=(hasManualResult || hasManualWork || opsData)?fmtNum(hour):'--';
 
       if(active){
         sumTarget+=target; sumResult+=showResult; sumDiff+=diff; sumWork+=showWorkMin; sumBreak+=showBreakMin;
