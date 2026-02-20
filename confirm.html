@@ -2,7 +2,11 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport"
+      content="width=device-width,
+               initial-scale=1,
+               maximum-scale=1,
+               user-scalable=no"/>
 <title>入力確認</title>
 <style>
   body{margin:0;font-family:"Noto Sans JP", sans-serif;background:#fff;color:#000}
@@ -168,6 +172,7 @@ a{ color:var(--link); }
   const KEY = "tsms_reports";
   const ARCHIVE_KEY = "tsms_reports_archive";
   const CURRENT_DAY_KEY = "tsms_report_current_day";
+  const CONFIRM_FORCE_EMPTY_KEY = "tsms_confirm_force_empty";
   let allData = [];
   let selectedDayId = "";
 
@@ -227,21 +232,13 @@ a{ color:var(--link); }
     return Array.from(set).sort((a,b)=> b.localeCompare(a));
   }
 
-  function syncDateSelect(){
-    const sel = document.getElementById("confirmDateSelect");
-    if(!sel) return;
-    const days = availableDays();
-    sel.innerHTML = "";
-
-    if(!days.length){
-      const opt = document.createElement("option");
-      opt.value = "";
-      opt.textContent = "保存済みデータなし";
-      sel.appendChild(opt);
-      sel.disabled = true;
-      selectedDayId = "";
-      return;
-    }
+function todayLocalYmd(){
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
 
     const currentDay = localStorage.getItem(CURRENT_DAY_KEY) || "";
     if(!currentDay){
@@ -352,12 +349,19 @@ a{ color:var(--link); }
   });
 
   const sel = document.getElementById("confirmDateSelect");
-  if(sel){
-    sel.addEventListener("change", ()=>{
-      selectedDayId = sel.value || "";
-      render();
-    });
-  }
+if(sel){
+  sel.addEventListener("change", ()=>{
+    selectedDayId = sel.value || "";
+
+    if(selectedDayId){
+      localStorage.setItem(CURRENT_DAY_KEY, selectedDayId);
+    }else{
+      localStorage.removeItem(CURRENT_DAY_KEY);
+    }
+
+    render();
+  });
+}
 
   load();
   syncDateSelect();
