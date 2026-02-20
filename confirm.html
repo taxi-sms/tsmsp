@@ -240,69 +240,25 @@ function todayLocalYmd(){
   return `${y}-${m}-${day}`;
 }
 
-function syncDateSelect(){
-  const sel = document.getElementById("confirmDateSelect");
-  if(!sel) return;
+    const currentDay = localStorage.getItem(CURRENT_DAY_KEY) || "";
+    if(!currentDay){
+      const emptyOpt = document.createElement("option");
+      emptyOpt.value = "";
+      emptyOpt.textContent = "日付を選択";
+      sel.appendChild(emptyOpt);
+    }
 
-  const days = availableDays();
-  sel.innerHTML = "";
+    days.forEach((dayId)=>{
+      const opt = document.createElement("option");
+      opt.value = dayId;
+      opt.textContent = dayLabel(dayId);
+      sel.appendChild(opt);
+    });
 
-  // データなし
-  if(!days.length){
-    const opt = document.createElement("option");
-    opt.value = "";
-    opt.textContent = "保存済みデータなし";
-    sel.appendChild(opt);
-    sel.disabled = true;
-    selectedDayId = "";
-    localStorage.removeItem(CURRENT_DAY_KEY);
-    return;
-  }
-
-  // 先頭に必ず「日付を選択」
-  const emptyOpt = document.createElement("option");
-  emptyOpt.value = "";
-  emptyOpt.textContent = "日付を選択";
-  sel.appendChild(emptyOpt);
-
-  // 日付一覧
-  days.forEach((dayId)=>{
-    const opt = document.createElement("option");
-    opt.value = dayId;
-    opt.textContent = dayLabel(dayId);
-    sel.appendChild(opt);
-  });
-
-  const forceEmpty = localStorage.getItem(CONFIRM_FORCE_EMPTY_KEY) === "1";
-
-  const today = todayLocalYmd();
-  const hasTodayData = days.includes(today);
-
-  // ★要望どおりのデフォルト選択
-  // - 今日のデータがある → 今日
-  // - 過去データしかない → 未選択（空）
-  let picked = "";
-  if(!forceEmpty && hasTodayData){
-    picked = today;
-  }else{
-    picked = "";
-  }
-
-  selectedDayId = picked;
-  sel.value = selectedDayId;
-  sel.disabled = false;
-
-  // report.html の保存先にも反映（未選択ならクリア）
-  if(selectedDayId){
-    localStorage.setItem(CURRENT_DAY_KEY, selectedDayId);
-  }else{
-    localStorage.removeItem(CURRENT_DAY_KEY);
-  }
-
-  if(forceEmpty){
-    localStorage.removeItem(CONFIRM_FORCE_EMPTY_KEY);
-  }
-}
+    const picked = [selectedDayId, currentDay, currentDay ? days[0] : ""].find((v)=> v === "" || (v && days.includes(v)));
+    selectedDayId = (picked === undefined) ? (currentDay ? days[0] : "") : picked;
+    sel.value = selectedDayId;
+    sel.disabled = false;
   }
 
   function filteredDataWithIndex(){
