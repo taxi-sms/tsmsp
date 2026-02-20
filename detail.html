@@ -244,9 +244,19 @@ a{ color:var(--link); }
 
   function loadOpsByDayId(dayId){
     const current = loadJson(OPS_KEY, {});
-    if(current && String(current.dayId || "") === String(dayId || "")) return current;
+    const target = String(dayId || "");
+    const currentDay = String((current && (current.dayId || current.date)) || "");
+    if(current && currentDay === target) return current;
     const archive = loadJson(OPS_ARCHIVE_KEY, {});
-    if(archive && typeof archive === "object" && archive[String(dayId)]) return archive[String(dayId)];
+    if(archive && typeof archive === "object"){
+      if(archive[target]) return archive[target];
+      const list = Object.values(archive);
+      for(const item of list){
+        if(!item || typeof item !== "object") continue;
+        const d = String(item.dayId || item.date || "");
+        if(d === target) return item;
+      }
+    }
     return {};
   }
 
@@ -317,8 +327,10 @@ a{ color:var(--link); }
     document.getElementById("targetDay").textContent = dayId ? `対象日: ${dayId.replace(/-/g, "/")}` : "対象日: --";
 
     const departAt = ops.departAt || null;
+    const returnAt = ops.returnAt || null;
     const departMs = departAt ? new Date(departAt).getTime() : NaN;
-    const elapsedMin = isNaN(departMs) ? 0 : Math.max(0, Math.round((Date.now() - departMs)/60000));
+    const endMs = returnAt ? new Date(returnAt).getTime() : Date.now();
+    const elapsedMin = isNaN(departMs) ? 0 : Math.max(0, Math.round((endMs - departMs)/60000));
 
     const sess = Array.isArray(ops.breakSessions) ? ops.breakSessions : [];
     let breakMin = sess.reduce((s,x)=> s + num(x.minutes), 0);
