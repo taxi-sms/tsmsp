@@ -84,6 +84,7 @@ html,body{
 .subline{display:block;margin-left:1.2em;}
 .contact{margin-top:18px;}
 .sign{margin-top:6px;text-align:right;font-weight:700;}
+.cache-version-foot{margin:14px 0 8px 0;font-size:12px;color:var(--text-muted);text-align:right;}
 
 @media (min-width:768px){
   .container{max-width:760px;margin:0 auto;}
@@ -213,12 +214,12 @@ a{ color:var(--link); }
         </li>
       </ul>
 
-      <p class="contact">アプリについての要望や質問があれば、<strong>taxi-sms.@sm-s.com</strong>にご連絡下さい。</p>
+      <p class="contact">アプリについての要望や質問があれば、<strong>taxi-sms@sm-s.com</strong>にご連絡下さい。</p>
       <div class="sign">2026/2/15　B.O.A.T. Tsubakihara</div>
     </div>
   </section>
 </main>
-
+<div class="cache-version-foot">キャッシュ更新: 2026-02-17 04:50 JST</div>
 
 <script>
 const menu = document.getElementById("menu");
@@ -259,7 +260,7 @@ menu.querySelectorAll("a").forEach(a=>a.addEventListener("click", closeMenu));
 
 
   <script>
-    (function(){if('serviceWorker'in navigator&&location.protocol.indexOf('http')===0){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js?v=20260215-1').catch(function(){});});}})();
+    (function(){if('serviceWorker'in navigator&&location.protocol.indexOf('http')===0){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js?v=20260216-3').catch(function(){});});}})();
   </script>
 
 
