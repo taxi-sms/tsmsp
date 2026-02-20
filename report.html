@@ -31,6 +31,7 @@
       padding:14px 10px;font-size:20px;min-height:56px;background:#fff;
     }
     .wf-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px;}
+    .wf-inline{display:grid;grid-template-columns:7fr 3fr;gap:8px;align-items:end;}
     .is-hidden{display:none !important;}
     .keypad{margin-top:10px;border-top:2px solid var(--border);padding-top:10px;}
     .keypad-grid{display:grid;grid-template-columns:repeat(3, 1fr);gap:8px;}
@@ -222,7 +223,10 @@ a{ color:var(--link); }
 
       <div class="wf-field">
         <div class="wf-field-label">備考</div>
-        <input class="input" id="in_note" placeholder="メモ">
+        <div class="wf-inline">
+          <input class="input" id="in_note" placeholder="メモ">
+          <button class="btn" type="button" id="btn_discount">障害割引</button>
+        </div>
       </div>
 
       <div class="wf-actions">
@@ -256,7 +260,7 @@ a{ color:var(--link); }
   const REPORT_KEY = "tsms_reports";
   const CURRENT_DAY_KEY = "tsms_report_current_day";
   const CONFIRM_FORCE_EMPTY_KEY = "tsms_confirm_force_empty";
-  const state = { rideType: "", payMethod: "", ticketSub: "" };
+  const state = { rideType: "", payMethod: "", ticketSub: "", disabilityDiscount: false };
   const secTicket = document.getElementById("sec_ticketSub");
   const secAmounts = document.getElementById("sec_amounts");
   const rowCash = document.getElementById("row_cash");
@@ -264,6 +268,7 @@ a{ color:var(--link); }
   const inCash = document.getElementById("in_cash");
   const inCredit = document.getElementById("in_credit");
   const inNote = document.getElementById("in_note");
+  const btnDiscount = document.getElementById("btn_discount");
   const btnClear = document.getElementById("btn_clear");
   const btnSubmit = document.getElementById("btn_submit");
   let focused = inCash;
@@ -340,7 +345,9 @@ a{ color:var(--link); }
     state.rideType = "";
     state.payMethod = "";
     state.ticketSub = "";
+    state.disabilityDiscount = false;
     document.querySelectorAll('button[data-group]').forEach((b) => b.classList.remove("is-selected"));
+    btnDiscount.classList.remove("is-selected");
     inCash.value = "";
     inCredit.value = "";
     inNote.value = "";
@@ -349,7 +356,13 @@ a{ color:var(--link); }
     secTicket.classList.add("is-hidden");
     focused = inCash;
     inCash.focus();
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
+
+  btnDiscount.addEventListener("click", () => {
+    state.disabilityDiscount = !state.disabilityDiscount;
+    btnDiscount.classList.toggle("is-selected", state.disabilityDiscount);
+  });
 
   document.addEventListener("click", (e) => {
     const btn = e.target.closest("button[data-group]");
@@ -420,6 +433,7 @@ a{ color:var(--link); }
       rideType: state.rideType,
       payMethod: state.payMethod,
       ticketSub: state.ticketSub || "",
+      disabilityDiscount: !!state.disabilityDiscount,
       cash: cash ? Number(cash.replace(/[^0-9]/g, "")) : 0,
       credit: credit ? Number(credit.replace(/[^0-9]/g, "")) : 0,
       note: (inNote.value || "").trim(),
@@ -475,6 +489,8 @@ a{ color:var(--link); }
     state.rideType = entry.rideType || "";
     state.payMethod = entry.payMethod || "";
     state.ticketSub = entry.ticketSub || "";
+    state.disabilityDiscount = !!entry.disabilityDiscount;
+    btnDiscount.classList.toggle("is-selected", state.disabilityDiscount);
 
     ["rideType", "payMethod", "ticketSub"].forEach((group) => {
       const target = state[group];
@@ -563,9 +579,11 @@ a{ color:var(--link); }
     var cash=document.getElementById('in_cash');
     var credit=document.getElementById('in_credit');
     var note=document.getElementById('in_note');
+    var discount=document.getElementById('btn_discount');
     var hasVal=((cash&&cash.value)||(credit&&credit.value)||(note&&note.value));
     var selected=document.querySelector('button[data-group].is-selected');
-    return !!(hasVal||selected);
+    var discountSelected=!!(discount&&discount.classList.contains('is-selected'));
+    return !!(hasVal||selected||discountSelected);
   }
   document.querySelectorAll('.tsms-bottom-nav a, .tsms-more-sheet a').forEach(function(a){
     a.addEventListener('click',function(e){
