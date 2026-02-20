@@ -145,14 +145,14 @@
 (function(){
   const REPORT_KEY='tsms_reports';
   const REPORT_ARCHIVE_KEY='tsms_reports_archive';
-
   const OPS_KEY='ops';
   const OPS_ARCHIVE_KEY='ops_archive_v1'; // ★追加：opsクリア後はここを見る
 
   const SETTINGS_KEY='tsms_settings';
   const PLAN_KEY='tsms_sales_plan';
   const HOLIDAY_KEY='tsms_holidays_jp_v1';
-
+  const SALES_RESET_TOKEN_KEY='tsms_sales_reset_token';
+  const SALES_RESET_TOKEN='20260216-reset-1';
   const SHIFT_ORDER=['work','holiday','absence','part','furidashi','furikyu'];
   const SHIFT_LABEL={work:'出勤',holiday:'休日',absence:'欠勤',part:'バイト',furidashi:'振出',furikyu:'振休'};
   const SHIFT_CLASS={work:'s-work',holiday:'s-holiday',absence:'s-absence',part:'s-part',furidashi:'s-furidashi',furikyu:'s-furikyu'};
@@ -164,7 +164,14 @@
 
   function loadJson(k,f){try{const v=JSON.parse(localStorage.getItem(k)||'null');return v==null?f:v;}catch(_){return f;}}
   function saveJson(k,v){localStorage.setItem(k,JSON.stringify(v));}
-
+  function applySalesOneTimeReset(){
+    try{
+      const done = localStorage.getItem(SALES_RESET_TOKEN_KEY);
+      if(done === SALES_RESET_TOKEN) return;
+      localStorage.removeItem(PLAN_KEY);
+      localStorage.setItem(SALES_RESET_TOKEN_KEY, SALES_RESET_TOKEN);
+    }catch(_){ }
+  }
   function ymd(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
   function parseYmd(s){const [y,m,d]=String(s).split('-').map(Number);return new Date(y,m-1,d);}
   function addDays(d,n){const x=new Date(d);x.setDate(x.getDate()+n);return x;}
@@ -357,6 +364,7 @@
       const dayId=ymd(d);
       if(!plan[dayId]) plan[dayId]={ shift:'work', target:'' };
 
+
       const row=plan[dayId];
       const shift=row.shift;
       const active=(shift==='work' || shift==='part' || shift==='furidashi');
@@ -437,6 +445,7 @@
   });
 
   (async function init(){
+    applySalesOneTimeReset();
     holidaySet = await loadHolidaySet();
     render(holidaySet);
   })();

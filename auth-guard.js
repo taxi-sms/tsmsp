@@ -50,15 +50,16 @@ async function guard() {
     const alreadyReloaded = sessionStorage.getItem(reloadMarker) === "1";
     const previousUserId = getLastSyncedUserId();
     const userChanged = !!previousUserId && previousUserId !== userId;
+    const shouldForceHydration = !previousUserId || userChanged;
 
     if (userChanged) {
       clearSyncedLocalState();
     }
 
-    const hydration = await hydrateCloudState({ force: userChanged });
+    const hydration = await hydrateCloudState({ force: shouldForceHydration });
     setLastSyncedUserId(userId);
 
-    if ((userChanged || hydration.restored) && !alreadyReloaded) {
+    if (hydration.restored && !alreadyReloaded) {
       sessionStorage.setItem(reloadMarker, "1");
       location.reload();
       return;

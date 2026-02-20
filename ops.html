@@ -244,7 +244,6 @@ bg.onclick = () => { menu.classList.remove("open"); bg.classList.remove("show");
 
 /* ===== Ops Logic ===== */
 const KEY = "ops";
-const OPS_ARCHIVE_KEY = "ops_archive_v1";   // ★追加：クリア前に退避してsalesで参照する
 const REPORT_KEY = "tsms_reports";
 const REPORT_ARCHIVE_KEY = "tsms_reports_archive";
 const CURRENT_DAY_KEY = "tsms_report_current_day";
@@ -491,7 +490,6 @@ btnReset.onclick = async ()=>{
     if(window.tsmsCloud && typeof window.tsmsCloud.setSyncPaused === "function") {
       window.tsmsCloud.setSyncPaused(true);
     }
-
     const currentDayId = localStorage.getItem(CURRENT_DAY_KEY) || (load().dayId || localYmd());
     const activeRows = JSON.parse(localStorage.getItem(REPORT_KEY) || "[]");
     const archiveRows = JSON.parse(localStorage.getItem(REPORT_ARCHIVE_KEY) || "[]");
@@ -502,22 +500,6 @@ btnReset.onclick = async ()=>{
     const byId = new Map();
     (Array.isArray(archiveRows) ? archiveRows : []).forEach((r)=>{ if(r && r.id) byId.set(String(r.id), r); });
     todayRows.forEach((r)=>{ if(r && r.id) byId.set(String(r.id), r); });
-
-    // ★追加：opsを消す前に履歴へ退避（sales用）
-    try{
-      const opsNow = load(); // ここではまだopsが残っている
-      const dayId = String(currentDayId);
-      const archive = JSON.parse(localStorage.getItem(OPS_ARCHIVE_KEY) || "{}");
-      if(archive && typeof archive === "object"){
-        archive[dayId] = {
-          dayId,
-          departAt: opsNow.departAt || null,
-          returnAt: opsNow.returnAt || null,
-          breakSessions: Array.isArray(opsNow.breakSessions) ? opsNow.breakSessions : []
-        };
-        localStorage.setItem(OPS_ARCHIVE_KEY, JSON.stringify(archive));
-      }
-    }catch(e){}
 
     localStorage.removeItem(KEY);
     localStorage.removeItem(CURRENT_DAY_KEY);
@@ -539,9 +521,13 @@ render();
 setInterval(()=>{ try{ updateBreakTimer(load()); }catch(e){} }, 1000);
 </script>
 
-<script>
-  (function(){if('serviceWorker'in navigator&&location.protocol.indexOf('http')===0){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js?v=20260216-3').catch(function(){});});}})();
-</script>
+
+
+
+  <script>
+    (function(){if('serviceWorker'in navigator&&location.protocol.indexOf('http')===0){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js?v=20260216-3').catch(function(){});});}})();
+  </script>
+
 
 <nav class="tsms-bottom-nav" aria-label="ボトムメニュー">
   <a href="report.html" data-tab="report"><span class="ico">📝</span><span>日報入力</span></a>
