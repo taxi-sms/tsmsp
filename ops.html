@@ -247,6 +247,7 @@ const KEY = "ops";
 const REPORT_KEY = "tsms_reports";
 const REPORT_ARCHIVE_KEY = "tsms_reports_archive";
 const CURRENT_DAY_KEY = "tsms_report_current_day";
+const CONFIRM_FORCE_EMPTY_KEY = "tsms_confirm_force_empty";
 
 function nowISO(){ return new Date().toISOString(); }
 function localYmd(){
@@ -503,6 +504,7 @@ btnReset.onclick = async ()=>{
 
     localStorage.removeItem(KEY);
     localStorage.removeItem(CURRENT_DAY_KEY);
+    localStorage.setItem(CONFIRM_FORCE_EMPTY_KEY, "1");
     localStorage.setItem(REPORT_KEY, JSON.stringify(remainRows));
     localStorage.setItem(REPORT_ARCHIVE_KEY, JSON.stringify(Array.from(byId.values())));
     render();

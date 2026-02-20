@@ -172,6 +172,7 @@ a{ color:var(--link); }
   const KEY = "tsms_reports";
   const ARCHIVE_KEY = "tsms_reports_archive";
   const CURRENT_DAY_KEY = "tsms_report_current_day";
+  const CONFIRM_FORCE_EMPTY_KEY = "tsms_confirm_force_empty";
   let allData = [];
   let selectedDayId = "";
 
@@ -256,6 +257,14 @@ a{ color:var(--link); }
       sel.appendChild(emptyOpt);
     }
 
+    const currentDay = localStorage.getItem(CURRENT_DAY_KEY) || "";
+    const forceEmpty = localStorage.getItem(CONFIRM_FORCE_EMPTY_KEY) === "1";
+
+    const emptyOpt = document.createElement("option");
+    emptyOpt.value = "";
+    emptyOpt.textContent = "日付を選択";
+    sel.appendChild(emptyOpt);
+
     days.forEach((dayId)=>{
       const opt = document.createElement("option");
       opt.value = dayId;
@@ -263,10 +272,16 @@ a{ color:var(--link); }
       sel.appendChild(opt);
     });
 
-    const picked = [selectedDayId, currentDay, currentDay ? days[0] : ""].find((v)=> v === "" || (v && days.includes(v)));
-    selectedDayId = (picked === undefined) ? (currentDay ? days[0] : "") : picked;
+    const preferredDay = currentDay && days.includes(currentDay) ? currentDay : days[0];
+    const hasSelectedDay = selectedDayId && days.includes(selectedDayId);
+    const picked = forceEmpty ? "" : (hasSelectedDay ? selectedDayId : preferredDay || "");
+    selectedDayId = picked || "";
     sel.value = selectedDayId;
     sel.disabled = false;
+
+    if(forceEmpty){
+      localStorage.removeItem(CONFIRM_FORCE_EMPTY_KEY);
+    }
   }
 
   function filteredDataWithIndex(){
