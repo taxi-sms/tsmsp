@@ -246,7 +246,10 @@ bg.onclick = () => { menu.classList.remove("open"); bg.classList.remove("show");
 
 /* ===== Ops Logic ===== */
 const KEY = "ops";
+const REPORT_KEY = "tsms_reports";
+const REPORT_ARCHIVE_KEY = "tsms_reports_archive";
 const CURRENT_DAY_KEY = "tsms_report_current_day";
+const CONFIRM_FORCE_EMPTY_KEY = "tsms_confirm_force_empty";
 
 function nowISO(){ return new Date().toISOString(); }
 function localYmd(){
@@ -294,10 +297,21 @@ function defaultData(){
     returnAt: null,
     breakActive: false,
     breakStartAt: null,
-    breakSessions: [] // {start,end,minutes}
+    breakSessions: [], // {start,end,minutes}
+    shiftClosed: false
   };
 }
-function load(){ return safeParse() || defaultData(); }
+function normalizeData(raw){
+  const d = Object.assign(defaultData(), raw || {});
+  d.breakSessions = Array.isArray(d.breakSessions) ? d.breakSessions : [];
+  if(typeof d.shiftClosed !== "boolean") d.shiftClosed = !!d.returnAt;
+  if(d.shiftClosed && d.breakActive){
+    d.breakActive = false;
+    d.breakStartAt = null;
+  }
+  return d;
+}
+function load(){ return normalizeData(safeParse() || defaultData()); }
 
 function calcBreakTotal(d){
   return (d.breakSessions||[]).reduce((s,x)=>s+(Number(x.minutes)||0),0);
@@ -364,20 +378,28 @@ function render(){
   }
 
   // buttons state
-  const departMs = d.departAt ? new Date(d.departAt).getTime() : NaN;
-  const returnMs = d.returnAt ? new Date(d.returnAt).getTime() : NaN;
-  const running = !isNaN(departMs) && (isNaN(returnMs) || departMs >= returnMs);
+  const hasDepart = !!d.departAt;
+  const hasReturn = !!d.returnAt;
+  const running = hasDepart && !hasReturn && !d.shiftClosed;
 
-  btnDepart.disabled = running;
-  btnReturn.disabled = !running;
+  if(d.shiftClosed){
+    btnDepart.disabled = true;
+    btnReturn.disabled = true;
+  } else if(running){
+    btnDepart.disabled = true;
+    btnReturn.disabled = false;
+  } else {
+    btnDepart.disabled = false;
+    btnReturn.disabled = true;
+  }
 
-  btnBreakStart.disabled = d.breakActive;
-  btnBreakEnd.disabled = !d.breakActive;
+  btnBreakStart.disabled = d.shiftClosed || d.breakActive || !running;
+  btnBreakEnd.disabled = d.shiftClosed || !d.breakActive;
 
-  btnDepart.classList.toggle("next", !running);
-  btnReturn.classList.toggle("next", running);
-  btnBreakStart.classList.toggle("next", !d.breakActive);
-  btnBreakEnd.classList.toggle("next", d.breakActive);
+  btnDepart.classList.toggle("next", !btnDepart.disabled);
+  btnReturn.classList.toggle("next", !btnReturn.disabled);
+  btnBreakStart.classList.toggle("next", !btnBreakStart.disabled);
+  btnBreakEnd.classList.toggle("next", !btnBreakEnd.disabled);
 
   // list
   const sessions = d.breakSessions || [];
@@ -398,6 +420,8 @@ function render(){
 btnDepart.onclick = ()=>{
   const d = load();
   d.departAt = nowISO();
+  d.returnAt = null;
+  d.shiftClosed = false;
   if(!localStorage.getItem(CURRENT_DAY_KEY)){
     localStorage.setItem(CURRENT_DAY_KEY, localYmd());
   }
@@ -407,8 +431,25 @@ btnDepart.onclick = ()=>{
 };
 
 btnReturn.onclick = ()=>{
+  if(!confirm("帰庫しますか？")) return;
+
   const d = load();
-  d.returnAt = nowISO();
+  const end = nowISO();
+
+  if(d.breakActive && d.breakStartAt){
+    const minutes = minDiff(d.breakStartAt, end);
+    d.breakSessions = d.breakSessions || [];
+    d.breakSessions.push({
+      start: d.breakStartAt,
+      end,
+      minutes
+    });
+  }
+
+  d.breakActive = false;
+  d.breakStartAt = null;
+  d.returnAt = end;
+  d.shiftClosed = true;
   d.dayId = localStorage.getItem(CURRENT_DAY_KEY) || localYmd();
   save(d);
   render();
@@ -440,11 +481,44 @@ btnBreakEnd.onclick = ()=>{
   render();
 };
 
-btnReset.onclick = ()=>{
-  if(!confirm("この日の出庫/帰庫/休憩を全てクリアしますか？")) return;
-  localStorage.removeItem(KEY);
-  localStorage.removeItem(CURRENT_DAY_KEY);
-  render();
+btnReset.onclick = async ()=>{
+  if(!confirm("この日の記録をクラウドへ保存してからクリアします。よろしいですか？")) return;
+
+  btnReset.disabled = true;
+  try{
+    if(window.tsmsCloud && typeof window.tsmsCloud.backupNow === "function") {
+      await window.tsmsCloud.backupNow();
+    }
+
+    if(window.tsmsCloud && typeof window.tsmsCloud.setSyncPaused === "function") {
+      window.tsmsCloud.setSyncPaused(true);
+    }
+    const currentDayId = localStorage.getItem(CURRENT_DAY_KEY) || (load().dayId || localYmd());
+    const activeRows = JSON.parse(localStorage.getItem(REPORT_KEY) || "[]");
+    const archiveRows = JSON.parse(localStorage.getItem(REPORT_ARCHIVE_KEY) || "[]");
+
+    const todayRows = (Array.isArray(activeRows) ? activeRows : []).filter((r)=> String((r && r.dayId) || "") === String(currentDayId));
+    const remainRows = (Array.isArray(activeRows) ? activeRows : []).filter((r)=> String((r && r.dayId) || "") !== String(currentDayId));
+
+    const byId = new Map();
+    (Array.isArray(archiveRows) ? archiveRows : []).forEach((r)=>{ if(r && r.id) byId.set(String(r.id), r); });
+    todayRows.forEach((r)=>{ if(r && r.id) byId.set(String(r.id), r); });
+
+    localStorage.removeItem(KEY);
+    localStorage.removeItem(CURRENT_DAY_KEY);
+    localStorage.setItem(CONFIRM_FORCE_EMPTY_KEY, "1");
+    localStorage.setItem(REPORT_KEY, JSON.stringify(remainRows));
+    localStorage.setItem(REPORT_ARCHIVE_KEY, JSON.stringify(Array.from(byId.values())));
+    render();
+    alert("この日の記録をクリアしました（過去データは日付選択から確認できます）");
+  }catch(e){
+    alert("クラウド保存に失敗したため、クリアを中止しました");
+  }finally{
+    if(window.tsmsCloud && typeof window.tsmsCloud.setSyncPaused === "function") {
+      window.tsmsCloud.setSyncPaused(false);
+    }
+    btnReset.disabled = false;
+  }
 };
 
 render();
@@ -455,7 +529,7 @@ setInterval(()=>{ try{ updateBreakTimer(load()); }catch(e){} }, 1000);
 
 
   <script>
-    (function(){if('serviceWorker'in navigator&&location.protocol.indexOf('http')===0){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js?v=20260215-1').catch(function(){});});}})();
+    (function(){if('serviceWorker'in navigator&&location.protocol.indexOf('http')===0){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js?v=20260216-3').catch(function(){});});}})();
   </script>
 
 
