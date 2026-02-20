@@ -502,6 +502,7 @@ btnReset.onclick = async ()=>{
   if(!confirm("この日の記録をクラウドへ保存してからクリアします。よろしいですか？")) return;
 
   btnReset.disabled = true;
+  let shouldBackupAfterChanges = false;
   try{
     if(window.tsmsCloud && typeof window.tsmsCloud.backupNow === "function") {
       await window.tsmsCloud.backupNow();
@@ -533,6 +534,7 @@ btnReset.onclick = async ()=>{
     localStorage.setItem(CONFIRM_FORCE_EMPTY_KEY, "1");
     localStorage.setItem(REPORT_KEY, JSON.stringify(remainRows));
     localStorage.setItem(REPORT_ARCHIVE_KEY, JSON.stringify(Array.from(byId.values())));
+    shouldBackupAfterChanges = true;
     render();
     alert("この日の記録をクリアしました（過去データは日付選択から確認できます）");
   }catch(e){
@@ -540,6 +542,9 @@ btnReset.onclick = async ()=>{
   }finally{
     if(window.tsmsCloud && typeof window.tsmsCloud.setSyncPaused === "function") {
       window.tsmsCloud.setSyncPaused(false);
+    }
+    if(shouldBackupAfterChanges && window.tsmsCloud && typeof window.tsmsCloud.backupNow === "function") {
+      try{ await window.tsmsCloud.backupNow(); }catch(e){}
     }
     btnReset.disabled = false;
   }
