@@ -146,8 +146,6 @@
   const REPORT_KEY='tsms_reports';
   const REPORT_ARCHIVE_KEY='tsms_reports_archive';
   const OPS_KEY='ops';
-  const OPS_ARCHIVE_KEY='ops_archive_v1'; // ★追加：opsクリア後はここを見る
-
   const SETTINGS_KEY='tsms_settings';
   const PLAN_KEY='tsms_sales_plan';
   const HOLIDAY_KEY='tsms_holidays_jp_v1';
@@ -173,18 +171,14 @@
     }catch(_){ }
   }
   function ymd(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
-  function parseYmd(s){const [y,m,d]=String(s).split('-').map(Number);return new Date(y,m-1,d);}
+  function parseYmd(s){const [y,m,d]=String(s).split('-').map(Number);return new Date(y,m-1,d);}  
   function addDays(d,n){const x=new Date(d);x.setDate(x.getDate()+n);return x;}
   function addMonths(d,n){const x=new Date(d);x.setMonth(x.getMonth()+n);return x;}
   function fmtNum(v){return Math.round(Number(v)||0).toLocaleString('ja-JP');}
   function pad2(n){return String(n).padStart(2,'0');}
   function hm(totalMin){const m=Math.max(0,Math.round(Number(totalMin)||0));return `${Math.floor(m/60)}:${pad2(m%60)}`;}
   function dowJa(d){return ['日','月','火','水','木','金','土'][d.getDay()];}
-  function minDiff(a,b){
-    const x=new Date(a).getTime(), y=new Date(b).getTime();
-    if(isNaN(x)||isNaN(y)) return 0;
-    return Math.max(0,Math.round((y-x)/60000));
-  }
+  function minDiff(a,b){const x=new Date(a).getTime(), y=new Date(b).getTime(); if(isNaN(x)||isNaN(y)) return 0; return Math.max(0,Math.round((y-x)/60000));}
   function todayYmd(){ const n=new Date(); return ymd(new Date(n.getFullYear(),n.getMonth(),n.getDate())); }
 
   async function loadHolidaySet(){
@@ -262,25 +256,10 @@
     return Math.round(salesExTax * (Number(settings.walkRate)||0) / 100);
   }
 
-  // ★追加：dayIdに対応するopsデータを「アーカイブ優先 → なければ当日のops」
-  function getOpsForDay(dayId){
-    try{
-      const arch = loadJson(OPS_ARCHIVE_KEY, {});
-      if(arch && typeof arch === 'object' && arch[dayId] && arch[dayId].returnAt){
-        return arch[dayId];
-      }
-    }catch(_){}
-
-    const ops = loadJson(OPS_KEY, null);
-    if(!ops) return null;
-    const opsDay = (ops && ops.dayId) ? String(ops.dayId) : String(localStorage.getItem('tsms_report_current_day')||'');
-    if(opsDay!==dayId || !ops.returnAt) return null;
-    return ops;
-  }
-
   function calcOpsDay(dayId){
-    const ops = getOpsForDay(dayId);
-    if(!ops || !ops.returnAt) return null;
+    const ops=loadJson(OPS_KEY,{});
+    const opsDay = (ops && ops.dayId) ? String(ops.dayId) : String(localStorage.getItem('tsms_report_current_day')||'');
+    if(!ops || opsDay!==dayId || !ops.returnAt) return null;
     const depart=ops.departAt?new Date(ops.departAt):null;
     const ret=ops.returnAt?new Date(ops.returnAt):null;
     const breakMin=(ops.breakSessions||[]).reduce((s,x)=>s+(Number(x.minutes)||0),0);
@@ -298,21 +277,9 @@
   function buildPeriods(settings,reports){
     const set = new Map();
     const seed=[new Date()];
-
     reports.forEach(r=>{ const d=parseYmd(toDayId(r)); if(!isNaN(d)) seed.push(d); });
-
-    // ★追加：ops（当日）も seed に入れる
     const ops=loadJson(OPS_KEY,{});
     if(ops && ops.dayId){ const d=parseYmd(ops.dayId); if(!isNaN(d)) seed.push(d); }
-
-    // ★追加：opsアーカイブの日付も seed に入れる（売上が無い日でも勤務実績があるケース対策）
-    const opsArch = loadJson(OPS_ARCHIVE_KEY, {});
-    if(opsArch && typeof opsArch === 'object'){
-      Object.keys(opsArch).forEach((k)=>{
-        const d=parseYmd(k);
-        if(!isNaN(d)) seed.push(d);
-      });
-    }
 
     // data-derived periods
     seed.forEach(d=>{ const p=getPeriodForDate(d, Number(settings.closeStartDay)||16, Number(settings.closeEndDay)||15); set.set(periodId(p), p); });
@@ -369,11 +336,9 @@
       const shift=row.shift;
       const active=(shift==='work' || shift==='part' || shift==='furidashi');
       const pastLocked = dayId < todayId;
-
       const result=active?calcDayNet(dayId,reports,settings):0;
       const target=active?(Number(row.target)||0):0;
       const diff=result-target;
-
       const opsData=active?calcOpsDay(dayId):null;
       const workMin=opsData?opsData.workMin:0;
       const breakMin=opsData?opsData.breakMin:0;
@@ -445,7 +410,6 @@
   });
 
   (async function init(){
-    applySalesOneTimeReset();
     holidaySet = await loadHolidaySet();
     render(holidaySet);
   })();
