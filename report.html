@@ -161,6 +161,29 @@ a{ color:var(--link); }
   .tsms-more-sheet a{display:block;padding:12px;border:2px solid var(--border,#ccc);margin-top:8px;text-decoration:none;color:var(--text-primary,#111);background:var(--surface-2,#f5f5f5);font-weight:900;}
   .tsms-more-bg{position:fixed;inset:0;background:rgba(0,0,0,.35);opacity:0;pointer-events:none;z-index:1250;transition:opacity .2s;}
   .tsms-more-bg.show{opacity:1;pointer-events:auto;}
+
+  .confirm-modal-bg{
+    position:fixed;inset:0;z-index:1400;
+    background:rgba(0,0,0,.45);
+    display:none;align-items:center;justify-content:center;
+    padding:16px;
+  }
+  .confirm-modal-bg.show{display:flex;}
+  .confirm-modal-card{
+    width:min(560px,100%);
+    background:var(--surface-1,#fff);
+    border:2px solid var(--border,#ccc);
+    padding:14px;
+  }
+  .confirm-modal-title{font-size:18px;font-weight:900;margin:0 0 10px;}
+  .confirm-modal-list{display:grid;gap:6px;margin:0 0 12px;}
+  .confirm-modal-item{
+    display:grid;grid-template-columns:110px 1fr;gap:8px;
+    font-size:14px;line-height:1.4;
+    border-bottom:1px solid var(--border,#ddd);padding-bottom:4px;
+  }
+  .confirm-modal-key{color:var(--text-muted,#666);font-weight:700;}
+  .confirm-modal-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
 </style>
 
   <script type="module" src="auth-guard.js"></script>
@@ -255,6 +278,25 @@ a{ color:var(--link); }
   </section>
 </main>
 
+<div class="confirm-modal-bg" id="submitConfirmModalBg" aria-hidden="true">
+  <div class="confirm-modal-card" role="dialog" aria-modal="true" aria-labelledby="submitConfirmTitle">
+    <p class="confirm-modal-title" id="submitConfirmTitle">この内容で登録しますか？</p>
+    <div class="confirm-modal-list">
+      <div class="confirm-modal-item"><span class="confirm-modal-key">乗車種別</span><span id="confirmRideType">-</span></div>
+      <div class="confirm-modal-item"><span class="confirm-modal-key">支払方法</span><span id="confirmPayMethod">-</span></div>
+      <div class="confirm-modal-item"><span class="confirm-modal-key">チケット種別</span><span id="confirmTicketSub">-</span></div>
+      <div class="confirm-modal-item"><span class="confirm-modal-key">現収</span><span id="confirmCash">0</span></div>
+      <div class="confirm-modal-item"><span class="confirm-modal-key">未収</span><span id="confirmCredit">0</span></div>
+      <div class="confirm-modal-item"><span class="confirm-modal-key">障害割引</span><span id="confirmDiscount">なし</span></div>
+      <div class="confirm-modal-item"><span class="confirm-modal-key">備考</span><span id="confirmNote">-</span></div>
+    </div>
+    <div class="confirm-modal-actions">
+      <button class="btn" type="button" id="confirmNoBtn">いいえ</button>
+      <button class="btn next" type="button" id="confirmYesBtn">はい</button>
+    </div>
+  </div>
+</div>
+
 <script>
 (() => {
   const REPORT_KEY = "tsms_reports";
@@ -271,6 +313,16 @@ a{ color:var(--link); }
   const btnDiscount = document.getElementById("btn_discount");
   const btnClear = document.getElementById("btn_clear");
   const btnSubmit = document.getElementById("btn_submit");
+  const submitConfirmModalBg = document.getElementById("submitConfirmModalBg");
+  const confirmRideType = document.getElementById("confirmRideType");
+  const confirmPayMethod = document.getElementById("confirmPayMethod");
+  const confirmTicketSub = document.getElementById("confirmTicketSub");
+  const confirmCash = document.getElementById("confirmCash");
+  const confirmCredit = document.getElementById("confirmCredit");
+  const confirmDiscount = document.getElementById("confirmDiscount");
+  const confirmNote = document.getElementById("confirmNote");
+  const confirmNoBtn = document.getElementById("confirmNoBtn");
+  const confirmYesBtn = document.getElementById("confirmYesBtn");
   let focused = inCash;
 
   function todayLocalYmd() {
@@ -359,6 +411,51 @@ a{ color:var(--link); }
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
+  function formatAmountText(value) {
+    const n = Number((value || "").replace(/[^0-9]/g, ""));
+    if (!n) return "0";
+    return n.toLocaleString("ja-JP");
+  }
+
+  function showSubmitConfirmModal() {
+    if (!submitConfirmModalBg) return Promise.resolve(true);
+    confirmRideType.textContent = state.rideType || "-";
+    confirmPayMethod.textContent = state.payMethod || "-";
+    confirmTicketSub.textContent = state.payMethod === "チケット他" ? (state.ticketSub || "-") : "-";
+    confirmCash.textContent = formatAmountText(inCash.value);
+    confirmCredit.textContent = formatAmountText(inCredit.value);
+    confirmDiscount.textContent = state.disabilityDiscount ? "あり" : "なし";
+    confirmNote.textContent = (inNote.value || "").trim() || "-";
+
+    return new Promise((resolve) => {
+      const close = (ok) => {
+        submitConfirmModalBg.classList.remove("show");
+        submitConfirmModalBg.setAttribute("aria-hidden", "true");
+        confirmNoBtn.removeEventListener("click", onNo);
+        confirmYesBtn.removeEventListener("click", onYes);
+        submitConfirmModalBg.removeEventListener("click", onBg);
+        document.removeEventListener("keydown", onEsc);
+        resolve(ok);
+      };
+      const onNo = () => close(false);
+      const onYes = () => close(true);
+      const onBg = (e) => {
+        if (e.target === submitConfirmModalBg) close(false);
+      };
+      const onEsc = (e) => {
+        if (e.key === "Escape") close(false);
+      };
+
+      submitConfirmModalBg.classList.add("show");
+      submitConfirmModalBg.setAttribute("aria-hidden", "false");
+      confirmNoBtn.addEventListener("click", onNo);
+      confirmYesBtn.addEventListener("click", onYes);
+      submitConfirmModalBg.addEventListener("click", onBg);
+      document.addEventListener("keydown", onEsc);
+      confirmNoBtn.focus();
+    });
+  }
+
   btnDiscount.addEventListener("click", () => {
     state.disabilityDiscount = !state.disabilityDiscount;
     btnDiscount.classList.toggle("is-selected", state.disabilityDiscount);
@@ -420,7 +517,7 @@ a{ color:var(--link); }
       return;
     }
 
-    if (!confirm("登録しますか？")) return;
+    if (!(await showSubmitConfirmModal())) return;
 
     const now = new Date();
     const hh = String(now.getHours()).padStart(2, "0");
@@ -596,6 +693,5 @@ a{ color:var(--link); }
 })();
 </script>
 
-  <script src="./cache-version.js"></script>
 </body>
 </html>
