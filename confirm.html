@@ -141,6 +141,7 @@ a{ color:var(--link); }
 </style>
 
   <script type="module" src="auth-guard.js"></script>
+  <script src="./custom-confirm.js"></script>
 </head>
 <body>
 <div class="wrap">
@@ -324,7 +325,7 @@ function todayLocalYmd(){
     });
   }
 
-  document.addEventListener("click", (e)=>{
+  document.addEventListener("click", async (e)=>{
     const btn = e.target.closest("button.actionBtn");
     if(!btn) return;
 
@@ -338,7 +339,7 @@ function todayLocalYmd(){
         alert("履歴データはここでは削除できません");
         return;
       }
-      if(!confirm("削除してよろしいですか？")) return;
+      if(!(await window.tsmsConfirm("削除してよろしいですか？"))) return;
       allData.splice(idx, 1);
       const activeOnly = allData.filter((r)=> !r || r.__source !== "archive").map((r)=>{
         const c = Object.assign({}, r);
@@ -464,8 +465,8 @@ if(sel){
     return !!(hasVal||selected);
   }
   document.querySelectorAll('.tsms-bottom-nav a, .tsms-more-sheet a').forEach(function(a){
-    a.addEventListener('click',function(e){
-      if(guard && isDirtyReport() && !confirm('入力を中止しますか？')){
+    a.addEventListener('click',async function(e){
+      if(guard && isDirtyReport() && !(await window.tsmsConfirm('入力を中止しますか？'))){
         e.preventDefault();
       }
       closeMore();

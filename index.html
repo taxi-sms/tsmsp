@@ -156,6 +156,7 @@ a{ color:var(--link); }
 </style>
 
   <script type="module" src="auth-guard.js"></script>
+  <script src="./custom-confirm.js"></script>
 </head>
 <body>
 
@@ -313,8 +314,8 @@ menu.querySelectorAll("a").forEach(a=>a.addEventListener("click", closeMenu));
     return !!(hasVal||selected);
   }
   document.querySelectorAll('.tsms-bottom-nav a, .tsms-more-sheet a').forEach(function(a){
-    a.addEventListener('click',function(e){
-      if(guard && isDirtyReport() && !confirm('入力を中止しますか？')){
+    a.addEventListener('click',async function(e){
+      if(guard && isDirtyReport() && !(await window.tsmsConfirm('入力を中止しますか？'))){
         e.preventDefault();
       }
       closeMore();

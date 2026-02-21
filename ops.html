@@ -192,6 +192,7 @@ a{ color:var(--link); }
 </style>
 
   <script type="module" src="auth-guard.js"></script>
+  <script src="./custom-confirm.js"></script>
 </head>
 <body>
 
@@ -447,8 +448,8 @@ btnDepart.onclick = ()=>{
   render();
 };
 
-btnReturn.onclick = ()=>{
-  if(!confirm("帰庫しますか？")) return;
+btnReturn.onclick = async ()=>{
+  if(!(await window.tsmsConfirm("帰庫しますか？"))) return;
 
   const d = load();
   const end = nowISO();
@@ -499,7 +500,7 @@ btnBreakEnd.onclick = ()=>{
 };
 
 btnReset.onclick = async ()=>{
-  if(!confirm("この日の記録をクラウドへ保存してからクリアします。よろしいですか？")) return;
+  if(!(await window.tsmsConfirm("この日の記録をクラウドへ保存してからクリアします。よろしいですか？"))) return;
 
   btnReset.disabled = true;
   let shouldBackupAfterChanges = false;
@@ -613,8 +614,8 @@ setInterval(()=>{ try{ updateBreakTimer(load()); }catch(e){} }, 1000);
     return !!(hasVal||selected);
   }
   document.querySelectorAll('.tsms-bottom-nav a, .tsms-more-sheet a').forEach(function(a){
-    a.addEventListener('click',function(e){
-      if(guard && isDirtyReport() && !confirm('入力を中止しますか？')){
+    a.addEventListener('click',async function(e){
+      if(guard && isDirtyReport() && !(await window.tsmsConfirm('入力を中止しますか？'))){
         e.preventDefault();
       }
       closeMore();
