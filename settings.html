@@ -468,8 +468,19 @@ import { cloudBackup, cloudRestore } from "./cloud-store.js";
     btnCloudBackup.addEventListener("click", async ()=>{
       btnCloudBackup.disabled = true;
       try{
-        await cloudBackup();
-        alert("クラウドへバックアップしました");
+        const res = await cloudBackup();
+        const lines = [
+          "クラウドへバックアップしました",
+          `ユーザー: ${res.userId || "(取得不可)"}`,
+          `保存キー数: ${res.keyCount}`,
+          `当日データ: ${res.reportCount}件`,
+          `履歴データ: ${res.archiveCount}件`,
+          `現在日付キー: ${res.currentDayId || "(なし)"}`,
+          `クラウド更新時刻: ${res.updatedAt || "(取得不可)"}`,
+          `履歴スナップショット: ${res.historyKey || "(保存失敗)"}`,
+          `履歴保持上限: ${res.historyKeepCount || "-"}世代`
+        ];
+        alert(lines.join("\n"));
       }catch(err){
         alert((err && err.message) ? err.message : "クラウドバックアップに失敗しました");
       }finally{
@@ -483,8 +494,17 @@ import { cloudBackup, cloudRestore } from "./cloud-store.js";
       if(!(await window.tsmsConfirm("クラウドから復元します。現在の保存データを上書きします。よろしいですか？"))) return;
       btnCloudRestore.disabled = true;
       try{
-        await cloudRestore();
-        alert("クラウドから復元しました。画面を再読み込みします");
+        const res = await cloudRestore();
+        const lines = [
+          "クラウドから復元しました。画面を再読み込みします",
+          `ユーザー: ${res.userId || "(取得不可)"}`,
+          `復元キー数: ${res.keyCount}`,
+          `当日データ: ${res.reportCount}件`,
+          `履歴データ: ${res.archiveCount}件`,
+          `現在日付キー: ${res.currentDayId || "(なし)"}`,
+          `クラウド更新時刻: ${res.updatedAt || "(取得不可)"}`
+        ];
+        alert(lines.join("\n"));
         location.reload();
       }catch(err){
         alert((err && err.message) ? err.message : "クラウド復元に失敗しました");

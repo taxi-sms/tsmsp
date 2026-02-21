@@ -1,6 +1,8 @@
 import { supabase } from "./supabase-client.js";
 
 const CLOUD_KEY = "localStorage_dump_v1";
+const CLOUD_HISTORY_PREFIX = `${CLOUD_KEY}:history:`;
+const CLOUD_HISTORY_KEEP_COUNT = 30;
 const LAST_SYNC_USER_KEY = "tsms_last_sync_user_id";
 const SYNC_KEYS = [
   "tsms_reports",
@@ -24,6 +26,57 @@ let inFlight = false;
 let pendingAfterFlight = false;
 let dirtySinceLastBackup = false;
 let syncPaused = false;
+
+function safeJsonParse(raw, fallback) {
+  try {
+    return JSON.parse(raw);
+  } catch (_) {
+    return fallback;
+  }
+}
+
+function summarizePayload(payload) {
+  const keys = Object.keys(payload || {});
+  const reports = safeJsonParse(payload?.tsms_reports || "[]", []);
+  const archive = safeJsonParse(payload?.tsms_reports_archive || "[]", []);
+  return {
+    keyCount: keys.length,
+    keys,
+    reportCount: Array.isArray(reports) ? reports.length : 0,
+    archiveCount: Array.isArray(archive) ? archive.length : 0,
+    currentDayId: String(payload?.tsms_report_current_day || "")
+  };
+}
+
+async function getCurrentUserId() {
+  try {
+    const { data } = await supabase.auth.getUser();
+    return String(data?.user?.id || "");
+  } catch (_) {
+    return "";
+  }
+}
+
+function buildHistoryKey() {
+  const iso = new Date().toISOString().replace(/[^\dTZ]/g, "");
+  const rand = Math.random().toString(36).slice(2, 8);
+  return `${CLOUD_HISTORY_PREFIX}${iso}_${rand}`;
+}
+
+async function pruneCloudHistory() {
+  const { data, error } = await supabase
+    .from("app_state")
+    .select("key,updated_at")
+    .like("key", `${CLOUD_HISTORY_PREFIX}%`)
+    .order("updated_at", { ascending: false });
+
+  if (error || !Array.isArray(data)) return;
+  if (data.length <= CLOUD_HISTORY_KEEP_COUNT) return;
+
+  const staleKeys = data.slice(CLOUD_HISTORY_KEEP_COUNT).map((x) => x.key).filter(Boolean);
+  if (!staleKeys.length) return;
+  await supabase.from("app_state").delete().in("key", staleKeys);
+}
 
 function shouldIncludeKey(key, prefix = "") {
   if (!key) return false;
@@ -60,21 +113,43 @@ export function restoreLocalStorage(obj, prefix = "") {
 
 export async function cloudBackup(prefix = "") {
   const payload = dumpLocalStorage(prefix);
+  const summary = summarizePayload(payload);
+  const userId = await getCurrentUserId();
+  const historyKey = buildHistoryKey();
 
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("app_state")
     .upsert(
       { key: CLOUD_KEY, value: payload, updated_at: new Date().toISOString() },
       { onConflict: "user_id,key" }
-    );
+    )
+    .select("updated_at")
+    .maybeSingle();
 
   if (error) throw error;
+
+  // Keep historical snapshots for rollback; best effort and non-blocking for the main backup.
+  try {
+    await supabase
+      .from("app_state")
+      .insert({ key: historyKey, value: payload, updated_at: new Date().toISOString() });
+    await pruneCloudHistory();
+  } catch (_) {}
+
+  return {
+    userId,
+    ...summary,
+    updatedAt: data?.updated_at || "",
+    historyKey,
+    historyKeepCount: CLOUD_HISTORY_KEEP_COUNT
+  };
 }
 
 export async function cloudRestore(prefix = "") {
+  const userId = await getCurrentUserId();
   const { data, error } = await supabase
     .from("app_state")
-    .select("value")
+    .select("value,updated_at")
     .eq("key", CLOUD_KEY)
     .maybeSingle();
 
@@ -82,6 +157,11 @@ export async function cloudRestore(prefix = "") {
   if (!data?.value) throw new Error("クラウドにバックアップがありません。先にバックアップしてね。");
 
   restoreLocalStorage(data.value, prefix);
+  return {
+    userId,
+    ...summarizePayload(data.value),
+    updatedAt: data?.updated_at || ""
+  };
 }
 
 export function clearSyncedLocalState(prefix = "") {
