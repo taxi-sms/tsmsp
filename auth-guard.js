@@ -107,10 +107,9 @@ async function guard() {
     if (userChanged) {
       clearSyncedLocalState();
     }
-    // Cloud-first mode: try an immediate backup before forced restore to protect unsynced local changes.
+    // Avoid a forced network write on every page navigation (notably unstable on iPhone/Safari during transitions).
     let hydration = { restored: false, reason: "skipped" };
     try {
-      await requestCloudBackup({ immediate: true });
       hydration = await hydrateCloudState({ force: shouldForceHydration });
       setLastSyncedUserId(userId);
     } catch (e) {
