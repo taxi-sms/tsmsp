@@ -402,6 +402,10 @@ function render(){
   if(d.shiftClosed){
     btnDepart.disabled = true;
     btnReturn.disabled = true;
+  } else if(hasReturn){
+    // 帰庫後〜日次クリア前は時刻修正のためデータは保持しつつ、再出庫は不可にする
+    btnDepart.disabled = true;
+    btnReturn.disabled = true;
   } else if(running){
     btnDepart.disabled = true;
     btnReturn.disabled = false;
@@ -467,7 +471,7 @@ btnReturn.onclick = async ()=>{
   d.breakActive = false;
   d.breakStartAt = null;
   d.returnAt = end;
-  d.shiftClosed = true;
+  d.shiftClosed = false;
   d.dayId = localStorage.getItem(CURRENT_DAY_KEY) || localYmd();
   save(d);
   render();
@@ -526,7 +530,10 @@ btnReset.onclick = async ()=>{
 
     if(opsData && (opsData.departAt || opsData.returnAt || (Array.isArray(opsData.breakSessions) && opsData.breakSessions.length))){
       const archive = loadOpsArchive();
-      archive[String(currentDayId)] = Object.assign({}, opsData, { dayId: String(currentDayId) });
+      archive[String(currentDayId)] = Object.assign({}, opsData, {
+        dayId: String(currentDayId),
+        shiftClosed: true
+      });
       saveOpsArchive(archive);
     }
 
