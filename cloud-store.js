@@ -27,6 +27,20 @@ let pendingAfterFlight = false;
 let dirtySinceLastBackup = false;
 let syncPaused = false;
 
+function currentPageName() {
+  try {
+    const p = (location.pathname || "").split("/").pop();
+    return p || "index.html";
+  } catch (_) {
+    return "";
+  }
+}
+
+function shouldFlushOnPageLeave() {
+  const page = currentPageName();
+  return page === "confirm.html" || page === "sales.html";
+}
+
 function safeJsonParse(raw, fallback) {
   try {
     return JSON.parse(raw);
@@ -291,6 +305,7 @@ export function ensureCloudSyncRuntime({ debounce = 5000 } = {}) {
   };
 
   const flushIfNeeded = () => {
+    if (!shouldFlushOnPageLeave()) return;
     if (syncPaused || !dirtySinceLastBackup) return;
     requestCloudBackup({ immediate: true });
   };
