@@ -11,6 +11,7 @@ import {
 
 const PUBLIC_PAGES = new Set(["login.html", "signup.html", "auth-callback.html"]);
 const IDLE_LOGOUT_MS = 30 * 60 * 1000;
+const AUTH_GUARD_VERSION = "20260222-diag-1";
 
 function currentPage() {
   const p = location.pathname.split("/").pop();
@@ -18,6 +19,13 @@ function currentPage() {
 }
 
 function redirectToLogin() {
+  try {
+    console.log("[tsms-auth-guard] redirectToLogin", {
+      version: AUTH_GUARD_VERSION,
+      at: new Date().toISOString(),
+      href: location.href
+    });
+  } catch (_) {}
   const loginUrl = new URL("login.html", location.href);
   const next = location.pathname + location.search + location.hash;
   loginUrl.searchParams.set("next", next || "/index.html");
@@ -35,7 +43,65 @@ function lockErrorMessage(err) {
   return msg;
 }
 
+function renderDiag(message) {
+  try {
+    let el = document.getElementById("tsmsAuthGuardDiag");
+    if (!el) {
+      el = document.createElement("div");
+      el.id = "tsmsAuthGuardDiag";
+      el.style.cssText = [
+        "position:fixed",
+        "right:8px",
+        "bottom:8px",
+        "z-index:99999",
+        "max-width:88vw",
+        "background:rgba(0,0,0,.78)",
+        "color:#fff",
+        "font:11px/1.35 monospace",
+        "padding:6px 8px",
+        "border-radius:6px",
+        "white-space:pre-wrap",
+        "pointer-events:none"
+      ].join(";");
+      document.addEventListener("DOMContentLoaded", () => {
+        if (!document.body.contains(el)) document.body.appendChild(el);
+      }, { once: true });
+      if (document.body) document.body.appendChild(el);
+    }
+    el.textContent = message;
+  } catch (_) {}
+}
+
+function updateDiag(extra = "") {
+  const now = new Date();
+  const msg = [
+    `auth-guard:${AUTH_GUARD_VERSION}`,
+    `idle_ms:${IDLE_LOGOUT_MS}`,
+    `now:${now.toLocaleTimeString()}`,
+    extra
+  ].filter(Boolean).join("\n");
+  renderDiag(msg);
+  try { console.log("[tsms-auth-guard] diag", msg); } catch (_) {}
+}
+
+function shouldEnableIdleLogout() {
+  try {
+    const ua = navigator.userAgent || "";
+    const platform = navigator.platform || "";
+    const touchPoints = Number(navigator.maxTouchPoints || 0);
+    const isIPhone = /iPhone/i.test(ua);
+    const isIPad = /iPad/i.test(ua) || (platform === "MacIntel" && touchPoints > 1);
+    return !(isIPhone || isIPad);
+  } catch (_) {
+    return true;
+  }
+}
+
 function installIdleLogout() {
+  if (!shouldEnableIdleLogout()) {
+    updateDiag("idle:disabled(iOS)");
+    return;
+  }
   if (window.__tsmsIdleLogoutInstalled) return;
   window.__tsmsIdleLogoutInstalled = true;
 
@@ -44,11 +110,15 @@ function installIdleLogout() {
 
   const schedule = () => {
     if (timer) clearTimeout(timer);
+    const fireAt = new Date(Date.now() + IDLE_LOGOUT_MS);
+    updateDiag(`idle:scheduled\nfire_at:${fireAt.toLocaleTimeString()}`);
     timer = setTimeout(async () => {
       if (firing) return;
       firing = true;
+      updateDiag(`idle:firing\nfired_at:${new Date().toLocaleTimeString()}`);
       try {
         if (window.tsmsCloud && typeof window.tsmsCloud.safeLogoutWithBackup === "function") {
+          try { console.log("[tsms-auth-guard] logout via safeLogoutWithBackup"); } catch (_) {}
           await window.tsmsCloud.safeLogoutWithBackup();
           return;
         }
@@ -78,6 +148,7 @@ function installIdleLogout() {
 }
 
 async function guard() {
+  updateDiag(`guard:start\npage:${currentPage()}`);
   if (PUBLIC_PAGES.has(currentPage())) return;
 
   const config = loadConfig();
@@ -92,6 +163,7 @@ async function guard() {
     const userId = session?.user?.id || "";
 
     if (error || !session || !userId) {
+      updateDiag("guard:no-session");
       redirectToLogin();
       return;
     }
@@ -144,8 +216,15 @@ async function guard() {
       backupNow: () => requestCloudBackup({ immediate: true }),
       backupDebounced: () => requestCloudBackup({ immediate: false }),
       setSyncPaused: (paused) => setCloudSyncPaused(paused),
-      logout: async () => { await supabase.auth.signOut(); redirectToLogin(); },
+      logout: async () => {
+        try { console.log("[tsms-auth-guard] manual logout() called"); } catch (_) {}
+        updateDiag("logout:manual");
+        await supabase.auth.signOut();
+        redirectToLogin();
+      },
       safeLogoutWithBackup: async () => {
+        try { console.log("[tsms-auth-guard] safeLogoutWithBackup() called"); } catch (_) {}
+        updateDiag("logout:safe-with-backup");
         await requestCloudBackup({ immediate: true });
         await supabase.auth.signOut();
         redirectToLogin();
