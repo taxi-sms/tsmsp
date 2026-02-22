@@ -84,6 +84,19 @@ html,body{
 .subline{display:block;margin-left:1.2em;}
 .contact{margin-top:18px;}
 .sign{margin-top:6px;text-align:right;font-weight:700;}
+.sign-actions{margin-top:6px;text-align:right;}
+.logout-mini{
+  appearance:none;
+  border:1px solid var(--border);
+  background:var(--surface-2);
+  color:var(--text-primary);
+  padding:4px 8px;
+  font:inherit;
+  font-size:12px;
+  font-weight:700;
+  border-radius:6px;
+  cursor:pointer;
+}
 
 @media (min-width:768px){
   .container{max-width:760px;margin:0 auto;}
@@ -216,6 +229,9 @@ a{ color:var(--link); }
 
       <p class="contact">アプリについての要望や質問があれば、<strong>taxi-sms@sm-s.com</strong>にご連絡下さい。</p>
       <div class="sign">2026/2/15　B.O.A.T. Tsubakihara</div>
+      <div class="sign-actions">
+        <button type="button" id="btnMiniLogout" class="logout-mini">ログアウト</button>
+      </div>
     </div>
   </section>
 </main>
@@ -255,6 +271,28 @@ window.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeMenu(); })
 
 // close on link tap (mobile)
 menu.querySelectorAll("a").forEach(a=>a.addEventListener("click", closeMenu));
+</script>
+
+<script>
+(function(){
+  var btn = document.getElementById("btnMiniLogout");
+  if(!btn) return;
+  btn.addEventListener("click", async function(){
+    try{
+      if(window.tsmsCloud && typeof window.tsmsCloud.safeLogoutWithBackup === "function"){
+        await window.tsmsCloud.safeLogoutWithBackup();
+        return;
+      }
+      if(window.tsmsCloud && typeof window.tsmsCloud.logout === "function"){
+        await window.tsmsCloud.logout();
+        return;
+      }
+      location.href = "login.html";
+    }catch(e){
+      alert("ログアウトに失敗しました。時間をおいて再度お試しください。");
+    }
+  });
+})();
 </script>
 
 
