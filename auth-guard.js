@@ -12,6 +12,8 @@ import {
 const PUBLIC_PAGES = new Set(["login.html", "signup.html", "auth-callback.html"]);
 const IDLE_LOGOUT_MS = 30 * 60 * 1000;
 const AUTH_GUARD_VERSION = "20260222-diag-1";
+const SESSION_RETRY_COUNT = 5;
+const SESSION_RETRY_DELAY_MS = 350;
 
 function currentPage() {
   const p = location.pathname.split("/").pop();
@@ -82,6 +84,26 @@ function updateDiag(extra = "") {
   ].filter(Boolean).join("\n");
   renderDiag(msg);
   try { console.log("[tsms-auth-guard] diag", msg); } catch (_) {}
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function getSessionWithRetry() {
+  let last = { data: null, error: null, attempts: 0 };
+  for (let i = 0; i < SESSION_RETRY_COUNT; i++) {
+    const result = await supabase.auth.getSession();
+    const session = result?.data?.session;
+    const userId = session?.user?.id || "";
+    last = { ...result, attempts: i + 1 };
+    if (!result?.error && session && userId) return last;
+    if (i < SESSION_RETRY_COUNT - 1) {
+      updateDiag(`guard:session-retry ${i + 1}/${SESSION_RETRY_COUNT}`);
+      await sleep(SESSION_RETRY_DELAY_MS);
+    }
+  }
+  return last;
 }
 
 function shouldEnableIdleLogout() {
@@ -158,12 +180,13 @@ async function guard() {
   }
 
   try {
-    const { data, error } = await supabase.auth.getSession();
+    const { data, error, attempts } = await getSessionWithRetry();
     const session = data?.session;
     const userId = session?.user?.id || "";
+    if (attempts) updateDiag(`guard:session-ok attempts=${attempts}`);
 
     if (error || !session || !userId) {
-      updateDiag("guard:no-session");
+      updateDiag(`guard:no-session attempts=${attempts || 0}`);
       redirectToLogin();
       return;
     }
