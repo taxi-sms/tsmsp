@@ -19,6 +19,7 @@
     .line:last-child{border-bottom:none;}
     .k{width:160px;font-weight:500;}
     .v{margin-left:auto;font-weight:500;text-align:right;white-space:nowrap;}
+    .v.value-highlight{color:#FD7E00;font-weight:900;}
     .line.strong .k,
     .line.strong .v{font-weight:900;}
     .date-switcher{border:2px solid var(--border);padding:10px;margin:0 0 12px 0;background:var(--surface-1);}
@@ -231,8 +232,8 @@ a{ color:var(--link); }
     const mm = m%60;
     return `${h}時間${String(mm).padStart(2,"0")}分`;
   }
-  function line(label, value, strong=false){
-    return `<div class="line${strong ? " strong" : ""}"><div class="k">${label}</div><div class="v">${value}</div></div>`;
+  function line(label, value, strong=false, highlightValue=false){
+    return `<div class="line${strong ? " strong" : ""}"><div class="k">${label}</div><div class="v${highlightValue ? " value-highlight" : ""}">${value}</div></div>`;
   }
 
   function loadReportsAll(){
@@ -374,11 +375,11 @@ a{ color:var(--link); }
       line("実車回数", `${tripCount}回`),
       line("現収合計", yen(cashSum)),
       line("未収合計", yen(creditSum)),
-      line("売上合計（税込）", yen(salesInTax), true),
+      line("売上合計（税込）", yen(salesInTax), true, true),
       line("売上合計（税抜）", yen(salesExTax)),
       line("決済手数料", yen(fee)),
-      line("概算手取", yen(takeHome), true),
-      line("時給換算", yen(hourly))
+      line("概算収入", yen(takeHome), true, true),
+      line("時給換算", yen(hourly), false, true)
     ].join("");
 
     document.getElementById("goBox").innerHTML = [

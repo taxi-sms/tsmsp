@@ -508,6 +508,7 @@ btnReset.onclick = async ()=>{
 
   btnReset.disabled = true;
   let shouldBackupAfterChanges = false;
+  let shouldLogoutAfterClear = false;
   try{
     if(window.tsmsCloud && typeof window.tsmsCloud.backupNow === "function") {
       await window.tsmsCloud.backupNow();
@@ -543,6 +544,7 @@ btnReset.onclick = async ()=>{
     localStorage.setItem(REPORT_KEY, JSON.stringify(remainRows));
     localStorage.setItem(REPORT_ARCHIVE_KEY, JSON.stringify(Array.from(byId.values())));
     shouldBackupAfterChanges = true;
+    shouldLogoutAfterClear = true;
     render();
     alert("この日の記録をクリアしました（過去データは日付選択から確認できます）");
   }catch(e){
@@ -551,8 +553,23 @@ btnReset.onclick = async ()=>{
     if(window.tsmsCloud && typeof window.tsmsCloud.setSyncPaused === "function") {
       window.tsmsCloud.setSyncPaused(false);
     }
+    let finalBackupOk = !shouldBackupAfterChanges;
     if(shouldBackupAfterChanges && window.tsmsCloud && typeof window.tsmsCloud.backupNow === "function") {
-      try{ await window.tsmsCloud.backupNow(); }catch(e){}
+      try{
+        await window.tsmsCloud.backupNow();
+        finalBackupOk = true;
+      }catch(e){
+        finalBackupOk = false;
+        alert("日次クリア後のクラウド保存に失敗しました。通信状態を確認して、設定画面からクラウドへバックアップしてください。ログアウトは中止しました。");
+      }
+    }
+    if(shouldLogoutAfterClear && finalBackupOk && window.tsmsCloud && typeof window.tsmsCloud.logout === "function"){
+      try{
+        await window.tsmsCloud.logout();
+        return;
+      }catch(e){
+        alert("ログアウトに失敗しました。いったんそのままご利用ください。");
+      }
     }
     btnReset.disabled = false;
   }
