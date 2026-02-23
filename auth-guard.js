@@ -13,6 +13,7 @@ const PUBLIC_PAGES = new Set(["login.html", "signup.html", "auth-callback.html"]
 const IDLE_LOGOUT_MS = 60 * 60 * 1000;
 const SESSION_RETRY_COUNT = 5;
 const SESSION_RETRY_DELAY_MS = 350;
+const OPS_KEY = "ops";
 
 function currentPage() {
   const p = location.pathname.split("/").pop();
@@ -35,6 +36,22 @@ function lockErrorMessage(err) {
     return "クラウド同期の認証ロックが競合しています。別タブ/別端末の同時操作を止めて再試行してください。";
   }
   return msg;
+}
+
+function hasActiveLocalOpsState() {
+  try {
+    const raw = localStorage.getItem(OPS_KEY);
+    if (!raw) return false;
+    const ops = JSON.parse(raw);
+    if (!ops || typeof ops !== "object") return false;
+    const hasDepart = !!ops.departAt;
+    const hasReturn = !!ops.returnAt;
+    const shiftClosed = !!ops.shiftClosed;
+    const breakActive = !!ops.breakActive;
+    return !!((hasDepart && !hasReturn && !shiftClosed) || breakActive);
+  } catch (_) {
+    return false;
+  }
 }
 
 function sleep(ms) {
@@ -123,7 +140,7 @@ async function guard() {
     const alreadyReloaded = sessionStorage.getItem(reloadMarker) === "1";
     const previousUserId = getLastSyncedUserId();
     const userChanged = !!previousUserId && previousUserId !== userId;
-    const shouldForceHydration = true;
+    const shouldForceHydration = !hasActiveLocalOpsState();
 
     if (userChanged) {
       clearSyncedLocalState();
