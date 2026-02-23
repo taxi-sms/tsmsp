@@ -226,6 +226,7 @@ a{ color:var(--link); }
 
     <div class="actions">
       <button class="btn action-main" type="button" id="btn_depart">出庫（今）</button>
+      <button class="btn action-main" type="button" id="btn_departCancel">出庫取消</button>
       <button class="btn action-main" type="button" id="btn_return">帰庫（今）</button>
       <button class="btn action-main" type="button" id="btn_breakStart">休憩開始</button>
       <button class="btn action-main" type="button" id="btn_breakEnd">休憩解除</button>
@@ -350,6 +351,7 @@ const vBreakTimer = document.getElementById("v_breakTimer");
 const breakList = document.getElementById("breakList");
 
 const btnDepart = document.getElementById("btn_depart");
+const btnDepartCancel = document.getElementById("btn_departCancel");
 const btnReturn = document.getElementById("btn_return");
 const btnBreakStart = document.getElementById("btn_breakStart");
 const btnBreakEnd = document.getElementById("btn_breakEnd");
@@ -401,16 +403,20 @@ function render(){
 
   if(d.shiftClosed){
     btnDepart.disabled = true;
+    btnDepartCancel.disabled = true;
     btnReturn.disabled = true;
   } else if(hasReturn){
     // 帰庫後〜日次クリア前は時刻修正のためデータは保持しつつ、再出庫は不可にする
     btnDepart.disabled = true;
+    btnDepartCancel.disabled = true;
     btnReturn.disabled = true;
   } else if(running){
     btnDepart.disabled = true;
+    btnDepartCancel.disabled = false;
     btnReturn.disabled = false;
   } else {
     btnDepart.disabled = false;
+    btnDepartCancel.disabled = true;
     btnReturn.disabled = true;
   }
 
@@ -418,6 +424,7 @@ function render(){
   btnBreakEnd.disabled = d.shiftClosed || !d.breakActive;
 
   btnDepart.classList.toggle("next", !btnDepart.disabled);
+  btnDepartCancel.classList.toggle("next", !btnDepartCancel.disabled);
   btnReturn.classList.toggle("next", !btnReturn.disabled);
   btnBreakStart.classList.toggle("next", !btnBreakStart.disabled);
   btnBreakEnd.classList.toggle("next", !btnBreakEnd.disabled);
@@ -448,6 +455,17 @@ btnDepart.onclick = ()=>{
   localStorage.setItem(CURRENT_DAY_KEY, nextDayId);
   d.dayId = nextDayId;
   save(d);
+  render();
+};
+
+btnDepartCancel.onclick = async ()=>{
+  const d = load();
+  if(!d.departAt || d.returnAt || d.shiftClosed) return;
+  if(!(await window.tsmsConfirm("出庫を取り消しますか？（出庫時間・休憩状態を初期化します）"))) return;
+
+  localStorage.removeItem(KEY);
+  localStorage.removeItem(CURRENT_DAY_KEY);
+  localStorage.setItem(CONFIRM_FORCE_EMPTY_KEY, "1");
   render();
 };
 
@@ -582,7 +600,7 @@ setInterval(()=>{ try{ updateBreakTimer(load()); }catch(e){} }, 1000);
 
 
   <script>
-    (function(){if('serviceWorker'in navigator&&location.protocol.indexOf('http')===0){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js?v=20260223-3').catch(function(){});});}})();
+    (function(){if('serviceWorker'in navigator&&location.protocol.indexOf('http')===0){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js?v=20260223-5').catch(function(){});});}})();
   </script>
 
 
