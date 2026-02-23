@@ -184,6 +184,31 @@ a{ color:var(--link); }
   }
   .confirm-modal-key{color:var(--text-muted,#666);font-weight:700;}
   .confirm-modal-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+
+  .result-modal-bg{
+    position:fixed;inset:0;z-index:1450;
+    background:rgba(0,0,0,.45);
+    display:none;align-items:center;justify-content:center;
+    padding:16px;
+  }
+  .result-modal-bg.show{display:flex;}
+  .result-modal-card{
+    width:min(320px,100%);
+    background:var(--surface-1,#fff);
+    border:2px solid var(--border,#ccc);
+    padding:18px 14px 14px;
+    text-align:center;
+  }
+  .result-modal-icon{
+    width:56px;height:56px;margin:0 auto 12px;
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;font-size:28px;font-weight:900;line-height:1;
+  }
+  .result-modal-icon.success{background:#1ea44a;}
+  .result-modal-icon.error{background:#d93025;}
+  .result-modal-message{margin:0 0 14px;font-size:18px;font-weight:900;}
+  .result-modal-actions{display:grid;grid-template-columns:1fr;gap:8px;}
 </style>
 
   <script type="module" src="auth-guard.js?v=20260223-5"></script>
@@ -298,6 +323,16 @@ a{ color:var(--link); }
   </div>
 </div>
 
+<div class="result-modal-bg" id="resultModalBg" aria-hidden="true">
+  <div class="result-modal-card" role="dialog" aria-modal="true" aria-labelledby="resultModalMessage">
+    <div class="result-modal-icon success" id="resultModalIcon" aria-hidden="true">○</div>
+    <p class="result-modal-message" id="resultModalMessage">登録が完了しました</p>
+    <div class="result-modal-actions">
+      <button class="btn" type="button" id="resultModalCloseBtn">閉じる</button>
+    </div>
+  </div>
+</div>
+
 <script>
 (() => {
   const REPORT_KEY = "tsms_reports";
@@ -324,6 +359,10 @@ a{ color:var(--link); }
   const confirmNote = document.getElementById("confirmNote");
   const confirmNoBtn = document.getElementById("confirmNoBtn");
   const confirmYesBtn = document.getElementById("confirmYesBtn");
+  const resultModalBg = document.getElementById("resultModalBg");
+  const resultModalIcon = document.getElementById("resultModalIcon");
+  const resultModalMessage = document.getElementById("resultModalMessage");
+  const resultModalCloseBtn = document.getElementById("resultModalCloseBtn");
   let focused = inCash;
 
   function todayLocalYmd() {
@@ -458,46 +497,40 @@ a{ color:var(--link); }
   }
 
   function showResultModal(message) {
-    if (!submitConfirmModalBg) {
+    if (!resultModalBg || !resultModalIcon || !resultModalMessage || !resultModalCloseBtn) {
       alert(String(message || ""));
       return Promise.resolve();
     }
-    confirmRideType.textContent = "-";
-    confirmPayMethod.textContent = "-";
-    confirmTicketSub.textContent = "-";
-    confirmCash.textContent = "-";
-    confirmCredit.textContent = "-";
-    confirmDiscount.textContent = "-";
-    confirmNote.textContent = String(message || "");
-
-    confirmNoBtn.textContent = "閉じる";
-    confirmYesBtn.classList.add("is-hidden");
+    const text = String(message || "");
+    const isSuccess = text.includes("完了");
+    resultModalMessage.textContent = text;
+    resultModalIcon.textContent = isSuccess ? "○" : "×";
+    resultModalIcon.classList.toggle("success", isSuccess);
+    resultModalIcon.classList.toggle("error", !isSuccess);
 
     return new Promise((resolve) => {
       const close = () => {
-        submitConfirmModalBg.classList.remove("show");
-        submitConfirmModalBg.setAttribute("aria-hidden", "true");
-        confirmNoBtn.removeEventListener("click", onClose);
-        submitConfirmModalBg.removeEventListener("click", onBg);
+        resultModalBg.classList.remove("show");
+        resultModalBg.setAttribute("aria-hidden", "true");
+        resultModalCloseBtn.removeEventListener("click", onClose);
+        resultModalBg.removeEventListener("click", onBg);
         document.removeEventListener("keydown", onEsc);
-        confirmYesBtn.classList.remove("is-hidden");
-        confirmNoBtn.textContent = "いいえ";
         resolve();
       };
       const onClose = () => close();
       const onBg = (e) => {
-        if (e.target === submitConfirmModalBg) close();
+        if (e.target === resultModalBg) close();
       };
       const onEsc = (e) => {
         if (e.key === "Escape") close();
       };
 
-      submitConfirmModalBg.classList.add("show");
-      submitConfirmModalBg.setAttribute("aria-hidden", "false");
-      confirmNoBtn.addEventListener("click", onClose);
-      submitConfirmModalBg.addEventListener("click", onBg);
+      resultModalBg.classList.add("show");
+      resultModalBg.setAttribute("aria-hidden", "false");
+      resultModalCloseBtn.addEventListener("click", onClose);
+      resultModalBg.addEventListener("click", onBg);
       document.addEventListener("keydown", onEsc);
-      confirmNoBtn.focus();
+      resultModalCloseBtn.focus();
     });
   }
 
@@ -614,7 +647,7 @@ a{ color:var(--link); }
       await showResultModal("登録が完了しました");
       location.href = "confirm.html";
     } catch (e) {
-      await showResultModal("登録に失敗しました");
+      await showResultModal("登録が失敗しました。");
     }
   });
 
