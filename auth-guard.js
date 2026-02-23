@@ -10,10 +10,11 @@ import {
 } from "./cloud-store.js";
 
 const PUBLIC_PAGES = new Set(["login.html", "signup.html", "auth-callback.html"]);
-const IDLE_LOGOUT_MS = 60 * 60 * 1000;
+const IDLE_LOGOUT_MS = 6 * 60 * 60 * 1000;
 const SESSION_RETRY_COUNT = 5;
 const SESSION_RETRY_DELAY_MS = 350;
 const OPS_KEY = "ops";
+const OPS_ARCHIVE_KEY = "ops_archive_v1";
 
 function currentPage() {
   const p = location.pathname.split("/").pop();
@@ -140,7 +141,8 @@ async function guard() {
     const alreadyReloaded = sessionStorage.getItem(reloadMarker) === "1";
     const previousUserId = getLastSyncedUserId();
     const userChanged = !!previousUserId && previousUserId !== userId;
-    const shouldForceHydration = !hasActiveLocalOpsState();
+    const preserveOpsLocal = hasActiveLocalOpsState();
+    const shouldForceHydration = true;
 
     if (userChanged) {
       clearSyncedLocalState();
@@ -148,7 +150,10 @@ async function guard() {
     // Avoid a forced network write on every page navigation (notably unstable on iPhone/Safari during transitions).
     let hydration = { restored: false, reason: "skipped" };
     try {
-      hydration = await hydrateCloudState({ force: shouldForceHydration });
+      hydration = await hydrateCloudState({
+        force: shouldForceHydration,
+        preserveKeys: preserveOpsLocal ? [OPS_KEY, OPS_ARCHIVE_KEY] : []
+      });
       setLastSyncedUserId(userId);
     } catch (e) {
       setLastSyncedUserId(userId);

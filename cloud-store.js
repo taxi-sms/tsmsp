@@ -26,6 +26,7 @@ let inFlight = false;
 let pendingAfterFlight = false;
 let dirtySinceLastBackup = false;
 let syncPaused = false;
+let inFlightPromise = null;
 
 function currentPageName() {
   try {
@@ -107,20 +108,24 @@ export function dumpLocalStorage(prefix = "") {
   return obj;
 }
 
-export function restoreLocalStorage(obj, prefix = "") {
+export function restoreLocalStorage(obj, prefix = "", options = {}) {
+  const preserveKeys = new Set(Array.isArray(options.preserveKeys) ? options.preserveKeys : []);
   if (prefix) {
     const remove = [];
     for (let i = 0; i < localStorage.length; i++) {
       const k = localStorage.key(i);
-      if (k && k.startsWith(prefix)) remove.push(k);
+      if (k && k.startsWith(prefix) && !preserveKeys.has(k)) remove.push(k);
     }
     remove.forEach((k) => localStorage.removeItem(k));
   } else {
-    SYNC_KEYS.forEach((k) => localStorage.removeItem(k));
+    SYNC_KEYS.forEach((k) => {
+      if (!preserveKeys.has(k)) localStorage.removeItem(k);
+    });
   }
 
   for (const [k, v] of Object.entries(obj || {})) {
     if (!shouldIncludeKey(k, prefix)) continue;
+    if (preserveKeys.has(k)) continue;
     localStorage.setItem(k, v == null ? "" : String(v));
   }
 }
@@ -190,7 +195,7 @@ function hasLocalSyncedKeys(prefix = "") {
   return false;
 }
 
-export async function hydrateCloudState({ force = false, prefix = "" } = {}) {
+export async function hydrateCloudState({ force = false, prefix = "", preserveKeys = [] } = {}) {
   if (!force && hasLocalSyncedKeys(prefix)) {
     return { restored: false, reason: "local_data_exists" };
   }
@@ -205,7 +210,7 @@ export async function hydrateCloudState({ force = false, prefix = "" } = {}) {
     return { restored: false, reason: "cloud_data_missing" };
   }
 
-  restoreLocalStorage(data.value, prefix);
+  restoreLocalStorage(data.value, prefix, { preserveKeys });
   return { restored: true, reason: "restored" };
 }
 
@@ -224,26 +229,30 @@ export function setLastSyncedUserId(userId) {
 async function runBackup() {
   if (inFlight) {
     pendingAfterFlight = true;
-    return;
+    return inFlightPromise || Promise.resolve();
   }
 
   inFlight = true;
-  try {
-    await cloudBackup();
-    dirtySinceLastBackup = false;
-  } catch (_) {
-    // Non-blocking autosave: silently ignore transient errors.
-  } finally {
-    inFlight = false;
-    if (pendingAfterFlight) {
-      pendingAfterFlight = false;
-      if (debounceTimer) clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(() => {
-        debounceTimer = null;
-        runBackup();
-      }, debounceMs);
+  inFlightPromise = (async () => {
+    try {
+      await cloudBackup();
+      dirtySinceLastBackup = false;
+    } catch (_) {
+      // Non-blocking autosave: silently ignore transient errors.
+    } finally {
+      inFlight = false;
+      inFlightPromise = null;
+      if (pendingAfterFlight) {
+        pendingAfterFlight = false;
+        if (debounceTimer) clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+          debounceTimer = null;
+          runBackup();
+        }, debounceMs);
+      }
     }
-  }
+  })();
+  return inFlightPromise;
 }
 
 export function setCloudSyncPaused(paused) {
@@ -256,7 +265,13 @@ export function requestCloudBackup({ immediate = false } = {}) {
       clearTimeout(debounceTimer);
       debounceTimer = null;
     }
-    return runBackup();
+    return (async () => {
+      await runBackup();
+      if (dirtySinceLastBackup || pendingAfterFlight) {
+        pendingAfterFlight = false;
+        await runBackup();
+      }
+    })();
   }
 
   if (debounceTimer) clearTimeout(debounceTimer);
