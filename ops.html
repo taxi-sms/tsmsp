@@ -444,10 +444,9 @@ btnDepart.onclick = ()=>{
   d.returnAt = null;
   d.shiftClosed = false;
   localStorage.removeItem(CONFIRM_FORCE_EMPTY_KEY);
-  if(!localStorage.getItem(CURRENT_DAY_KEY)){
-    localStorage.setItem(CURRENT_DAY_KEY, localYmd());
-  }
-  d.dayId = localStorage.getItem(CURRENT_DAY_KEY) || localYmd();
+  const nextDayId = localYmd();
+  localStorage.setItem(CURRENT_DAY_KEY, nextDayId);
+  d.dayId = nextDayId;
   save(d);
   render();
 };
@@ -583,7 +582,7 @@ setInterval(()=>{ try{ updateBreakTimer(load()); }catch(e){} }, 1000);
 
 
   <script>
-    (function(){if('serviceWorker'in navigator&&location.protocol.indexOf('http')===0){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js?v=20260223-2').catch(function(){});});}})();
+    (function(){if('serviceWorker'in navigator&&location.protocol.indexOf('http')===0){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js?v=20260223-3').catch(function(){});});}})();
   </script>
 
 
