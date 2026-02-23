@@ -142,7 +142,9 @@ async function guard() {
     const previousUserId = getLastSyncedUserId();
     const userChanged = !!previousUserId && previousUserId !== userId;
     const preserveOpsLocal = hasActiveLocalOpsState();
-    const shouldForceHydration = true;
+    // Force restore only when user changed; otherwise prefer current local state
+    // to avoid overwriting just-saved data with older cloud snapshots on page transitions.
+    const shouldForceHydration = userChanged;
 
     if (userChanged) {
       clearSyncedLocalState();
