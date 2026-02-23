@@ -303,7 +303,6 @@ a{ color:var(--link); }
   const REPORT_KEY = "tsms_reports";
   const CURRENT_DAY_KEY = "tsms_report_current_day";
   const CONFIRM_FORCE_EMPTY_KEY = "tsms_confirm_force_empty";
-  const OPS_KEY = "ops";
   const state = { rideType: "", payMethod: "", ticketSub: "", disabilityDiscount: false };
   const secTicket = document.getElementById("sec_ticketSub");
   const secAmounts = document.getElementById("sec_amounts");
@@ -348,36 +347,8 @@ a{ color:var(--link); }
     return localStorage.getItem(CURRENT_DAY_KEY) || "";
   }
 
-  function ymdFromIsoLocal(iso) {
-    if (!iso) return "";
-    const d = new Date(iso);
-    if (isNaN(d)) return "";
-    const y = d.getFullYear();
-    const m = String(d.getMonth() + 1).padStart(2, "0");
-    const day = String(d.getDate()).padStart(2, "0");
-    return `${y}-${m}-${day}`;
-  }
-
-  function loadCurrentOps() {
-    try {
-      const raw = localStorage.getItem(OPS_KEY);
-      if (!raw) return null;
-      const obj = JSON.parse(raw);
-      return (obj && typeof obj === "object") ? obj : null;
-    } catch (_) {
-      return null;
-    }
-  }
-
   function resolveSaveDayId() {
-    const current = getCurrentDayId();
-    const ops = loadCurrentOps();
-    // During an active shift, trust the departure timestamp day to avoid stale CURRENT_DAY_KEY mixing rows.
-    if (ops && ops.departAt && !ops.shiftClosed) {
-      const opsDayId = ymdFromIsoLocal(ops.departAt);
-      if (opsDayId) return opsDayId;
-    }
-    return current || todayLocalYmd();
+    return getCurrentDayId() || todayLocalYmd();
   }
 
   function clearSelected(group) {
@@ -656,7 +627,7 @@ a{ color:var(--link); }
 </script>
 
 <script>
-  (function(){if('serviceWorker' in navigator && location.protocol.indexOf('http')===0){window.addEventListener('load', function(){navigator.serviceWorker.register('./sw.js?v=20260223-6').catch(function(){});});}})();
+  (function(){if('serviceWorker' in navigator && location.protocol.indexOf('http')===0){window.addEventListener('load', function(){navigator.serviceWorker.register('./sw.js?v=20260223-7').catch(function(){});});}})();
 </script>
 
 
