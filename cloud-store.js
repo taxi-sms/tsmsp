@@ -38,7 +38,7 @@ function currentPageName() {
 
 function shouldFlushOnPageLeave() {
   const page = currentPageName();
-  return page === "confirm.html" || page === "sales.html";
+  return page === "confirm.html" || page === "sales.html" || page === "ops.html";
 }
 
 function safeJsonParse(raw, fallback) {

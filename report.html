@@ -457,6 +457,50 @@ a{ color:var(--link); }
     });
   }
 
+  function showResultModal(message) {
+    if (!submitConfirmModalBg) {
+      alert(String(message || ""));
+      return Promise.resolve();
+    }
+    confirmRideType.textContent = "-";
+    confirmPayMethod.textContent = "-";
+    confirmTicketSub.textContent = "-";
+    confirmCash.textContent = "-";
+    confirmCredit.textContent = "-";
+    confirmDiscount.textContent = "-";
+    confirmNote.textContent = String(message || "");
+
+    confirmNoBtn.textContent = "閉じる";
+    confirmYesBtn.classList.add("is-hidden");
+
+    return new Promise((resolve) => {
+      const close = () => {
+        submitConfirmModalBg.classList.remove("show");
+        submitConfirmModalBg.setAttribute("aria-hidden", "true");
+        confirmNoBtn.removeEventListener("click", onClose);
+        submitConfirmModalBg.removeEventListener("click", onBg);
+        document.removeEventListener("keydown", onEsc);
+        confirmYesBtn.classList.remove("is-hidden");
+        confirmNoBtn.textContent = "いいえ";
+        resolve();
+      };
+      const onClose = () => close();
+      const onBg = (e) => {
+        if (e.target === submitConfirmModalBg) close();
+      };
+      const onEsc = (e) => {
+        if (e.key === "Escape") close();
+      };
+
+      submitConfirmModalBg.classList.add("show");
+      submitConfirmModalBg.setAttribute("aria-hidden", "false");
+      confirmNoBtn.addEventListener("click", onClose);
+      submitConfirmModalBg.addEventListener("click", onBg);
+      document.addEventListener("keydown", onEsc);
+      confirmNoBtn.focus();
+    });
+  }
+
   btnDiscount.addEventListener("click", () => {
     state.disabilityDiscount = !state.disabilityDiscount;
     btnDiscount.classList.toggle("is-selected", state.disabilityDiscount);
@@ -555,18 +599,23 @@ a{ color:var(--link); }
       list.unshift(entry);
     }
 
-    localStorage.setItem(REPORT_KEY, JSON.stringify(list));
-    localStorage.setItem(CURRENT_DAY_KEY, entry.dayId);
-    localStorage.removeItem(CONFIRM_FORCE_EMPTY_KEY);
-    if(window.tsmsCloud && typeof window.tsmsCloud.backupNow === "function"){
-      try{
-        await Promise.race([
-          window.tsmsCloud.backupNow(),
-          new Promise((resolve)=>setTimeout(resolve, 1200))
-        ]);
-      }catch(_){ }
+    try {
+      localStorage.setItem(REPORT_KEY, JSON.stringify(list));
+      localStorage.setItem(CURRENT_DAY_KEY, entry.dayId);
+      localStorage.removeItem(CONFIRM_FORCE_EMPTY_KEY);
+      if(window.tsmsCloud && typeof window.tsmsCloud.backupNow === "function"){
+        try{
+          await Promise.race([
+            window.tsmsCloud.backupNow(),
+            new Promise((resolve)=>setTimeout(resolve, 1200))
+          ]);
+        }catch(_){ }
+      }
+      await showResultModal("登録が完了しました");
+      location.href = "confirm.html";
+    } catch (e) {
+      await showResultModal("登録に失敗しました");
     }
-    location.href = "confirm.html";
   });
 
   (function loadForEdit() {
@@ -627,7 +676,7 @@ a{ color:var(--link); }
 </script>
 
 <script>
-  (function(){if('serviceWorker' in navigator && location.protocol.indexOf('http')===0){window.addEventListener('load', function(){navigator.serviceWorker.register('./sw.js?v=20260223-7').catch(function(){});});}})();
+  (function(){if('serviceWorker' in navigator && location.protocol.indexOf('http')===0){window.addEventListener('load', function(){navigator.serviceWorker.register('./sw.js?v=20260223-10').catch(function(){});});}})();
 </script>
 
 

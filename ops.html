@@ -413,20 +413,20 @@ function render(){
 
   if(d.shiftClosed){
     btnDepart.disabled = true;
-    btnDepartCancel.disabled = true;
+    if(btnDepartCancel) btnDepartCancel.disabled = true;
     btnReturn.disabled = true;
   } else if(hasReturn){
     // 帰庫後〜日次クリア前は時刻修正のためデータは保持しつつ、再出庫は不可にする
     btnDepart.disabled = true;
-    btnDepartCancel.disabled = true;
+    if(btnDepartCancel) btnDepartCancel.disabled = true;
     btnReturn.disabled = true;
   } else if(running){
     btnDepart.disabled = true;
-    btnDepartCancel.disabled = false;
+    if(btnDepartCancel) btnDepartCancel.disabled = false;
     btnReturn.disabled = false;
   } else {
     btnDepart.disabled = false;
-    btnDepartCancel.disabled = true;
+    if(btnDepartCancel) btnDepartCancel.disabled = true;
     btnReturn.disabled = true;
   }
 
@@ -434,7 +434,7 @@ function render(){
   btnBreakEnd.disabled = d.shiftClosed || !d.breakActive;
 
   btnDepart.classList.toggle("next", !btnDepart.disabled);
-  btnDepartCancel.classList.toggle("next", !btnDepartCancel.disabled);
+  if(btnDepartCancel) btnDepartCancel.classList.toggle("next", !btnDepartCancel.disabled);
   btnReturn.classList.toggle("next", !btnReturn.disabled);
   btnBreakStart.classList.toggle("next", !btnBreakStart.disabled);
   btnBreakEnd.classList.toggle("next", !btnBreakEnd.disabled);
@@ -468,16 +468,18 @@ btnDepart.onclick = ()=>{
   render();
 };
 
-btnDepartCancel.onclick = async ()=>{
-  const d = load();
-  if(!d.departAt || d.returnAt || d.shiftClosed) return;
-  if(!(await window.tsmsConfirm("出庫を取り消しますか？（出庫時間・休憩状態を初期化します）"))) return;
+if(btnDepartCancel){
+  btnDepartCancel.onclick = async ()=>{
+    const d = load();
+    if(!d.departAt || d.returnAt || d.shiftClosed) return;
+    if(!(await window.tsmsConfirm("出庫を取り消しますか？（出庫時間・休憩状態を初期化します）"))) return;
 
-  localStorage.removeItem(KEY);
-  localStorage.removeItem(CURRENT_DAY_KEY);
-  localStorage.setItem(CONFIRM_FORCE_EMPTY_KEY, "1");
-  render();
-};
+    localStorage.removeItem(KEY);
+    localStorage.removeItem(CURRENT_DAY_KEY);
+    localStorage.setItem(CONFIRM_FORCE_EMPTY_KEY, "1");
+    render();
+  };
+}
 
 btnReturn.onclick = async ()=>{
   if(!(await window.tsmsConfirm("帰庫しますか？"))) return;
@@ -610,7 +612,7 @@ setInterval(()=>{ try{ updateBreakTimer(load()); }catch(e){} }, 1000);
 
 
   <script>
-    (function(){if('serviceWorker'in navigator&&location.protocol.indexOf('http')===0){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js?v=20260223-7').catch(function(){});});}})();
+    (function(){if('serviceWorker'in navigator&&location.protocol.indexOf('http')===0){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js?v=20260223-10').catch(function(){});});}})();
   </script>
 
 
