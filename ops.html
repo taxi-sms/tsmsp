@@ -98,6 +98,13 @@ html,body{
 .btn.wide{ grid-column:1 / -1; }
 .btn.danger{ border-color:#333; }
 .btn:disabled{ opacity:.45; }
+.btn.btn-mini{
+  min-height:auto;
+  padding:6px 10px;
+  font-size:12px;
+  font-weight:800;
+  border-width:1px;
+}
 .btn.next{
   background:#111;
   color:#fff;
@@ -108,6 +115,7 @@ html,body{
 
 /* Break sessions list */
 .list{ margin-top:10px; }
+.bottom-mini-actions{ margin-top:10px; display:flex; justify-content:flex-end; }
 .item{ display:flex; gap:10px; align-items:baseline; padding:6px 0; border-bottom:1px dashed #cfcfcf; }
 .item:last-child{ border-bottom:none; }
 .item .idx{ width:36px; color:var(--muted); font-size:12px; }
@@ -226,7 +234,6 @@ a{ color:var(--link); }
 
     <div class="actions">
       <button class="btn action-main" type="button" id="btn_depart">出庫（今）</button>
-      <button class="btn action-main" type="button" id="btn_departCancel">出庫取消</button>
       <button class="btn action-main" type="button" id="btn_return">帰庫（今）</button>
       <button class="btn action-main" type="button" id="btn_breakStart">休憩開始</button>
       <button class="btn action-main" type="button" id="btn_breakEnd">休憩解除</button>
@@ -235,6 +242,9 @@ a{ color:var(--link); }
     </div>
 
     <div class="list" id="breakList"></div>
+    <div class="bottom-mini-actions">
+      <button class="btn btn-mini" type="button" id="btn_departCancel">出庫取消</button>
+    </div>
   </section>
 </main>
 
@@ -600,7 +610,7 @@ setInterval(()=>{ try{ updateBreakTimer(load()); }catch(e){} }, 1000);
 
 
   <script>
-    (function(){if('serviceWorker'in navigator&&location.protocol.indexOf('http')===0){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js?v=20260223-5').catch(function(){});});}})();
+    (function(){if('serviceWorker'in navigator&&location.protocol.indexOf('http')===0){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js?v=20260223-6').catch(function(){});});}})();
   </script>
 
 
