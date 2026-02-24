@@ -11,13 +11,15 @@
       font-size:18px;
     }
     .main{padding:12px;max-width:880px;margin:0 auto;}
-    .section{border:2px solid var(--border);background:#fff;margin:10px 0;padding:10px;}
-    .title{font-weight:900;font-size:16px;margin:0 0 8px 0;}
+    .main .section{border:0 !important;background:transparent !important;margin:8px 0;padding:4px 0 2px;}
+    .title{display:flex;align-items:center;gap:10px;font-weight:900;font-size:16px;margin:0 0 8px 0;}
+    .title::after{content:"";flex:1 1 auto;border-top:2px solid var(--border);opacity:.95;}
     .note{font-size:12px;color:var(--muted);line-height:1.35;margin:6px 0 10px 0;}
-    .field{display:grid;gap:6px;margin-bottom:10px;}
+    .field{display:grid;gap:6px;margin:0;padding:8px 0;border-bottom:1px solid var(--border);}
+    .section .field:last-of-type{border-bottom:none;padding-bottom:0;}
     .label{font-size:13px;color:var(--muted);}
     .input{width:100%;box-sizing:border-box;border:2px solid var(--border);border-radius:0;padding:12px 10px;font-size:18px;background:#fff;}
-    .actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+    .actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;}
     .btn{appearance:none;-webkit-appearance:none;border:2px solid var(--border);background:#fff;border-radius:0;padding:12px 8px;font-size:16px;min-height:52px;font-weight:900;}
 
 /* ---- TSMS Hamburger Menu (overlay) ---- */
@@ -136,7 +138,7 @@ a{ color:var(--link); }
   .tsms-more-bg.show{opacity:1;pointer-events:auto;}
 </style>
 
-  <script type="module" src="auth-guard.js?v=20260223-3"></script>
+  <script type="module" src="auth-guard.js?v=20260223-5"></script>
   <script src="./custom-confirm.js"></script>
 </head>
 <body>
@@ -392,7 +394,7 @@ a{ color:var(--link); }
 </script>
 
 <script>
-  (function(){if('serviceWorker' in navigator && location.protocol.indexOf('http')===0){window.addEventListener('load', function(){navigator.serviceWorker.register('./sw.js?v=20260223-11').catch(function(){});});}})();
+  (function(){if('serviceWorker' in navigator && location.protocol.indexOf('http')===0){window.addEventListener('load', function(){navigator.serviceWorker.register('./sw.js?v=20260223-14').catch(function(){});});}})();
 </script>
 
 <nav class="tsms-bottom-nav" aria-label="ボトムメニュー">

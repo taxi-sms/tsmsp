@@ -6,10 +6,11 @@
   <title>月間管理</title>
   <style>
     :root{ --bg:#fff; --text:#111; --muted:#666; --border:#999; }
-    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:"Noto Sans JP", sans-serif;font-size:16px;}
-    .main{padding:10px;max-width:980px;margin:0 auto;}
-    .panel{border:2px solid var(--border);background:#fff;margin:8px 0;padding:8px;}
-    .label{font-size:12px;color:var(--muted);margin:0 0 4px 0;}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:"Noto Sans JP", sans-serif;font-size:18px;}
+    .main{padding:12px;max-width:980px;margin:0 auto;}
+    .panel{border:0 !important;background:transparent !important;margin:8px 0;padding:4px 0 2px;}
+    .panel .label{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted);margin:0 0 8px 0;font-weight:900;}
+    .panel .label::after{content:"";flex:1 1 auto;border-top:2px solid var(--border);opacity:.95;}
     .input{width:100%;box-sizing:border-box;border:2px solid var(--border);padding:10px 8px;font-size:18px;background:#fff;color:inherit;}
 
     .tsms-header{position:sticky; top:0; z-index:100;height:60px; background:#fff;border-bottom:2px solid #000;display:flex; align-items:center;padding:0 14px 0 56px;font-weight:900; font-size:20px;}
@@ -32,7 +33,7 @@
     td.date.sat{background:var(--week-sat-bg);color:var(--weekend-text);font-weight:800;}
     td.date.sun{background:var(--week-sun-bg);color:var(--weekend-text);font-weight:800;}
     td.date.holiday{background:var(--week-sun-bg);color:var(--weekend-text);font-weight:800;}
-    .sum-row td{background:#55cad8;font-weight:900;border:2px solid var(--border);}
+    .sum-row td{background:#55cad8;color:#111;font-weight:900;border:2px solid var(--border);}
 
     .shift-btn{appearance:none;border:none;color:#fff;font-weight:900;border-radius:6px;padding:4px 2px;min-height:28px;width:100%;font-size:11px;}
     .shift-btn:disabled{opacity:.55;filter:grayscale(.25);}

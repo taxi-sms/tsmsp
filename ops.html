@@ -10,6 +10,7 @@
 html,body{
   margin:0; padding:0; background:#fff; color:#111;
   font-family:"Noto Sans JP", sans-serif;
+  font-size:18px;
 }
 
 /* Header */
@@ -71,13 +72,34 @@ html,body{
 
 /* Content */
 .main{ padding:12px; max-width:1000px; margin:0 auto; }
-.card{ border:2px solid var(--border); padding:12px; margin:10px 0; }
+.main .card{
+  border:0 !important;
+  background:transparent !important;
+  padding:4px 0 2px;
+  margin:8px 0;
+}
 
 .note{ font-size:12px; color:var(--muted); margin:0 0 10px 0; line-height:1.35; }
 
+.group-title{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-weight:900;
+  font-size:16px;
+  margin:0 0 8px 0;
+}
+.group-title::after{
+  content:"";
+  flex:1 1 auto;
+  border-top:2px solid var(--border);
+  opacity:.95;
+}
+
 /* Rows (no inner boxes) */
-.content{ display:grid; gap:8px; }
-.line{ display:flex; gap:10px; align-items:baseline; }
+.content{ display:grid; gap:0; }
+.line{ display:flex; gap:10px; align-items:baseline; padding:6px 0; border-bottom:1px solid var(--border); }
+.content .line:last-child{ border-bottom:none; }
 .k{ width:130px; font-size:12px; color:var(--muted); }
 .v{ font-size:20px; font-weight:900; margin-left:auto; font-variant-numeric:tabular-nums; }
 
@@ -141,7 +163,15 @@ html,body{
 /* Break sessions list */
 .list{ margin-top:10px; }
 .bottom-mini-actions{ margin-top:10px; display:flex; justify-content:flex-end; }
-.item{ display:flex; gap:10px; align-items:baseline; padding:6px 0; border-bottom:1px dashed #cfcfcf; }
+.sync-meta{
+  margin-top:10px;
+  font-size:12px;
+  color:var(--text-muted,#666);
+  text-align:right;
+  line-height:1.35;
+}
+.sync-meta.error{ color:#c62828; font-weight:700; }
+.item{ display:flex; gap:10px; align-items:baseline; padding:6px 0; border-bottom:1px solid var(--border); }
 .item:last-child{ border-bottom:none; }
 .item .idx{ width:36px; color:var(--muted); font-size:12px; }
 .item .txt{ font-size:14px; font-weight:800; }
@@ -248,6 +278,7 @@ a{ color:var(--link); }
 
 <main class="main">
   <section class="card">
+    <div class="group-title">出庫 / 帰庫</div>
     <div class="actions">
       <button class="btn action-main" type="button" id="btn_depart">出庫（今）</button>
       <button class="btn action-main" type="button" id="btn_return">帰庫（今）</button>
@@ -258,7 +289,8 @@ a{ color:var(--link); }
       <div class="line"><div class="k">帰庫時間</div><div class="v" id="v_return">--</div></div>
     </div>
 
-    <div class="actions" style="margin-top:12px;">
+    <div class="group-title" style="margin-top:12px;">休憩</div>
+    <div class="actions">
       <button class="btn action-main" type="button" id="btn_breakStart">休憩開始</button>
       <button class="btn action-main" type="button" id="btn_breakEnd">休憩解除</button>
     </div>
@@ -274,10 +306,12 @@ a{ color:var(--link); }
       <button class="btn danger wide reset-final" type="button" id="btn_reset">この日の記録をクリア<br><span class="warn">（〆作業として一番最後に実行）</span></button>
     </div>
 
+    <div class="group-title" style="margin-top:12px;">休憩履歴</div>
     <div class="list" id="breakList"></div>
     <div class="bottom-mini-actions">
       <button class="btn btn-mini" type="button" id="btn_departCancel">出庫取消</button>
     </div>
+    <div class="sync-meta" id="opsSyncMeta">最終クラウド同期: --</div>
   </section>
 </main>
 
@@ -303,6 +337,8 @@ bg.onclick = () => { menu.classList.remove("open"); bg.classList.remove("show");
 const KEY = "ops";
 const OPS_ARCHIVE_KEY = "ops_archive_v1";
 const OPS_SYNC_REV_KEY = "ops_sync_rev_v1";
+const CLOUD_LAST_SUCCESS_AT_KEY = "tsms_cloud_last_success_at";
+const CLOUD_LAST_FAILURE_AT_KEY = "tsms_cloud_last_failure_at";
 const REPORT_KEY = "tsms_reports";
 const REPORT_ARCHIVE_KEY = "tsms_reports_archive";
 const CURRENT_DAY_KEY = "tsms_report_current_day";
@@ -332,6 +368,12 @@ function fmtMin(m){
   const mm = v%60;
   if(h<=0) return `${mm}分`;
   return `${h}時間${mm}分`;
+}
+function fmtSyncDateTime(iso){
+  if(!iso) return "";
+  const d = new Date(iso);
+  if(isNaN(d)) return "";
+  return `${d.getFullYear()}/${pad(d.getMonth()+1)}/${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
 }
 function safeParse(){
   try{
@@ -425,6 +467,28 @@ const resultModalBg = document.getElementById("resultModalBg");
 const resultModalIcon = document.getElementById("resultModalIcon");
 const resultModalMessage = document.getElementById("resultModalMessage");
 const resultModalCloseBtn = document.getElementById("resultModalCloseBtn");
+const opsSyncMeta = document.getElementById("opsSyncMeta");
+
+function renderCloudSyncStatus(){
+  if(!opsSyncMeta) return;
+  const okAt = localStorage.getItem(CLOUD_LAST_SUCCESS_AT_KEY) || "";
+  const ngAt = localStorage.getItem(CLOUD_LAST_FAILURE_AT_KEY) || "";
+  const okMs = okAt ? new Date(okAt).getTime() : 0;
+  const ngMs = ngAt ? new Date(ngAt).getTime() : 0;
+
+  if(okMs && okMs >= ngMs){
+    opsSyncMeta.classList.remove("error");
+    opsSyncMeta.textContent = `最終クラウド同期: ${fmtSyncDateTime(okAt)}`;
+    return;
+  }
+  if(ngMs){
+    opsSyncMeta.classList.add("error");
+    opsSyncMeta.textContent = "最終クラウド同期: 失敗（再試行してください）";
+    return;
+  }
+  opsSyncMeta.classList.remove("error");
+  opsSyncMeta.textContent = "最終クラウド同期: --";
+}
 
 function showResultModal(message, isSuccess){
   if(!resultModalBg || !resultModalIcon || !resultModalMessage || !resultModalCloseBtn){
@@ -478,6 +542,7 @@ function updateBreakTimer(d){
 
 function render(){
   const d = load();
+  renderCloudSyncStatus();
 
   vDepart.textContent = fmt(d.departAt);
   vReturn.textContent = fmt(d.returnAt);
@@ -535,8 +600,7 @@ function render(){
   if(!sessions.length){
     breakList.innerHTML = '<div class="note">休憩履歴なし</div>';
   } else {
-    breakList.innerHTML = '<div class="note" style="margin:10px 0 0 0;">休憩履歴</div>'
-      + sessions.map((s,i)=>`
+    breakList.innerHTML = sessions.map((s,i)=>`
         <div class="item">
           <div class="idx">#${i+1}</div>
           <div class="txt">${fmt(s.start)} → ${fmt(s.end)}</div>
@@ -680,8 +744,10 @@ btnReset.onclick = async ()=>{
     }
 
     await backupNow();
+    renderCloudSyncStatus();
     await showResultModal("締め作業が完了しました", true);
   }catch(e){
+    renderCloudSyncStatus();
     await showResultModal("バックアップに失敗しました。もう一度実行してください。", false);
   }
 
