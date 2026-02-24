@@ -1,0 +1,1313 @@
+{\rtf1\ansi\ansicpg932\cocoartf2867
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 HelveticaNeue;}
+{\colortbl;\red255\green255\blue255;\red120\green129\blue140;\red189\green198\blue208;\red12\green14\blue18;
+\red111\green230\blue116;\red104\green177\blue255;\red253\green149\blue70;\red150\green204\blue255;\red252\green99\blue95;
+}
+{\*\expandedcolortbl;;\cssrgb\c54510\c58039\c61961;\cssrgb\c78824\c81961\c85098;\cssrgb\c5098\c6667\c9020;
+\cssrgb\c49412\c90588\c52941;\cssrgb\c47451\c75294\c100000;\cssrgb\c100000\c65098\c34118;\cssrgb\c64706\c83922\c100000;\cssrgb\c100000\c48235\c44706;
+}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs28 \cf2 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 /* =============================================================\
+   TSMs Design System \'97 tsms-design-system.css\
+   \uc0\u20840 \u12506 \u12540 \u12472 \u20849 \u36890 \u12290 \u21508 HTML\u12398 \u26082 \u23384 <style>\u12398  \u30452 \u24460 \u12395 \
+   <link rel="stylesheet" href="tsms-design-system.css">\
+   \uc0\u12434 1\u34892 \u36861 \u21152 \u12377 \u12427 \u12384 \u12369 \u12391 \u36969 \u29992 \u12373 \u12428 \u12414 \u12377 \u12290 \
+   \uc0\u12525 \u12472 \u12483 \u12463 \u12539 HTML\u27083 \u36896 \u12399 \u19968 \u20999 \u22793 \u26356 \u19981 \u35201 \u12290 \
+   ============================================================= */\cf3 \cb4 \strokec3 \
+\
+\cf2 \cb1 \strokec2 /* \uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \
+   0. \uc0\u12488 \u12540 \u12463 \u12531 \u24375 \u21270 \u65288 \u26082 \u23384 \u22793 \u25968 \u12434 \u19978 \u26360 \u12365 \u12539 \u25313 \u24373 \u65289 \
+\uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472  */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf5 \cb1 \strokec5 :root\cf3 \cb4 \strokec3  \{\
+  \cf2 \cb1 \strokec2 /* \uc0\u9472 \u9472  \u12459 \u12521 \u12540  \u9472 \u9472  */\cf3 \cb4 \strokec3 \
+  \cf6 \cb1 \strokec6 --bg\cf3 \cb4 \strokec3 :            \cf6 \cb1 \strokec6 #F0F4F7\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 --surface-1\cf3 \cb4 \strokec3 :     \cf6 \cb1 \strokec6 #FFFFFF\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 --surface-2\cf3 \cb4 \strokec3 :     \cf6 \cb1 \strokec6 #E8EEF3\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 --surface-3\cf3 \cb4 \strokec3 :     \cf6 \cb1 \strokec6 #DDE5EC\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 --border\cf3 \cb4 \strokec3 :        \cf6 \cb1 \strokec6 #C8D5DF\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 --border-focus\cf3 \cb4 \strokec3 :  \cf6 \cb1 \strokec6 #2580ED\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 --text-primary\cf3 \cb4 \strokec3 :  \cf6 \cb1 \strokec6 #0D1B26\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 --text-secondary\cf3 \cb4 \strokec3 :\cf6 \cb1 \strokec6 #2E4357\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 --text-muted\cf3 \cb4 \strokec3 :    \cf6 \cb1 \strokec6 #6B7D8C\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 --accent\cf3 \cb4 \strokec3 :        \cf6 \cb1 \strokec6 #2580ED\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 --accent-hover\cf3 \cb4 \strokec3 :  \cf6 \cb1 \strokec6 #1A6DD4\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 --accent-light\cf3 \cb4 \strokec3 :  \cf7 \cb1 \strokec7 rgba\cf3 \cb4 \strokec3 (\cf6 \cb1 \strokec6 37\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 128\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 237\cf3 \cb4 \strokec3 ,.\cf6 \cb1 \strokec6 12\cf3 \cb4 \strokec3 );\
+  \cf6 \cb1 \strokec6 --accent-dark\cf3 \cb4 \strokec3 :   \cf6 \cb1 \strokec6 #1256A8\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 --link\cf3 \cb4 \strokec3 :          \cf6 \cb1 \strokec6 #187FBF\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 --success\cf3 \cb4 \strokec3 :       \cf6 \cb1 \strokec6 #1A9B3A\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 --success-bg\cf3 \cb4 \strokec3 :    \cf7 \cb1 \strokec7 rgba\cf3 \cb4 \strokec3 (\cf6 \cb1 \strokec6 26\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 155\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 58\cf3 \cb4 \strokec3 ,.\cf6 \cb1 \strokec6 12\cf3 \cb4 \strokec3 );\
+  \cf6 \cb1 \strokec6 --danger\cf3 \cb4 \strokec3 :        \cf6 \cb1 \strokec6 #D93025\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 --danger-bg\cf3 \cb4 \strokec3 :     \cf7 \cb1 \strokec7 rgba\cf3 \cb4 \strokec3 (\cf6 \cb1 \strokec6 217\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 48\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 37\cf3 \cb4 \strokec3 ,.\cf6 \cb1 \strokec6 1\cf3 \cb4 \strokec3 );\
+  \cf6 \cb1 \strokec6 --warn\cf3 \cb4 \strokec3 :          \cf6 \cb1 \strokec6 #E07000\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 --go-orange\cf3 \cb4 \strokec3 :     \cf6 \cb1 \strokec6 #FD7E00\cf3 \cb4 \strokec3 ;\
+\
+  \cf2 \cb1 \strokec2 /* \uc0\u9472 \u9472  \u12471 \u12455 \u12452 \u12503  \u9472 \u9472  */\cf3 \cb4 \strokec3 \
+  \cf6 \cb1 \strokec6 --radius-sm\cf3 \cb4 \strokec3 :  \cf6 \cb1 \strokec6 4px\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 --radius\cf3 \cb4 \strokec3 :     \cf6 \cb1 \strokec6 6px\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 --radius-md\cf3 \cb4 \strokec3 :  \cf6 \cb1 \strokec6 8px\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 --radius-lg\cf3 \cb4 \strokec3 :  \cf6 \cb1 \strokec6 12px\cf3 \cb4 \strokec3 ;\
+\
+  \cf2 \cb1 \strokec2 /* \uc0\u9472 \u9472  \u12471 \u12515 \u12489 \u12454  \u9472 \u9472  */\cf3 \cb4 \strokec3 \
+  \cf6 \cb1 \strokec6 --shadow-xs\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 1px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 2px\cf3 \cb4 \strokec3  \cf7 \cb1 \strokec7 rgba\cf3 \cb4 \strokec3 (\cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ,.\cf6 \cb1 \strokec6 06\cf3 \cb4 \strokec3 );\
+  \cf6 \cb1 \strokec6 --shadow-sm\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 2px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 6px\cf3 \cb4 \strokec3  \cf7 \cb1 \strokec7 rgba\cf3 \cb4 \strokec3 (\cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ,.\cf6 \cb1 \strokec6 08\cf3 \cb4 \strokec3 );\
+  \cf6 \cb1 \strokec6 --shadow-md\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 4px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 16px\cf3 \cb4 \strokec3  \cf7 \cb1 \strokec7 rgba\cf3 \cb4 \strokec3 (\cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ,.\cf6 \cb1 \strokec6 10\cf3 \cb4 \strokec3 );\
+  \cf6 \cb1 \strokec6 --shadow-lg\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 8px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 32px\cf3 \cb4 \strokec3  \cf7 \cb1 \strokec7 rgba\cf3 \cb4 \strokec3 (\cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ,.\cf6 \cb1 \strokec6 14\cf3 \cb4 \strokec3 );\
+\
+  \cf2 \cb1 \strokec2 /* \uc0\u9472 \u9472  \u12488 \u12521 \u12531 \u12472 \u12471 \u12519 \u12531  \u9472 \u9472  */\cf3 \cb4 \strokec3 \
+  \cf6 \cb1 \strokec6 --trans-fast\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 120ms\cf3 \cb4 \strokec3  ease;\
+  \cf6 \cb1 \strokec6 --trans\cf3 \cb4 \strokec3 :      \cf6 \cb1 \strokec6 180ms\cf3 \cb4 \strokec3  ease;\
+  \cf6 \cb1 \strokec6 --trans-slow\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 260ms\cf3 \cb4 \strokec3  ease;\
+\
+  \cf2 \cb1 \strokec2 /* \uc0\u9472 \u9472  \u12479 \u12452 \u12509  \u9472 \u9472  */\cf3 \cb4 \strokec3 \
+  \cf6 \cb1 \strokec6 --font-base\cf3 \cb4 \strokec3 : \cf8 \cb1 \strokec8 "Noto Sans JP"\cf3 \cb4 \strokec3 , \cf8 \cb1 \strokec8 "Hiragino Sans"\cf3 \cb4 \strokec3 , \cf8 \cb1 \strokec8 "Yu Gothic UI"\cf3 \cb4 \strokec3 , sans-serif;\
+\
+  \cf2 \cb1 \strokec2 /* \uc0\u9472 \u9472  \u12508 \u12488 \u12512 \u12490 \u12499 \u39640 \u12373  \u9472 \u9472  */\cf3 \cb4 \strokec3 \
+  \cf6 \cb1 \strokec6 --bottom-nav-h\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 60px\cf3 \cb4 \strokec3 ;\
+\}\
+\
+\cf5 \cb1 \strokec5 :root\cf6 \strokec6 [data-theme=\cf8 \strokec8 "dark"\cf6 \strokec6 ]\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 --bg\cf3 \cb4 \strokec3 :            \cf6 \cb1 \strokec6 #0D1318\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 --surface-1\cf3 \cb4 \strokec3 :     \cf6 \cb1 \strokec6 #141C22\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 --surface-2\cf3 \cb4 \strokec3 :     \cf6 \cb1 \strokec6 #1A242C\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 --surface-3\cf3 \cb4 \strokec3 :     \cf6 \cb1 \strokec6 #212E38\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 --border\cf3 \cb4 \strokec3 :        \cf6 \cb1 \strokec6 #28363F\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 --border-focus\cf3 \cb4 \strokec3 :  \cf6 \cb1 \strokec6 #3B95F0\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 --text-primary\cf3 \cb4 \strokec3 :  \cf6 \cb1 \strokec6 #E4EEF4\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 --text-secondary\cf3 \cb4 \strokec3 :\cf6 \cb1 \strokec6 #B4C4CF\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 --text-muted\cf3 \cb4 \strokec3 :    \cf6 \cb1 \strokec6 #7A8E9A\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 --accent\cf3 \cb4 \strokec3 :        \cf6 \cb1 \strokec6 #3B95F0\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 --accent-hover\cf3 \cb4 \strokec3 :  \cf6 \cb1 \strokec6 #5AAEFF\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 --accent-light\cf3 \cb4 \strokec3 :  \cf7 \cb1 \strokec7 rgba\cf3 \cb4 \strokec3 (\cf6 \cb1 \strokec6 59\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 149\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 240\cf3 \cb4 \strokec3 ,.\cf6 \cb1 \strokec6 15\cf3 \cb4 \strokec3 );\
+  \cf6 \cb1 \strokec6 --accent-dark\cf3 \cb4 \strokec3 :   \cf6 \cb1 \strokec6 #2070CC\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 --link\cf3 \cb4 \strokec3 :          \cf6 \cb1 \strokec6 #58C2FF\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 --success\cf3 \cb4 \strokec3 :       \cf6 \cb1 \strokec6 #22C55E\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 --success-bg\cf3 \cb4 \strokec3 :    \cf7 \cb1 \strokec7 rgba\cf3 \cb4 \strokec3 (\cf6 \cb1 \strokec6 34\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 197\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 94\cf3 \cb4 \strokec3 ,.\cf6 \cb1 \strokec6 12\cf3 \cb4 \strokec3 );\
+  \cf6 \cb1 \strokec6 --danger\cf3 \cb4 \strokec3 :        \cf6 \cb1 \strokec6 #EF4444\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 --danger-bg\cf3 \cb4 \strokec3 :     \cf7 \cb1 \strokec7 rgba\cf3 \cb4 \strokec3 (\cf6 \cb1 \strokec6 239\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 68\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 68\cf3 \cb4 \strokec3 ,.\cf6 \cb1 \strokec6 12\cf3 \cb4 \strokec3 );\
+  \cf6 \cb1 \strokec6 --warn\cf3 \cb4 \strokec3 :          \cf6 \cb1 \strokec6 #F59E0B\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 --go-orange\cf3 \cb4 \strokec3 :     \cf6 \cb1 \strokec6 #FFA733\cf3 \cb4 \strokec3 ;\
+\
+  \cf6 \cb1 \strokec6 --shadow-xs\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 1px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 2px\cf3 \cb4 \strokec3  \cf7 \cb1 \strokec7 rgba\cf3 \cb4 \strokec3 (\cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ,.\cf6 \cb1 \strokec6 18\cf3 \cb4 \strokec3 );\
+  \cf6 \cb1 \strokec6 --shadow-sm\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 2px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 6px\cf3 \cb4 \strokec3  \cf7 \cb1 \strokec7 rgba\cf3 \cb4 \strokec3 (\cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ,.\cf6 \cb1 \strokec6 24\cf3 \cb4 \strokec3 );\
+  \cf6 \cb1 \strokec6 --shadow-md\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 4px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 16px\cf3 \cb4 \strokec3  \cf7 \cb1 \strokec7 rgba\cf3 \cb4 \strokec3 (\cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ,.\cf6 \cb1 \strokec6 32\cf3 \cb4 \strokec3 );\
+  \cf6 \cb1 \strokec6 --shadow-lg\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 8px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 32px\cf3 \cb4 \strokec3  \cf7 \cb1 \strokec7 rgba\cf3 \cb4 \strokec3 (\cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ,.\cf6 \cb1 \strokec6 40\cf3 \cb4 \strokec3 );\
+\}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* \uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \
+   1. \uc0\u12505 \u12540 \u12473 \u12522 \u12475 \u12483 \u12488 \
+\uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472  */\cf3 \cb4 \strokec3 \
+*, *\cf5 \cb1 \strokec5 ::before\cf3 \cb4 \strokec3 , *\cf5 \cb1 \strokec5 ::after\cf3 \cb4 \strokec3  \{ \cf6 \cb1 \strokec6 box-sizing\cf3 \cb4 \strokec3 : border-box; \}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf5 \cb1 \strokec5 html\cf3 \cb4 \strokec3 , \cf5 \cb1 \strokec5 body\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 margin\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ; \cf6 \cb1 \strokec6 padding\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--bg) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--text-primary) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-family\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--font-base);\
+  \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 16px\cf3 \cb4 \strokec3 ;\
+  -webkit-\cf6 \cb1 \strokec6 font-smoothing\cf3 \cb4 \strokec3 : antialiased;\
+  -webkit-tap-highlight-\cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : transparent;\
+\}\
+\
+\cf5 \cb1 \strokec5 a\cf3 \cb4 \strokec3  \{ \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--link); \cf6 \cb1 \strokec6 text-decoration\cf3 \cb4 \strokec3 : none; \}\
+\cf5 \cb1 \strokec5 a:hover\cf3 \cb4 \strokec3  \{ \cf6 \cb1 \strokec6 text-decoration\cf3 \cb4 \strokec3 : underline; \}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* \uc0\u12473 \u12463 \u12525 \u12540 \u12523 \u12496 \u12540 \u65288 WebKit\u65289  */\cf3 \cb4 \strokec3 \
+::-webkit-scrollbar \{ \cf6 \cb1 \strokec6 width\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 4px\cf3 \cb4 \strokec3 ; \cf6 \cb1 \strokec6 height\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 4px\cf3 \cb4 \strokec3 ; \}\
+::-webkit-scrollbar-track \{ \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : transparent; \}\
+::-webkit-scrollbar-thumb \{ \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--border); \cf6 \cb1 \strokec6 border-radius\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 99px\cf3 \cb4 \strokec3 ; \}\
+\
+\cf2 \cb1 \strokec2 /* \uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \
+   2. \uc0\u12504 \u12483 \u12480 \u12540 \
+\uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472  */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 .tsms-header\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .header\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 position\cf3 \cb4 \strokec3 : sticky \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 top\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 z-index\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 100\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 height\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 56px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--surface-\cf6 \cb1 \strokec6 1\cf3 \cb4 \strokec3 ) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border-bottom\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1px\cf3 \cb4 \strokec3  solid \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--border) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 display\cf3 \cb4 \strokec3 : flex \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 align-items\cf3 \cb4 \strokec3 : center \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 padding\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 12px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 14px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-weight\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 800\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 17px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--text-primary) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 gap\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 10px\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 box-shadow\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--shadow-xs);\
+  \cf6 \cb1 \strokec6 letter-spacing\cf3 \cb4 \strokec3 : .\cf6 \cb1 \strokec6 01em\cf3 \cb4 \strokec3 ;\
+\}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* \uc0\u12450 \u12452 \u12467 \u12531 \u65288 \u26082 \u23384 \u12398 background:url \u12399 \u12381 \u12398 \u12414 \u12414 \u27963 \u12365 \u12427 \u65289  */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 .tsms-header\cf5 \strokec5 ::before\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .header\cf5 \strokec5 ::before\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 content\cf3 \cb4 \strokec3 : \cf8 \cb1 \strokec8 ""\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 display\cf3 \cb4 \strokec3 : inline-block \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 width\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 26px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 height\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 26px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 flex\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 26px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 margin-right\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 4px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 url\cf3 \cb4 \strokec3 (\cf8 \cb1 \strokec8 'icon.png'\cf3 \cb4 \strokec3 ) center/contain no-repeat \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border-radius\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--radius-sm);\
+\}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* \uc0\u12504 \u12483 \u12480 \u12540 \u21491 \u31471 \u12508 \u12479 \u12531  */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 .header-to-report\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .header-manual-edit\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 margin-left\cf3 \cb4 \strokec3 : auto;\
+  \cf6 \cb1 \strokec6 border\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1.5px\cf3 \cb4 \strokec3  solid \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--border) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 padding\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 5px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 11px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 12px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-weight\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 700\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--text-secondary) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--surface-\cf6 \cb1 \strokec6 2\cf3 \cb4 \strokec3 ) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border-radius\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--radius) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 transition\cf3 \cb4 \strokec3 : background \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--trans-fast), border-color \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--trans-fast), color \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--trans-fast);\
+  \cf6 \cb1 \strokec6 line-height\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1.4\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 white-space\cf3 \cb4 \strokec3 : nowrap;\
+  \cf6 \cb1 \strokec6 cursor\cf3 \cb4 \strokec3 : pointer;\
+\}\
+\cf6 \cb1 \strokec6 .header-to-report\cf5 \strokec5 :hover\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .header-manual-edit\cf5 \strokec5 :hover\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--surface-\cf6 \cb1 \strokec6 3\cf3 \cb4 \strokec3 ) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border-color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--accent) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--accent) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 text-decoration\cf3 \cb4 \strokec3 : none;\
+\}\
+\cf6 \cb1 \strokec6 .header-manual-edit.active\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--accent-light) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border-color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--accent) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--accent) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+\}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* \uc0\u12504 \u12483 \u12480 \u12540  \u35079 \u25968 \u12508 \u12479 \u12531 \u20006 \u12403  */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 .header-actions\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 margin-left\cf3 \cb4 \strokec3 : auto;\
+  \cf6 \cb1 \strokec6 display\cf3 \cb4 \strokec3 : flex;\
+  \cf6 \cb1 \strokec6 gap\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 6px\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 align-items\cf3 \cb4 \strokec3 : center;\
+\}\
+\cf6 \cb1 \strokec6 .header-actions\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 .header-to-report\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .header-actions\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 .header-manual-edit\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 margin-left\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ;\
+\}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* \uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \
+   3. \uc0\u12508 \u12488 \u12512 \u12490 \u12499 \u12466 \u12540 \u12471 \u12519 \u12531 \
+\uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472  */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 .tsms-bottom-nav\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 position\cf3 \cb4 \strokec3 : fixed \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 left\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ; \cf6 \cb1 \strokec6 right\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ; \cf6 \cb1 \strokec6 bottom\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 z-index\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1200\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 display\cf3 \cb4 \strokec3 : grid \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 grid-template-columns\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 repeat\cf3 \cb4 \strokec3 (\cf6 \cb1 \strokec6 5\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 1\cf3 \cb4 \strokec3 fr) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--surface-\cf6 \cb1 \strokec6 1\cf3 \cb4 \strokec3 ) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border-top\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1px\cf3 \cb4 \strokec3  solid \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--border) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 padding-bottom\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 env\cf3 \cb4 \strokec3 (safe-area-inset-bottom) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 box-shadow\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  -\cf6 \cb1 \strokec6 2px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 12px\cf3 \cb4 \strokec3  \cf7 \cb1 \strokec7 rgba\cf3 \cb4 \strokec3 (\cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ,.\cf6 \cb1 \strokec6 08\cf3 \cb4 \strokec3 );\
+\}\
+\
+\cf6 \cb1 \strokec6 .tsms-bottom-nav\cf3 \cb4 \strokec3  \cf5 \cb1 \strokec5 a\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .tsms-bottom-nav\cf3 \cb4 \strokec3  \cf5 \cb1 \strokec5 button\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 appearance\cf3 \cb4 \strokec3 : none \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : transparent \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--text-muted) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font\cf3 \cb4 \strokec3 : inherit;\
+  \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 10px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-weight\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 700\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 padding\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 8px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 2px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 9px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 min-height\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--bottom-nav-h) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 display\cf3 \cb4 \strokec3 : flex \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 flex-direction\cf3 \cb4 \strokec3 : column \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 align-items\cf3 \cb4 \strokec3 : center \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 justify-content\cf3 \cb4 \strokec3 : center \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 gap\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 3px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 text-decoration\cf3 \cb4 \strokec3 : none \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 cursor\cf3 \cb4 \strokec3 : pointer;\
+  \cf6 \cb1 \strokec6 border-radius\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 transition\cf3 \cb4 \strokec3 : color \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--trans-fast), background \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--trans-fast);\
+  \cf6 \cb1 \strokec6 position\cf3 \cb4 \strokec3 : relative;\
+\}\
+\cf6 \cb1 \strokec6 .tsms-bottom-nav\cf3 \cb4 \strokec3  \cf5 \cb1 \strokec5 a:hover\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .tsms-bottom-nav\cf3 \cb4 \strokec3  \cf5 \cb1 \strokec5 button:hover\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--accent-light) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--accent) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+\}\
+\
+\cf6 \cb1 \strokec6 .tsms-bottom-nav\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 .ico\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 width\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 22px\cf3 \cb4 \strokec3 ; \cf6 \cb1 \strokec6 height\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 22px\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 display\cf3 \cb4 \strokec3 : inline-flex;\
+  \cf6 \cb1 \strokec6 align-items\cf3 \cb4 \strokec3 : center;\
+  \cf6 \cb1 \strokec6 justify-content\cf3 \cb4 \strokec3 : center;\
+  \cf6 \cb1 \strokec6 transition\cf3 \cb4 \strokec3 : transform \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--trans-fast);\
+\}\
+\cf6 \cb1 \strokec6 .tsms-bottom-nav\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 .ico\cf3 \cb4 \strokec3  \cf5 \cb1 \strokec5 svg\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 width\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 22px\cf3 \cb4 \strokec3 ; \cf6 \cb1 \strokec6 height\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 22px\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 stroke\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--text-muted);\
+  \cf6 \cb1 \strokec6 fill\cf3 \cb4 \strokec3 : none;\
+  \cf6 \cb1 \strokec6 stroke-width\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 2\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 stroke-linecap\cf3 \cb4 \strokec3 : round;\
+  \cf6 \cb1 \strokec6 stroke-linejoin\cf3 \cb4 \strokec3 : round;\
+  \cf6 \cb1 \strokec6 display\cf3 \cb4 \strokec3 : block;\
+  \cf6 \cb1 \strokec6 transition\cf3 \cb4 \strokec3 : stroke \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--trans-fast);\
+\}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* \uc0\u12450 \u12463 \u12486 \u12451 \u12502  */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 .tsms-bottom-nav\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 .active\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--accent) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+\}\
+\cf6 \cb1 \strokec6 .tsms-bottom-nav\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 .active\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 .ico\cf3 \cb4 \strokec3  \cf5 \cb1 \strokec5 svg\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 stroke\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--accent) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+\}\
+\cf6 \cb1 \strokec6 .tsms-bottom-nav\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 .active\cf5 \strokec5 ::before\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 content\cf3 \cb4 \strokec3 : \cf8 \cb1 \strokec8 ""\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 position\cf3 \cb4 \strokec3 : absolute \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 top\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ; \cf6 \cb1 \strokec6 left\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 12%\cf3 \cb4 \strokec3 ; \cf6 \cb1 \strokec6 right\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 12%\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 height\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 2px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--accent) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border-radius\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 2px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 2px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+\}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* \uc0\u12479 \u12483 \u12503 \u26178 \u12398 \u12501 \u12451 \u12540 \u12489 \u12496 \u12483 \u12463  */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 .tsms-bottom-nav\cf3 \cb4 \strokec3  \cf5 \cb1 \strokec5 a:active\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .tsms-bottom-nav\cf3 \cb4 \strokec3  \cf5 \cb1 \strokec5 button:active\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--accent-light) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+\}\
+\cf6 \cb1 \strokec6 .tsms-bottom-nav\cf3 \cb4 \strokec3  \cf5 \cb1 \strokec5 a:active\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 .ico\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .tsms-bottom-nav\cf3 \cb4 \strokec3  \cf5 \cb1 \strokec5 button:active\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 .ico\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 transform\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 scale\cf3 \cb4 \strokec3 (.\cf6 \cb1 \strokec6 88\cf3 \cb4 \strokec3 );\
+\}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* \uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \
+   4. \uc0\u12469 \u12452 \u12489 \u12513 \u12491 \u12517 \u12540 \u65288 \u12495 \u12531 \u12496 \u12540 \u12460 \u12540 \u65289 \
+\uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472  */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 .tsms-menu\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .menu\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 position\cf3 \cb4 \strokec3 : fixed \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 top\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ; \cf6 \cb1 \strokec6 left\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 height\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 100%\cf3 \cb4 \strokec3 ; \cf6 \cb1 \strokec6 width\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 280px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--surface-\cf6 \cb1 \strokec6 1\cf3 \cb4 \strokec3 ) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border-right\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1px\cf3 \cb4 \strokec3  solid \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--border) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 transform\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 translateX\cf3 \cb4 \strokec3 (-\cf6 \cb1 \strokec6 100%\cf3 \cb4 \strokec3 );\
+  \cf6 \cb1 \strokec6 transition\cf3 \cb4 \strokec3 : transform \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--trans-slow) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 z-index\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1000\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 padding-top\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 56px\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 box-shadow\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--shadow-lg);\
+\}\
+\cf6 \cb1 \strokec6 .tsms-menu.open\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .menu.open\cf3 \cb4 \strokec3  \{ \cf6 \cb1 \strokec6 transform\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 translateX\cf3 \cb4 \strokec3 (\cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ; \}\
+\
+\cf6 \cb1 \strokec6 .tsms-menu\cf3 \cb4 \strokec3  \cf5 \cb1 \strokec5 a\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .menu\cf3 \cb4 \strokec3  \cf5 \cb1 \strokec5 a\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 display\cf3 \cb4 \strokec3 : flex \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 flex-direction\cf3 \cb4 \strokec3 : column;\
+  \cf6 \cb1 \strokec6 padding\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 13px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 16px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border-bottom\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1px\cf3 \cb4 \strokec3  solid \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--border) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 text-decoration\cf3 \cb4 \strokec3 : none \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--text-primary) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : transparent \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 15px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-weight\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 700\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 transition\cf3 \cb4 \strokec3 : background \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--trans-fast), color \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--trans-fast), padding-left \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--trans-fast);\
+\}\
+\cf6 \cb1 \strokec6 .tsms-menu\cf3 \cb4 \strokec3  \cf5 \cb1 \strokec5 a:hover\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .menu\cf3 \cb4 \strokec3  \cf5 \cb1 \strokec5 a:hover\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--accent-light) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--accent) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 padding-left\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 20px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+\}\
+\cf6 \cb1 \strokec6 .tsms-menu\cf3 \cb4 \strokec3  \cf5 \cb1 \strokec5 a:active\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .menu\cf3 \cb4 \strokec3  \cf5 \cb1 \strokec5 a:active\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--surface-\cf6 \cb1 \strokec6 3\cf3 \cb4 \strokec3 ) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+\}\
+\
+\cf6 \cb1 \strokec6 .tsms-menu\cf3 \cb4 \strokec3  small,\
+\cf6 \cb1 \strokec6 .menu\cf3 \cb4 \strokec3  small \{\
+  \cf6 \cb1 \strokec6 display\cf3 \cb4 \strokec3 : block \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 margin-top\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 2px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 11px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-weight\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 500\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--text-muted) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 line-height\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1.3\cf3 \cb4 \strokec3 ;\
+\}\
+\
+\cf6 \cb1 \strokec6 .tsms-menu-bg\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .menu-bg\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 position\cf3 \cb4 \strokec3 : fixed \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 inset\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 rgba\cf3 \cb4 \strokec3 (\cf6 \cb1 \strokec6 13\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 27\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 38\cf3 \cb4 \strokec3 ,.\cf6 \cb1 \strokec6 5\cf3 \cb4 \strokec3 ) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 opacity\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 pointer-events\cf3 \cb4 \strokec3 : none \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 transition\cf3 \cb4 \strokec3 : opacity \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--trans-slow) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 z-index\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 900\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 backdrop-filter\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 blur\cf3 \cb4 \strokec3 (\cf6 \cb1 \strokec6 2px\cf3 \cb4 \strokec3 );\
+\}\
+\cf6 \cb1 \strokec6 .tsms-menu-bg.show\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .menu-bg.show\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 opacity\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 pointer-events\cf3 \cb4 \strokec3 : auto \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+\}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* \uc0\u12495 \u12531 \u12496 \u12540 \u12460 \u12540 \u12450 \u12452 \u12467 \u12531 \u65288 \u38560 \u12428 \u12390 \u12356 \u12427 \u12364 \u24565 \u12398 \u12383 \u12417 \u65289  */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 .tsms-hamburger\cf3 \cb4 \strokec3  \cf5 \cb1 \strokec5 span\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .hamburger\cf3 \cb4 \strokec3  \cf5 \cb1 \strokec5 span\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--accent) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border-radius\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 2px\cf3 \cb4 \strokec3 ;\
+\}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* \uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \
+   5. \uc0\u12508 \u12479 \u12531 \u65288 \u20849 \u36890 \u65289 \
+\uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472  */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 .btn\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 appearance\cf3 \cb4 \strokec3 : none \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  -webkit-\cf6 \cb1 \strokec6 appearance\cf3 \cb4 \strokec3 : none \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 display\cf3 \cb4 \strokec3 : inline-flex;\
+  \cf6 \cb1 \strokec6 align-items\cf3 \cb4 \strokec3 : center;\
+  \cf6 \cb1 \strokec6 justify-content\cf3 \cb4 \strokec3 : center;\
+  \cf6 \cb1 \strokec6 gap\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 6px\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1.5px\cf3 \cb4 \strokec3  solid \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--border) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--surface-\cf6 \cb1 \strokec6 2\cf3 \cb4 \strokec3 ) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--text-primary) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border-radius\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--radius) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-family\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--font-base);\
+  \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 15px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-weight\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 800\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 padding\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 12px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 10px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 min-height\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 48px\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 cursor\cf3 \cb4 \strokec3 : pointer;\
+  \cf6 \cb1 \strokec6 transition\cf3 \cb4 \strokec3 :\
+    background \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--trans-fast),\
+    border-color \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--trans-fast),\
+    color \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--trans-fast),\
+    transform \cf6 \cb1 \strokec6 80ms\cf3 \cb4 \strokec3  ease,\
+    box-shadow \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--trans-fast);\
+  -webkit-tap-highlight-\cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : transparent;\
+  \cf6 \cb1 \strokec6 line-height\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1.3\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 text-align\cf3 \cb4 \strokec3 : center;\
+  \cf6 \cb1 \strokec6 word-break\cf3 \cb4 \strokec3 : keep-all;\
+  \cf6 \cb1 \strokec6 user-select\cf3 \cb4 \strokec3 : none;\
+\}\
+\cf6 \cb1 \strokec6 .btn\cf5 \strokec5 :hover\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--surface-\cf6 \cb1 \strokec6 3\cf3 \cb4 \strokec3 ) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border-color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--accent) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+\}\
+\cf6 \cb1 \strokec6 .btn\cf5 \strokec5 :active\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 transform\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 scale\cf3 \cb4 \strokec3 (.\cf6 \cb1 \strokec6 97\cf3 \cb4 \strokec3 );\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--surface-\cf6 \cb1 \strokec6 3\cf3 \cb4 \strokec3 ) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 box-shadow\cf3 \cb4 \strokec3 : none \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+\}\
+\cf6 \cb1 \strokec6 .btn\cf5 \strokec5 :disabled\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 opacity\cf3 \cb4 \strokec3 : .\cf6 \cb1 \strokec6 42\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 cursor\cf3 \cb4 \strokec3 : not-allowed;\
+  \cf6 \cb1 \strokec6 transform\cf3 \cb4 \strokec3 : none \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+\}\
+\cf6 \cb1 \strokec6 .btn\cf5 \strokec5 :focus-visible\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 outline\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 2px\cf3 \cb4 \strokec3  solid \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--border-focus);\
+  \cf6 \cb1 \strokec6 outline-offset\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 2px\cf3 \cb4 \strokec3 ;\
+\}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* \uc0\u12450 \u12463 \u12475 \u12531 \u12488 \u12508 \u12479 \u12531 \u65288 .next / .primary\u65289  */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 .btn.next\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .btn.primary\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--accent) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border-color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--accent) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 #fff\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 box-shadow\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 2px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 8px\cf3 \cb4 \strokec3  \cf7 \cb1 \strokec7 rgba\cf3 \cb4 \strokec3 (\cf6 \cb1 \strokec6 37\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 128\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 237\cf3 \cb4 \strokec3 ,.\cf6 \cb1 \strokec6 28\cf3 \cb4 \strokec3 );\
+\}\
+\cf6 \cb1 \strokec6 .btn.next\cf5 \strokec5 :hover\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .btn.primary\cf5 \strokec5 :hover\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--accent-hover) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border-color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--accent-hover) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 box-shadow\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 4px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 12px\cf3 \cb4 \strokec3  \cf7 \cb1 \strokec7 rgba\cf3 \cb4 \strokec3 (\cf6 \cb1 \strokec6 37\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 128\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 237\cf3 \cb4 \strokec3 ,.\cf6 \cb1 \strokec6 36\cf3 \cb4 \strokec3 );\
+\}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* \uc0\u12487 \u12531 \u12472 \u12515 \u12540 \u12508 \u12479 \u12531  */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 .btn.danger\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 border-color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--danger) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--danger) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+\}\
+\cf6 \cb1 \strokec6 .btn.danger\cf5 \strokec5 :hover\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--danger-bg) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+\}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* \uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \
+   6. \uc0\u12452 \u12531 \u12503 \u12483 \u12488  / \u12475 \u12524 \u12463 \u12488 \
+\uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472  */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 .input\cf3 \cb4 \strokec3 ,\
+\pard\pardeftab720\partightenfactor0
+\cf5 \cb1 \strokec5 input\cf6 \strokec6 .input\cf3 \cb4 \strokec3 ,\
+\cf5 \cb1 \strokec5 select\cf6 \strokec6 .input\cf3 \cb4 \strokec3 ,\
+\cf5 \cb1 \strokec5 select\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 width\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 100%\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 box-sizing\cf3 \cb4 \strokec3 : border-box \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1.5px\cf3 \cb4 \strokec3  solid \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--border) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border-radius\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--radius) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 padding\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 11px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 12px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 17px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-family\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--font-base);\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--surface-\cf6 \cb1 \strokec6 1\cf3 \cb4 \strokec3 ) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--text-primary) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 appearance\cf3 \cb4 \strokec3 : none;\
+  -webkit-\cf6 \cb1 \strokec6 appearance\cf3 \cb4 \strokec3 : none;\
+  \cf6 \cb1 \strokec6 transition\cf3 \cb4 \strokec3 : border-color \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--trans-fast), box-shadow \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--trans-fast);\
+  \cf6 \cb1 \strokec6 outline\cf3 \cb4 \strokec3 : none;\
+\}\
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 .input\cf5 \strokec5 :focus\cf3 \cb4 \strokec3 ,\
+\pard\pardeftab720\partightenfactor0
+\cf5 \cb1 \strokec5 input\cf6 \strokec6 .input\cf5 \strokec5 :focus\cf3 \cb4 \strokec3 ,\
+\cf5 \cb1 \strokec5 select\cf6 \strokec6 .input\cf5 \strokec5 :focus\cf3 \cb4 \strokec3 ,\
+\cf5 \cb1 \strokec5 select:focus\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 border-color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--border-focus) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 box-shadow\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 3px\cf3 \cb4 \strokec3  \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--accent-light) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+\}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* \uc0\u12475 \u12524 \u12463 \u12488 \u12398 \u30690 \u21360  */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf5 \cb1 \strokec5 select\cf6 \strokec6 .input\cf3 \cb4 \strokec3 ,\
+\cf5 \cb1 \strokec5 select\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 background-image\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 url\cf3 \cb4 \strokec3 (\cf8 \cb1 \strokec8 "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B7D8C' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"\cf3 \cb4 \strokec3 ) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 background-repeat\cf3 \cb4 \strokec3 : no-repeat \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 background-position\cf3 \cb4 \strokec3 : right \cf6 \cb1 \strokec6 10px\cf3 \cb4 \strokec3  center \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 background-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 18px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 padding-right\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 36px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+\}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* \uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \
+   7. \uc0\u12475 \u12463 \u12471 \u12519 \u12531 \u12539 \u12497 \u12493 \u12523 \u12539 \u12459 \u12540 \u12489 \
+\uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472  */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 .section\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .wf-panel\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .panel\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .card\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .box\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .doc\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : transparent \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 margin\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 2px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 padding\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 6px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 4px\cf3 \cb4 \strokec3 ;\
+\}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* \uc0\u12475 \u12463 \u12471 \u12519 \u12531 \u12479 \u12452 \u12488 \u12523 \u65288 ::after \u12521 \u12452 \u12531 \u65289  */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 .title\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .wf-label\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .group-title\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .doc-head\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 display\cf3 \cb4 \strokec3 : flex \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 align-items\cf3 \cb4 \strokec3 : center \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 gap\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 10px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-weight\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 800\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 13px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 margin\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 10px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--text-secondary) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 letter-spacing\cf3 \cb4 \strokec3 : .\cf6 \cb1 \strokec6 06em\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 text-transform\cf3 \cb4 \strokec3 : none;\
+\}\
+\cf6 \cb1 \strokec6 .title\cf5 \strokec5 ::after\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .wf-label\cf5 \strokec5 ::after\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .group-title\cf5 \strokec5 ::after\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .doc-head\cf5 \strokec5 ::after\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 content\cf3 \cb4 \strokec3 : \cf8 \cb1 \strokec8 ""\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 flex\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 1\cf3 \cb4 \strokec3  auto \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border-top\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1.5px\cf3 \cb4 \strokec3  solid \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--border) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 opacity\cf3 \cb4 \strokec3 : .\cf6 \cb1 \strokec6 8\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+\}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* \uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \
+   8. \uc0\u12501 \u12451 \u12540 \u12523 \u12489 \u34892 \u65288 \u35373 \u23450 \u12539 \u35443 \u32048 \u65289 \
+\uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472  */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 .field\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 display\cf3 \cb4 \strokec3 : grid;\
+  \cf6 \cb1 \strokec6 gap\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 5px\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 margin\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 padding\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 10px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border-bottom\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1px\cf3 \cb4 \strokec3  solid \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--surface-\cf6 \cb1 \strokec6 3\cf3 \cb4 \strokec3 );\
+\}\
+\cf6 \cb1 \strokec6 .section\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 .field\cf5 \strokec5 :last-of-type\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 border-bottom\cf3 \cb4 \strokec3 : none;\
+  \cf6 \cb1 \strokec6 padding-bottom\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ;\
+\}\
+\
+\cf6 \cb1 \strokec6 .label\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .wf-field-label\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 12px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-weight\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 600\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--text-muted) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 letter-spacing\cf3 \cb4 \strokec3 : .\cf6 \cb1 \strokec6 03em\cf3 \cb4 \strokec3 ;\
+\}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* \uc0\u35443 \u32048 \u30906 \u35469 \u12398  .line */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 .line\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 display\cf3 \cb4 \strokec3 : flex;\
+  \cf6 \cb1 \strokec6 gap\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 10px\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 padding\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 7px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border-bottom\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1px\cf3 \cb4 \strokec3  solid \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--surface-\cf6 \cb1 \strokec6 3\cf3 \cb4 \strokec3 );\
+  \cf6 \cb1 \strokec6 align-items\cf3 \cb4 \strokec3 : baseline;\
+\}\
+\cf6 \cb1 \strokec6 .line\cf5 \strokec5 :last-child\cf3 \cb4 \strokec3  \{ \cf6 \cb1 \strokec6 border-bottom\cf3 \cb4 \strokec3 : none; \}\
+\
+\cf6 \cb1 \strokec6 .k\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 12px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-weight\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 600\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--text-muted) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 width\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 140px\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 flex-shrink\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ;\
+\}\
+\cf6 \cb1 \strokec6 .v\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 17px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-weight\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 800\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 margin-left\cf3 \cb4 \strokec3 : auto;\
+  \cf6 \cb1 \strokec6 text-align\cf3 \cb4 \strokec3 : right;\
+  \cf6 \cb1 \strokec6 white-space\cf3 \cb4 \strokec3 : nowrap;\
+  \cf6 \cb1 \strokec6 font-variant-numeric\cf3 \cb4 \strokec3 : tabular-nums;\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--text-primary);\
+\}\
+\cf6 \cb1 \strokec6 .v.value-highlight\cf3 \cb4 \strokec3  \{ \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--go-orange) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ; \}\
+\cf6 \cb1 \strokec6 .line.strong\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 .k\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .line.strong\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 .v\cf3 \cb4 \strokec3  \{ \cf6 \cb1 \strokec6 font-weight\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 900\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ; \}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* \uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \
+   9. \uc0\u12450 \u12463 \u12471 \u12519 \u12531 \u12508 \u12479 \u12531 \u12464 \u12522 \u12483 \u12489 \
+\uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472  */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 .actions\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .wf-actions\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 display\cf3 \cb4 \strokec3 : grid;\
+  \cf6 \cb1 \strokec6 gap\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 8px\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 margin-top\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 10px\cf3 \cb4 \strokec3 ;\
+\}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* \uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \
+   10. \uc0\u26085 \u22577 \u20837 \u21147  \'97 \u31278 \u21029 \u36984 \u25246 \u12508 \u12479 \u12531 \
+\uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472  */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 .wf-row\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 display\cf3 \cb4 \strokec3 : grid;\
+  \cf6 \cb1 \strokec6 grid-template-columns\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 repeat\cf3 \cb4 \strokec3 (\cf6 \cb1 \strokec6 4\cf3 \cb4 \strokec3 , \cf6 \cb1 \strokec6 1\cf3 \cb4 \strokec3 fr);\
+  \cf6 \cb1 \strokec6 gap\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 6px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+\}\
+\
+\cf6 \cb1 \strokec6 .wf-row\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 .btn\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 min-height\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 50px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 14px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 padding\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 10px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 6px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-weight\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 800\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border-radius\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--radius) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1.5px\cf3 \cb4 \strokec3  solid \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--border) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--surface-\cf6 \cb1 \strokec6 1\cf3 \cb4 \strokec3 ) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--text-primary) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+\}\
+\cf6 \cb1 \strokec6 .wf-row\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 .btn\cf5 \strokec5 :active\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 transform\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 scale\cf3 \cb4 \strokec3 (.\cf6 \cb1 \strokec6 94\cf3 \cb4 \strokec3 ) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+\}\
+\cf6 \cb1 \strokec6 .wf-row\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 .btn.is-selected\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--success) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border-color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--success) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 #fff\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 box-shadow\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 2px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 8px\cf3 \cb4 \strokec3  \cf7 \cb1 \strokec7 rgba\cf3 \cb4 \strokec3 (\cf6 \cb1 \strokec6 26\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 155\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 58\cf3 \cb4 \strokec3 ,.\cf6 \cb1 \strokec6 28\cf3 \cb4 \strokec3 );\
+\}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* \uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \
+   11. \uc0\u12486 \u12531 \u12461 \u12540 \
+\uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472  */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 .keypad-grid\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 display\cf3 \cb4 \strokec3 : grid;\
+  \cf6 \cb1 \strokec6 grid-template-columns\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 repeat\cf3 \cb4 \strokec3 (\cf6 \cb1 \strokec6 3\cf3 \cb4 \strokec3 , \cf6 \cb1 \strokec6 1\cf3 \cb4 \strokec3 fr);\
+  \cf6 \cb1 \strokec6 gap\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 6px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+\}\
+\
+\cf6 \cb1 \strokec6 .key\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 appearance\cf3 \cb4 \strokec3 : none;\
+  -webkit-\cf6 \cb1 \strokec6 appearance\cf3 \cb4 \strokec3 : none;\
+  \cf6 \cb1 \strokec6 display\cf3 \cb4 \strokec3 : flex;\
+  \cf6 \cb1 \strokec6 align-items\cf3 \cb4 \strokec3 : center;\
+  \cf6 \cb1 \strokec6 justify-content\cf3 \cb4 \strokec3 : center;\
+  \cf6 \cb1 \strokec6 border\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1.5px\cf3 \cb4 \strokec3  solid \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--border) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border-radius\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--radius-md) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--surface-\cf6 \cb1 \strokec6 1\cf3 \cb4 \strokec3 ) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--text-primary) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 min-height\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 56px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 22px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-weight\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 700\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-family\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--font-base);\
+  \cf6 \cb1 \strokec6 cursor\cf3 \cb4 \strokec3 : pointer;\
+  \cf6 \cb1 \strokec6 transition\cf3 \cb4 \strokec3 :\
+    background \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--trans-fast),\
+    transform \cf6 \cb1 \strokec6 80ms\cf3 \cb4 \strokec3  ease,\
+    box-shadow \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--trans-fast);\
+  -webkit-tap-highlight-\cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : transparent;\
+  \cf6 \cb1 \strokec6 box-shadow\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--shadow-xs);\
+\}\
+\cf6 \cb1 \strokec6 .key\cf5 \strokec5 :hover\cf3 \cb4 \strokec3  \{ \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--surface-\cf6 \cb1 \strokec6 2\cf3 \cb4 \strokec3 ) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ; \}\
+\cf6 \cb1 \strokec6 .key\cf5 \strokec5 :active\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 transform\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 scale\cf3 \cb4 \strokec3 (.\cf6 \cb1 \strokec6 92\cf3 \cb4 \strokec3 ) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--surface-\cf6 \cb1 \strokec6 3\cf3 \cb4 \strokec3 ) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 box-shadow\cf3 \cb4 \strokec3 : none \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+\}\
+\cf6 \cb1 \strokec6 .key.small\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 15px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-weight\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 800\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--surface-\cf6 \cb1 \strokec6 2\cf3 \cb4 \strokec3 ) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+\}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* \uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \
+   12. \uc0\u20986 \u24235 /\u24112 \u24235 \u12508 \u12479 \u12531 \u65288 \u22823 \u12508 \u12479 \u12531 \u65289 \
+\uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472  */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 .btn.action-main\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 min-height\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 110px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 18px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-weight\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 900\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border-radius\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--radius-md) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1.5px\cf3 \cb4 \strokec3  solid \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--border) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--surface-\cf6 \cb1 \strokec6 1\cf3 \cb4 \strokec3 ) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 box-shadow\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--shadow-sm);\
+  \cf6 \cb1 \strokec6 flex-direction\cf3 \cb4 \strokec3 : column;\
+  \cf6 \cb1 \strokec6 gap\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 6px\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 transition\cf3 \cb4 \strokec3 :\
+    background \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--trans-fast),\
+    border-color \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--trans-fast),\
+    transform \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--trans-fast),\
+    box-shadow \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--trans-fast);\
+\}\
+\cf6 \cb1 \strokec6 .btn.action-main\cf5 \strokec5 :active\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 transform\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 scale\cf3 \cb4 \strokec3 (.\cf6 \cb1 \strokec6 96\cf3 \cb4 \strokec3 ) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 box-shadow\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--shadow-xs) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+\}\
+\cf6 \cb1 \strokec6 .btn.action-main.next\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--accent) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border-color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--accent) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 #fff\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 box-shadow\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 4px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 16px\cf3 \cb4 \strokec3  \cf7 \cb1 \strokec7 rgba\cf3 \cb4 \strokec3 (\cf6 \cb1 \strokec6 37\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 128\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 237\cf3 \cb4 \strokec3 ,.\cf6 \cb1 \strokec6 32\cf3 \cb4 \strokec3 ) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+\}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* \uc0\u12522 \u12475 \u12483 \u12488 \u12508 \u12479 \u12531  */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 .btn.reset-final\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 min-height\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 100px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border-radius\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--radius-md) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border-color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--danger) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--danger) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--danger-bg) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 line-height\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1.5\cf3 \cb4 \strokec3 ;\
+\}\
+\cf6 \cb1 \strokec6 .btn.reset-final\cf5 \strokec5 :hover\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--danger-bg) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 box-shadow\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 3px\cf3 \cb4 \strokec3  \cf7 \cb1 \strokec7 rgba\cf3 \cb4 \strokec3 (\cf6 \cb1 \strokec6 217\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 48\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 37\cf3 \cb4 \strokec3 ,.\cf6 \cb1 \strokec6 18\cf3 \cb4 \strokec3 );\
+\}\
+\cf6 \cb1 \strokec6 .btn.reset-final\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 .warn\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 display\cf3 \cb4 \strokec3 : block;\
+  \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 11px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-weight\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 700\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--danger) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 margin-top\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 4px\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 opacity\cf3 \cb4 \strokec3 : .\cf6 \cb1 \strokec6 85\cf3 \cb4 \strokec3 ;\
+\}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* \uc0\u12473 \u12486 \u12540 \u12479 \u12473 Pill */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 .pill\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 display\cf3 \cb4 \strokec3 : inline-block;\
+  \cf6 \cb1 \strokec6 border\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1.5px\cf3 \cb4 \strokec3  solid \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--border) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border-radius\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--radius-sm);\
+  \cf6 \cb1 \strokec6 padding\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 3px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 10px\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 12px\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-weight\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 800\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--surface-\cf6 \cb1 \strokec6 2\cf3 \cb4 \strokec3 );\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--text-secondary);\
+\}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* \uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \
+   13. \uc0\u20837 \u21147 \u30906 \u35469 \u12459 \u12540 \u12489 \
+\uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472  */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 #cards\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 .card\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--surface-\cf6 \cb1 \strokec6 1\cf3 \cb4 \strokec3 ) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border-bottom\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1px\cf3 \cb4 \strokec3  solid \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--border) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border-radius\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 padding\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 12px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 14px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 margin\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 transition\cf3 \cb4 \strokec3 : background \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--trans-fast);\
+\}\
+\cf6 \cb1 \strokec6 #cards\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 .card\cf5 \strokec5 :last-child\cf3 \cb4 \strokec3  \{ \cf6 \cb1 \strokec6 border-bottom\cf3 \cb4 \strokec3 : none \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ; \}\
+\
+\cf6 \cb1 \strokec6 .entry-head\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 display\cf3 \cb4 \strokec3 : flex;\
+  \cf6 \cb1 \strokec6 align-items\cf3 \cb4 \strokec3 : center;\
+  \cf6 \cb1 \strokec6 gap\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 8px\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 margin\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 8px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ;\
+\}\
+\cf6 \cb1 \strokec6 .entry-head\cf5 \strokec5 ::after\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 content\cf3 \cb4 \strokec3 : \cf8 \cb1 \strokec8 ""\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 flex\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 1\cf3 \cb4 \strokec3  auto;\
+  \cf6 \cb1 \strokec6 border-top\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1px\cf3 \cb4 \strokec3  solid \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--border);\
+\}\
+\cf6 \cb1 \strokec6 .time-text\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 font-weight\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 800\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 13px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--text-secondary) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-variant-numeric\cf3 \cb4 \strokec3 : tabular-nums;\
+\}\
+\
+\cf6 \cb1 \strokec6 .kv\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 display\cf3 \cb4 \strokec3 : grid;\
+  \cf6 \cb1 \strokec6 grid-template-columns\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 80px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 1\cf3 \cb4 \strokec3 fr;\
+  \cf6 \cb1 \strokec6 gap\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 6px\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 padding\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 2px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ;\
+\}\
+\cf6 \cb1 \strokec6 .kv\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 .label\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 12px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--text-muted) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-weight\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 600\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+\}\
+\cf6 \cb1 \strokec6 .kv\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 .value\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 14px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-weight\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 700\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--text-primary);\
+\}\
+\cf6 \cb1 \strokec6 .kv.payment-row\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 .value\cf3 \cb4 \strokec3  \{ \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--go-orange) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ; \cf6 \cb1 \strokec6 font-weight\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 800\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ; \}\
+\cf6 \cb1 \strokec6 .kv.amount-row\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 .value\cf3 \cb4 \strokec3  \{ \cf6 \cb1 \strokec6 font-variant-numeric\cf3 \cb4 \strokec3 : tabular-nums; \}\
+\
+\cf6 \cb1 \strokec6 .tag-row\cf3 \cb4 \strokec3  \{ \cf6 \cb1 \strokec6 display\cf3 \cb4 \strokec3 : flex; \cf6 \cb1 \strokec6 gap\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 5px\cf3 \cb4 \strokec3 ; \cf6 \cb1 \strokec6 flex-wrap\cf3 \cb4 \strokec3 : wrap; \cf6 \cb1 \strokec6 margin-top\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 4px\cf3 \cb4 \strokec3 ; \}\
+\cf6 \cb1 \strokec6 .tag\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 display\cf3 \cb4 \strokec3 : inline-block;\
+  \cf6 \cb1 \strokec6 border\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1px\cf3 \cb4 \strokec3  solid \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--border);\
+  \cf6 \cb1 \strokec6 border-radius\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--radius-sm);\
+  \cf6 \cb1 \strokec6 padding\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 2px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 7px\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 11px\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-weight\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 800\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--accent-light);\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--accent);\
+\}\
+\
+\cf6 \cb1 \strokec6 .actionBtn\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 appearance\cf3 \cb4 \strokec3 : none \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  -webkit-\cf6 \cb1 \strokec6 appearance\cf3 \cb4 \strokec3 : none \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1.5px\cf3 \cb4 \strokec3  solid \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--border) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--surface-\cf6 \cb1 \strokec6 2\cf3 \cb4 \strokec3 ) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--text-secondary) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border-radius\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--radius) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 padding\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 6px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 12px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 12px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-weight\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 800\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 cursor\cf3 \cb4 \strokec3 : pointer;\
+  \cf6 \cb1 \strokec6 transition\cf3 \cb4 \strokec3 : background \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--trans-fast), border-color \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--trans-fast);\
+\}\
+\cf6 \cb1 \strokec6 .actionBtn\cf5 \strokec5 :hover\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--surface-\cf6 \cb1 \strokec6 3\cf3 \cb4 \strokec3 ) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border-color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--accent) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+\}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* \uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \
+   14. \uc0\u26085 \u20184 \u12475 \u12524 \u12463 \u12479 \u65288 confirm / detail / sales\u65289 \
+\uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472  */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 .date-switcher\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : transparent \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 padding\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 margin\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 10px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+\}\
+\cf6 \cb1 \strokec6 .date-switcher\cf3 \cb4 \strokec3  \cf5 \cb1 \strokec5 label\cf3 \cb4 \strokec3  \{ \cf6 \cb1 \strokec6 display\cf3 \cb4 \strokec3 : none \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ; \}\
+\cf6 \cb1 \strokec6 .date-switcher\cf3 \cb4 \strokec3  \cf5 \cb1 \strokec5 select\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 border-radius\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--radius) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1.5px\cf3 \cb4 \strokec3  solid \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--border) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--surface-\cf6 \cb1 \strokec6 1\cf3 \cb4 \strokec3 ) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+\}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* \uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \
+   15. \uc0\u26376 \u38291 \u31649 \u29702 \u12486 \u12540 \u12502 \u12523 \
+\uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472  */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 .table-wrap\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 border\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1px\cf3 \cb4 \strokec3  solid \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--border) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border-radius\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--radius-md);\
+  \cf6 \cb1 \strokec6 overflow\cf3 \cb4 \strokec3 : hidden;\
+  \cf6 \cb1 \strokec6 box-shadow\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--shadow-sm);\
+\}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf5 \cb1 \strokec5 table\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 border-collapse\cf3 \cb4 \strokec3 : collapse;\
+  \cf6 \cb1 \strokec6 width\cf3 \cb4 \strokec3 : max-content;\
+  \cf6 \cb1 \strokec6 min-width\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 610px\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 table-layout\cf3 \cb4 \strokec3 : fixed;\
+  \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 11px\cf3 \cb4 \strokec3 ;\
+\}\
+\cf5 \cb1 \strokec5 th\cf3 \cb4 \strokec3 , \cf5 \cb1 \strokec5 td\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 border\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1px\cf3 \cb4 \strokec3  solid \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--surface-\cf6 \cb1 \strokec6 3\cf3 \cb4 \strokec3 ) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 padding\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 4px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 3px\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 text-align\cf3 \cb4 \strokec3 : center;\
+  \cf6 \cb1 \strokec6 vertical-align\cf3 \cb4 \strokec3 : middle;\
+  \cf6 \cb1 \strokec6 white-space\cf3 \cb4 \strokec3 : nowrap;\
+  \cf6 \cb1 \strokec6 overflow\cf3 \cb4 \strokec3 : hidden;\
+  \cf6 \cb1 \strokec6 text-overflow\cf3 \cb4 \strokec3 : ellipsis;\
+\}\
+\cf5 \cb1 \strokec5 th\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--surface-\cf6 \cb1 \strokec6 2\cf3 \cb4 \strokec3 ) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--text-secondary) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-weight\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 800\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 10px\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 letter-spacing\cf3 \cb4 \strokec3 : .\cf6 \cb1 \strokec6 04em\cf3 \cb4 \strokec3 ;\
+\}\
+\cf5 \cb1 \strokec5 td\cf6 \strokec6 .date.sat\cf3 \cb4 \strokec3  \{ \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--week-sat-bg) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ; \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--weekend-text) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ; \cf6 \cb1 \strokec6 font-weight\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 800\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ; \}\
+\cf5 \cb1 \strokec5 td\cf6 \strokec6 .date.sun\cf3 \cb4 \strokec3 ,\
+\cf5 \cb1 \strokec5 td\cf6 \strokec6 .date.holiday\cf3 \cb4 \strokec3  \{ \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--week-sun-bg) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ; \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--weekend-text) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ; \cf6 \cb1 \strokec6 font-weight\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 800\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ; \}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 .sum-row\cf3 \cb4 \strokec3  \cf5 \cb1 \strokec5 td\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--accent) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 #fff\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-weight\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 900\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border-color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--accent-dark) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+\}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* \uc0\u12471 \u12501 \u12488 \u12508 \u12479 \u12531  */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 .shift-btn\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 appearance\cf3 \cb4 \strokec3 : none;\
+  \cf6 \cb1 \strokec6 border\cf3 \cb4 \strokec3 : none;\
+  \cf6 \cb1 \strokec6 border-radius\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--radius-sm) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 #fff\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-weight\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 800\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 padding\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 3px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 2px\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 min-height\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 26px\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 width\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 100%\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 10px\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 cursor\cf3 \cb4 \strokec3 : pointer;\
+  \cf6 \cb1 \strokec6 transition\cf3 \cb4 \strokec3 : opacity \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--trans-fast), transform \cf6 \cb1 \strokec6 80ms\cf3 \cb4 \strokec3  ease;\
+\}\
+\cf6 \cb1 \strokec6 .shift-btn\cf5 \strokec5 :active\cf3 \cb4 \strokec3  \{ \cf6 \cb1 \strokec6 transform\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 scale\cf3 \cb4 \strokec3 (.\cf6 \cb1 \strokec6 92\cf3 \cb4 \strokec3 ); \}\
+\cf6 \cb1 \strokec6 .shift-btn\cf5 \strokec5 :disabled\cf3 \cb4 \strokec3  \{ \cf6 \cb1 \strokec6 opacity\cf3 \cb4 \strokec3 : .\cf6 \cb1 \strokec6 4\cf3 \cb4 \strokec3 ; \cf6 \cb1 \strokec6 cursor\cf3 \cb4 \strokec3 : not-allowed; \}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* \uc0\u25163 \u21205 \u20837 \u21147  */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 .target-input\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .manual-input\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 width\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 100%\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 box-sizing\cf3 \cb4 \strokec3 : border-box;\
+  \cf6 \cb1 \strokec6 border\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1px\cf3 \cb4 \strokec3  solid \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--border) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border-radius\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--radius-sm) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 padding\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 3px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 4px\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 11px\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 text-align\cf3 \cb4 \strokec3 : right;\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--surface-\cf6 \cb1 \strokec6 1\cf3 \cb4 \strokec3 ) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--text-primary) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 transition\cf3 \cb4 \strokec3 : border-color \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--trans-fast);\
+\}\
+\cf6 \cb1 \strokec6 .target-input\cf5 \strokec5 :focus\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .manual-input\cf5 \strokec5 :focus\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 border-color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--border-focus) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 outline\cf3 \cb4 \strokec3 : none;\
+\}\
+\cf6 \cb1 \strokec6 .manual-input.time\cf3 \cb4 \strokec3  \{ \cf6 \cb1 \strokec6 text-align\cf3 \cb4 \strokec3 : center; \}\
+\pard\pardeftab720\partightenfactor0
+\cf5 \cb1 \strokec5 td\cf6 \strokec6 .muted\cf3 \cb4 \strokec3 ,\
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 .muted\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 .target-input\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--surface-\cf6 \cb1 \strokec6 2\cf3 \cb4 \strokec3 ) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--text-muted) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+\}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* \uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \
+   16. \uc0\u12514 \u12540 \u12480 \u12523 \u65288 \u30906 \u35469  / \u32080 \u26524 \u65289 \
+\uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472  */\cf3 \cb4 \strokec3 \
+\cf2 \cb1 \strokec2 /* \uc0\u30906 \u35469 \u12514 \u12540 \u12480 \u12523  */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 .confirm-modal-bg\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .result-modal-bg\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .tsms-confirm-overlay\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 position\cf3 \cb4 \strokec3 : fixed \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 inset\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 z-index\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1400\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 rgba\cf3 \cb4 \strokec3 (\cf6 \cb1 \strokec6 13\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 27\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 38\cf3 \cb4 \strokec3 ,.\cf6 \cb1 \strokec6 55\cf3 \cb4 \strokec3 ) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 display\cf3 \cb4 \strokec3 : none;\
+  \cf6 \cb1 \strokec6 align-items\cf3 \cb4 \strokec3 : center \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 justify-content\cf3 \cb4 \strokec3 : center \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 padding\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 16px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 backdrop-filter\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 blur\cf3 \cb4 \strokec3 (\cf6 \cb1 \strokec6 4px\cf3 \cb4 \strokec3 );\
+  -webkit-\cf6 \cb1 \strokec6 backdrop-filter\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 blur\cf3 \cb4 \strokec3 (\cf6 \cb1 \strokec6 4px\cf3 \cb4 \strokec3 );\
+\}\
+\cf6 \cb1 \strokec6 .confirm-modal-bg.show\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .result-modal-bg.show\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .tsms-confirm-overlay.show\cf3 \cb4 \strokec3  \{ \cf6 \cb1 \strokec6 display\cf3 \cb4 \strokec3 : flex \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ; \}\
+\
+\cf6 \cb1 \strokec6 .confirm-modal-card\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .result-modal-card\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .tsms-confirm-card\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 width\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 min\cf3 \cb4 \strokec3 (\cf6 \cb1 \strokec6 480px\cf3 \cb4 \strokec3 , \cf6 \cb1 \strokec6 100%\cf3 \cb4 \strokec3 ) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--surface-\cf6 \cb1 \strokec6 1\cf3 \cb4 \strokec3 ) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1px\cf3 \cb4 \strokec3  solid \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--border) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border-radius\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--radius-lg) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 padding\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 20px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 16px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 16px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 box-shadow\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--shadow-lg) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 animation\cf3 \cb4 \strokec3 : modalIn \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--trans) both;\
+\}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb1 \strokec9 @keyframes\cf3 \cb4 \strokec3  modalIn \{\
+  \cf5 \cb1 \strokec5 from\cf3 \cb4 \strokec3  \{ \cf6 \cb1 \strokec6 opacity\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ; \cf6 \cb1 \strokec6 transform\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 scale\cf3 \cb4 \strokec3 (.\cf6 \cb1 \strokec6 95\cf3 \cb4 \strokec3 ) \cf7 \cb1 \strokec7 translateY\cf3 \cb4 \strokec3 (\cf6 \cb1 \strokec6 6px\cf3 \cb4 \strokec3 ); \}\
+  \cf5 \cb1 \strokec5 to\cf3 \cb4 \strokec3    \{ \cf6 \cb1 \strokec6 opacity\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1\cf3 \cb4 \strokec3 ; \cf6 \cb1 \strokec6 transform\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 scale\cf3 \cb4 \strokec3 (\cf6 \cb1 \strokec6 1\cf3 \cb4 \strokec3 )  \cf7 \cb1 \strokec7 translateY\cf3 \cb4 \strokec3 (\cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ); \}\
+\}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 .confirm-modal-title\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .result-modal-message\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .tsms-confirm-title\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 16px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-weight\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 800\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 margin\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 14px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--text-primary) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 line-height\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1.5\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 word-break\cf3 \cb4 \strokec3 : break-word;\
+\}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* \uc0\u30906 \u35469 \u12514 \u12540 \u12480 \u12523 \u20869 \u12522 \u12473 \u12488  */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 .confirm-modal-list\cf3 \cb4 \strokec3  \{ \cf6 \cb1 \strokec6 display\cf3 \cb4 \strokec3 : grid; \cf6 \cb1 \strokec6 gap\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 4px\cf3 \cb4 \strokec3 ; \cf6 \cb1 \strokec6 margin\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 14px\cf3 \cb4 \strokec3 ; \}\
+\cf6 \cb1 \strokec6 .confirm-modal-item\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 display\cf3 \cb4 \strokec3 : grid;\
+  \cf6 \cb1 \strokec6 grid-template-columns\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 100px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 1\cf3 \cb4 \strokec3 fr;\
+  \cf6 \cb1 \strokec6 gap\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 8px\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 13px\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 padding\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 5px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border-bottom\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1px\cf3 \cb4 \strokec3  solid \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--surface-\cf6 \cb1 \strokec6 3\cf3 \cb4 \strokec3 );\
+\}\
+\cf6 \cb1 \strokec6 .confirm-modal-item\cf5 \strokec5 :last-child\cf3 \cb4 \strokec3  \{ \cf6 \cb1 \strokec6 border-bottom\cf3 \cb4 \strokec3 : none; \}\
+\cf6 \cb1 \strokec6 .confirm-modal-key\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--text-muted) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-weight\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 700\cf3 \cb4 \strokec3 ;\
+\}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* \uc0\u32080 \u26524 \u12514 \u12540 \u12480 \u12523 \u12450 \u12452 \u12467 \u12531  */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 .result-modal-icon\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 width\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 52px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ; \cf6 \cb1 \strokec6 height\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 52px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 margin\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  auto \cf6 \cb1 \strokec6 14px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border-radius\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 50%\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 display\cf3 \cb4 \strokec3 : flex \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 align-items\cf3 \cb4 \strokec3 : center \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 justify-content\cf3 \cb4 \strokec3 : center \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 24px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-weight\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 900\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 #fff\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+\}\
+\cf6 \cb1 \strokec6 .result-modal-icon.success\cf3 \cb4 \strokec3  \{ \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--success) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ; \}\
+\cf6 \cb1 \strokec6 .result-modal-icon.error\cf3 \cb4 \strokec3    \{ \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--danger) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;  \}\
+\
+\cf6 \cb1 \strokec6 .result-modal-card\cf3 \cb4 \strokec3  \{ \cf6 \cb1 \strokec6 text-align\cf3 \cb4 \strokec3 : center \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ; \}\
+\cf6 \cb1 \strokec6 .result-modal-message\cf3 \cb4 \strokec3  \{ \cf6 \cb1 \strokec6 text-align\cf3 \cb4 \strokec3 : center \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ; \}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* \uc0\u12514 \u12540 \u12480 \u12523 \u20869 \u12508 \u12479 \u12531 \u37197 \u32622  */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 .confirm-modal-actions\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .result-modal-actions\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .tsms-confirm-actions\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 display\cf3 \cb4 \strokec3 : grid \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 grid-template-columns\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1\cf3 \cb4 \strokec3 fr \cf6 \cb1 \strokec6 1\cf3 \cb4 \strokec3 fr \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 gap\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 8px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+\}\
+\cf6 \cb1 \strokec6 .result-modal-actions\cf3 \cb4 \strokec3  \{ \cf6 \cb1 \strokec6 grid-template-columns\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1\cf3 \cb4 \strokec3 fr \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ; \}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* \uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \
+   17. \uc0\u12508 \u12488 \u12512 \u12471 \u12540 \u12488 \u65288 \u12418 \u12387 \u12392 \u12513 \u12491 \u12517 \u12540 \u65289 \
+\uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472  */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 .tsms-more-sheet\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 position\cf3 \cb4 \strokec3 : fixed \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 left\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ; \cf6 \cb1 \strokec6 right\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ; \cf6 \cb1 \strokec6 bottom\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 z-index\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1300\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--surface-\cf6 \cb1 \strokec6 1\cf3 \cb4 \strokec3 ) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border-top\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1px\cf3 \cb4 \strokec3  solid \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--border) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border-radius\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--radius-lg) \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--radius-lg) \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 transform\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 translateY\cf3 \cb4 \strokec3 (\cf6 \cb1 \strokec6 110%\cf3 \cb4 \strokec3 ) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 transition\cf3 \cb4 \strokec3 : transform \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--trans-slow) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 padding\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 16px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 12px\cf3 \cb4 \strokec3  \cf7 \cb1 \strokec7 calc\cf3 \cb4 \strokec3 (\cf6 \cb1 \strokec6 16px\cf3 \cb4 \strokec3  + \cf7 \cb1 \strokec7 env\cf3 \cb4 \strokec3 (safe-area-inset-bottom)) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 box-shadow\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--shadow-lg);\
+\}\
+\cf6 \cb1 \strokec6 .tsms-more-sheet.show\cf3 \cb4 \strokec3  \{ \cf6 \cb1 \strokec6 transform\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 translateY\cf3 \cb4 \strokec3 (\cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ; \}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* \uc0\u12471 \u12540 \u12488 \u19978 \u37096 \u12398 \u12495 \u12531 \u12489 \u12523  */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 .tsms-more-sheet\cf5 \strokec5 ::before\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 content\cf3 \cb4 \strokec3 : \cf8 \cb1 \strokec8 ""\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 display\cf3 \cb4 \strokec3 : block;\
+  \cf6 \cb1 \strokec6 width\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 36px\cf3 \cb4 \strokec3 ; \cf6 \cb1 \strokec6 height\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 4px\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--border);\
+  \cf6 \cb1 \strokec6 border-radius\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 2px\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 margin\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  auto \cf6 \cb1 \strokec6 14px\cf3 \cb4 \strokec3 ;\
+\}\
+\
+\cf6 \cb1 \strokec6 .tsms-more-sheet\cf3 \cb4 \strokec3  \cf5 \cb1 \strokec5 a\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 display\cf3 \cb4 \strokec3 : block \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 padding\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 13px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 14px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1px\cf3 \cb4 \strokec3  solid \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--border) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border-radius\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--radius) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 margin-top\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 8px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 text-decoration\cf3 \cb4 \strokec3 : none \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--text-primary) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--surface-\cf6 \cb1 \strokec6 2\cf3 \cb4 \strokec3 ) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-weight\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 800\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 15px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 transition\cf3 \cb4 \strokec3 : background \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--trans-fast), padding-left \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--trans-fast);\
+\}\
+\cf6 \cb1 \strokec6 .tsms-more-sheet\cf3 \cb4 \strokec3  \cf5 \cb1 \strokec5 a:hover\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--surface-\cf6 \cb1 \strokec6 3\cf3 \cb4 \strokec3 ) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 padding-left\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 18px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+\}\
+\
+\cf6 \cb1 \strokec6 .tsms-more-bg\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 position\cf3 \cb4 \strokec3 : fixed \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 inset\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 rgba\cf3 \cb4 \strokec3 (\cf6 \cb1 \strokec6 13\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 27\cf3 \cb4 \strokec3 ,\cf6 \cb1 \strokec6 38\cf3 \cb4 \strokec3 ,.\cf6 \cb1 \strokec6 45\cf3 \cb4 \strokec3 ) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 opacity\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 pointer-events\cf3 \cb4 \strokec3 : none \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 z-index\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1250\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 transition\cf3 \cb4 \strokec3 : opacity \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--trans) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 backdrop-filter\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 blur\cf3 \cb4 \strokec3 (\cf6 \cb1 \strokec6 2px\cf3 \cb4 \strokec3 );\
+\}\
+\cf6 \cb1 \strokec6 .tsms-more-bg.show\cf3 \cb4 \strokec3  \{ \cf6 \cb1 \strokec6 opacity\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ; \cf6 \cb1 \strokec6 pointer-events\cf3 \cb4 \strokec3 : auto \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ; \}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* \uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \
+   18. \uc0\u12494 \u12540 \u12488  / \u35036 \u36275 \u12486 \u12461 \u12473 \u12488 \
+\uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472  */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 .note\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .wf-subnote\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 12px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--text-muted) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 line-height\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1.55\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 margin\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 4px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 10px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ;\
+\}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* \uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \
+   19. \uc0\u12525 \u12464 \u12452 \u12531  / \u12469 \u12452 \u12531 \u12450 \u12483 \u12503 \
+\uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472  */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 .main\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 .section\cf3 \cb4 \strokec3 ,\
+\pard\pardeftab720\partightenfactor0
+\cf5 \cb1 \strokec5 section\cf6 \strokec6 .section\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 border\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1px\cf3 \cb4 \strokec3  solid \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--border) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border-radius\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--radius-lg) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--surface-\cf6 \cb1 \strokec6 1\cf3 \cb4 \strokec3 ) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 padding\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 16px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 14px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 margin\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 10px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 box-shadow\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--shadow-xs);\
+\}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* \uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \
+   20. \uc0\u12502 \u12521 \u12531 \u12489 \u12525 \u12468 \u65288 \u12525 \u12464 \u12452 \u12531 \u30011 \u38754 \u65289 \
+\uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472  */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 .brand-main\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 font-weight\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 900\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 48px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 letter-spacing\cf3 \cb4 \strokec3 : .\cf6 \cb1 \strokec6 04em\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 line-height\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 linear-gradient\cf3 \cb4 \strokec3 (\cf6 \cb1 \strokec6 135deg\cf3 \cb4 \strokec3 , \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--accent), \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--link));\
+  -webkit-\cf6 \cb1 \strokec6 background-clip\cf3 \cb4 \strokec3 : text;\
+  -webkit-\cf5 \cb1 \strokec5 text\cf3 \cb4 \strokec3 -\cf6 \cb1 \strokec6 fill\cf3 \cb4 \strokec3 -\cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : transparent;\
+  \cf6 \cb1 \strokec6 background-clip\cf3 \cb4 \strokec3 : text;\
+\}\
+\cf6 \cb1 \strokec6 .brand-cache\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 10px\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--text-muted);\
+  \cf6 \cb1 \strokec6 text-align\cf3 \cb4 \strokec3 : center;\
+  \cf6 \cb1 \strokec6 margin-top\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 2px\cf3 \cb4 \strokec3 ;\
+\}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* \uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \
+   21. TOP \'97 \uc0\u12489 \u12461 \u12517 \u12513 \u12531 \u12488 \u12473 \u12479 \u12452 \u12523 \
+\uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472  */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 .doc-title\cf3 \cb4 \strokec3  \{ \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 36px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ; \cf6 \cb1 \strokec6 font-weight\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 300\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ; \}\
+\cf6 \cb1 \strokec6 .doc-updated\cf3 \cb4 \strokec3  \{ \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 13px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ; \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--text-muted) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ; \}\
+\
+\cf6 \cb1 \strokec6 .guide-list\cf3 \cb4 \strokec3  \{ \cf6 \cb1 \strokec6 margin\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 8px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ; \cf6 \cb1 \strokec6 padding\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ; \cf6 \cb1 \strokec6 list-style\cf3 \cb4 \strokec3 : none; \}\
+\cf6 \cb1 \strokec6 .guide-list\cf3 \cb4 \strokec3  > \cf5 \cb1 \strokec5 li\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 margin\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 padding\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 10px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border-bottom\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1px\cf3 \cb4 \strokec3  solid \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--border);\
+  \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 14px\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 line-height\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1.6\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--text-secondary);\
+\}\
+\cf6 \cb1 \strokec6 .guide-list\cf3 \cb4 \strokec3  > \cf5 \cb1 \strokec5 li:last-child\cf3 \cb4 \strokec3  \{ \cf6 \cb1 \strokec6 border-bottom\cf3 \cb4 \strokec3 : none; \}\
+\cf6 \cb1 \strokec6 .subline\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 display\cf3 \cb4 \strokec3 : block;\
+  \cf6 \cb1 \strokec6 margin\cf3 \cb4 \strokec3 : .\cf6 \cb1 \strokec6 3em\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 1em\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 12px\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--text-muted);\
+\}\
+\
+\cf6 \cb1 \strokec6 .sign\cf3 \cb4 \strokec3  \{ \cf6 \cb1 \strokec6 text-align\cf3 \cb4 \strokec3 : right; \cf6 \cb1 \strokec6 font-weight\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 700\cf3 \cb4 \strokec3 ; \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 13px\cf3 \cb4 \strokec3 ; \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--text-muted); \cf6 \cb1 \strokec6 margin-top\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 8px\cf3 \cb4 \strokec3 ; \}\
+\cf6 \cb1 \strokec6 .logout-mini\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 appearance\cf3 \cb4 \strokec3 : none;\
+  \cf6 \cb1 \strokec6 border\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1px\cf3 \cb4 \strokec3  solid \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--border);\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--surface-\cf6 \cb1 \strokec6 2\cf3 \cb4 \strokec3 );\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--text-secondary);\
+  \cf6 \cb1 \strokec6 padding\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 5px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 10px\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font\cf3 \cb4 \strokec3 : inherit;\
+  \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 12px\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-weight\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 700\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border-radius\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--radius);\
+  \cf6 \cb1 \strokec6 cursor\cf3 \cb4 \strokec3 : pointer;\
+  \cf6 \cb1 \strokec6 transition\cf3 \cb4 \strokec3 : background \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--trans-fast);\
+\}\
+\cf6 \cb1 \strokec6 .logout-mini\cf5 \strokec5 :hover\cf3 \cb4 \strokec3  \{ \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--danger-bg); \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--danger); \cf6 \cb1 \strokec6 border-color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--danger); \}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* \uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \
+   22. \uc0\u21516 \u26399 \u12513 \u12479 \u24773 \u22577 \u65288 ops.html\u65289 \
+\uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472  */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 .sync-meta\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 margin-top\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 10px\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 11px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--text-muted) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 text-align\cf3 \cb4 \strokec3 : right;\
+  \cf6 \cb1 \strokec6 line-height\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1.4\cf3 \cb4 \strokec3 ;\
+\}\
+\cf6 \cb1 \strokec6 .sync-meta.error\cf3 \cb4 \strokec3  \{ \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--danger) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ; \cf6 \cb1 \strokec6 font-weight\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 700\cf3 \cb4 \strokec3 ; \}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* \uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \
+   23. \uc0\u12513 \u12452 \u12531 \u12467 \u12531 \u12486 \u12531 \u12484  padding\
+\uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472  */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 .main\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .container\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 padding\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 12px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 14px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 max-width\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 880px\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 margin\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3  auto;\
+\}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* \uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \
+   24. \uc0\u35469 \u35388 \u12467 \u12540 \u12523 \u12496 \u12483 \u12463 \
+\uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472  */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 .status\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 margin-top\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 10px\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1px\cf3 \cb4 \strokec3  solid \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--border) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 border-radius\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--radius) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 background\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--surface-\cf6 \cb1 \strokec6 2\cf3 \cb4 \strokec3 ) \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 padding\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 12px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 white-space\cf3 \cb4 \strokec3 : pre-wrap;\
+  \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 13px\cf3 \cb4 \strokec3 ;\
+  \cf6 \cb1 \strokec6 color\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 var\cf3 \cb4 \strokec3 (--text-secondary);\
+  \cf6 \cb1 \strokec6 line-height\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1.55\cf3 \cb4 \strokec3 ;\
+\}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* \uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \
+   25. \uc0\u12506 \u12540 \u12472 \u36983 \u31227 \u12501 \u12455 \u12540 \u12489 \u65288 \u36605 \u37327 \u65289 \
+\uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472  */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb1 \strokec9 @keyframes\cf3 \cb4 \strokec3  pageFadeIn \{\
+  \cf5 \cb1 \strokec5 from\cf3 \cb4 \strokec3  \{ \cf6 \cb1 \strokec6 opacity\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ; \cf6 \cb1 \strokec6 transform\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 translateY\cf3 \cb4 \strokec3 (\cf6 \cb1 \strokec6 4px\cf3 \cb4 \strokec3 ); \}\
+  \cf5 \cb1 \strokec5 to\cf3 \cb4 \strokec3    \{ \cf6 \cb1 \strokec6 opacity\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 1\cf3 \cb4 \strokec3 ; \cf6 \cb1 \strokec6 transform\cf3 \cb4 \strokec3 : \cf7 \cb1 \strokec7 translateY\cf3 \cb4 \strokec3 (\cf6 \cb1 \strokec6 0\cf3 \cb4 \strokec3 ); \}\
+\}\
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 .main\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .container\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .wrap\cf3 \cb4 \strokec3  > \cf6 \cb1 \strokec6 #cards\cf3 \cb4 \strokec3 ,\
+\cf6 \cb1 \strokec6 .wrap\cf3 \cb4 \strokec3  > \cf6 \cb1 \strokec6 .date-switcher\cf3 \cb4 \strokec3  \{\
+  \cf6 \cb1 \strokec6 animation\cf3 \cb4 \strokec3 : pageFadeIn \cf6 \cb1 \strokec6 200ms\cf3 \cb4 \strokec3  ease both;\
+\}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* \uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \
+   26. \uc0\u12518 \u12540 \u12486 \u12451 \u12522 \u12486 \u12451 \
+\uc0\u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472 \u9472  */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb1 \strokec6 .is-hidden\cf3 \cb4 \strokec3  \{ \cf6 \cb1 \strokec6 display\cf3 \cb4 \strokec3 : none \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ; \}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* report.html 1\uc0\u30011 \u38754 \u21454 \u12417  \'97 \u12501 \u12457 \u12531 \u12488 \u12469 \u12452 \u12474 \u19978 \u26360 \u12365 \u25233 \u21046  */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb1 \strokec9 @media\cf3 \cb4 \strokec3  (\cf6 \cb1 \strokec6 max-width\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 420px\cf3 \cb4 \strokec3 ) \{\
+  \cf6 \cb1 \strokec6 .wf-row\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 .btn\cf3 \cb4 \strokec3  \{ \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 13px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ; \cf6 \cb1 \strokec6 min-height\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 48px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ; \}\
+  \cf6 \cb1 \strokec6 .key\cf3 \cb4 \strokec3  \{ \cf6 \cb1 \strokec6 min-height\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 52px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ; \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 20px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ; \}\
+\}\
+\cf9 \cb1 \strokec9 @media\cf3 \cb4 \strokec3  (\cf6 \cb1 \strokec6 min-width\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 768px\cf3 \cb4 \strokec3 ) \{\
+  \cf5 \cb1 \strokec5 html\cf3 \cb4 \strokec3  \{ \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 17px\cf3 \cb4 \strokec3 ; \}\
+  \cf6 \cb1 \strokec6 .wf-row\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 .btn\cf3 \cb4 \strokec3  \{ \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 15px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ; \cf6 \cb1 \strokec6 min-height\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 54px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ; \}\
+  \cf6 \cb1 \strokec6 .key\cf3 \cb4 \strokec3  \{ \cf6 \cb1 \strokec6 min-height\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 64px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ; \cf6 \cb1 \strokec6 font-size\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 24px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ; \}\
+  \cf6 \cb1 \strokec6 .btn.action-main\cf3 \cb4 \strokec3  \{ \cf6 \cb1 \strokec6 min-height\cf3 \cb4 \strokec3 : \cf6 \cb1 \strokec6 120px\cf3 \cb4 \strokec3  \cf6 \cb1 \strokec6 !important\cf3 \cb4 \strokec3 ; \}\
+\}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb1 \strokec2 /* manifest.json \uc0\u12398  theme-color \u12392 \u12398 \u25972 \u21512 \u29992  */\cf3 \cb4 \strokec3 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb1 \strokec9 @media\cf3 \cb4 \strokec3  (\cf6 \cb1 \strokec6 prefers-color-scheme\cf3 \cb4 \strokec3 : dark) \{\
+  \cf5 \cb1 \strokec5 :root:not\cf3 \cb4 \strokec3 (\cf6 \cb1 \strokec6 [data-theme=\cf8 \strokec8 "light"\cf6 \strokec6 ]\cf3 \cb4 \strokec3 ) \{\
+    \cf6 \cb1 \strokec6 color-scheme\cf3 \cb4 \strokec3 : dark;\
+  \}\
+\}}

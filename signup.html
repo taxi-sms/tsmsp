@@ -18,10 +18,12 @@
     .label{font-size:13px;color:var(--text-muted);}
     .input{width:100%;box-sizing:border-box;border:2px solid var(--border);padding:12px 10px;font-size:18px;background:var(--surface-2);color:var(--text-primary);}
     .btn{appearance:none;border:2px solid var(--accent);background:var(--accent);color:#fff;padding:12px 10px;font-size:16px;font-weight:900;width:100%;}
+    .btn:disabled{border-color:var(--border);background:var(--border);color:#fff;opacity:.75;cursor:not-allowed;}
     .msg{margin-top:12px;border:2px solid var(--border);background:var(--surface-2);padding:10px;white-space:pre-wrap;font-size:14px;line-height:1.45;min-height:44px;}
     .row{display:flex;gap:12px;margin-top:12px;flex-wrap:wrap;}
   </style>
-  <meta name="theme-color" content="#ffffff">
+  <link rel="stylesheet" href="tsms-design-system.css">
+<meta name="theme-color" content="#ffffff">
   <script>(function(){try{var t=localStorage.getItem("tsms_theme")==="dark"?"dark":"light";document.documentElement.setAttribute("data-theme",t);var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content",t==="dark"?"#0F1417":"#F3F6F8");}catch(e){}})();</script>
 </head>
 <body>
@@ -63,11 +65,15 @@
     const setMsg = (t) => { $("msg").textContent = t || ""; };
 
     $("btn").addEventListener("click", async () => {
+      const btn = $("btn");
+      if (btn.disabled) return;
       setMsg("");
       const email = $("email").value.trim();
       const password = $("password").value;
 
       if (!email || !password) return setMsg("メールとパスワードを入力してね。");
+
+      btn.disabled = true;
 
       const { error } = await supabase.auth.signUp({
         email,
@@ -77,9 +83,12 @@
         }
       });
 
-      if (error) return setMsg("エラー: " + error.message);
+      if (error) {
+        btn.disabled = false;
+        return setMsg("エラー: " + error.message);
+      }
 
-      setMsg("登録OK。\n確認メールを開いて認証してから、ログインしてください。");
+      setMsg("メールを送信しました！\n確認メールを開いて認証を行なってください。");
     });
   </script>
   <script src="./cache-version.js"></script>
