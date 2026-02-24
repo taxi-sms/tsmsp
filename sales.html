@@ -442,7 +442,7 @@
       const wkCls=wk===6?'sat':((wk===0||isHoliday)?'sun holiday':'');
       tr.innerHTML=`
         <td>
-          <button type="button" class="shift-btn ${SHIFT_CLASS[shift]}" data-day="${dayId}" ${pastLocked?'disabled':''}>${SHIFT_LABEL[shift]}</button>
+          <button type="button" class="shift-btn ${SHIFT_CLASS[shift]}" data-day="${dayId}" ${(pastLocked && !manualEditMode)?'disabled':''}>${SHIFT_LABEL[shift]}</button>
         </td>
         <td class="date ${wkCls}">${d.getMonth()+1}/${d.getDate()}(${dowJa(d)})</td>
         <td class="${(active||manualEditMode)?'':'muted'}"><input class="target-input" data-target="${dayId}" value="${String(row.target||'').replace(/[^0-9]/g,'')}" ${((manualEditMode || active) && (manualEditMode || !pastLocked))?'':'disabled'} inputmode="numeric"></td>
