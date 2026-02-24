@@ -130,11 +130,8 @@ a{ color:var(--link); }
   body{padding-bottom:78px;}
   .tsms-hamburger,.hamburger,.tsms-menu,.menu,.tsms-menu-bg,.menu-bg{display:none!important;}
   .tsms-header,.header{padding-left:14px!important;}
-  .tsms-header::before,.header::before{content:"";display:inline-block;width:22px;height:22px;flex:0 0 22px;margin-right:8px;background:url('icon.png') center/contain no-repeat;}
   .tsms-bottom-nav{position:fixed;left:0;right:0;bottom:0;z-index:1200;display:grid;grid-template-columns:repeat(5,1fr);background:var(--surface-1,#fff);border-top:2px solid var(--border,#ccc);padding-bottom:env(safe-area-inset-bottom);}
   .tsms-bottom-nav a,.tsms-bottom-nav button{appearance:none;border:0;background:transparent;color:var(--text-secondary,#445);font:inherit;font-size:11px;font-weight:900;padding:8px 2px 9px;min-height:58px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-decoration:none;}
-  .tsms-bottom-nav .ico{width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;color:#58C2FF;}
-  .tsms-bottom-nav .ico svg{width:22px;height:22px;stroke:#58C2FF;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;display:block;}
   .tsms-bottom-nav .active{color:var(--text-primary,#111);position:relative;}
   .tsms-bottom-nav .active::before{content:"";position:absolute;top:0;left:14%;right:14%;height:2px;background:#58C2FF;}
   .tsms-more-sheet{position:fixed;left:0;right:0;bottom:0;z-index:1300;background:var(--surface-1,#fff);border-top:2px solid var(--border,#ccc);transform:translateY(110%);transition:transform .2s ease;padding:12px 12px calc(12px + env(safe-area-inset-bottom));}
@@ -404,11 +401,11 @@ a{ color:var(--link); }
 </script>
 
 <nav class="tsms-bottom-nav" aria-label="ボトムメニュー">
-  <a href="report.html" data-tab="report"><span class="ico">📝</span><span>日報入力</span></a>
-  <a href="confirm.html" data-tab="confirm"><span class="ico">✅</span><span>入力確認</span></a>
-  <a href="detail.html" data-tab="detail"><span class="ico">📊</span><span>詳細確認</span></a>
-  <a href="ops.html" data-tab="ops"><span class="ico">🚕</span><span>出庫/帰庫</span></a>
-  <button type="button" id="tsmsMoreBtn"><span class="ico">⋯</span><span>その他</span></button>
+  <a href="report.html" data-tab="report"><span>日報入力</span></a>
+  <a href="confirm.html" data-tab="confirm"><span>入力確認</span></a>
+  <a href="detail.html" data-tab="detail"><span>詳細確認</span></a>
+  <a href="ops.html" data-tab="ops"><span>出庫/帰庫</span></a>
+  <button type="button" id="tsmsMoreBtn"><span>その他</span></button>
 </nav>
 <div class="tsms-more-bg" id="tsmsMoreBg"></div>
 <div class="tsms-more-sheet" id="tsmsMoreSheet" aria-label="その他メニュー">
@@ -421,22 +418,7 @@ a{ color:var(--link); }
   var page=(location.pathname.split('/').pop()||'index.html').replace('.html','');
   document.querySelectorAll('.tsms-bottom-nav [data-tab]').forEach(function(a){
     if(a.getAttribute('data-tab')===page) a.classList.add('active');
-  });
-  var iconMap={
-    report:'<svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>',
-    confirm:'<svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="m8 12 3 3 5-6"/></svg>',
-    detail:'<svg viewBox="0 0 24 24"><path d="M4 19h16"/><rect x="6" y="10" width="3" height="6"/><rect x="11" y="7" width="3" height="9"/><rect x="16" y="5" width="3" height="11"/></svg>',
-    ops:'<svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="8" rx="2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/><path d="M6 8l2-3h8l2 3"/></svg>',
-    more:'<svg viewBox="0 0 24 24"><circle cx="6" cy="7" r="1.5"/><circle cx="6" cy="12" r="1.5"/><circle cx="6" cy="17" r="1.5"/><path d="M10 7h10M10 12h10M10 17h10"/></svg>'
-  };
-  document.querySelectorAll('.tsms-bottom-nav [data-tab]').forEach(function(a){
-    var k=a.getAttribute('data-tab');
-    var ico=a.querySelector('.ico');
-    if(ico && iconMap[k]) ico.innerHTML=iconMap[k];
-  });
-  var moreIco=document.querySelector('#tsmsMoreBtn .ico');
-  if(moreIco) moreIco.innerHTML=iconMap.more;
-  var btn=document.getElementById('tsmsMoreBtn');
+  });  var btn=document.getElementById('tsmsMoreBtn');
   var bg=document.getElementById('tsmsMoreBg');
   var sheet=document.getElementById('tsmsMoreSheet');
   function closeMore(){sheet.classList.remove('show');bg.classList.remove('show');}
