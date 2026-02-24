@@ -17,6 +17,8 @@ const ASSETS = [
   './icon-192.png',
   './icon-512.png',
   './apple-touch-icon.png',
+  './favicon.ico',
+  './favicon.svg',
   './cache-version.js'
 ];
 
