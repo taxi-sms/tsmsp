@@ -11,14 +11,77 @@
 <style>
   body{margin:0;font-family:"Noto Sans JP", sans-serif;background:#fff;color:#000}
   .wrap{width:100%;max-width:none;margin:0;padding:0}
-  .card{border:2px solid #000;padding:12px;margin-bottom:12px}
-  .row{display:flex;justify-content:space-between;margin:4px 0;padding-bottom:2px}
-  .row.underline-dashed{border-bottom:1px dashed var(--border);}
-  .row.payment-row{border-bottom:1px dashed #FD7E00;}
-  .payment-value{color:#FD7E00;font-weight:900;}
-  .label{font-weight:900}
-  .note{margin-top:6px;font-size:14px}
-  .actions{display:flex;justify-content:flex-end;gap:8px;margin-top:10px}
+  #cards{display:block}
+  .wrap #cards .card{
+    border:0!important;
+    border-bottom:1px solid var(--border)!important;
+    background:transparent!important;
+    padding:8px 0 10px;
+    margin:0;
+  }
+  .wrap #cards .card:first-child{border-top:1px solid var(--border)!important}
+  .entry-head{
+    display:flex;align-items:center;gap:8px;
+    margin:0 0 6px 0;
+  }
+  .entry-head::after{
+    content:"";
+    flex:1 1 auto;
+    border-top:1px solid var(--border);
+    opacity:.9;
+  }
+  .entry-head .label{
+    font-weight:900;
+    font-size:13px;
+    line-height:1.2;
+    flex:0 0 auto;
+  }
+  .time-text{
+    font-weight:900;
+    font-size:15px;
+    line-height:1.2;
+    white-space:nowrap;
+    font-variant-numeric:tabular-nums;
+  }
+  .kv{
+    display:grid;
+    grid-template-columns:84px 1fr;
+    gap:8px;
+    align-items:start;
+    margin:0;
+    padding:1px 0;
+  }
+  .kv .label{
+    font-weight:800;
+    font-size:13px;
+    line-height:1.35;
+  }
+  .kv .value{
+    font-weight:800;
+    font-size:15px;
+    line-height:1.35;
+    word-break:break-word;
+  }
+  .kv.payment-row .value{color:#FD7E00;font-weight:900;}
+  .kv.amount-row .value{font-variant-numeric:tabular-nums;}
+  .note{
+    margin-top:4px;
+    font-size:13px;
+    line-height:1.35;
+    white-space:pre-wrap;
+    word-break:break-word;
+  }
+  .tag-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+  .tag{
+    display:inline-block;
+    border:1px solid var(--border);
+    padding:2px 6px;
+    font-size:12px;
+    font-weight:900;
+    line-height:1.2;
+    background:transparent;
+  }
+  .actions{display:flex;justify-content:flex-end;gap:8px;margin-top:8px}
   .actionBtn{border:2px solid #000;background:#fff;padding:6px 10px;font-weight:900;font-size:14px}
   .empty{padding:24px 0;color:#666;text-align:center}
   .date-switcher{border:2px solid #000;padding:10px;margin:0 0 12px 0}
@@ -226,6 +289,25 @@ a{ color:var(--link); }
     return String(dayId || "").replace(/-/g, "/");
   }
 
+  function rowDateTimeText(r){
+    const day = rowDayId(r);
+    const time = String((r && r.time) || "").trim();
+    if(day && time) return `${dayLabel(day)} ${time}`;
+    if(time) return time;
+    if(r && r.ts){
+      const d = new Date(r.ts);
+      if(!isNaN(d)){
+        const y = d.getFullYear();
+        const m = String(d.getMonth()+1).padStart(2, "0");
+        const dayNum = String(d.getDate()).padStart(2, "0");
+        const hh = String(d.getHours()).padStart(2, "0");
+        const mm = String(d.getMinutes()).padStart(2, "0");
+        return `${y}/${m}/${dayNum} ${hh}:${mm}`;
+      }
+    }
+    return "--";
+  }
+
   function availableDays(){
     const set = new Set();
     allData.forEach((r)=>{
@@ -307,16 +389,20 @@ function todayLocalYmd(){
       const card = document.createElement("div");
       card.className = "card";
       const lines = [];
-      lines.push(`<div class="row"><span class="label">時間</span><span>${esc(r.time||"")}</span></div>`);
-      lines.push(`<div class="row"><span class="label">乗車種別</span><span>${esc(r.rideType||"")}</span></div>`);
-      lines.push(`<div class="row payment-row"><span class="label">支払い方法</span><span class="payment-value">${esc(r.payMethod||"")}</span></div>`);
-      if(r.ticketSub) lines.push(`<div class="row"><span class="label">チケット区分</span><span>${esc(r.ticketSub)}</span></div>`);
-      if(Number(r.cash||0) > 0) lines.push(`<div class="row"><span class="label">現収</span><span>${esc(yen(r.cash))}</span></div>`);
-      if(Number(r.credit||0) > 0) lines.push(`<div class="row"><span class="label">未収</span><span>${esc(yen(r.credit))}</span></div>`);
+      lines.push(`<div class="kv"><span class="label">乗車種別</span><span class="value">${esc(r.rideType||"")}</span></div>`);
+      lines.push(`<div class="kv payment-row"><span class="label">支払い方法</span><span class="value">${esc(r.payMethod||"")}</span></div>`);
+      if(r.ticketSub) lines.push(`<div class="kv"><span class="label">チケット区分</span><span class="value">${esc(r.ticketSub)}</span></div>`);
+      if(Number(r.cash||0) > 0) lines.push(`<div class="kv amount-row"><span class="label">現収</span><span class="value">${esc(yen(r.cash))}</span></div>`);
+      if(Number(r.credit||0) > 0) lines.push(`<div class="kv amount-row"><span class="label">未収</span><span class="value">${esc(yen(r.credit))}</span></div>`);
       if(r.note) lines.push(`<div class="note">${esc(r.note)}</div>`);
-      if(r.disabilityDiscount) lines.push(`<div class="note">障害割引</div>`);
+      if(r.disabilityDiscount) lines.push(`<div class="tag-row"><span class="tag">障害割引</span></div>`);
 
-      card.innerHTML = lines.join("\n") + `
+      card.innerHTML = `
+        <div class="entry-head">
+          <span class="label">時間</span>
+          <span class="time-text">${esc(rowDateTimeText(r))}</span>
+        </div>
+      ` + lines.join("\n") + `
         <div class="actions">
           <button type="button" class="actionBtn" data-action="edit" data-idx="${idx}">修正</button>
           <button type="button" class="actionBtn" data-action="delete" data-idx="${idx}">削除</button>
