@@ -277,19 +277,19 @@ a{ color:var(--link); }
     <div class="wf-label">金額入力</div>
     <div class="wf-form">
       <div class="wf-field" id="row_cash">
-        <div class="wf-field-label">現収（数字のみ）</div>
-        <input class="input" id="in_cash" inputmode="none" placeholder="0" readonly aria-readonly="true">
+        <div class="wf-field-label" hidden>現収（数字のみ）</div>
+        <input class="input" id="in_cash" inputmode="none" placeholder="現収（数字のみ）" aria-label="現収（数字のみ）" readonly aria-readonly="true">
       </div>
 
       <div class="wf-field" id="row_credit">
-        <div class="wf-field-label">未収（数字のみ）</div>
-        <input class="input" id="in_credit" inputmode="none" placeholder="0" readonly aria-readonly="true">
+        <div class="wf-field-label" hidden>未収（数字のみ）</div>
+        <input class="input" id="in_credit" inputmode="none" placeholder="未収（数字のみ）" aria-label="未収（数字のみ）" readonly aria-readonly="true">
       </div>
 
       <div class="wf-field">
-        <div class="wf-field-label">備考</div>
+        <div class="wf-field-label" hidden>備考</div>
         <div class="wf-inline">
-          <input class="input" id="in_note" placeholder="メモ">
+          <input class="input" id="in_note" placeholder="備考" aria-label="備考">
           <button class="btn" type="button" id="btn_discount">障害割引</button>
         </div>
       </div>
