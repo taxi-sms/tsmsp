@@ -225,6 +225,29 @@ a{ color:var(--link); }
   .result-modal-icon.error{background:#d93025;}
   .result-modal-message{margin:0 0 14px;font-size:18px;font-weight:900;}
   .result-modal-actions{display:grid;grid-template-columns:1fr;gap:8px;}
+  .voice-input-modal-card{max-width:min(380px,100%);}
+  .voice-input-modal-body{
+    border:2px solid var(--border,#ccc);
+    background:var(--surface-2,#f5f5f5);
+    padding:10px;
+    margin:0 0 12px;
+    text-align:left;
+  }
+  .voice-input-modal-step{margin:0 0 8px;font-size:13px;color:var(--text-muted,#666);font-weight:700;}
+  .voice-input-modal-prompt{margin:0 0 8px;font-size:16px;font-weight:900;line-height:1.35;}
+  .voice-input-modal-status{margin:0 0 8px;font-size:13px;color:var(--text-muted,#666);line-height:1.3;}
+  .voice-input-modal-transcript{
+    margin:0;
+    min-height:38px;
+    border:1px solid var(--border,#ccc);
+    background:var(--surface-1,#fff);
+    padding:8px;
+    font-size:14px;
+    line-height:1.35;
+    word-break:break-word;
+    white-space:pre-wrap;
+  }
+  .voice-input-modal-actions.is-single{grid-template-columns:1fr;}
 </style>
 
   <script type="module" src="auth-guard.js?v=20260223-5"></script>
@@ -352,6 +375,22 @@ a{ color:var(--link); }
   </div>
 </div>
 
+<div class="confirm-modal-bg" id="voiceInputModalBg" aria-hidden="true">
+  <div class="confirm-modal-card voice-input-modal-card" role="dialog" aria-modal="true" aria-labelledby="voiceInputModalTitle">
+    <p class="confirm-modal-title" id="voiceInputModalTitle">音声入力を開始しますか？</p>
+    <div class="voice-input-modal-body">
+      <p class="voice-input-modal-step" id="voiceInputModalStep">開始確認</p>
+      <p class="voice-input-modal-prompt" id="voiceInputModalPrompt">「はい」で音声入力を開始します。</p>
+      <p class="voice-input-modal-status" id="voiceInputModalStatus">手動入力は従来どおり利用できます。</p>
+      <p class="voice-input-modal-transcript" id="voiceInputModalTranscript">-</p>
+    </div>
+    <div class="confirm-modal-actions voice-input-modal-actions" id="voiceInputModalActions">
+      <button class="btn" type="button" id="voiceInputModalCancelBtn">いいえ</button>
+      <button class="btn next" type="button" id="voiceInputModalOkBtn">はい</button>
+    </div>
+  </div>
+</div>
+
 <script>
 (() => {
   const REPORT_KEY = "tsms_reports";
@@ -382,7 +421,19 @@ a{ color:var(--link); }
   const resultModalIcon = document.getElementById("resultModalIcon");
   const resultModalMessage = document.getElementById("resultModalMessage");
   const resultModalCloseBtn = document.getElementById("resultModalCloseBtn");
+  const voiceInputModalBg = document.getElementById("voiceInputModalBg");
+  const voiceInputModalTitle = document.getElementById("voiceInputModalTitle");
+  const voiceInputModalStep = document.getElementById("voiceInputModalStep");
+  const voiceInputModalPrompt = document.getElementById("voiceInputModalPrompt");
+  const voiceInputModalStatus = document.getElementById("voiceInputModalStatus");
+  const voiceInputModalTranscript = document.getElementById("voiceInputModalTranscript");
+  const voiceInputModalActions = document.getElementById("voiceInputModalActions");
+  const voiceInputModalCancelBtn = document.getElementById("voiceInputModalCancelBtn");
+  const voiceInputModalOkBtn = document.getElementById("voiceInputModalOkBtn");
   let focused = inCash;
+  let voiceFlowAbortRequested = false;
+  let activeVoiceRecognition = null;
+  let voiceModalEscHandler = null;
 
   function todayLocalYmd() {
     const d = new Date();
@@ -553,6 +604,522 @@ a{ color:var(--link); }
     });
   }
 
+  function setVoiceModalEscHandler(handler) {
+    if (voiceModalEscHandler) {
+      document.removeEventListener("keydown", voiceModalEscHandler);
+      voiceModalEscHandler = null;
+    }
+    if (handler) {
+      voiceModalEscHandler = handler;
+      document.addEventListener("keydown", voiceModalEscHandler);
+    }
+  }
+
+  function closeVoiceInputModal() {
+    if (!voiceInputModalBg) return;
+    voiceInputModalBg.classList.remove("show");
+    voiceInputModalBg.setAttribute("aria-hidden", "true");
+    if (voiceInputModalCancelBtn) voiceInputModalCancelBtn.onclick = null;
+    if (voiceInputModalOkBtn) voiceInputModalOkBtn.onclick = null;
+    voiceInputModalBg.onclick = null;
+    setVoiceModalEscHandler(null);
+  }
+
+  function openVoiceInputModal() {
+    if (!voiceInputModalBg) return;
+    voiceInputModalBg.classList.add("show");
+    voiceInputModalBg.setAttribute("aria-hidden", "false");
+  }
+
+  function setVoiceInputModalState(opts) {
+    if (!voiceInputModalBg) return;
+    const o = opts || {};
+    if (voiceInputModalTitle && "title" in o) voiceInputModalTitle.textContent = String(o.title || "");
+    if (voiceInputModalStep && "step" in o) voiceInputModalStep.textContent = String(o.step || "");
+    if (voiceInputModalPrompt && "prompt" in o) voiceInputModalPrompt.textContent = String(o.prompt || "");
+    if (voiceInputModalStatus && "status" in o) voiceInputModalStatus.textContent = String(o.status || "");
+    if (voiceInputModalTranscript && "transcript" in o) {
+      const t = String(o.transcript || "").trim();
+      voiceInputModalTranscript.textContent = t || "-";
+    }
+    if (voiceInputModalCancelBtn && "cancelText" in o) voiceInputModalCancelBtn.textContent = String(o.cancelText || "");
+    if (voiceInputModalOkBtn && "okText" in o) voiceInputModalOkBtn.textContent = String(o.okText || "");
+    if (voiceInputModalCancelBtn && "hideCancel" in o) voiceInputModalCancelBtn.hidden = !!o.hideCancel;
+    if (voiceInputModalOkBtn && "hideOk" in o) voiceInputModalOkBtn.hidden = !!o.hideOk;
+    if (voiceInputModalActions) voiceInputModalActions.classList.toggle("is-single", !!o.singleAction);
+  }
+
+  function showVoiceStartModal() {
+    if (!voiceInputModalBg || !voiceInputModalCancelBtn || !voiceInputModalOkBtn) {
+      return Promise.resolve(false);
+    }
+    return new Promise((resolve) => {
+      let done = false;
+      const finish = (ok) => {
+        if (done) return;
+        done = true;
+        closeVoiceInputModal();
+        resolve(!!ok);
+      };
+      setVoiceInputModalState({
+        title: "音声入力を開始しますか？",
+        step: "開始確認",
+        prompt: "「はい」を押すと音声で順番に入力します。",
+        status: "失敗した項目は手動入力に戻せます。",
+        transcript: "-",
+        cancelText: "いいえ",
+        okText: "はい",
+        hideCancel: false,
+        hideOk: false,
+        singleAction: false
+      });
+      voiceInputModalCancelBtn.onclick = () => finish(false);
+      voiceInputModalOkBtn.onclick = () => finish(true);
+      voiceInputModalBg.onclick = (e) => {
+        if (e.target === voiceInputModalBg) finish(false);
+      };
+      setVoiceModalEscHandler((e) => {
+        if (e.key === "Escape") finish(false);
+      });
+      openVoiceInputModal();
+      voiceInputModalOkBtn.focus();
+    });
+  }
+
+  function stopActiveVoiceRecognition() {
+    if (!activeVoiceRecognition) return;
+    try { activeVoiceRecognition.abort(); } catch (_) {}
+  }
+
+  function openVoiceFlowModal() {
+    if (!voiceInputModalBg || !voiceInputModalCancelBtn) return;
+    voiceFlowAbortRequested = false;
+    setVoiceInputModalState({
+      title: "音声入力を実行中",
+      step: "準備中",
+      prompt: "順番にご案内します。",
+      status: "マイク許可が必要な場合は許可してください。",
+      transcript: "-",
+      cancelText: "中止",
+      hideCancel: false,
+      hideOk: true,
+      singleAction: true
+    });
+    voiceInputModalCancelBtn.onclick = () => {
+      voiceFlowAbortRequested = true;
+      setVoiceInputModalState({
+        status: "中止中…",
+        transcript: "音声入力を停止しています。"
+      });
+      stopActiveVoiceRecognition();
+    };
+    voiceInputModalBg.onclick = (e) => {
+      if (e.target === voiceInputModalBg) {
+        voiceFlowAbortRequested = true;
+        stopActiveVoiceRecognition();
+      }
+    };
+    setVoiceModalEscHandler((e) => {
+      if (e.key === "Escape") {
+        voiceFlowAbortRequested = true;
+        stopActiveVoiceRecognition();
+      }
+    });
+    openVoiceInputModal();
+    voiceInputModalCancelBtn.focus();
+  }
+
+  function updateVoiceFlowModal(opts) {
+    setVoiceInputModalState(opts || {});
+  }
+
+  function waitMs(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  function toAsciiBasic(str) {
+    return String(str || "")
+      .replace(/[！-～]/g, (c) => String.fromCharCode(c.charCodeAt(0) - 0xFEE0))
+      .replace(/　/g, " ");
+  }
+
+  function normalizeVoiceText(text) {
+    return toAsciiBasic(text)
+      .toLowerCase()
+      .replace(/\s+/g, "")
+      .replace(/[、。,.，．・:：;；!?！？"'`´「」『』（）()［］\[\]【】]/g, "");
+  }
+
+  function extractVoiceDigits(text) {
+    const normalized = toAsciiBasic(text).replace(/[^\d]/g, "");
+    return normalized;
+  }
+
+  function resolveVoiceChoice(rawText, defs) {
+    const text = normalizeVoiceText(rawText);
+    if (!text) return "";
+    let best = "";
+    let bestLen = 0;
+    defs.forEach((def) => {
+      (def.aliases || []).forEach((alias) => {
+        const key = normalizeVoiceText(alias);
+        if (!key) return;
+        if (text.includes(key) && key.length > bestLen) {
+          best = def.value;
+          bestLen = key.length;
+        }
+      });
+    });
+    return best;
+  }
+
+  function setGroupSelectionDirect(group, value) {
+    let hit = null;
+    document.querySelectorAll(`button[data-group="${group}"]`).forEach((b) => {
+      const v = b.dataset.value || b.textContent.trim();
+      if (v === value) hit = b;
+    });
+    if (!hit) return false;
+    clearSelected(group);
+    hit.classList.add("is-selected");
+
+    if (group === "rideType") state.rideType = value;
+    if (group === "payMethod") {
+      state.payMethod = value;
+      if (value !== "チケット他") {
+        state.ticketSub = "";
+        clearSelected("ticketSub");
+      }
+      applyPayRules();
+    }
+    if (group === "ticketSub") state.ticketSub = value;
+    return true;
+  }
+
+  function getSpeechRecognitionCtor() {
+    return window.SpeechRecognition || window.webkitSpeechRecognition || null;
+  }
+
+  function recognizeSpeechOnce(stepLabel, promptText, timeoutMs) {
+    const Ctor = getSpeechRecognitionCtor();
+    if (!Ctor) return Promise.resolve({ ok: false, error: "unsupported" });
+
+    return new Promise((resolve) => {
+      let settled = false;
+      let finalText = "";
+      let interimText = "";
+      let errorCode = "";
+      let timerId = null;
+      const recognition = new Ctor();
+      activeVoiceRecognition = recognition;
+      recognition.lang = "ja-JP";
+      recognition.continuous = false;
+      recognition.interimResults = true;
+      recognition.maxAlternatives = 1;
+
+      const finish = (payload) => {
+        if (settled) return;
+        settled = true;
+        if (timerId) clearTimeout(timerId);
+        recognition.onstart = null;
+        recognition.onresult = null;
+        recognition.onerror = null;
+        recognition.onend = null;
+        if (activeVoiceRecognition === recognition) activeVoiceRecognition = null;
+        resolve(payload);
+      };
+
+      recognition.onstart = () => {
+        updateVoiceFlowModal({
+          step: stepLabel,
+          prompt: promptText,
+          status: "聞き取り中…（話し終わったら少し待ってください）",
+          transcript: interimText || finalText || "-"
+        });
+      };
+
+      recognition.onresult = (event) => {
+        let latestInterim = "";
+        for (let i = event.resultIndex; i < event.results.length; i += 1) {
+          const item = event.results[i];
+          const transcript = item && item[0] ? String(item[0].transcript || "") : "";
+          if (!transcript) continue;
+          if (item.isFinal) finalText += transcript;
+          else latestInterim += transcript;
+        }
+        interimText = latestInterim;
+        updateVoiceFlowModal({
+          step: stepLabel,
+          prompt: promptText,
+          status: "認識結果を確認中…",
+          transcript: (finalText || interimText || "-").trim() || "-"
+        });
+      };
+
+      recognition.onerror = (event) => {
+        errorCode = (event && event.error) ? String(event.error) : "error";
+      };
+
+      recognition.onend = () => {
+        if (voiceFlowAbortRequested) {
+          finish({ ok: false, cancelled: true, error: "aborted" });
+          return;
+        }
+        const text = (finalText || interimText || "").trim();
+        if (text) {
+          finish({ ok: true, text });
+          return;
+        }
+        finish({ ok: false, error: errorCode || "no-speech" });
+      };
+
+      try {
+        updateVoiceFlowModal({
+          step: stepLabel,
+          prompt: promptText,
+          status: "音声入力を開始します…",
+          transcript: "-"
+        });
+        recognition.start();
+        timerId = setTimeout(() => {
+          try { recognition.stop(); } catch (_) {}
+        }, Math.max(3000, Number(timeoutMs || 8000)));
+      } catch (_) {
+        finish({ ok: false, error: "start-failed" });
+      }
+    });
+  }
+
+  const VOICE_RIDE_TYPE_DEFS = [
+    { value: "付待", aliases: ["付待", "付け待ち", "つけまち", "付待ち"] },
+    { value: "乗場", aliases: ["乗場", "のりば", "乗り場"] },
+    { value: "無線", aliases: ["無線"] },
+    { value: "流し", aliases: ["流し"] },
+    { value: "連続", aliases: ["連続"] },
+    { value: "会社", aliases: ["会社"] },
+    { value: "予約", aliases: ["予約"] },
+    { value: "GO", aliases: ["go", "GO", "ゴー"] }
+  ];
+
+  const VOICE_PAY_METHOD_DEFS = [
+    { value: "乗込GO Pay", aliases: ["乗込gopay", "乗り込みgopay", "乗込go pay", "乗り込みgo pay", "乗込go", "乗り込みgo"] },
+    { value: "GO pay", aliases: ["gopay", "go pay", "ゴーペイ", "go"] },
+    { value: "チケット他", aliases: ["チケット他", "チケット", "ticket", "チケットそのた"] },
+    { value: "電子M", aliases: ["電子m", "電子マネー", "でんしまねー"] },
+    { value: "クレカ", aliases: ["クレカ", "クレジット", "カード"] },
+    { value: "現金", aliases: ["現金", "げんきん"] },
+    { value: "QR", aliases: ["qr", "qrコード", "キューアール", "ペイペイ", "paypay"] }
+  ];
+
+  const VOICE_TICKET_SUB_DEFS = [
+    { value: "JCBチケット", aliases: ["jcbチケット", "jcb", "ジェーシービー"] },
+    { value: "GOチケット", aliases: ["goチケット", "g oチケット", "ゴーチケット"] },
+    { value: "自社チケット", aliases: ["自社チケット", "じしゃチケット"] },
+    { value: "臨時チケット", aliases: ["臨時チケット", "りんじチケット"] },
+    { value: "福祉チケット", aliases: ["福祉チケット", "ふくしチケット"] },
+    { value: "社内扱い", aliases: ["社内扱い", "しゃないあつかい"] },
+    { value: "Aチケット", aliases: ["aチケット", "エーチケット"] },
+    { value: "その他", aliases: ["その他", "そのた"] }
+  ];
+
+  async function captureVoiceChoice(stepLabel, promptText, defs, applyFn) {
+    for (let attempt = 1; attempt <= 2; attempt += 1) {
+      if (voiceFlowAbortRequested) return { ok: false, cancelled: true };
+      const result = await recognizeSpeechOnce(`${stepLabel} (${attempt}/2)`, promptText, 8500);
+      if (voiceFlowAbortRequested) return { ok: false, cancelled: true };
+      if (!result.ok) {
+        updateVoiceFlowModal({
+          step: stepLabel,
+          prompt: promptText,
+          status: `認識失敗（${attempt}/2）`,
+          transcript: result.error || "-"
+        });
+        await waitMs(500);
+        continue;
+      }
+      const value = resolveVoiceChoice(result.text, defs);
+      if (!value) {
+        updateVoiceFlowModal({
+          step: stepLabel,
+          prompt: promptText,
+          status: `候補に一致しません（${attempt}/2）`,
+          transcript: result.text
+        });
+        await waitMs(700);
+        continue;
+      }
+      const applied = applyFn(value, result.text);
+      if (!applied) {
+        updateVoiceFlowModal({
+          step: stepLabel,
+          prompt: promptText,
+          status: "反映に失敗しました",
+          transcript: result.text
+        });
+        await waitMs(700);
+        continue;
+      }
+      updateVoiceFlowModal({
+        step: stepLabel,
+        prompt: promptText,
+        status: `反映しました: ${value}`,
+        transcript: result.text
+      });
+      await waitMs(350);
+      return { ok: true, value };
+    }
+    return { ok: false, error: "unmatched" };
+  }
+
+  async function captureVoiceAmount(stepLabel, promptText, targetInput) {
+    for (let attempt = 1; attempt <= 2; attempt += 1) {
+      if (voiceFlowAbortRequested) return { ok: false, cancelled: true };
+      const result = await recognizeSpeechOnce(`${stepLabel} (${attempt}/2)`, promptText, 9000);
+      if (voiceFlowAbortRequested) return { ok: false, cancelled: true };
+      if (!result.ok) {
+        updateVoiceFlowModal({
+          step: stepLabel,
+          prompt: promptText,
+          status: `認識失敗（${attempt}/2）`,
+          transcript: result.error || "-"
+        });
+        await waitMs(500);
+        continue;
+      }
+      const norm = normalizeVoiceText(result.text);
+      let digits = extractVoiceDigits(result.text);
+      if (!digits && (norm === "ゼロ" || norm === "0" || norm === "れい")) digits = "0";
+      if (!digits) {
+        updateVoiceFlowModal({
+          step: stepLabel,
+          prompt: promptText,
+          status: `数字を認識できません（${attempt}/2）`,
+          transcript: result.text
+        });
+        await waitMs(700);
+        continue;
+      }
+      targetInput.value = digits;
+      focused = targetInput;
+      updateVoiceFlowModal({
+        step: stepLabel,
+        prompt: promptText,
+        status: `反映しました: ${digits}`,
+        transcript: result.text
+      });
+      await waitMs(350);
+      return { ok: true, value: digits };
+    }
+    return { ok: false, error: "digits" };
+  }
+
+  async function captureVoiceNote() {
+    for (let attempt = 1; attempt <= 2; attempt += 1) {
+      if (voiceFlowAbortRequested) return { ok: false, cancelled: true };
+      const result = await recognizeSpeechOnce(`備考 (${attempt}/2)`, "備考を話してください（例: 迎車待ち3分）。「なし」でも可。", 10000);
+      if (voiceFlowAbortRequested) return { ok: false, cancelled: true };
+      if (!result.ok) {
+        updateVoiceFlowModal({
+          step: "備考",
+          prompt: "備考を話してください",
+          status: `認識失敗（${attempt}/2）`,
+          transcript: result.error || "-"
+        });
+        await waitMs(500);
+        continue;
+      }
+      const raw = String(result.text || "").trim();
+      const norm = normalizeVoiceText(raw);
+      inNote.value = (norm === "なし" || norm === "特になし") ? "" : raw;
+      updateVoiceFlowModal({
+        step: "備考",
+        prompt: "備考を話してください",
+        status: "反映しました",
+        transcript: raw
+      });
+      await waitMs(350);
+      return { ok: true, value: inNote.value };
+    }
+    return { ok: false, error: "note" };
+  }
+
+  async function startVoiceInputFlow() {
+    if (!getSpeechRecognitionCtor()) {
+      await showResultModal("この端末/ブラウザでは音声入力に対応していません。手動入力をご利用ください。");
+      return;
+    }
+
+    openVoiceFlowModal();
+
+    try {
+      const rideRes = await captureVoiceChoice(
+        "乗車種別",
+        "乗車種別を話してください（無線・付待・流し・乗場・連続・会社・予約・GO）。",
+        VOICE_RIDE_TYPE_DEFS,
+        (value) => setGroupSelectionDirect("rideType", value)
+      );
+      if (!rideRes.ok) throw new Error(rideRes.cancelled ? "cancelled" : "rideType");
+
+      const payRes = await captureVoiceChoice(
+        "支払方法",
+        "支払方法を話してください（現金・QR・クレカ・電子マネー・チケット他・GO pay・乗込GO Pay）。",
+        VOICE_PAY_METHOD_DEFS,
+        (value) => setGroupSelectionDirect("payMethod", value)
+      );
+      if (!payRes.ok) throw new Error(payRes.cancelled ? "cancelled" : "payMethod");
+
+      if (state.payMethod === "チケット他") {
+        const ticketRes = await captureVoiceChoice(
+          "チケット種別",
+          "チケット種別を話してください（Aチケット・自社チケット・臨時チケット・JCBチケット・福祉チケット・社内扱い・その他・GOチケット）。",
+          VOICE_TICKET_SUB_DEFS,
+          (value) => setGroupSelectionDirect("ticketSub", value)
+        );
+        if (!ticketRes.ok) throw new Error(ticketRes.cancelled ? "cancelled" : "ticketSub");
+      }
+
+      if (state.payMethod === "現金") {
+        const cashRes = await captureVoiceAmount("現収", "現収金額を数字で話してください。", inCash);
+        if (!cashRes.ok) throw new Error(cashRes.cancelled ? "cancelled" : "cash");
+        inCredit.value = "";
+      } else if (state.payMethod === "チケット他") {
+        const cashRes = await captureVoiceAmount("現収", "現収金額を数字で話してください。ない場合はゼロ。", inCash);
+        if (!cashRes.ok) throw new Error(cashRes.cancelled ? "cancelled" : "cash");
+        const creditRes = await captureVoiceAmount("未収", "未収金額を数字で話してください。", inCredit);
+        if (!creditRes.ok) throw new Error(creditRes.cancelled ? "cancelled" : "credit");
+      } else {
+        inCash.value = "";
+        const creditRes = await captureVoiceAmount("未収", "未収金額を数字で話してください。", inCredit);
+        if (!creditRes.ok) throw new Error(creditRes.cancelled ? "cancelled" : "credit");
+      }
+
+      const noteRes = await captureVoiceNote();
+      if (!noteRes.ok) throw new Error(noteRes.cancelled ? "cancelled" : "note");
+
+      updateVoiceFlowModal({
+        step: "完了",
+        prompt: "音声入力の反映が完了しました。",
+        status: "内容を確認して「登録する」を押してください。",
+        transcript: "必要に応じて手動修正できます。"
+      });
+      await waitMs(450);
+      closeVoiceInputModal();
+      scrollToAmountsIfReady();
+      await showResultModal("音声入力の反映が完了しました。内容を確認して登録してください。");
+    } catch (err) {
+      closeVoiceInputModal();
+      if (String(err && err.message) === "cancelled" || voiceFlowAbortRequested) {
+        await showResultModal("音声入力を中止しました。手動入力をご利用ください。");
+      } else {
+        await showResultModal("音声入力で一部項目を認識できませんでした。手動入力に切り替えてください。");
+      }
+    } finally {
+      voiceFlowAbortRequested = false;
+      stopActiveVoiceRecognition();
+      closeVoiceInputModal();
+    }
+  }
+
   btnDiscount.addEventListener("click", () => {
     state.disabilityDiscount = !state.disabilityDiscount;
     btnDiscount.classList.toggle("is-selected", state.disabilityDiscount);
@@ -706,6 +1273,16 @@ a{ color:var(--link); }
     inNote.value = entry.note || "";
     focused = inCash;
     setTimeout(scrollToAmountsIfReady, 50);
+  })();
+
+  (function promptVoiceInputOnOpen() {
+    setTimeout(async () => {
+      if (document.visibilityState === "hidden") return;
+      if (submitConfirmModalBg && submitConfirmModalBg.classList.contains("show")) return;
+      const start = await showVoiceStartModal();
+      if (!start) return;
+      await startVoiceInputFlow();
+    }, 250);
   })();
 })();
 </script>
