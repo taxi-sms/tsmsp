@@ -264,6 +264,35 @@ a{ color:var(--link); }
   <script type="module" src="auth-guard.js?v=20260223-5"></script>
   <script src="./custom-confirm.js"></script>
   <link rel="stylesheet" href="./tsms-design.css?v=20260227-3">
+  <style id="ops-action-tweaks">
+    #btn_depart,
+    #btn_return{
+      font-size:clamp(24px,6.6vw,32px)!important;
+      line-height:1.15;
+    }
+    #btn_reset.reset-final{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      text-align:center;
+      line-height:1.2;
+    }
+    #btn_reset .reset-main{
+      display:block;
+      font-size:clamp(22px,6.2vw,30px)!important;
+      font-weight:900;
+      line-height:1.15;
+    }
+    #btn_reset .warn{
+      display:block;
+      font-size:clamp(16px,4.4vw,22px)!important;
+      font-weight:900;
+      line-height:1.25;
+      max-width:92%;
+    }
+  </style>
 </head>
 <body>
 
@@ -288,8 +317,8 @@ a{ color:var(--link); }
   <section class="card">
     <div class="group-title">出庫 / 帰庫</div>
     <div class="actions">
-      <button class="btn action-main" type="button" id="btn_depart">出庫（今）</button>
-      <button class="btn action-main" type="button" id="btn_return">帰庫（今）</button>
+      <button class="btn action-main" type="button" id="btn_depart">出庫</button>
+      <button class="btn action-main" type="button" id="btn_return">帰庫</button>
     </div>
 
     <div class="content" style="margin-top:12px;">
@@ -311,7 +340,7 @@ a{ color:var(--link); }
     </div>
 
     <div class="actions">
-      <button class="btn danger wide reset-final" type="button" id="btn_reset">この日の記録をクリア<br><span class="warn">（〆作業として一番最後に実行）</span></button>
+      <button class="btn danger wide reset-final" type="button" id="btn_reset"><span class="reset-main">この日の記録を<br>クリア</span><span class="warn">（〆作業として一番最後に実行）</span></button>
     </div>
 
     <div class="group-title" style="margin-top:12px;">休憩履歴</div>
@@ -779,7 +808,7 @@ setInterval(()=>{ try{ updateBreakTimer(load()); }catch(e){} }, 1000);
 
 
   <script>
-    (function(){if('serviceWorker'in navigator&&location.protocol.indexOf('http')===0){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js?v=20260227-3').catch(function(){});});}})();
+    (function(){if('serviceWorker'in navigator&&location.protocol.indexOf('http')===0){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js?v=20260227-4').catch(function(){});});}})();
   </script>
 
 

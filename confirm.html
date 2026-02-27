@@ -212,6 +212,22 @@ a{ color:var(--link); }
   <script type="module" src="auth-guard.js?v=20260223-5"></script>
   <script src="./custom-confirm.js"></script>
   <link rel="stylesheet" href="./tsms-design.css?v=20260227-3">
+  <style id="confirm-entry-actions-style">
+    .actions.entry-actions{
+      display:flex;
+      justify-content:flex-end;
+      gap:8px;
+      margin-top:8px;
+    }
+    .actions.entry-actions .actionBtn{
+      flex:0 0 auto;
+      min-height:0;
+      width:auto;
+      padding:4px 10px;
+      font-size:16px;
+      line-height:1.2;
+    }
+  </style>
 </head>
 <body>
 <div class="wrap">
@@ -408,7 +424,7 @@ function todayLocalYmd(){
           <span class="time-text">${esc(rowDateTimeText(r))}</span>
         </div>
       ` + lines.join("\n") + `
-        <div class="actions">
+        <div class="actions entry-actions">
           <button type="button" class="actionBtn" data-action="edit" data-idx="${idx}">修正</button>
           <button type="button" class="actionBtn" data-action="delete" data-idx="${idx}">削除</button>
         </div>`;
@@ -501,7 +517,7 @@ if(sel){
 </script>
 
 <script>
-  (function(){if('serviceWorker'in navigator&&location.protocol.indexOf('http')===0){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js?v=20260227-3').catch(function(){});});}})();
+  (function(){if('serviceWorker'in navigator&&location.protocol.indexOf('http')===0){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js?v=20260227-4').catch(function(){});});}})();
 </script>
 
 

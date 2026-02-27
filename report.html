@@ -41,6 +41,14 @@
       border-radius:0;padding:14px 8px;font-size:16px;min-height:56px;
     }
     .btn.is-selected{border:2px solid #1A7A28;background:#1F9A33!important;color:#fff!important;}
+#btn_discount.is-selected,
+#btn_discount.is-selected:hover,
+#btn_discount.is-selected:active,
+#btn_discount.is-selected:focus-visible{
+  border:2px solid #1A7A28!important;
+  background:#1F9A33!important;
+  color:#fff!important;
+}
     .wf-form{display:grid;gap:10px;}
     .wf-field{display:grid;gap:6px;}
     .wf-field-label{font-size:13px;color:var(--muted);}
@@ -1692,7 +1700,7 @@ ${remaining}秒後に${countdownLabel}`;
 </script>
 
 <script>
-  (function(){if('serviceWorker' in navigator && location.protocol.indexOf('http')===0){window.addEventListener('load', function(){navigator.serviceWorker.register('./sw.js?v=20260227-3').catch(function(){});});}})();
+  (function(){if('serviceWorker' in navigator && location.protocol.indexOf('http')===0){window.addEventListener('load', function(){navigator.serviceWorker.register('./sw.js?v=20260227-4').catch(function(){});});}})();
 </script>
 
 
