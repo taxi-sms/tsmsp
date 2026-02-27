@@ -723,6 +723,10 @@ ${remaining}秒後に${countdownLabel}`;
       const t = String(o.transcript || "").trim();
       voiceInputModalTranscript.textContent = t || "-";
     }
+    if (voiceInputModalStep) voiceInputModalStep.hidden = !!o.hideStep;
+    if (voiceInputModalPrompt) voiceInputModalPrompt.hidden = !!o.hidePrompt;
+    if (voiceInputModalStatus) voiceInputModalStatus.hidden = !!o.hideStatus;
+    if (voiceInputModalTranscript) voiceInputModalTranscript.hidden = !!o.hideTranscript;
     if (voiceInputModalCancelBtn && "cancelText" in o) voiceInputModalCancelBtn.textContent = String(o.cancelText || "");
     if (voiceInputModalOkBtn && "okText" in o) voiceInputModalOkBtn.textContent = String(o.okText || "");
     if (voiceInputModalCancelBtn && "hideCancel" in o) voiceInputModalCancelBtn.hidden = !!o.hideCancel;
@@ -744,10 +748,14 @@ ${remaining}秒後に${countdownLabel}`;
       };
       setVoiceInputModalState({
         title: "音声入力を開始しますか？",
-        step: "開始確認",
-        prompt: "「はい」を押すと音声で順番に入力します。",
-        status: "手動入力は従来どおり利用できます。",
-        transcript: "-",
+        step: "",
+        prompt: "",
+        status: "※ブラウザでマイク許可の確認が表示された場合は「許可」を選んでください。許可しないと音声入力を開始できません。",
+        transcript: "",
+        hideStep: true,
+        hidePrompt: true,
+        hideStatus: false,
+        hideTranscript: true,
         cancelText: "いいえ",
         okText: "はい",
         hideCancel: false,
