@@ -92,15 +92,23 @@
   <script src="./custom-confirm.js"></script>
   <link rel="stylesheet" href="./tsms-design.css?v=20260227-3">
   <style id="sales-manual-table-lock">
+    .table-wrap td{
+      padding:3px 2px;
+    }
     .table-wrap .target-input,
-    .table-wrap .manual-input,
-    .table-wrap .manual-input.time{
+    .table-wrap .manual-input{
+      box-sizing:border-box;
+      display:block;
+      width:calc(100% - 6px);
+      max-width:64px;
+      margin:0 auto;
       font-size:11px!important;
       line-height:1.2;
       padding:3px 2px;
     }
-    .table-wrap td{
-      padding:3px 2px;
+    .table-wrap .manual-input.time{
+      max-width:58px;
+      text-align:center;
     }
   </style>
 </head>
@@ -561,7 +569,7 @@
   menu.querySelectorAll("a").forEach((a)=>a.addEventListener("click", closeMenu));
 })();
 </script>
-<script>(function(){if('serviceWorker' in navigator && location.protocol.indexOf('http')===0){window.addEventListener('load', function(){navigator.serviceWorker.register('./sw.js?v=20260227-6').catch(function(){});});}})();</script>
+<script>(function(){if('serviceWorker' in navigator && location.protocol.indexOf('http')===0){window.addEventListener('load', function(){navigator.serviceWorker.register('./sw.js?v=20260228-1').catch(function(){});});}})();</script>
 
 <nav class="tsms-bottom-nav" aria-label="ボトムメニュー">
   <a href="report.html" data-tab="report"><span class="ico">📝</span><span>日報入力</span></a>
