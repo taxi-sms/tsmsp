@@ -236,17 +236,7 @@ a{ color:var(--link); }
   .voice-input-modal-step{margin:0 0 8px;font-size:13px;color:var(--text-muted,#666);font-weight:700;}
   .voice-input-modal-prompt{margin:0 0 8px;font-size:16px;font-weight:900;line-height:1.35;}
   .voice-input-modal-status{margin:0 0 8px;font-size:13px;color:var(--text-muted,#666);line-height:1.3;}
-  .voice-input-modal-transcript{
-    margin:0;
-    min-height:38px;
-    border:1px solid var(--border,#ccc);
-    background:var(--surface-1,#fff);
-    padding:8px;
-    font-size:14px;
-    line-height:1.35;
-    word-break:break-word;
-    white-space:pre-wrap;
-  }
+  .voice-input-modal-transcript{display:none;}
   .voice-input-modal-actions.is-single{grid-template-columns:1fr;}
   .voice-input-modal-card{width:min(680px,100%);} 
   .voice-input-modal-body{padding:10px 10px 12px;}
@@ -788,6 +778,7 @@ ${remaining}秒後に${countdownLabel}`;
       prompt: promptText,
       status: statusText || "番号か項目をお話しください。",
       transcript: "-",
+      hideTranscript: true,
       cancelText: "中止",
       hideCancel: false,
       hideOk: true,
@@ -1017,13 +1008,16 @@ ${remaining}秒後に${countdownLabel}`;
     });
   }
 
-  function renderVoiceChoiceOptions(defs, selectedValue, onPick) {
+  function renderVoiceChoiceOptions(defs, selectedValue, onPick, opts) {
     if (!voiceInputModalDynamic) return;
     voiceInputModalDynamic.innerHTML = "";
 
+    const o = opts || {};
+    if (typeof o.beforeRender === "function") o.beforeRender(voiceInputModalDynamic);
+
     const guide = document.createElement("p");
     guide.className = "voice-choice-guide";
-    guide.textContent = "番号か項目をお話しください。タップでも選択できます。";
+    guide.textContent = o.guideText || "番号か項目をお話しください。タップでも選択できます。";
     voiceInputModalDynamic.appendChild(guide);
 
     const grid = document.createElement("div");
@@ -1087,6 +1081,42 @@ ${remaining}秒後に${countdownLabel}`;
     voiceInputModalDynamic.appendChild(grid);
   }
 
+  function appendVoiceAmountSnapshot(parent, opts) {
+    const host = parent || voiceInputModalDynamic;
+    if (!host) return;
+    const o = opts || {};
+    const showCash = ("showCash" in o) ? !!o.showCash : true;
+    const showCredit = ("showCredit" in o) ? !!o.showCredit : true;
+    const activeField = o.activeField || "";
+
+    const heading = document.createElement("p");
+    heading.className = "voice-amount-guide";
+    heading.textContent = o.guideText || "現在の入力金額";
+    host.appendChild(heading);
+
+    const grid = document.createElement("div");
+    grid.className = "voice-amount-grid" + ((showCash && showCredit) ? "" : " single");
+
+    const makeBox = (label, value, active) => {
+      const box = document.createElement("div");
+      box.className = "voice-amount-box" + (active ? " active" : "");
+      const k = document.createElement("p");
+      k.className = "voice-amount-label";
+      k.textContent = label;
+      const v = document.createElement("div");
+      v.className = "voice-amount-value";
+      const digits = String(value || "").trim();
+      v.textContent = digits ? formatAmountText(digits) : "-";
+      box.appendChild(k);
+      box.appendChild(v);
+      return box;
+    };
+
+    if (showCash) grid.appendChild(makeBox("現収", inCash.value, activeField === "cash"));
+    if (showCredit) grid.appendChild(makeBox("未収", inCredit.value, activeField === "credit"));
+    host.appendChild(grid);
+  }
+
   const VOICE_RIDE_TYPE_DEFS = [
     { value: "無線", label: "無線", aliases: ["無線"] },
     { value: "付待", label: "付待", aliases: ["付待", "付け待ち", "つけまち", "付待ち"] },
@@ -1124,7 +1154,8 @@ ${remaining}秒後に${countdownLabel}`;
     { value: "no", label: "いいえ", aliases: ["いいえ", "いや", "キャンセル", "だめ", "ダメ", "やめる"] }
   ];
 
-  async function captureVoiceChoice(stepLabel, promptText, defs, applyFn) {
+  async function captureVoiceChoice(stepLabel, promptText, defs, applyFn, opts) {
+    const o = opts || {};
     let manualValue = "";
     let attempt = 0;
 
@@ -1136,7 +1167,7 @@ ${remaining}秒後に${countdownLabel}`;
       renderVoiceChoiceOptions(defs, value, (picked) => {
         manualValue = picked;
         stopActiveVoiceRecognition();
-      });
+      }, o);
       setVoiceInputModalState({
         step: stepLabel,
         prompt: promptText,
@@ -1150,7 +1181,7 @@ ${remaining}秒後に${countdownLabel}`;
     renderVoiceChoiceOptions(defs, "", (picked) => {
       manualValue = picked;
       stopActiveVoiceRecognition();
-    });
+    }, o);
 
     while (!voiceFlowAbortRequested) {
       if (manualValue) {
@@ -1320,8 +1351,25 @@ ${remaining}秒後に${countdownLabel}`;
     return { ok: false, cancelled: true };
   }
 
-  async function captureVoiceYesNo(stepLabel, promptText) {
-    const res = await captureVoiceChoice(stepLabel, promptText, VOICE_YES_NO_DEFS, null);
+  async function captureVoiceYesNo(stepLabel, promptText, opts) {
+    const o = opts || {};
+
+    if (o.useVoiceModal === false) {
+      const attempts = Math.max(1, Number(o.attempts || 2));
+      const timeoutMs = Math.max(3000, Number(o.timeoutMs || 9000));
+      for (let attempt = 1; attempt <= attempts; attempt += 1) {
+        const result = await recognizeSpeechOnceSilent(timeoutMs);
+        if (voiceFlowAbortRequested) return { ok: false, cancelled: true };
+        if (!result.ok) continue;
+
+        const value = resolveVoiceChoiceOrIndex(result.text, VOICE_YES_NO_DEFS);
+        if (!value) continue;
+        return { ok: true, yes: value === "yes", rawText: result.text || "" };
+      }
+      return { ok: false, cancelled: false };
+    }
+
+    const res = await captureVoiceChoice(stepLabel, promptText, VOICE_YES_NO_DEFS, null, o);
     if (!res.ok) return { ok: false, cancelled: !!res.cancelled };
     return { ok: true, yes: res.value === "yes", rawText: res.rawText || "" };
   }
@@ -1401,7 +1449,16 @@ ${remaining}秒後に${countdownLabel}`;
           continue;
         }
 
-        const modifyAns = await captureVoiceYesNo("金額確認", "金額の修正はありますか？");
+        const modifyAns = await captureVoiceYesNo("金額確認", "金額の修正はありますか？", {
+          guideText: "番号か項目をお話しください。タップでも選択できます。",
+          beforeRender: (container) => {
+            appendVoiceAmountSnapshot(container, {
+              showCash: true,
+              showCredit: true,
+              guideText: "現在の入力金額"
+            });
+          }
+        });
         if (!modifyAns.ok) throw new Error(modifyAns.cancelled ? "cancelled" : "amount-confirm");
         if (!modifyAns.yes) break;
       }
@@ -1623,7 +1680,7 @@ ${remaining}秒後に${countdownLabel}`;
 </script>
 
 <script>
-  (function(){if('serviceWorker' in navigator && location.protocol.indexOf('http')===0){window.addEventListener('load', function(){navigator.serviceWorker.register('./sw.js?v=20260223-16').catch(function(){});});}})();
+  (function(){if('serviceWorker' in navigator && location.protocol.indexOf('http')===0){window.addEventListener('load', function(){navigator.serviceWorker.register('./sw.js?v=20260227-1').catch(function(){});});}})();
 </script>
 
 
