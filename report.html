@@ -965,6 +965,25 @@ ${remaining}秒後に${countdownLabel}`;
     return code === "not-allowed" || code === "service-not-allowed" || code === "audio-capture";
   }
 
+  async function ensureMicPermissionByGesture() {
+    try {
+      if (!navigator.mediaDevices || typeof navigator.mediaDevices.getUserMedia !== "function") {
+        return { ok: true, reason: "media-devices-unsupported" };
+      }
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      try {
+        stream.getTracks().forEach((track) => {
+          try { track.stop(); } catch (_) {}
+        });
+      } catch (_) {}
+      return { ok: true };
+    } catch (err) {
+      const name = String(err && err.name ? err.name : "");
+      const code = name || String(err && err.message ? err.message : "not-allowed");
+      return { ok: false, error: code };
+    }
+  }
+
   function openVoiceInputModal() {
     if (!voiceInputModalBg) return;
     voiceInputModalBg.classList.add("show");
@@ -1004,6 +1023,7 @@ ${remaining}秒後に${countdownLabel}`;
     }
     return new Promise((resolve) => {
       let done = false;
+      let approving = false;
       const finish = (ok) => {
         if (done) return;
         done = true;
@@ -1035,7 +1055,56 @@ ${remaining}秒後に${countdownLabel}`;
         voiceInputModalRetryBtn.onclick = null;
         voiceInputModalRetryBtn.ontouchend = null;
       }
-      bindModalActionButton(voiceInputModalOkBtn, () => finish(true));
+      bindModalActionButton(voiceInputModalOkBtn, async () => {
+        if (approving || done) return;
+        approving = true;
+        setVoiceInputModalState({
+          title: "音声入力を開始しますか？",
+          step: "",
+          prompt: "",
+          status: "マイク権限を確認しています…",
+          transcript: "",
+          hideStep: true,
+          hidePrompt: true,
+          hideStatus: false,
+          hideTranscript: true,
+          cancelText: "いいえ",
+          retryText: "やり直し",
+          okText: "はい",
+          hideCancel: false,
+          hideRetry: true,
+          hideOk: false,
+          singleAction: false,
+          binaryAction: true
+        });
+
+        const permission = await ensureMicPermissionByGesture();
+        approving = false;
+        if (!permission.ok) {
+          setVoiceInputModalState({
+            title: "音声入力を開始しますか？",
+            step: "",
+            prompt: "",
+            status: "マイクを許可できませんでした。\nAndroidのオーバーレイ表示を閉じて再試行するか、手動入力をご利用ください。",
+            transcript: permission.error || "not-allowed",
+            hideStep: true,
+            hidePrompt: true,
+            hideStatus: false,
+            hideTranscript: false,
+            cancelText: "いいえ",
+            retryText: "やり直し",
+            okText: "はい",
+            hideCancel: false,
+            hideRetry: true,
+            hideOk: false,
+            singleAction: false,
+            binaryAction: true
+          });
+          return;
+        }
+
+        finish(true);
+      });
       voiceInputModalBg.onclick = (e) => {
         if (e.target === voiceInputModalBg) finish(false);
       };
