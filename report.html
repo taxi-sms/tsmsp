@@ -209,6 +209,64 @@ a{ color:var(--link); }
   .confirm-modal-key{color:var(--text-muted,#666);font-weight:700;}
   .confirm-modal-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
 
+  .submit-confirm-modal-card{
+    width:min(560px,100%);
+    border-radius:16px;
+    border:1px solid #3d5f94;
+    background:
+      radial-gradient(120% 100% at 50% 0%, rgba(86,148,255,.18), rgba(10,21,44,0) 55%),
+      linear-gradient(180deg, #0f1f42 0%, #0a1733 100%);
+    box-shadow:0 10px 28px rgba(0,0,0,.45), 0 0 0 1px rgba(126,167,235,.22) inset;
+    padding:12px;
+  }
+  .submit-confirm-modal-head{
+    display:grid;
+    grid-template-columns:1fr auto;
+    align-items:end;
+    gap:8px;
+    margin:0 0 8px;
+    padding:2px 4px 10px;
+    border-bottom:1px solid rgba(135,168,220,.45);
+  }
+  .submit-confirm-modal-step{
+    margin:0;
+    color:#c8ddff;
+    font-size:24px;
+    line-height:1;
+    font-weight:900;
+    letter-spacing:.01em;
+  }
+  .submit-confirm-modal-card .confirm-modal-title{
+    margin:0;
+    color:#eaf3ff;
+    font-size:clamp(22px,6.2vw,30px);
+    line-height:1.1;
+  }
+  .submit-confirm-modal-card .confirm-modal-list{
+    border:1px solid rgba(125,164,230,.34);
+    border-radius:10px;
+    background:linear-gradient(180deg, rgba(16,31,62,.86) 0%, rgba(13,26,52,.86) 100%);
+    padding:0 10px;
+    gap:0;
+  }
+  .submit-confirm-modal-card .confirm-modal-item{
+    grid-template-columns:120px 1fr;
+    gap:10px;
+    font-size:15px;
+    line-height:1.4;
+    border-bottom:1px solid rgba(125,164,230,.34);
+    color:#e8f2ff;
+    padding:8px 0;
+  }
+  .submit-confirm-modal-card .confirm-modal-item:last-child{border-bottom:0;}
+  .submit-confirm-modal-card .confirm-modal-key{color:#bdd6fa;font-weight:700;}
+  .submit-confirm-modal-card .confirm-modal-actions .btn{
+    min-height:52px;
+    border-radius:10px;
+    font-size:17px;
+    font-weight:900;
+  }
+
   .result-modal-bg{
     position:fixed;inset:0;z-index:1450;
     background:rgba(0,0,0,.45);
@@ -394,6 +452,7 @@ a{ color:var(--link); }
     font-size:17px;
     font-weight:900;
   }
+  .voice-input-modal-actions .btn[hidden]{display:none !important;}
 
 </style>
 
@@ -495,8 +554,11 @@ a{ color:var(--link); }
 </main>
 
 <div class="confirm-modal-bg" id="submitConfirmModalBg" aria-hidden="true">
-  <div class="confirm-modal-card" role="dialog" aria-modal="true" aria-labelledby="submitConfirmTitle">
-    <p class="confirm-modal-title" id="submitConfirmTitle">この内容で登録しますか？</p>
+  <div class="confirm-modal-card submit-confirm-modal-card" role="dialog" aria-modal="true" aria-labelledby="submitConfirmTitle">
+    <div class="submit-confirm-modal-head">
+      <p class="confirm-modal-title" id="submitConfirmTitle">この内容で登録しますか？</p>
+      <p class="submit-confirm-modal-step">8/8</p>
+    </div>
     <div class="confirm-modal-list">
       <div class="confirm-modal-item"><span class="confirm-modal-key">乗車種別</span><span id="confirmRideType">-</span></div>
       <div class="confirm-modal-item"><span class="confirm-modal-key">支払方法</span><span id="confirmPayMethod">-</span></div>
@@ -1313,6 +1375,12 @@ ${remaining}秒後に${countdownLabel}`;
     { value: "no", label: "いいえ", aliases: ["いいえ", "いや", "キャンセル", "だめ", "ダメ", "やめる"] }
   ];
 
+  const VOICE_REVIEW_ACTION_DEFS = [
+    { value: "cancel", label: "中止", aliases: ["中止", "ちゅうし", "キャンセル", "やめる", "終了"] },
+    { value: "retry", label: "やり直し", aliases: ["やり直し", "やりなおし", "修正", "再入力", "もう一度"] },
+    { value: "ok", label: "OK", aliases: ["ok", "オーケー", "おーけー", "おっけー", "オッケー", "確定", "次へ", "進む"] }
+  ];
+
   async function captureVoiceChoice(stepLabel, promptText, defs, applyFn, opts) {
     const o = opts || {};
     const stageTitle = String(o.title || "音声入力");
@@ -1609,6 +1677,7 @@ ${remaining}秒後に${countdownLabel}`;
       const finish = (payload) => {
         if (done) return;
         done = true;
+        stopActiveVoiceRecognition();
         resolve(payload);
       };
 
@@ -1666,6 +1735,49 @@ ${remaining}秒後に${countdownLabel}`;
 
       openVoiceInputModal();
       if (voiceInputModalOkBtn) voiceInputModalOkBtn.focus();
+
+      (async () => {
+        await waitMs(350);
+        for (let attempt = 1; attempt <= 2; attempt += 1) {
+          if (done || voiceFlowAbortRequested) return;
+          setVoiceInputModalState({
+            title: "金額確認",
+            step: "6/8",
+            prompt: "入力した金額を確認してください。",
+            status: `「中止」「やり直し」「OK」を話してください（${attempt}回目）`,
+            hideTranscript: true
+          });
+
+          const result = await recognizeSpeechOnceSilent(9000);
+          if (done || voiceFlowAbortRequested) return;
+          if (!result.ok) continue;
+
+          const action = resolveVoiceChoiceOrIndex(result.text, VOICE_REVIEW_ACTION_DEFS);
+          if (!action) {
+            setVoiceInputModalState({
+              title: "金額確認",
+              step: "6/8",
+              prompt: "入力した金額を確認してください。",
+              status: "候補に一致しませんでした。ボタンでも操作できます。",
+              transcript: result.text,
+              hideTranscript: false
+            });
+            continue;
+          }
+
+          if (action === "cancel") {
+            voiceFlowAbortRequested = true;
+            finish({ ok: false, cancelled: true });
+            return;
+          }
+          if (action === "retry") {
+            finish({ ok: false, retry: true });
+            return;
+          }
+          finish({ ok: true });
+          return;
+        }
+      })().catch(() => {});
     });
   }
 
