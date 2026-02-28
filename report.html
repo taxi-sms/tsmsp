@@ -933,12 +933,36 @@ ${remaining}秒後に${countdownLabel}`;
     if (!voiceInputModalBg) return;
     voiceInputModalBg.classList.remove("show");
     voiceInputModalBg.setAttribute("aria-hidden", "true");
-    if (voiceInputModalCancelBtn) voiceInputModalCancelBtn.onclick = null;
-    if (voiceInputModalRetryBtn) voiceInputModalRetryBtn.onclick = null;
-    if (voiceInputModalOkBtn) voiceInputModalOkBtn.onclick = null;
+    if (voiceInputModalCancelBtn) {
+      voiceInputModalCancelBtn.onclick = null;
+      voiceInputModalCancelBtn.ontouchend = null;
+    }
+    if (voiceInputModalRetryBtn) {
+      voiceInputModalRetryBtn.onclick = null;
+      voiceInputModalRetryBtn.ontouchend = null;
+    }
+    if (voiceInputModalOkBtn) {
+      voiceInputModalOkBtn.onclick = null;
+      voiceInputModalOkBtn.ontouchend = null;
+    }
     voiceInputModalBg.onclick = null;
     clearVoiceModalDynamic();
     setVoiceModalEscHandler(null);
+  }
+
+  function bindModalActionButton(button, handler) {
+    if (!button || typeof handler !== "function") return;
+    const run = (e) => {
+      if (e && typeof e.preventDefault === "function") e.preventDefault();
+      handler();
+    };
+    button.onclick = run;
+    button.ontouchend = run;
+  }
+
+  function isVoicePermissionError(errorCode) {
+    const code = String(errorCode || "").toLowerCase();
+    return code === "not-allowed" || code === "service-not-allowed" || code === "audio-capture";
   }
 
   function openVoiceInputModal() {
@@ -1006,9 +1030,12 @@ ${remaining}秒後に${countdownLabel}`;
         binaryAction: true
       });
       clearVoiceModalDynamic();
-      voiceInputModalCancelBtn.onclick = () => finish(false);
-      if (voiceInputModalRetryBtn) voiceInputModalRetryBtn.onclick = null;
-      voiceInputModalOkBtn.onclick = () => finish(true);
+      bindModalActionButton(voiceInputModalCancelBtn, () => finish(false));
+      if (voiceInputModalRetryBtn) {
+        voiceInputModalRetryBtn.onclick = null;
+        voiceInputModalRetryBtn.ontouchend = null;
+      }
+      bindModalActionButton(voiceInputModalOkBtn, () => finish(true));
       voiceInputModalBg.onclick = (e) => {
         if (e.target === voiceInputModalBg) finish(false);
       };
@@ -1042,14 +1069,20 @@ ${remaining}秒後に${countdownLabel}`;
       singleAction: true,
       binaryAction: false
     });
-    if (voiceInputModalRetryBtn) voiceInputModalRetryBtn.onclick = null;
-    if (voiceInputModalOkBtn) voiceInputModalOkBtn.onclick = null;
+    if (voiceInputModalRetryBtn) {
+      voiceInputModalRetryBtn.onclick = null;
+      voiceInputModalRetryBtn.ontouchend = null;
+    }
+    if (voiceInputModalOkBtn) {
+      voiceInputModalOkBtn.onclick = null;
+      voiceInputModalOkBtn.ontouchend = null;
+    }
     if (voiceInputModalCancelBtn) {
-      voiceInputModalCancelBtn.onclick = () => {
+      bindModalActionButton(voiceInputModalCancelBtn, () => {
         voiceFlowAbortRequested = true;
         setVoiceInputModalState({ status: "中止しています…" });
         stopActiveVoiceRecognition();
-      };
+      });
     }
     if (voiceInputModalBg) {
       voiceInputModalBg.onclick = (e) => {
@@ -1242,9 +1275,13 @@ ${remaining}秒後に${countdownLabel}`;
 
       recognition.onerror = (event) => {
         errorCode = (event && event.error) ? String(event.error) : "error";
+        if (isVoicePermissionError(errorCode)) {
+          finish({ ok: false, error: errorCode, permissionDenied: true });
+        }
       };
 
       recognition.onend = () => {
+        if (settled) return;
         if (voiceFlowAbortRequested) {
           finish({ ok: false, cancelled: true, error: "aborted" });
           return;
@@ -1299,6 +1336,10 @@ ${remaining}秒後に${countdownLabel}`;
       btn.appendChild(no);
       btn.appendChild(label);
       btn.addEventListener("click", () => onPick(def.value));
+      btn.addEventListener("touchend", (e) => {
+        e.preventDefault();
+        onPick(def.value);
+      }, { passive: false });
       grid.appendChild(btn);
     });
     voiceInputModalDynamic.appendChild(grid);
@@ -1483,6 +1524,16 @@ ${remaining}秒後に${countdownLabel}`;
       }
 
       if (!result.ok) {
+        if (isVoicePermissionError(result.error)) {
+          setVoiceInputModalState({
+            title: stageTitle,
+            step: stepLabel,
+            prompt: promptText,
+            status: "マイクの許可が必要です。ブラウザ設定でマイクを許可してください。",
+            transcript: result.error || "not-allowed"
+          });
+          return { ok: false, permissionDenied: true, error: result.error || "not-allowed" };
+        }
         setVoiceInputModalState({
           title: stageTitle,
           step: stepLabel,
@@ -1549,6 +1600,16 @@ ${remaining}秒後に${countdownLabel}`;
       if (voiceFlowAbortRequested) return { ok: false, cancelled: true };
 
       if (!result.ok) {
+        if (isVoicePermissionError(result.error)) {
+          setVoiceInputModalState({
+            title: stageTitle,
+            step: stepLabel,
+            prompt: promptText,
+            status: "マイクの許可が必要です。ブラウザ設定でマイクを許可してください。",
+            transcript: result.error || "not-allowed"
+          });
+          return { ok: false, permissionDenied: true, error: result.error || "not-allowed" };
+        }
         setVoiceInputModalState({
           title: stageTitle,
           step: stepLabel,
@@ -1618,6 +1679,17 @@ ${remaining}秒後に${countdownLabel}`;
       if (voiceFlowAbortRequested) return { ok: false, cancelled: true };
 
       if (!result.ok) {
+        if (isVoicePermissionError(result.error)) {
+          setVoiceInputModalState({
+            title: stageTitle,
+            step: stepLabel,
+            prompt: promptText,
+            status: "マイクの許可が必要です。ブラウザ設定でマイクを許可してください。",
+            transcript: result.error || "not-allowed",
+            hideTranscript: false
+          });
+          return { ok: false, permissionDenied: true, error: result.error || "not-allowed" };
+        }
         setVoiceInputModalState({ title: stageTitle, step: stepLabel, prompt: promptText, status: `聞き取れませんでした（${attempt}回目）`, transcript: result.error || "-", hideTranscript: false });
         continue;
       }
@@ -1642,7 +1714,12 @@ ${remaining}秒後に${countdownLabel}`;
       for (let attempt = 1; attempt <= attempts; attempt += 1) {
         const result = await recognizeSpeechOnceSilent(timeoutMs);
         if (voiceFlowAbortRequested) return { ok: false, cancelled: true };
-        if (!result.ok) continue;
+        if (!result.ok) {
+          if (isVoicePermissionError(result.error)) {
+            return { ok: false, cancelled: false, permissionDenied: true, error: result.error || "not-allowed" };
+          }
+          continue;
+        }
 
         const value = resolveVoiceChoiceOrIndex(result.text, VOICE_YES_NO_DEFS);
         if (!value) continue;
@@ -1746,16 +1823,16 @@ ${remaining}秒後に${countdownLabel}`;
       });
 
       if (voiceInputModalCancelBtn) {
-        voiceInputModalCancelBtn.onclick = () => {
+        bindModalActionButton(voiceInputModalCancelBtn, () => {
           voiceFlowAbortRequested = true;
           finish({ ok: false, cancelled: true });
-        };
+        });
       }
       if (voiceInputModalRetryBtn) {
-        voiceInputModalRetryBtn.onclick = () => finish({ ok: false, retry: true });
+        bindModalActionButton(voiceInputModalRetryBtn, () => finish({ ok: false, retry: true }));
       }
       if (voiceInputModalOkBtn) {
-        voiceInputModalOkBtn.onclick = () => finish({ ok: true });
+        bindModalActionButton(voiceInputModalOkBtn, () => finish({ ok: true }));
       }
       if (voiceInputModalBg) {
         voiceInputModalBg.onclick = (e) => {
@@ -1789,7 +1866,18 @@ ${remaining}秒後に${countdownLabel}`;
 
           const result = await recognizeSpeechOnceSilent(9000);
           if (done || voiceFlowAbortRequested) return;
-          if (!result.ok) continue;
+          if (!result.ok) {
+            if (isVoicePermissionError(result.error)) {
+              setVoiceInputModalState({
+                title: "金額確認",
+                step: "6/8",
+                prompt: "入力した金額を確認してください。",
+                status: "マイク許可がないため、ボタン操作で進めてください。"
+              });
+              return;
+            }
+            continue;
+          }
 
           const action = resolveVoiceChoiceOrIndex(result.text, VOICE_REVIEW_ACTION_DEFS);
           if (!action) {
@@ -1822,6 +1910,7 @@ ${remaining}秒後に${countdownLabel}`;
 
   async function startVoiceInputFlow() {
     if (!getSpeechRecognitionCtor()) {
+      closeVoiceInputModal();
       await showResultModal("この端末/ブラウザでは音声入力に対応していません。手動入力をご利用ください。");
       return;
     }
@@ -1832,22 +1921,26 @@ ${remaining}秒後に${countdownLabel}`;
       const rideRes = await captureVoiceChoice("1/8", "番号か項目をお話しください。", VOICE_RIDE_TYPE_DEFS, (value) => setGroupSelectionDirect("rideType", value), {
         title: "乗車種別を選択してください"
       });
+      if (rideRes.permissionDenied) throw new Error("permission-denied");
       if (!rideRes.ok) throw new Error(rideRes.cancelled ? "cancelled" : "rideType");
 
       const payRes = await captureVoiceChoice("2/8", "番号か項目をお話しください。", VOICE_PAY_METHOD_DEFS, (value) => setGroupSelectionDirect("payMethod", value), {
         title: "支払方法を選択してください"
       });
+      if (payRes.permissionDenied) throw new Error("permission-denied");
       if (!payRes.ok) throw new Error(payRes.cancelled ? "cancelled" : "payMethod");
 
       if (state.payMethod === "チケット他") {
         const ticketRes = await captureVoiceChoice("3/8", "番号か項目をお話しください。", VOICE_TICKET_SUB_DEFS, (value) => setGroupSelectionDirect("ticketSub", value), {
           title: "チケット種別を選択してください"
         });
+        if (ticketRes.permissionDenied) throw new Error("permission-denied");
         if (!ticketRes.ok) throw new Error(ticketRes.cancelled ? "cancelled" : "ticketSub");
       }
 
       while (true) {
         const amountRes = await runVoiceAmountStage();
+        if (amountRes.permissionDenied) throw new Error("permission-denied");
         if (!amountRes.ok) throw new Error(amountRes.cancelled ? "cancelled" : "amount");
 
         const hasCash = !!String(inCash.value || "").trim();
@@ -1878,6 +1971,7 @@ ${remaining}秒後に${countdownLabel}`;
         step: "7/8",
         prompt: "備考をお話しください。『なし』でも大丈夫です。"
       });
+      if (noteRes.permissionDenied) throw new Error("permission-denied");
       if (!noteRes.ok) throw new Error(noteRes.cancelled ? "cancelled" : "note");
 
       closeVoiceInputModal();
@@ -1894,6 +1988,8 @@ ${remaining}秒後に${countdownLabel}`;
       closeVoiceInputModal();
       if (String(err && err.message) === "cancelled" || voiceFlowAbortRequested) {
         await showResultModal("音声入力を中止しました。手動入力をご利用ください。");
+      } else if (String(err && err.message) === "permission-denied") {
+        await showResultModal("マイクの使用が許可されていません。\nブラウザ設定でマイクを許可してから再度お試しください。\n手動入力も利用できます。");
       } else {
         await showResultModal("音声入力で一部項目を認識できませんでした。手動入力に切り替えてください。");
       }
