@@ -93,6 +93,7 @@
 
     const $ = (id) => document.getElementById(id);
     const setMsg = (t) => { $("msg").textContent = t || ""; };
+    const FORCE_HYDRATION_ONCE_KEY = "tsms_force_hydration_once";
 
     async function refreshUI() {
       const { data: { session } } = await supabase.auth.getSession();
@@ -112,6 +113,7 @@
 
       const next = new URL(location.href).searchParams.get("next") || "./index.html";
       setMsg("ログイン成功。遷移します…");
+      try { sessionStorage.setItem(FORCE_HYDRATION_ONCE_KEY, "1"); } catch (_) {}
       location.href = next;
     });
 

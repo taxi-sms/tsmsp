@@ -15,6 +15,7 @@ const SESSION_RETRY_COUNT = 5;
 const SESSION_RETRY_DELAY_MS = 350;
 const OPS_KEY = "ops";
 const OPS_ARCHIVE_KEY = "ops_archive_v1";
+const FORCE_HYDRATION_ONCE_KEY = "tsms_force_hydration_once";
 
 function currentPage() {
   const p = location.pathname.split("/").pop();
@@ -50,6 +51,16 @@ function hasActiveLocalOpsState() {
     const shiftClosed = !!ops.shiftClosed;
     const breakActive = !!ops.breakActive;
     return !!((hasDepart && !hasReturn && !shiftClosed) || breakActive);
+  } catch (_) {
+    return false;
+  }
+}
+
+function consumeForceHydrationFlag() {
+  try {
+    const forced = sessionStorage.getItem(FORCE_HYDRATION_ONCE_KEY) === "1";
+    sessionStorage.removeItem(FORCE_HYDRATION_ONCE_KEY);
+    return forced;
   } catch (_) {
     return false;
   }
@@ -141,10 +152,12 @@ async function guard() {
     const alreadyReloaded = sessionStorage.getItem(reloadMarker) === "1";
     const previousUserId = getLastSyncedUserId();
     const userChanged = !!previousUserId && previousUserId !== userId;
+    const firstSyncForDevice = !previousUserId;
+    const forceHydrationOnce = consumeForceHydrationFlag();
     const preserveOpsLocal = hasActiveLocalOpsState();
     // Force restore only when user changed; otherwise prefer current local state
     // to avoid overwriting just-saved data with older cloud snapshots on page transitions.
-    const shouldForceHydration = userChanged;
+    const shouldForceHydration = userChanged || forceHydrationOnce || firstSyncForDevice;
 
     if (userChanged) {
       clearSyncedLocalState();
