@@ -1572,7 +1572,7 @@ ${remaining}秒後に${countdownLabel}`;
     }
 
     const skipSubmitConfirm = !!voiceSkipNextSubmitConfirm;
-    const successAutoRedirectSeconds = Math.max(0, Number(voiceSubmitSuccessAutoRedirectSeconds || 0));
+    const successAutoRedirectSeconds = Math.max(0, Number(voiceSubmitSuccessAutoRedirectSeconds || 5));
     voiceSkipNextSubmitConfirm = false;
     voiceSubmitSuccessAutoRedirectSeconds = 0;
 
