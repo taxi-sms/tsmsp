@@ -233,46 +233,166 @@ a{ color:var(--link); }
   .result-modal-icon.error{background:#d93025;}
   .result-modal-message{margin:0 0 14px;font-size:18px;font-weight:900;line-height:1.35;white-space:pre-line;}
   .result-modal-actions{display:grid;grid-template-columns:1fr;gap:8px;}
-  .voice-input-modal-card{max-width:min(380px,100%);}
+  .voice-input-modal-card{
+    width:min(520px,100%);
+    border-radius:16px;
+    border:1px solid #3d5f94;
+    background:
+      radial-gradient(120% 100% at 50% 0%, rgba(86,148,255,.18), rgba(10,21,44,0) 55%),
+      linear-gradient(180deg, #0f1f42 0%, #0a1733 100%);
+    box-shadow:0 10px 28px rgba(0,0,0,.45), 0 0 0 1px rgba(126,167,235,.22) inset;
+    padding:12px;
+  }
+  .voice-input-modal-head{
+    display:grid;
+    grid-template-columns:1fr auto;
+    align-items:end;
+    gap:8px;
+    margin:0 0 8px;
+    padding:2px 4px 10px;
+    border-bottom:1px solid rgba(135,168,220,.45);
+  }
+  .voice-input-modal-head .confirm-modal-title{
+    margin:0;
+    color:#eaf3ff;
+    font-size:clamp(22px,6.2vw,30px);
+    line-height:1.1;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .voice-input-modal-step{
+    margin:0;
+    color:#c8ddff;
+    font-size:24px;
+    line-height:1;
+    font-weight:900;
+    letter-spacing:.01em;
+  }
   .voice-input-modal-body{
-    border:2px solid var(--border,#ccc);
-    background:var(--surface-2,#f5f5f5);
+    border:1px solid rgba(125,164,230,.34);
+    border-radius:10px;
+    background:linear-gradient(180deg, rgba(16,31,62,.86) 0%, rgba(13,26,52,.86) 100%);
     padding:10px;
     margin:0 0 12px;
     text-align:left;
   }
-  .voice-input-modal-step{margin:0 0 8px;font-size:13px;color:var(--text-muted,#666);font-weight:700;}
-  .voice-input-modal-prompt{margin:0 0 8px;font-size:16px;font-weight:900;line-height:1.35;}
-  .voice-input-modal-status{margin:0 0 8px;font-size:13px;color:var(--text-muted,#666);line-height:1.3;}
+  .voice-input-modal-prompt{
+    margin:0 0 8px;
+    font-size:15px;
+    color:#d3e6ff;
+    font-weight:900;
+    line-height:1.35;
+  }
+  .voice-input-modal-status{
+    margin:0 0 8px;
+    font-size:13px;
+    color:#bdd6fa;
+    line-height:1.3;
+  }
   .voice-input-modal-transcript{
     margin:0;
-    min-height:38px;
-    border:1px solid var(--border,#ccc);
-    background:var(--surface-1,#fff);
-    padding:8px;
+    min-height:44px;
+    border:1px solid rgba(125,164,230,.42);
+    border-radius:8px;
+    background:rgba(11,23,44,.9);
+    padding:8px 10px;
     font-size:14px;
+    color:#e8f2ff;
     line-height:1.35;
     word-break:break-word;
     white-space:pre-wrap;
   }
-  .voice-input-modal-actions.is-single{grid-template-columns:1fr;}
-  .voice-input-modal-card{width:min(680px,100%);} 
-  .voice-input-modal-body{padding:10px 10px 12px;}
-  .voice-input-modal-dynamic{margin-top:10px;}
-  .voice-choice-guide{margin:0 0 8px;font-size:13px;color:var(--text-muted,#666);font-weight:700;}
-  .voice-choice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
-  .voice-choice-btn{display:flex;align-items:center;justify-content:flex-start;gap:8px;min-height:58px;padding:10px;}
-  .voice-choice-no{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;border:2px solid var(--border,#ccc);font-size:12px;font-weight:900;line-height:1;background:var(--surface-1,#fff);} 
-  .voice-choice-label{font-size:22px;font-weight:900;line-height:1.1;}
-  .voice-amount-guide{margin:0 0 8px;font-size:13px;color:var(--text-muted,#666);font-weight:700;}
+  .voice-input-modal-dynamic{margin-top:8px;display:grid;gap:8px;}
+  .voice-choice-guide,
+  .voice-amount-guide{
+    margin:0;
+    font-size:13px;
+    color:#bdd6fa;
+    font-weight:700;
+  }
+  .voice-choice-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:8px;
+  }
+  .voice-choice-btn{
+    display:flex;
+    align-items:center;
+    justify-content:flex-start;
+    gap:10px;
+    min-height:58px;
+    padding:10px 12px;
+    border-radius:10px;
+    border:1px solid #4a6695 !important;
+    background:linear-gradient(180deg, rgba(31,52,96,.95) 0%, rgba(17,33,67,.95) 100%) !important;
+  }
+  .voice-choice-btn.is-selected{
+    border-color:#62abff !important;
+    background:linear-gradient(180deg, #2b7fe5 0%, #1e5fbb 100%) !important;
+  }
+  .voice-choice-no{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width:28px;
+    height:28px;
+    border:1px solid #7ea6df;
+    border-radius:999px;
+    color:#d6e8ff;
+    font-size:14px;
+    font-weight:900;
+    line-height:1;
+    background:rgba(10,20,40,.75);
+  }
+  .voice-choice-label{
+    color:#f1f7ff;
+    font-size:clamp(20px,5.8vw,30px);
+    font-weight:900;
+    line-height:1.05;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
   .voice-amount-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
   .voice-amount-grid.single{grid-template-columns:1fr;}
-  .voice-amount-box{border:2px solid var(--border,#ccc);background:var(--surface-1,#fff);padding:10px;}
-  .voice-amount-box.active{border-color:#1A7A28;box-shadow:0 0 0 1px rgba(26,122,40,.18) inset;}
-  .voice-amount-label{margin:0 0 6px;font-size:12px;color:var(--text-muted,#666);font-weight:700;}
-  .voice-amount-value{font-size:28px;font-weight:900;line-height:1.1;word-break:break-all;}
-  @media (min-width:560px){
-    .voice-choice-grid{grid-template-columns:repeat(4,minmax(0,1fr));}
+  .voice-amount-box{
+    border:1px solid rgba(125,164,230,.42);
+    border-radius:10px;
+    background:rgba(11,23,44,.9);
+    padding:10px;
+  }
+  .voice-amount-box.active{
+    border-color:#62abff;
+    box-shadow:0 0 0 1px rgba(98,171,255,.28) inset;
+  }
+  .voice-amount-label{
+    margin:0 0 6px;
+    font-size:12px;
+    color:#bdd6fa;
+    font-weight:700;
+  }
+  .voice-amount-value{
+    font-size:clamp(32px,10vw,54px);
+    font-weight:900;
+    line-height:1.05;
+    text-align:right;
+    color:#f2f8ff;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .voice-input-modal-actions{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:8px;
+  }
+  .voice-input-modal-actions.is-binary{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .voice-input-modal-actions.is-single{grid-template-columns:1fr;}
+  .voice-input-modal-actions .btn{
+    min-height:52px;
+    border-radius:10px;
+    font-size:17px;
+    font-weight:900;
   }
 
 </style>
@@ -405,16 +525,19 @@ a{ color:var(--link); }
 
 <div class="confirm-modal-bg" id="voiceInputModalBg" aria-hidden="true">
   <div class="confirm-modal-card voice-input-modal-card" role="dialog" aria-modal="true" aria-labelledby="voiceInputModalTitle">
-    <p class="confirm-modal-title" id="voiceInputModalTitle">音声入力を開始しますか？</p>
-    <div class="voice-input-modal-body">
+    <div class="voice-input-modal-head">
+      <p class="confirm-modal-title" id="voiceInputModalTitle">音声入力を開始しますか？</p>
       <p class="voice-input-modal-step" id="voiceInputModalStep">開始確認</p>
+    </div>
+    <div class="voice-input-modal-body">
       <p class="voice-input-modal-prompt" id="voiceInputModalPrompt">「はい」で音声入力を開始します。</p>
       <p class="voice-input-modal-status" id="voiceInputModalStatus">手動入力は従来どおり利用できます。</p>
       <p class="voice-input-modal-transcript" id="voiceInputModalTranscript">-</p>
       <div class="voice-input-modal-dynamic" id="voiceInputModalDynamic"></div>
     </div>
-    <div class="confirm-modal-actions voice-input-modal-actions" id="voiceInputModalActions">
+    <div class="confirm-modal-actions voice-input-modal-actions is-binary" id="voiceInputModalActions">
       <button class="btn" type="button" id="voiceInputModalCancelBtn">いいえ</button>
+      <button class="btn" type="button" id="voiceInputModalRetryBtn" hidden>やり直し</button>
       <button class="btn next" type="button" id="voiceInputModalOkBtn">はい</button>
     </div>
   </div>
@@ -459,6 +582,7 @@ a{ color:var(--link); }
   const voiceInputModalActions = document.getElementById("voiceInputModalActions");
   const voiceInputModalDynamic = document.getElementById("voiceInputModalDynamic");
   const voiceInputModalCancelBtn = document.getElementById("voiceInputModalCancelBtn");
+  const voiceInputModalRetryBtn = document.getElementById("voiceInputModalRetryBtn");
   const voiceInputModalOkBtn = document.getElementById("voiceInputModalOkBtn");
   let focused = inCash;
   let voiceFlowAbortRequested = false;
@@ -709,6 +833,7 @@ ${remaining}秒後に${countdownLabel}`;
     voiceInputModalBg.classList.remove("show");
     voiceInputModalBg.setAttribute("aria-hidden", "true");
     if (voiceInputModalCancelBtn) voiceInputModalCancelBtn.onclick = null;
+    if (voiceInputModalRetryBtn) voiceInputModalRetryBtn.onclick = null;
     if (voiceInputModalOkBtn) voiceInputModalOkBtn.onclick = null;
     voiceInputModalBg.onclick = null;
     clearVoiceModalDynamic();
@@ -737,10 +862,15 @@ ${remaining}秒後に${countdownLabel}`;
     if (voiceInputModalStatus) voiceInputModalStatus.hidden = !!o.hideStatus;
     if (voiceInputModalTranscript) voiceInputModalTranscript.hidden = !!o.hideTranscript;
     if (voiceInputModalCancelBtn && "cancelText" in o) voiceInputModalCancelBtn.textContent = String(o.cancelText || "");
+    if (voiceInputModalRetryBtn && "retryText" in o) voiceInputModalRetryBtn.textContent = String(o.retryText || "");
     if (voiceInputModalOkBtn && "okText" in o) voiceInputModalOkBtn.textContent = String(o.okText || "");
     if (voiceInputModalCancelBtn && "hideCancel" in o) voiceInputModalCancelBtn.hidden = !!o.hideCancel;
+    if (voiceInputModalRetryBtn && "hideRetry" in o) voiceInputModalRetryBtn.hidden = !!o.hideRetry;
     if (voiceInputModalOkBtn && "hideOk" in o) voiceInputModalOkBtn.hidden = !!o.hideOk;
-    if (voiceInputModalActions) voiceInputModalActions.classList.toggle("is-single", !!o.singleAction);
+    if (voiceInputModalActions) {
+      voiceInputModalActions.classList.toggle("is-single", !!o.singleAction);
+      voiceInputModalActions.classList.toggle("is-binary", !!o.binaryAction);
+    }
   }
 
   function showVoiceStartModal() {
@@ -766,13 +896,17 @@ ${remaining}秒後に${countdownLabel}`;
         hideStatus: false,
         hideTranscript: true,
         cancelText: "いいえ",
+        retryText: "やり直し",
         okText: "はい",
         hideCancel: false,
+        hideRetry: true,
         hideOk: false,
-        singleAction: false
+        singleAction: false,
+        binaryAction: true
       });
       clearVoiceModalDynamic();
       voiceInputModalCancelBtn.onclick = () => finish(false);
+      if (voiceInputModalRetryBtn) voiceInputModalRetryBtn.onclick = null;
       voiceInputModalOkBtn.onclick = () => finish(true);
       voiceInputModalBg.onclick = (e) => {
         if (e.target === voiceInputModalBg) finish(false);
@@ -790,19 +924,25 @@ ${remaining}秒後に${countdownLabel}`;
     try { activeVoiceRecognition.abort(); } catch (_) {}
   }
 
-  function setupVoiceStageModal(stepLabel, promptText, statusText) {
+  function setupVoiceStageModal(titleText, stepLabel, promptText, statusText) {
     setVoiceInputModalState({
-      title: "音声入力",
+      title: titleText || "音声入力",
       step: stepLabel,
       prompt: promptText,
       status: statusText || "番号か項目をお話しください。",
       transcript: "-",
       hideTranscript: true,
       cancelText: "中止",
+      retryText: "やり直し",
+      okText: "OK",
       hideCancel: false,
+      hideRetry: true,
       hideOk: true,
-      singleAction: true
+      singleAction: true,
+      binaryAction: false
     });
+    if (voiceInputModalRetryBtn) voiceInputModalRetryBtn.onclick = null;
+    if (voiceInputModalOkBtn) voiceInputModalOkBtn.onclick = null;
     if (voiceInputModalCancelBtn) {
       voiceInputModalCancelBtn.onclick = () => {
         voiceFlowAbortRequested = true;
@@ -1175,6 +1315,7 @@ ${remaining}秒後に${countdownLabel}`;
 
   async function captureVoiceChoice(stepLabel, promptText, defs, applyFn, opts) {
     const o = opts || {};
+    const stageTitle = String(o.title || "音声入力");
     let manualValue = "";
     let attempt = 0;
 
@@ -1188,6 +1329,7 @@ ${remaining}秒後に${countdownLabel}`;
         stopActiveVoiceRecognition();
       }, o);
       setVoiceInputModalState({
+        title: stageTitle,
         step: stepLabel,
         prompt: promptText,
         status: `「${(defs.find((d) => d.value === value) || {}).label || value}」を反映しました。`,
@@ -1196,7 +1338,7 @@ ${remaining}秒後に${countdownLabel}`;
       return true;
     };
 
-    setupVoiceStageModal(stepLabel, promptText, "番号か項目をお話しください。");
+    setupVoiceStageModal(stageTitle, stepLabel, promptText, "番号か項目をお話しください。");
     renderVoiceChoiceOptions(defs, "", (picked) => {
       manualValue = picked;
       stopActiveVoiceRecognition();
@@ -1214,6 +1356,7 @@ ${remaining}秒後に${countdownLabel}`;
 
       attempt += 1;
       setVoiceInputModalState({
+        title: stageTitle,
         step: stepLabel,
         prompt: promptText,
         status: `番号か項目をお話しください（${attempt}回目）`,
@@ -1234,6 +1377,7 @@ ${remaining}秒後に${countdownLabel}`;
 
       if (!result.ok) {
         setVoiceInputModalState({
+          title: stageTitle,
           step: stepLabel,
           prompt: promptText,
           status: `聞き取れませんでした（${attempt}回目）`,
@@ -1245,6 +1389,7 @@ ${remaining}秒後に${countdownLabel}`;
       const value = resolveVoiceChoiceOrIndex(result.text, defs);
       if (!value) {
         setVoiceInputModalState({
+          title: stageTitle,
           step: stepLabel,
           prompt: promptText,
           status: `候補に一致しません（${attempt}回目）`,
@@ -1255,6 +1400,7 @@ ${remaining}秒後に${countdownLabel}`;
 
       if (!applySelection(value, result.text)) {
         setVoiceInputModalState({
+          title: stageTitle,
           step: stepLabel,
           prompt: promptText,
           status: "反映に失敗しました。もう一度お願いします。",
@@ -1272,18 +1418,20 @@ ${remaining}秒後に${countdownLabel}`;
 
   async function captureVoiceAmount(stepLabel, promptText, targetInput, opts) {
     const o = opts || {};
+    const stageTitle = String(o.title || "音声入力");
     const allowNone = !!o.allowNone;
     const showCash = !!o.showCash;
     const showCredit = !!o.showCredit;
     const activeField = o.activeField || "cash";
     let attempt = 0;
 
-    setupVoiceStageModal(stepLabel, promptText, "数字を話してください。");
+    setupVoiceStageModal(stageTitle, stepLabel, promptText, "数字を話してください。");
 
     while (!voiceFlowAbortRequested) {
       renderVoiceAmountBoxes({ showCash, showCredit, activeField });
       attempt += 1;
       setVoiceInputModalState({
+        title: stageTitle,
         step: stepLabel,
         prompt: promptText,
         status: `金額をお話しください（${attempt}回目）`,
@@ -1295,6 +1443,7 @@ ${remaining}秒後に${countdownLabel}`;
 
       if (!result.ok) {
         setVoiceInputModalState({
+          title: stageTitle,
           step: stepLabel,
           prompt: promptText,
           status: `聞き取れませんでした（${attempt}回目）`,
@@ -1318,6 +1467,7 @@ ${remaining}秒後に${countdownLabel}`;
       if (!digits && (norm === "ぜろ" || norm === "0" || norm === "れい" || norm === "まる")) digits = "0";
       if (!digits) {
         setVoiceInputModalState({
+          title: stageTitle,
           step: stepLabel,
           prompt: promptText,
           status: `数字を認識できません（${attempt}回目）`,
@@ -1329,7 +1479,7 @@ ${remaining}秒後に${countdownLabel}`;
       targetInput.value = digits;
       focused = targetInput;
       renderVoiceAmountBoxes({ showCash, showCredit, activeField });
-      setVoiceInputModalState({ status: `${formatAmountText(digits)} を反映しました。`, transcript: result.text });
+      setVoiceInputModalState({ title: stageTitle, step: stepLabel, prompt: promptText, status: `${formatAmountText(digits)} を反映しました。`, transcript: result.text });
       await waitMs(220);
       return { ok: true, value: digits, rawText: result.text };
     }
@@ -1337,16 +1487,21 @@ ${remaining}秒後に${countdownLabel}`;
     return { ok: false, cancelled: true };
   }
 
-  async function captureVoiceNote() {
+  async function captureVoiceNote(opts) {
+    const o = opts || {};
+    const stageTitle = String(o.title || "備考");
+    const stepLabel = String(o.step || "備考");
+    const promptText = String(o.prompt || "備考をお願いします。『なし』でも大丈夫です。");
     let attempt = 0;
-    setupVoiceStageModal("備考", "備考をお願いします。『なし』でも大丈夫です。", "備考をお話しください。");
+    setupVoiceStageModal(stageTitle, stepLabel, promptText, "備考をお話しください。");
 
     while (!voiceFlowAbortRequested) {
       clearVoiceModalDynamic();
       attempt += 1;
       setVoiceInputModalState({
-        step: "備考",
-        prompt: "備考をお願いします。『なし』でも大丈夫です。",
+        title: stageTitle,
+        step: stepLabel,
+        prompt: promptText,
         status: `備考をお話しください（${attempt}回目）`,
         transcript: "-",
         hideTranscript: false
@@ -1356,14 +1511,14 @@ ${remaining}秒後に${countdownLabel}`;
       if (voiceFlowAbortRequested) return { ok: false, cancelled: true };
 
       if (!result.ok) {
-        setVoiceInputModalState({ status: `聞き取れませんでした（${attempt}回目）`, transcript: result.error || "-", hideTranscript: false });
+        setVoiceInputModalState({ title: stageTitle, step: stepLabel, prompt: promptText, status: `聞き取れませんでした（${attempt}回目）`, transcript: result.error || "-", hideTranscript: false });
         continue;
       }
 
       const raw = String(result.text || "").trim();
       const norm = normalizeVoiceText(raw);
       inNote.value = (norm === "なし" || norm === "特になし") ? "" : raw;
-      setVoiceInputModalState({ status: "備考を反映しました。", transcript: raw || "なし", hideTranscript: false });
+      setVoiceInputModalState({ title: stageTitle, step: stepLabel, prompt: promptText, status: "備考を反映しました。", transcript: raw || "なし", hideTranscript: false });
       await waitMs(220);
       return { ok: true, value: inNote.value, rawText: raw };
     }
@@ -1397,7 +1552,8 @@ ${remaining}秒後に${countdownLabel}`;
   async function runVoiceAmountStage() {
     if (state.payMethod === "現金") {
       inCredit.value = "";
-      const cashRes = await captureVoiceAmount("金額入力", "金額をお願いします。", inCash, {
+      const cashRes = await captureVoiceAmount("4/8", "数字をお話しください。", inCash, {
+        title: "金額入力",
         allowNone: false,
         showCash: true,
         showCredit: false,
@@ -1408,7 +1564,8 @@ ${remaining}秒後に${countdownLabel}`;
     }
 
     if (state.payMethod === "チケット他") {
-      const cashRes = await captureVoiceAmount("現収", "現収をお願いします。ない場合は『なし』。", inCash, {
+      const cashRes = await captureVoiceAmount("4/8", "現収をお話しください。ない場合は『なし』。", inCash, {
+        title: "現収入力",
         allowNone: true,
         showCash: true,
         showCredit: true,
@@ -1416,7 +1573,8 @@ ${remaining}秒後に${countdownLabel}`;
       });
       if (!cashRes.ok) return cashRes;
 
-      const creditRes = await captureVoiceAmount("未収", "未収をお願いします。ない場合は『なし』。", inCredit, {
+      const creditRes = await captureVoiceAmount("5/8", "未収をお話しください。ない場合は『なし』。", inCredit, {
+        title: "未収入力",
         allowNone: true,
         showCash: true,
         showCredit: true,
@@ -1428,7 +1586,8 @@ ${remaining}秒後に${countdownLabel}`;
     }
 
     inCash.value = "";
-    const creditRes = await captureVoiceAmount("金額入力", "金額をお願いします。", inCredit, {
+    const creditRes = await captureVoiceAmount("4/8", "数字をお話しください。", inCredit, {
+      title: "金額入力",
       allowNone: false,
       showCash: false,
       showCredit: true,
@@ -1436,6 +1595,78 @@ ${remaining}秒後に${countdownLabel}`;
     });
     if (!creditRes.ok) return creditRes;
     return { ok: true };
+  }
+
+  function getVoiceAmountVisibility() {
+    if (state.payMethod === "現金") return { showCash: true, showCredit: false };
+    if (state.payMethod === "チケット他") return { showCash: true, showCredit: true };
+    return { showCash: false, showCredit: true };
+  }
+
+  function showVoiceAmountReviewModal() {
+    return new Promise((resolve) => {
+      let done = false;
+      const finish = (payload) => {
+        if (done) return;
+        done = true;
+        resolve(payload);
+      };
+
+      const vis = getVoiceAmountVisibility();
+      setVoiceInputModalState({
+        title: "金額確認",
+        step: "6/8",
+        prompt: "入力した金額を確認してください。",
+        status: "修正する場合は「やり直し」を押してください。",
+        transcript: "",
+        hideTranscript: true,
+        cancelText: "中止",
+        retryText: "やり直し",
+        okText: "OK",
+        hideCancel: false,
+        hideRetry: false,
+        hideOk: false,
+        singleAction: false,
+        binaryAction: false
+      });
+
+      clearVoiceModalDynamic();
+      appendVoiceAmountSnapshot(voiceInputModalDynamic, {
+        showCash: vis.showCash,
+        showCredit: vis.showCredit,
+        guideText: "現在の入力金額"
+      });
+
+      if (voiceInputModalCancelBtn) {
+        voiceInputModalCancelBtn.onclick = () => {
+          voiceFlowAbortRequested = true;
+          finish({ ok: false, cancelled: true });
+        };
+      }
+      if (voiceInputModalRetryBtn) {
+        voiceInputModalRetryBtn.onclick = () => finish({ ok: false, retry: true });
+      }
+      if (voiceInputModalOkBtn) {
+        voiceInputModalOkBtn.onclick = () => finish({ ok: true });
+      }
+      if (voiceInputModalBg) {
+        voiceInputModalBg.onclick = (e) => {
+          if (e.target === voiceInputModalBg) {
+            voiceFlowAbortRequested = true;
+            finish({ ok: false, cancelled: true });
+          }
+        };
+      }
+      setVoiceModalEscHandler((e) => {
+        if (e.key === "Escape") {
+          voiceFlowAbortRequested = true;
+          finish({ ok: false, cancelled: true });
+        }
+      });
+
+      openVoiceInputModal();
+      if (voiceInputModalOkBtn) voiceInputModalOkBtn.focus();
+    });
   }
 
   async function startVoiceInputFlow() {
@@ -1447,14 +1678,20 @@ ${remaining}秒後に${countdownLabel}`;
     voiceFlowAbortRequested = false;
 
     try {
-      const rideRes = await captureVoiceChoice("乗車種別", "乗車種別を選択してください。", VOICE_RIDE_TYPE_DEFS, (value) => setGroupSelectionDirect("rideType", value));
+      const rideRes = await captureVoiceChoice("1/8", "番号か項目をお話しください。", VOICE_RIDE_TYPE_DEFS, (value) => setGroupSelectionDirect("rideType", value), {
+        title: "乗車種別を選択してください"
+      });
       if (!rideRes.ok) throw new Error(rideRes.cancelled ? "cancelled" : "rideType");
 
-      const payRes = await captureVoiceChoice("支払方法", "支払方法を選択してください。", VOICE_PAY_METHOD_DEFS, (value) => setGroupSelectionDirect("payMethod", value));
+      const payRes = await captureVoiceChoice("2/8", "番号か項目をお話しください。", VOICE_PAY_METHOD_DEFS, (value) => setGroupSelectionDirect("payMethod", value), {
+        title: "支払方法を選択してください"
+      });
       if (!payRes.ok) throw new Error(payRes.cancelled ? "cancelled" : "payMethod");
 
       if (state.payMethod === "チケット他") {
-        const ticketRes = await captureVoiceChoice("チケット種別", "チケット種別を選択してください。", VOICE_TICKET_SUB_DEFS, (value) => setGroupSelectionDirect("ticketSub", value));
+        const ticketRes = await captureVoiceChoice("3/8", "番号か項目をお話しください。", VOICE_TICKET_SUB_DEFS, (value) => setGroupSelectionDirect("ticketSub", value), {
+          title: "チケット種別を選択してください"
+        });
         if (!ticketRes.ok) throw new Error(ticketRes.cancelled ? "cancelled" : "ticketSub");
       }
 
@@ -1465,25 +1702,31 @@ ${remaining}秒後に${countdownLabel}`;
         const hasCash = !!String(inCash.value || "").trim();
         const hasCredit = !!String(inCredit.value || "").trim();
         if (!hasCash && !hasCredit) {
-          setVoiceInputModalState({ status: "現収または未収のどちらかを入力してください。", transcript: "-" });
+          setVoiceInputModalState({ title: "金額入力", step: "6/8", prompt: "入力した金額を確認してください。", status: "現収または未収のどちらかを入力してください。", transcript: "-" });
           continue;
         }
 
-        const modifyAns = await captureVoiceYesNo("金額確認", "金額の修正はありますか？", {
-          guideText: "番号か項目をお話しください。タップでも選択できます。",
-          beforeRender: (container) => {
-            appendVoiceAmountSnapshot(container, {
-              showCash: true,
-              showCredit: true,
-              guideText: "現在の入力金額"
-            });
+        const reviewAns = await showVoiceAmountReviewModal();
+        if (reviewAns.cancelled) throw new Error("cancelled");
+        if (reviewAns.retry) {
+          if (state.payMethod === "現金") inCash.value = "";
+          else if (state.payMethod === "チケット他") {
+            inCash.value = "";
+            inCredit.value = "";
+          } else {
+            inCredit.value = "";
           }
-        });
-        if (!modifyAns.ok) throw new Error(modifyAns.cancelled ? "cancelled" : "amount-confirm");
-        if (!modifyAns.yes) break;
+          continue;
+        }
+        if (!reviewAns.ok) throw new Error("amount-confirm");
+        break;
       }
 
-      const noteRes = await captureVoiceNote();
+      const noteRes = await captureVoiceNote({
+        title: "備考入力",
+        step: "7/8",
+        prompt: "備考をお話しください。『なし』でも大丈夫です。"
+      });
       if (!noteRes.ok) throw new Error(noteRes.cancelled ? "cancelled" : "note");
 
       closeVoiceInputModal();
