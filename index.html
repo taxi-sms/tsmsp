@@ -137,6 +137,11 @@ body{padding-bottom:78px;}
   box-shadow:inset 0 0 0 1px rgba(255,255,255,.05);
 }
 .swipe-track.locked{ border-color:var(--accent); }
+.swipe-track.locked .swipe-label{
+  left:12px;
+  right:12px;
+  text-align:center;
+}
 .swipe-label{
   position:absolute;
   left:72px;
@@ -179,27 +184,6 @@ body{padding-bottom:78px;}
   box-shadow:0 4px 14px rgba(45,140,255,.45);
 }
 .swipe-track.dragging .swipe-handle{ transition:none !important; }
-.dispatch-status{
-  position:absolute;
-  right:12px;
-  bottom:4px;
-  margin:0;
-  border:0;
-  background:transparent;
-  padding:0;
-  font-size:12px;
-  line-height:1.2;
-  letter-spacing:.01em;
-  font-weight:700;
-  color:var(--text-muted);
-  pointer-events:none;
-}
-:root[data-theme="dark"] .dispatch-status{
-  color:#b7c9e8;
-}
-.dispatch-status.ok{
-  color:#9fd0ff;
-}
 .calendar-head{
   display:flex;
   justify-content:space-between;
@@ -400,7 +384,6 @@ body{padding-bottom:78px;}
     <div class="swipe-track" id="dispatchSwipeTrack">
       <span class="swipe-label" id="dispatchSwipeLabel">右にスワイプして出庫</span>
       <button type="button" class="swipe-handle" id="dispatchSwipeHandle" aria-label="右にスワイプして出庫">›</button>
-      <p class="dispatch-status" id="dispatchState">未出庫</p>
     </div>
   </section>
 
@@ -465,7 +448,6 @@ body{padding-bottom:78px;}
   var dispatchTrack = document.getElementById("dispatchSwipeTrack");
   var dispatchHandle = document.getElementById("dispatchSwipeHandle");
   var dispatchLabel = document.getElementById("dispatchSwipeLabel");
-  var dispatchState = document.getElementById("dispatchState");
   var calendarMonthTitle = document.getElementById("calendarMonthTitle");
   var calendarPrevBtn = document.getElementById("calendarPrevBtn");
   var calendarNextBtn = document.getElementById("calendarNextBtn");
@@ -568,10 +550,11 @@ body{padding-bottom:78px;}
     dispatchHandle.style.transition = animate ? "transform .18s ease" : "none";
     dispatchHandle.style.transform = "translate3d(" + x + "px,-50%,0)";
   }
-  function lockDispatchSlider(){
+  function lockDispatchSlider(departAt){
     if(!dispatchTrack || !dispatchLabel) return;
     dispatchTrack.classList.add("locked");
-    dispatchLabel.textContent = "出庫済み";
+    var t = fmtHm(departAt);
+    dispatchLabel.textContent = "出庫済み " + (t === "--:--" ? "" : t);
     setHandlePos(getMaxHandleX(), true);
   }
   function unlockDispatchSlider(){
@@ -583,20 +566,11 @@ body{padding-bottom:78px;}
   }
 
   function renderDispatchState(){
-    if(!dispatchState) return;
     var d = loadOps();
     if(d.departAt){
-      dispatchState.classList.add("ok");
-      if(d.returnAt){
-        dispatchState.textContent = "出庫 " + fmtHm(d.departAt) + " / 帰庫 " + fmtHm(d.returnAt);
-      }else{
-        dispatchState.textContent = "出庫完了 " + fmtHm(d.departAt);
-      }
-      lockDispatchSlider();
+      lockDispatchSlider(d.departAt);
       return;
     }
-    dispatchState.classList.remove("ok");
-    dispatchState.textContent = "未出庫";
     unlockDispatchSlider();
   }
 
