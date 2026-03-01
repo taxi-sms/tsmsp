@@ -4,16 +4,21 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>月間管理</title>
-  <style>
+    <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
     :root{ --bg:#fff; --text:#111; --muted:#666; --border:#999; }
-    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:"Noto Sans JP", sans-serif;font-size:16px;}
-    .main{padding:10px;max-width:980px;margin:0 auto;}
-    .panel{border:2px solid var(--border);background:#fff;margin:8px 0;padding:8px;}
-    .label{font-size:12px;color:var(--muted);margin:0 0 4px 0;}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:"Noto Sans JP", sans-serif;font-size:18px;}
+    .main{padding:12px;max-width:980px;margin:0 auto;}
+    .panel{border:0 !important;background:transparent !important;margin:8px 0;padding:4px 0 2px;}
+    .panel .label{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted);margin:0 0 8px 0;font-weight:900;}
+    .panel .label::after{content:"";flex:1 1 auto;border-top:2px solid var(--border);opacity:.95;}
     .input{width:100%;box-sizing:border-box;border:2px solid var(--border);padding:10px 8px;font-size:18px;background:#fff;color:inherit;}
 
     .tsms-header{position:sticky; top:0; z-index:100;height:60px; background:#fff;border-bottom:2px solid #000;display:flex; align-items:center;padding:0 14px 0 56px;font-weight:900; font-size:20px;}
-    .header-to-report{margin-left:auto;border:2px solid #000;padding:6px 10px;font-size:14px;font-weight:900;color:#000;text-decoration:none;line-height:1.2;background:#fff;}
+    .header-actions{margin-left:auto;display:flex;gap:8px;align-items:center;}
+    .header-to-report,.header-manual-edit{border:2px solid #000;padding:6px 10px;font-size:14px;font-weight:900;color:#000;text-decoration:none;line-height:1.2;background:#fff;cursor:pointer;}
+    .header-manual-edit.active{background:#dff2ff;border-color:#187FBF;color:#0a4f7a;}
     .tsms-hamburger{position:absolute; left:14px; top:50%;transform:translateY(-50%);width:32px; height:24px;display:flex; flex-direction:column; justify-content:space-between;cursor:pointer; user-select:none;}
     .tsms-hamburger span{ height:3px; background:#000; display:block; }
     .tsms-menu{position:fixed; top:0; left:0; height:100%; width:280px;background:#fff; border-right:2px solid #000;transform:translateX(-100%);transition:transform .25s ease;z-index:1000; padding-top:60px;}
@@ -30,7 +35,7 @@
     td.date.sat{background:var(--week-sat-bg);color:var(--weekend-text);font-weight:800;}
     td.date.sun{background:var(--week-sun-bg);color:var(--weekend-text);font-weight:800;}
     td.date.holiday{background:var(--week-sun-bg);color:var(--weekend-text);font-weight:800;}
-    .sum-row td{background:#55cad8;font-weight:900;border:2px solid var(--border);}
+    .sum-row td{background:#55cad8;color:#111;font-weight:900;border:2px solid var(--border);}
 
     .shift-btn{appearance:none;border:none;color:#fff;font-weight:900;border-radius:6px;padding:4px 2px;min-height:28px;width:100%;font-size:11px;}
     .shift-btn:disabled{opacity:.55;filter:grayscale(.25);}
@@ -41,7 +46,8 @@
     .s-furidashi{background:#1c9b2d;}
     .s-furikyu{background:#f0ad00;color:#1d1d1d;}
 
-    .target-input{width:100%;box-sizing:border-box;border:1px solid var(--border);padding:3px 2px;font-size:11px;text-align:right;background:var(--surface-1);color:inherit;}
+    .target-input,.manual-input{width:100%;box-sizing:border-box;border:1px solid var(--border);padding:3px 2px;font-size:11px;text-align:right;background:var(--surface-1);color:inherit;}
+    .manual-input.time{text-align:center;}
     td.muted, .muted .target-input{background:var(--disabled-bg) !important;color:var(--disabled-text) !important;}
 
     /* ---- Theme tokens ---- */
@@ -51,13 +57,13 @@
     a{ color:var(--link); }
     .tsms-header,.header,.app-header,.card,.wf-panel,.section,.date-switcher,.menu,.tsms-menu,.box,.panel{background:var(--surface-1)!important;border-color:var(--border)!important;color:var(--text-primary)!important;}
     .note,.wf-field-label,.label,.k,.idx,.desc,.wf-subnote,.wf-field-label{color:var(--text-muted)!important;}
-    .tsms-menu a,.menu a,.header-to-report,.btn,.actionBtn,.key,.input,select,.key.small{background:var(--surface-2)!important;color:var(--text-primary)!important;border-color:var(--border)!important;}
+    .tsms-menu a,.menu a,.header-to-report,.header-manual-edit,.btn,.actionBtn,.key,.input,select,.key.small{background:var(--surface-2)!important;color:var(--text-primary)!important;border-color:var(--border)!important;}
     .menu small,.tsms-menu small{color:var(--text-muted)!important;}
     .menu-bg,.tsms-menu-bg{background:rgba(15,23,32,.35)!important;}
     .hamburger span,.tsms-hamburger span{background:#58C2FF!important;}
     /* ---- Theme tokens end ---- */
   </style>
-  <link rel="manifest" href="manifest.json">
+<link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#ffffff">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -69,7 +75,6 @@
   body{padding-bottom:78px;}
   .tsms-hamburger,.hamburger,.tsms-menu,.menu,.tsms-menu-bg,.menu-bg{display:none!important;}
   .tsms-header,.header{padding-left:14px!important;}
-  .tsms-header::before,.header::before{content:"";display:inline-block;width:22px;height:22px;flex:0 0 22px;margin-right:8px;background:url('icon.png') center/contain no-repeat;}
   .tsms-bottom-nav{position:fixed;left:0;right:0;bottom:0;z-index:1200;display:grid;grid-template-columns:repeat(5,1fr);background:var(--surface-1,#fff);border-top:2px solid var(--border,#ccc);padding-bottom:env(safe-area-inset-bottom);}
   .tsms-bottom-nav a,.tsms-bottom-nav button{appearance:none;border:0;background:transparent;color:var(--text-secondary,#445);font:inherit;font-size:11px;font-weight:900;padding:8px 2px 9px;min-height:58px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-decoration:none;}
   .tsms-bottom-nav .ico{width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;color:#58C2FF;}
@@ -83,7 +88,114 @@
   .tsms-more-bg.show{opacity:1;pointer-events:auto;}
 </style>
 
-  <script type="module" src="auth-guard.js"></script>
+  <script type="module" src="auth-guard.js?v=20260223-5"></script>
+  <script src="./custom-confirm.js"></script>
+  <link rel="stylesheet" href="./tsms-design.css?v=20260227-3">
+  <style id="sales-manual-table-lock">
+    .table-wrap td{
+      padding:3px 2px;
+    }
+    .table-wrap .target-input,
+    .table-wrap .manual-input{
+      box-sizing:border-box;
+      display:block;
+      width:calc(100% - 6px);
+      max-width:64px;
+      margin:0 auto;
+      font-size:11px!important;
+      line-height:1.2;
+      padding:3px 2px;
+    }
+    .table-wrap .manual-input.time{
+      max-width:58px;
+      text-align:center;
+    }
+  </style>
+  <style id="sales-unified-layout-tweaks">
+    .main{
+      padding:var(--space-3) 14px;
+    }
+    .panel{
+      margin:var(--space-2) 0;
+      padding:var(--space-2) var(--space-3) var(--space-2);
+    }
+    .panel .label{
+      margin:0 0 var(--space-3) 0;
+      font-size:var(--font-lg);
+      gap:var(--space-2);
+      color:var(--text-muted);
+    }
+    .panel .label::after{
+      border-top:var(--line-regular) solid var(--border);
+    }
+    .input{
+      border:var(--line-strong) solid var(--border);
+      border-radius:var(--radius-sm);
+      background:var(--surface-2);
+      color:var(--text-primary);
+      padding:11px 12px;
+      font-size:var(--font-2xl);
+      min-height:var(--control-h-md);
+    }
+    .table-wrap{
+      border:var(--line-strong) solid var(--border);
+      border-radius:var(--radius-md);
+      background:var(--surface-1);
+    }
+    .tsms-header{
+      border-bottom:var(--line-strong) solid var(--border);
+      background:var(--surface-1);
+      color:var(--text-primary);
+      font-size:var(--font-4xl);
+    }
+    .header-actions{
+      gap:var(--space-2);
+    }
+    .header-to-report,
+    .header-manual-edit{
+      border:var(--line-strong) solid var(--border);
+      border-radius:var(--radius-sm);
+      background:var(--surface-2);
+      color:var(--text-primary);
+      font-size:var(--font-lg);
+      padding:6px 10px;
+      min-height:var(--touch-min);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .header-manual-edit.active{
+      background:var(--accent-light);
+      border-color:var(--accent);
+      color:var(--text-primary);
+    }
+    .shift-btn{
+      border-radius:var(--radius-sm);
+    }
+    .target-input,
+    .manual-input{
+      border:var(--line-thin) solid var(--border);
+      border-radius:4px;
+      background:var(--surface-1);
+      color:var(--text-primary);
+    }
+    .sum-row td{
+      border:var(--line-strong) solid var(--border);
+    }
+    @media (max-width:420px){
+      .header-actions{
+        gap:6px;
+      }
+      .header-to-report,
+      .header-manual-edit{
+        font-size:var(--font-md);
+        padding:5px 8px;
+      }
+      .panel{
+        padding:var(--space-2) var(--space-2) var(--space-2);
+      }
+    }
+  </style>
 </head>
 <body>
 <nav class="tsms-menu" id="tsmsMenu" aria-label="サイドメニュー">
@@ -100,7 +212,10 @@
 <header class="tsms-header">
   <div class="tsms-hamburger" id="tsmsHamburger" role="button" tabindex="0" aria-label="メニュー"><span></span><span></span><span></span></div>
   月間管理
-  <a class="header-to-report" href="report.html">入力画面へ</a>
+  <div class="header-actions">
+    <button type="button" class="header-manual-edit" id="manualEditBtn">手動編集</button>
+    <a class="header-to-report" href="report.html">入力画面へ</a>
+  </div>
 </header>
 
 <main class="main">
@@ -146,8 +261,12 @@
   const REPORT_KEY='tsms_reports';
   const REPORT_ARCHIVE_KEY='tsms_reports_archive';
   const OPS_KEY='ops';
+  const OPS_ARCHIVE_KEY='ops_archive_v1'; // ★追加：opsクリア後はここを見る
+
   const SETTINGS_KEY='tsms_settings';
   const PLAN_KEY='tsms_sales_plan';
+  const MANUAL_KEY='tsms_sales_manual_v1';
+  const MANUAL_MODE_KEY='tsms_sales_manual_mode';
   const HOLIDAY_KEY='tsms_holidays_jp_v1';
   const SALES_RESET_TOKEN_KEY='tsms_sales_reset_token';
   const SALES_RESET_TOKEN='20260216-reset-1';
@@ -159,6 +278,8 @@
 
   const monthSelect=document.getElementById('monthSelect');
   const tbody=document.getElementById('tbody');
+  const manualEditBtn=document.getElementById('manualEditBtn');
+  let manualEditMode = localStorage.getItem(MANUAL_MODE_KEY)==='1';
 
   function loadJson(k,f){try{const v=JSON.parse(localStorage.getItem(k)||'null');return v==null?f:v;}catch(_){return f;}}
   function saveJson(k,v){localStorage.setItem(k,JSON.stringify(v));}
@@ -166,19 +287,31 @@
     try{
       const done = localStorage.getItem(SALES_RESET_TOKEN_KEY);
       if(done === SALES_RESET_TOKEN) return;
-      localStorage.removeItem(PLAN_KEY);
+      // Keep existing plan data. Only record migration marker.
       localStorage.setItem(SALES_RESET_TOKEN_KEY, SALES_RESET_TOKEN);
     }catch(_){ }
   }
   function ymd(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
-  function parseYmd(s){const [y,m,d]=String(s).split('-').map(Number);return new Date(y,m-1,d);}  
+  function parseYmd(s){const [y,m,d]=String(s).split('-').map(Number);return new Date(y,m-1,d);}
   function addDays(d,n){const x=new Date(d);x.setDate(x.getDate()+n);return x;}
   function addMonths(d,n){const x=new Date(d);x.setMonth(x.getMonth()+n);return x;}
   function fmtNum(v){return Math.round(Number(v)||0).toLocaleString('ja-JP');}
   function pad2(n){return String(n).padStart(2,'0');}
   function hm(totalMin){const m=Math.max(0,Math.round(Number(totalMin)||0));return `${Math.floor(m/60)}:${pad2(m%60)}`;}
+  function parseHmToMin(v){
+    if(!v) return NaN;
+    const m=String(v).trim().match(/^(\d{1,2}):(\d{2})$/);
+    if(!m) return NaN;
+    const h=Number(m[1]), mm=Number(m[2]);
+    if(!Number.isFinite(h) || !Number.isFinite(mm) || mm<0 || mm>59) return NaN;
+    return h*60 + mm;
+  }
   function dowJa(d){return ['日','月','火','水','木','金','土'][d.getDay()];}
-  function minDiff(a,b){const x=new Date(a).getTime(), y=new Date(b).getTime(); if(isNaN(x)||isNaN(y)) return 0; return Math.max(0,Math.round((y-x)/60000));}
+  function minDiff(a,b){
+    const x=new Date(a).getTime(), y=new Date(b).getTime();
+    if(isNaN(x)||isNaN(y)) return 0;
+    return Math.max(0,Math.round((y-x)/60000));
+  }
   function todayYmd(){ const n=new Date(); return ymd(new Date(n.getFullYear(),n.getMonth(),n.getDate())); }
 
   async function loadHolidaySet(){
@@ -256,10 +389,25 @@
     return Math.round(salesExTax * (Number(settings.walkRate)||0) / 100);
   }
 
-  function calcOpsDay(dayId){
-    const ops=loadJson(OPS_KEY,{});
+  // ★追加：dayIdに対応するopsデータを「アーカイブ優先 → なければ当日のops」
+  function getOpsForDay(dayId){
+    try{
+      const arch = loadJson(OPS_ARCHIVE_KEY, {});
+      if(arch && typeof arch === 'object' && arch[dayId] && arch[dayId].returnAt){
+        return arch[dayId];
+      }
+    }catch(_){}
+
+    const ops = loadJson(OPS_KEY, null);
+    if(!ops) return null;
     const opsDay = (ops && ops.dayId) ? String(ops.dayId) : String(localStorage.getItem('tsms_report_current_day')||'');
-    if(!ops || opsDay!==dayId || !ops.returnAt) return null;
+    if(opsDay!==dayId || !ops.returnAt) return null;
+    return ops;
+  }
+
+  function calcOpsDay(dayId){
+    const ops = getOpsForDay(dayId);
+    if(!ops || !ops.returnAt) return null;
     const depart=ops.departAt?new Date(ops.departAt):null;
     const ret=ops.returnAt?new Date(ops.returnAt):null;
     const breakMin=(ops.breakSessions||[]).reduce((s,x)=>s+(Number(x.minutes)||0),0);
@@ -273,13 +421,40 @@
 
   function getPlan(){ return loadJson(PLAN_KEY, {}); }
   function savePlan(p){ saveJson(PLAN_KEY, p); }
+  function getManual(){ return loadJson(MANUAL_KEY, {}); }
+  function saveManual(m){ saveJson(MANUAL_KEY, m); }
+  function setManualButtonState(){
+    if(!manualEditBtn) return;
+    manualEditBtn.classList.toggle('active', manualEditMode);
+    manualEditBtn.setAttribute('aria-pressed', manualEditMode?'true':'false');
+  }
 
-  function buildPeriods(settings,reports){
+  function buildPeriods(settings,reports,plan){
     const set = new Map();
     const seed=[new Date()];
+
     reports.forEach(r=>{ const d=parseYmd(toDayId(r)); if(!isNaN(d)) seed.push(d); });
+
+    // ★追加：ops（当日）も seed に入れる
     const ops=loadJson(OPS_KEY,{});
     if(ops && ops.dayId){ const d=parseYmd(ops.dayId); if(!isNaN(d)) seed.push(d); }
+
+    // ★追加：opsアーカイブの日付も seed に入れる（売上が無い日でも勤務実績があるケース対策）
+    const opsArch = loadJson(OPS_ARCHIVE_KEY, {});
+    if(opsArch && typeof opsArch === 'object'){
+      Object.keys(opsArch).forEach((k)=>{
+        const d=parseYmd(k);
+        if(!isNaN(d)) seed.push(d);
+      });
+    }
+
+    // plan（日別目標）の日付も seed に入れる
+    if(plan && typeof plan === 'object'){
+      Object.keys(plan).forEach((k)=>{
+        const d=parseYmd(k);
+        if(!isNaN(d)) seed.push(d);
+      });
+    }
 
     // data-derived periods
     seed.forEach(d=>{ const p=getPeriodForDate(d, Number(settings.closeStartDay)||16, Number(settings.closeEndDay)||15); set.set(periodId(p), p); });
@@ -312,7 +487,7 @@
     const settings=getSettings();
     const reports=getAllReports();
     const plan=getPlan();
-    const periods=buildPeriods(settings,reports);
+    const periods=buildPeriods(settings,reports,plan);
 
     if(!monthSelect.options.length){
       monthSelect.innerHTML=periods.map(p=>`<option value="${periodId(p)}">${periodLabel(p)}</option>`).join('');
@@ -323,6 +498,8 @@
     if(!period) return;
     const days=periodDays(period);
     const todayId = todayYmd();
+    const manual = getManual();
+    const reportedDaySet = new Set(reports.map((r)=>toDayId(r)).filter(Boolean));
 
     tbody.innerHTML='';
     let sumTarget=0,sumResult=0,sumDiff=0,sumWork=0,sumBreak=0;
@@ -330,22 +507,41 @@
     days.forEach((d,idx)=>{
       const dayId=ymd(d);
       if(!plan[dayId]) plan[dayId]={ shift:'work', target:'' };
-
-
       const row=plan[dayId];
+      // Backfill legacy plan rows that were saved without shift/target fields.
+      if(!row.shift) row.shift='work';
+      if(row.target==null) row.target='';
       const shift=row.shift;
       const active=(shift==='work' || shift==='part' || shift==='furidashi');
       const pastLocked = dayId < todayId;
+
       const result=active?calcDayNet(dayId,reports,settings):0;
+      const hasTargetInput = row.target!=null && String(row.target).trim()!=='';
       const target=active?(Number(row.target)||0):0;
-      const diff=result-target;
       const opsData=active?calcOpsDay(dayId):null;
       const workMin=opsData?opsData.workMin:0;
       const breakMin=opsData?opsData.breakMin:0;
-      const hour=workMin>0?Math.round(result/(workMin/60)):0;
+      const manualRow=manual[dayId]||{};
+      const manualResult=Number(String(manualRow.result||'').replace(/[^0-9]/g,''));
+      const manualWorkMin=parseHmToMin(manualRow.work);
+      const manualBreakMin=parseHmToMin(manualRow.break);
+      const hasManualResult = manualRow.result!=null && String(manualRow.result).trim()!=='';
+      const hasReportedResult = reportedDaySet.has(dayId);
+      const hasResultInput = hasManualResult || hasReportedResult;
+      const hasManualDepart = manualRow.depart!=null && String(manualRow.depart).trim()!=='';
+      const hasManualWork = manualRow.work!=null && String(manualRow.work).trim()!=='';
+      const hasManualBreak = manualRow.break!=null && String(manualRow.break).trim()!=='';
+      const showResult=(hasManualResult && Number.isFinite(manualResult))?manualResult:result;
+      const showWorkMin=(hasManualWork && Number.isFinite(manualWorkMin))?manualWorkMin:workMin;
+      const showBreakMin=(hasManualBreak && Number.isFinite(manualBreakMin))?manualBreakMin:breakMin;
+      const showDepart=hasManualDepart?manualRow.depart:(opsData?opsData.depart:'--');
+      const shouldCalcDiff = active && hasTargetInput && hasResultInput;
+      const diff=shouldCalcDiff?(showResult-target):null;
+      const hour=showWorkMin>0?Math.round(showResult/(showWorkMin/60)):0;
+      const showHourText=(hasManualResult || hasManualWork || opsData)?fmtNum(hour):'--';
 
       if(active){
-        sumTarget+=target; sumResult+=result; sumDiff+=diff; sumWork+=workMin; sumBreak+=breakMin;
+        sumTarget+=target; sumResult+=showResult; if(shouldCalcDiff) sumDiff+=diff; sumWork+=showWorkMin; sumBreak+=showBreakMin;
       }
 
       const tr=document.createElement('tr');
@@ -354,16 +550,16 @@
       const wkCls=wk===6?'sat':((wk===0||isHoliday)?'sun holiday':'');
       tr.innerHTML=`
         <td>
-          <button type="button" class="shift-btn ${SHIFT_CLASS[shift]}" data-day="${dayId}" ${pastLocked?'disabled':''}>${SHIFT_LABEL[shift]}</button>
+          <button type="button" class="shift-btn ${SHIFT_CLASS[shift]}" data-day="${dayId}" ${(pastLocked && !manualEditMode)?'disabled':''}>${SHIFT_LABEL[shift]}</button>
         </td>
         <td class="date ${wkCls}">${d.getMonth()+1}/${d.getDate()}(${dowJa(d)})</td>
-        <td class="${active?'':'muted'}"><input class="target-input" data-target="${dayId}" value="${active?(row.target||''):''}" ${(active && !pastLocked)?'':'disabled'} inputmode="numeric"></td>
-        <td class="${active?'':'muted'}">${active?fmtNum(result):'-'}</td>
-        <td class="${active?'':'muted'}">${active?(diff>=0?`+${fmtNum(diff)}`:`-${fmtNum(Math.abs(diff))}`):'-'}</td>
-        <td class="${active?'':'muted'}">${active?(opsData?opsData.depart:'--'):'-'}</td>
-        <td class="${active?'':'muted'}">${active?(opsData?hm(workMin):'--'):'-'}</td>
-        <td class="${active?'':'muted'}">${active?(opsData?hm(breakMin):'--'):'-'}</td>
-        <td class="${active?'':'muted'}">${active?(opsData?fmtNum(hour):'--'):'-'}</td>
+        <td class="${(active||manualEditMode)?'':'muted'}"><input class="target-input" data-target="${dayId}" value="${String(row.target||'').replace(/[^0-9]/g,'')}" ${((manualEditMode || active) && (manualEditMode || !pastLocked))?'':'disabled'} inputmode="numeric"></td>
+        <td class="${(active||manualEditMode)?'':'muted'}">${manualEditMode?`<input class="manual-input" data-manual="result" data-day="${dayId}" value="${(manualRow.result!=null && String(manualRow.result).trim()!=='')?String(manualRow.result).replace(/[^0-9]/g,''):String(result)}" inputmode="numeric">`:(active?fmtNum(showResult):'-')}</td>
+        <td class="${active?'':'muted'}">${active?(shouldCalcDiff?(diff>=0?`+${fmtNum(diff)}`:`-${fmtNum(Math.abs(diff))}`):'-'):'-'}</td>
+        <td class="${(active||manualEditMode)?'':'muted'}">${manualEditMode?`<input class="manual-input time" data-manual="depart" data-day="${dayId}" value="${(manualRow.depart!=null && String(manualRow.depart).trim()!=='')?manualRow.depart:(showDepart==='--'?'':showDepart)}" placeholder="--:--">`:(active?showDepart:'-')}</td>
+        <td class="${(active||manualEditMode)?'':'muted'}">${manualEditMode?`<input class="manual-input time" data-manual="work" data-day="${dayId}" value="${(manualRow.work!=null && String(manualRow.work).trim()!=='')?manualRow.work:(opsData?hm(workMin):'')}" placeholder="0:00">`:(active?(hasManualWork?hm(showWorkMin):(opsData?hm(showWorkMin):'--')):'-')}</td>
+        <td class="${(active||manualEditMode)?'':'muted'}">${manualEditMode?`<input class="manual-input time" data-manual="break" data-day="${dayId}" value="${(manualRow.break!=null && String(manualRow.break).trim()!=='')?manualRow.break:(opsData?hm(breakMin):'')}" placeholder="0:00">`:(active?(hasManualBreak?hm(showBreakMin):(opsData?hm(showBreakMin):'--')):'-')}</td>
+        <td class="${active?'':'muted'}">${active?showHourText:'-'}</td>
       `;
       tbody.appendChild(tr);
     });
@@ -380,6 +576,14 @@
 
   let holidaySet = new Set();
   monthSelect.addEventListener('change', ()=>render(holidaySet));
+  if(manualEditBtn){
+    manualEditBtn.addEventListener('click', ()=>{
+      manualEditMode=!manualEditMode;
+      localStorage.setItem(MANUAL_MODE_KEY, manualEditMode?'1':'0');
+      setManualButtonState();
+      render(holidaySet);
+    });
+  }
 
   tbody.addEventListener('click',(e)=>{
     const btn=e.target.closest('.shift-btn');
@@ -403,13 +607,33 @@
     savePlan(plan);
   });
 
+  tbody.addEventListener('input',(e)=>{
+    const input=e.target.closest('input[data-manual]');
+    if(!input) return;
+    const day=input.dataset.day;
+    const kind=input.dataset.manual;
+    if(!day || !kind) return;
+    const manual=getManual();
+    if(!manual[day]) manual[day]={};
+    if(kind==='result'){
+      manual[day][kind]=String(input.value||'').replace(/[^0-9]/g,'');
+      input.value=manual[day][kind];
+    }else{
+      manual[day][kind]=String(input.value||'').replace(/[^0-9:]/g,'').slice(0,5);
+      input.value=manual[day][kind];
+    }
+    saveManual(manual);
+  });
+
   tbody.addEventListener('change',(e)=>{
-    const input=e.target.closest('input[data-target]');
+    const input=e.target.closest('input[data-target],input[data-manual]');
     if(!input) return;
     render(holidaySet);
   });
 
   (async function init(){
+    applySalesOneTimeReset();
+    setManualButtonState();
     holidaySet = await loadHolidaySet();
     render(holidaySet);
   })();
@@ -430,7 +654,7 @@
   menu.querySelectorAll("a").forEach((a)=>a.addEventListener("click", closeMenu));
 })();
 </script>
-<script>(function(){if('serviceWorker' in navigator && location.protocol.indexOf('http')===0){window.addEventListener('load', function(){navigator.serviceWorker.register('./sw.js?v=20260216-3').catch(function(){});});}})();</script>
+<script>(function(){if('serviceWorker' in navigator && location.protocol.indexOf('http')===0){window.addEventListener('load', function(){navigator.serviceWorker.register('./sw.js?v=20260228-1').catch(function(){});});}})();</script>
 
 <nav class="tsms-bottom-nav" aria-label="ボトムメニュー">
   <a href="report.html" data-tab="report"><span class="ico">📝</span><span>日報入力</span></a>
@@ -483,8 +707,8 @@
     return !!(hasVal||selected);
   }
   document.querySelectorAll('.tsms-bottom-nav a, .tsms-more-sheet a').forEach(function(a){
-    a.addEventListener('click',function(e){
-      if(guard && isDirtyReport() && !confirm('入力を中止しますか？')){
+    a.addEventListener('click',async function(e){
+      if(guard && isDirtyReport() && !(await window.tsmsConfirm('入力を中止しますか？'))){
         e.preventDefault();
       }
       closeMore();
@@ -493,5 +717,6 @@
 })();
 </script>
 
+  <script src="./cache-version.js"></script>
 </body>
 </html>

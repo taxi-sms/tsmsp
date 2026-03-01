@@ -9,7 +9,6 @@ import {
   setLastSyncedUserId
 } from "./cloud-store.js";
 import { migrateLocalStorageSchema } from "./storage-schema.js";
-import { installSwUpdateUi } from "./sw-update-ui.js";
 
 const PUBLIC_PAGES = new Set(["login.html", "signup.html", "auth-callback.html"]);
 const IDLE_LOGOUT_MS = 6 * 60 * 60 * 1000;
@@ -227,5 +226,4 @@ async function guard() {
   }
 }
 
-installSwUpdateUi();
 guard();

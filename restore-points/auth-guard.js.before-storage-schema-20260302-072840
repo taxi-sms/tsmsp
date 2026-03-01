@@ -8,8 +8,6 @@ import {
   setCloudSyncPaused,
   setLastSyncedUserId
 } from "./cloud-store.js";
-import { migrateLocalStorageSchema } from "./storage-schema.js";
-import { installSwUpdateUi } from "./sw-update-ui.js";
 
 const PUBLIC_PAGES = new Set(["login.html", "signup.html", "auth-callback.html"]);
 const IDLE_LOGOUT_MS = 6 * 60 * 60 * 1000;
@@ -132,10 +130,6 @@ function installIdleLogout() {
 async function guard() {
   if (PUBLIC_PAGES.has(currentPage())) return;
 
-  try {
-    migrateLocalStorageSchema(localStorage);
-  } catch (_) {}
-
   const config = loadConfig();
   if (!config.url || !config.anonKey) {
     redirectToLogin();
@@ -175,9 +169,6 @@ async function guard() {
         force: shouldForceHydration,
         preserveKeys: preserveOpsLocal ? [OPS_KEY, OPS_ARCHIVE_KEY] : []
       });
-      try {
-        migrateLocalStorageSchema(localStorage);
-      } catch (_) {}
       setLastSyncedUserId(userId);
     } catch (e) {
       setLastSyncedUserId(userId);
@@ -227,5 +218,4 @@ async function guard() {
   }
 }
 
-installSwUpdateUi();
 guard();

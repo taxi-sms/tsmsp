@@ -1,5 +1,4 @@
 import { supabase } from "./supabase-client.js";
-import { STORAGE_SCHEMA_VERSION_KEY } from "./storage-schema.js";
 
 const CLOUD_KEY = "localStorage_dump_v1";
 const CLOUD_HISTORY_PREFIX = `${CLOUD_KEY}:history:`;
@@ -17,8 +16,7 @@ const SYNC_KEYS = [
   "tsms_sales_reset_token",
   "tsms_report_current_day",
   "tsms_holidays_jp_v1",
-  "tsms_theme",
-  STORAGE_SCHEMA_VERSION_KEY
+  "tsms_theme"
 ];
 
 let autoSyncInstalled = false;

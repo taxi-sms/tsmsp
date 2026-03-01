@@ -1,20 +1,29 @@
 <!doctype html>
 <html lang="ja">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta charset="utf-8" />
+<meta name="viewport"
+      content="width=device-width,
+               initial-scale=1,
+               maximum-scale=1,
+               user-scalable=no"/>
 <title>出庫 / 帰庫 / 休憩</title>
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <style>
 :root{ --border:#888; --muted:#666; }
 
 html,body{
   margin:0; padding:0; background:#fff; color:#111;
   font-family:"Noto Sans JP", sans-serif;
+  font-size:18px;
 }
 
 /* Header */
 .header{
   position:relative;
+  display:flex;
+  align-items:center;
   border-bottom:2px solid var(--border);
   padding:14px 14px 14px 56px;
   font-size:20px;
@@ -71,13 +80,34 @@ html,body{
 
 /* Content */
 .main{ padding:12px; max-width:1000px; margin:0 auto; }
-.card{ border:2px solid var(--border); padding:12px; margin:10px 0; }
+.main .card{
+  border:0 !important;
+  background:transparent !important;
+  padding:4px 0 2px;
+  margin:8px 0;
+}
 
 .note{ font-size:12px; color:var(--muted); margin:0 0 10px 0; line-height:1.35; }
 
+.group-title{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-weight:900;
+  font-size:16px;
+  margin:0 0 8px 0;
+}
+.group-title::after{
+  content:"";
+  flex:1 1 auto;
+  border-top:2px solid var(--border);
+  opacity:.95;
+}
+
 /* Rows (no inner boxes) */
-.content{ display:grid; gap:8px; }
-.line{ display:flex; gap:10px; align-items:baseline; }
+.content{ display:grid; gap:0; }
+.line{ display:flex; gap:10px; align-items:baseline; padding:6px 0; border-bottom:none; }
+.content .line:last-child{ border-bottom:none; }
 .k{ width:130px; font-size:12px; color:var(--muted); }
 .v{ font-size:20px; font-weight:900; margin-left:auto; font-variant-numeric:tabular-nums; }
 
@@ -91,12 +121,20 @@ html,body{
   font-weight:900;
   min-height:64px;
 }
+.btn.action-main{ min-height:128px; }
 .btn.small{ font-size:14px; min-height:52px; padding:12px 10px; font-weight:800; }
 .btn.reset-final{ min-height:124px; line-height:1.3; }
 .btn.reset-final .warn{ display:block; color:#c00; font-size:13px; font-weight:900; margin-top:6px; }
 .btn.wide{ grid-column:1 / -1; }
 .btn.danger{ border-color:#333; }
 .btn:disabled{ opacity:.45; }
+.btn.btn-mini{
+  min-height:auto;
+  padding:6px 10px;
+  font-size:12px;
+  font-weight:800;
+  border-width:1px;
+}
 .btn.next{
   background:#111;
   color:#fff;
@@ -105,9 +143,43 @@ html,body{
 
 .pill{ border:2px solid var(--border); padding:4px 8px; font-size:12px; font-weight:800; display:inline-block; }
 
+.result-modal-bg{
+  position:fixed; inset:0; z-index:1400;
+  background:rgba(0,0,0,.45);
+  display:none; align-items:center; justify-content:center;
+  padding:16px;
+}
+.result-modal-bg.show{ display:flex; }
+.result-modal-card{
+  width:min(320px,100%);
+  background:var(--surface-1,#fff);
+  border:2px solid var(--border,#ccc);
+  padding:18px 14px 14px;
+  text-align:center;
+}
+.result-modal-icon{
+  width:56px; height:56px; margin:0 auto 12px;
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  color:#fff; font-size:28px; font-weight:900; line-height:1;
+}
+.result-modal-icon.success{ background:#1ea44a; }
+.result-modal-icon.error{ background:#d93025; }
+.result-modal-message{ margin:0 0 14px; font-size:18px; font-weight:900; line-height:1.4; }
+.result-modal-actions{ display:grid; grid-template-columns:1fr; gap:8px; }
+
 /* Break sessions list */
 .list{ margin-top:10px; }
-.item{ display:flex; gap:10px; align-items:baseline; padding:6px 0; border-bottom:1px dashed #cfcfcf; }
+.bottom-mini-actions{ margin-top:10px; display:flex; justify-content:flex-end; }
+.sync-meta{
+  margin-top:10px;
+  font-size:12px;
+  color:var(--text-muted,#666);
+  text-align:right;
+  line-height:1.35;
+}
+.sync-meta.error{ color:#c62828; font-weight:700; }
+.item{ display:flex; gap:10px; align-items:baseline; padding:6px 0; border-bottom:none; }
 .item:last-child{ border-bottom:none; }
 .item .idx{ width:36px; color:var(--muted); font-size:12px; }
 .item .txt{ font-size:14px; font-weight:800; }
@@ -117,6 +189,7 @@ html,body{
   .k{ width:110px; }
   .v{ font-size:18px; }
   .btn{ font-size:16px; min-height:58px; }
+  .btn.action-main{ min-height:116px; }
 }
 @media (min-width:768px){
   .k{ width:160px; }
@@ -124,45 +197,9 @@ html,body{
   .actions{ grid-template-columns:1fr 1fr 1fr 1fr; }
   .btn.wide{ grid-column:auto; }
 }
-/* ---- Theme tokens ---- */
-:root{
-  --bg:#F3F6F8;
-  --surface-1:#FFFFFF;
-  --surface-2:#EEF3F6;
-  --border:#D5DEE6;
-  --text-primary:#0F1720;
-  --text-secondary:#344554;
-  --text-muted:#5B6D7C;
-  --accent:#2580ED;
-  --accent-hover:#4DA3FF;
-  --link:#187FBF;
-}
-:root[data-theme="dark"]{
-  --bg:#0F1417;
-  --surface-1:#151C20;
-  --surface-2:#1B242A;
-  --border:#2A353D;
-  --text-primary:#E6EEF3;
-  --text-secondary:#B7C4CC;
-  --text-muted:#8A949A;
-  --accent:#3B95F0;
-  --accent-hover:#4DA3FF;
-  --link:#58C2FF;
-}
-html,body{ background:var(--bg)!important; color:var(--text-primary)!important; }
-a{ color:var(--link); }
-.tsms-header,.header,.app-header,.card,.wf-panel,.section,.date-switcher,.menu,.tsms-menu,.box{background:var(--surface-1)!important;border-color:var(--border)!important;color:var(--text-primary)!important;}
-.note,.wf-field-label,.label,.k,.idx,.desc,.wf-subnote,.wf-field-label{color:var(--text-muted)!important;}
-.tsms-menu a,.menu a,.header-to-report,.btn,.actionBtn,.key,.input,select,.key.small{background:var(--surface-2)!important;color:var(--text-primary)!important;border-color:var(--border)!important;}
-.menu small,.tsms-menu small{color:var(--text-muted)!important;}
-.btn.next{background:var(--accent)!important;border-color:var(--accent)!important;color:#fff!important;}
-.menu-bg,.tsms-menu-bg{background:rgba(15,23,32,.35)!important;}
-
-.hamburger span,.tsms-hamburger span{background:#58C2FF!important;}
-/* ---- Theme tokens end ---- */
 
 </style>
-  <link rel="manifest" href="manifest.json">
+<link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#ffffff">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -175,7 +212,6 @@ a{ color:var(--link); }
   body{padding-bottom:78px;}
   .tsms-hamburger,.hamburger,.tsms-menu,.menu,.tsms-menu-bg,.menu-bg{display:none!important;}
   .tsms-header,.header{padding-left:14px!important;}
-  .tsms-header::before,.header::before{content:"";display:inline-block;width:22px;height:22px;flex:0 0 22px;margin-right:8px;background:url('icon.png') center/contain no-repeat;}
   .tsms-bottom-nav{position:fixed;left:0;right:0;bottom:0;z-index:1200;display:grid;grid-template-columns:repeat(5,1fr);background:var(--surface-1,#fff);border-top:2px solid var(--border,#ccc);padding-bottom:env(safe-area-inset-bottom);}
   .tsms-bottom-nav a,.tsms-bottom-nav button{appearance:none;border:0;background:transparent;color:var(--text-secondary,#445);font:inherit;font-size:11px;font-weight:900;padding:8px 2px 9px;min-height:58px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-decoration:none;}
   .tsms-bottom-nav .ico{width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;color:#58C2FF;}
@@ -189,7 +225,154 @@ a{ color:var(--link); }
   .tsms-more-bg.show{opacity:1;pointer-events:auto;}
 </style>
 
-  <script type="module" src="auth-guard.js"></script>
+  <script type="module" src="auth-guard.js?v=20260223-5"></script>
+  <script src="./custom-confirm.js"></script>
+  <link rel="stylesheet" href="./tsms-design.css?v=20260227-3">
+  <style id="ops-action-tweaks">
+    #btn_depart,
+    #btn_return{
+      font-size:clamp(24px,6.6vw,32px)!important;
+      line-height:1.15;
+    }
+    #btn_reset.reset-final{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      text-align:center;
+      line-height:1.2;
+    }
+    #btn_reset .reset-main{
+      display:block;
+      font-size:clamp(22px,6.2vw,30px)!important;
+      font-weight:900;
+      line-height:1.15;
+    }
+    #btn_reset .warn{
+      display:block;
+      font-size:clamp(16px,4.4vw,22px)!important;
+      font-weight:900;
+      line-height:1.25;
+      max-width:92%;
+    }
+  </style>
+  <style id="ops-unified-layout-tweaks">
+    .main{
+      padding:var(--space-3) 14px;
+    }
+    .main .card{
+      margin:var(--space-2) 0;
+      padding:var(--space-2) var(--space-3) var(--space-2);
+    }
+    .group-title{
+      margin:0 0 var(--space-3) 0;
+      font-size:var(--font-2xl);
+      gap:var(--space-2);
+      color:var(--text-primary);
+    }
+    .group-title::after{
+      border-top:var(--line-regular) solid var(--border);
+    }
+    .content{
+      gap:0;
+    }
+    .line{
+      gap:var(--space-2);
+      align-items:center;
+      padding:8px 4px;
+    }
+    .k{
+      width:132px;
+      font-size:var(--font-lg);
+      color:var(--text-muted);
+    }
+    .v{
+      font-size:var(--font-4xl);
+      color:var(--text-primary);
+    }
+    .actions{
+      gap:var(--space-2);
+      margin-top:var(--space-3);
+    }
+    .btn{
+      border:var(--line-strong) solid var(--border);
+      border-radius:var(--radius-sm);
+      padding:12px 10px;
+      min-height:var(--control-h-lg);
+      font-size:var(--font-3xl);
+      font-weight:900;
+    }
+    .btn.action-main{
+      min-height:120px;
+    }
+    .btn.small{
+      min-height:var(--control-h-md);
+      font-size:var(--font-lg);
+      padding:8px 10px;
+    }
+    .btn.reset-final{
+      min-height:120px;
+    }
+    .btn.btn-mini{
+      min-height:var(--touch-min);
+      border-width:var(--line-thin);
+      font-size:var(--font-sm);
+      padding:6px 10px;
+    }
+    .pill{
+      border:var(--line-regular) solid var(--border);
+      border-radius:var(--radius-pill);
+      padding:4px 10px;
+      font-size:var(--font-md);
+    }
+    .item{
+      padding:8px 4px;
+      align-items:center;
+    }
+    .item .idx{
+      font-size:var(--font-sm);
+    }
+    .item .txt,
+    .item .dur{
+      font-size:var(--font-lg);
+    }
+    .sync-meta{
+      margin-top:var(--space-3);
+      font-size:var(--font-sm);
+      color:var(--text-muted);
+    }
+    .result-modal-card{
+      border:var(--line-strong) solid var(--border);
+      border-radius:var(--radius-md);
+      padding:18px 14px 14px;
+    }
+    .result-modal-message{
+      font-size:var(--font-3xl);
+    }
+    .header{
+      border-bottom:var(--line-strong) solid var(--border);
+      font-size:var(--font-4xl);
+    }
+    .header-to-report{
+      border:var(--line-strong) solid var(--border);
+      border-radius:var(--radius-sm);
+      font-size:var(--font-lg);
+      padding:6px 10px;
+      background:var(--surface-2);
+      color:var(--text-primary);
+    }
+    @media (max-width:420px){
+      .k{ width:116px; }
+      .v{ font-size:var(--font-3xl); }
+      .btn{ font-size:var(--font-2xl); min-height:var(--control-h-md); }
+      .btn.action-main{ min-height:110px; }
+    }
+    @media (min-width:768px){
+      .k{ width:164px; }
+      .v{ font-size:var(--font-5xl); }
+    }
+  </style>
 </head>
 <body>
 
@@ -212,9 +395,24 @@ a{ color:var(--link); }
 
 <main class="main">
   <section class="card">
-    <div class="content">
+    <div class="group-title">出庫 / 帰庫</div>
+    <div class="actions">
+      <button class="btn action-main" type="button" id="btn_depart">出庫</button>
+      <button class="btn action-main" type="button" id="btn_return">帰庫</button>
+    </div>
+
+    <div class="content" style="margin-top:12px;">
       <div class="line"><div class="k">出庫時間</div><div class="v" id="v_depart">--</div></div>
       <div class="line"><div class="k">帰庫時間</div><div class="v" id="v_return">--</div></div>
+    </div>
+
+    <div class="group-title" style="margin-top:12px;">休憩</div>
+    <div class="actions">
+      <button class="btn action-main" type="button" id="btn_breakStart">休憩開始</button>
+      <button class="btn action-main" type="button" id="btn_breakEnd">休憩解除</button>
+    </div>
+
+    <div class="content" style="margin-top:12px;">
       <div class="line"><div class="k">休憩合計</div><div class="v" id="v_break">--</div></div>
       <div class="line"><div class="k">実働（参考）</div><div class="v" id="v_work">--</div></div>
       <div class="line"><div class="k">休憩状態</div><div class="v"><span class="pill" id="v_breakState">未休憩</span></div></div>
@@ -222,19 +420,27 @@ a{ color:var(--link); }
     </div>
 
     <div class="actions">
-      <button class="btn" type="button" id="btn_depart">出庫（今）</button>
-      <button class="btn" type="button" id="btn_return">帰庫（今）</button>
-      <button class="btn" type="button" id="btn_breakStart">休憩開始</button>
-      <button class="btn" type="button" id="btn_breakEnd">休憩解除</button>
-
-      <button class="btn danger wide reset-final" type="button" id="btn_reset">この日の記録をクリア<br><span class="warn">（〆作業として一番最後に実行）</span></button>
+      <button class="btn danger wide reset-final" type="button" id="btn_reset"><span class="reset-main">この日の記録を<br>クリア</span><span class="warn">（〆作業として一番最後に実行）</span></button>
     </div>
 
+    <div class="group-title" style="margin-top:12px;">休憩履歴</div>
     <div class="list" id="breakList"></div>
+    <div class="bottom-mini-actions">
+      <button class="btn btn-mini" type="button" id="btn_departCancel">出庫取消</button>
+    </div>
+    <div class="sync-meta" id="opsSyncMeta">最終クラウド同期: --</div>
   </section>
-
-
 </main>
+
+<div class="result-modal-bg" id="resultModalBg" aria-hidden="true">
+  <div class="result-modal-card" role="dialog" aria-modal="true" aria-labelledby="resultModalMessage">
+    <div class="result-modal-icon success" id="resultModalIcon" aria-hidden="true">○</div>
+    <p class="result-modal-message" id="resultModalMessage">締め作業が完了しました</p>
+    <div class="result-modal-actions">
+      <button class="btn" type="button" id="resultModalCloseBtn">閉じる</button>
+    </div>
+  </div>
+</div>
 
 <script>
 /* ===== Hamburger ===== */
@@ -246,9 +452,14 @@ bg.onclick = () => { menu.classList.remove("open"); bg.classList.remove("show");
 
 /* ===== Ops Logic ===== */
 const KEY = "ops";
+const OPS_ARCHIVE_KEY = "ops_archive_v1";
+const OPS_SYNC_REV_KEY = "ops_sync_rev_v1";
+const CLOUD_LAST_SUCCESS_AT_KEY = "tsms_cloud_last_success_at";
+const CLOUD_LAST_FAILURE_AT_KEY = "tsms_cloud_last_failure_at";
 const REPORT_KEY = "tsms_reports";
 const REPORT_ARCHIVE_KEY = "tsms_reports_archive";
 const CURRENT_DAY_KEY = "tsms_report_current_day";
+const CONFIRM_FORCE_EMPTY_KEY = "tsms_confirm_force_empty";
 
 function nowISO(){ return new Date().toISOString(); }
 function localYmd(){
@@ -275,6 +486,12 @@ function fmtMin(m){
   if(h<=0) return `${mm}分`;
   return `${h}時間${mm}分`;
 }
+function fmtSyncDateTime(iso){
+  if(!iso) return "";
+  const d = new Date(iso);
+  if(isNaN(d)) return "";
+  return `${d.getFullYear()}/${pad(d.getMonth()+1)}/${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+}
 function safeParse(){
   try{
     const raw = localStorage.getItem(KEY);
@@ -282,10 +499,19 @@ function safeParse(){
     return JSON.parse(raw);
   }catch(e){ return null; }
 }
+function markOpsSyncRevision(iso){
+  const stamp = String(iso || nowISO());
+  try{
+    localStorage.setItem(OPS_SYNC_REV_KEY, stamp);
+  }catch(e){}
+  return stamp;
+}
 function save(data){
   try{
+    const stamp = markOpsSyncRevision(nowISO());
     const dayId = localStorage.getItem(CURRENT_DAY_KEY) || localYmd();
     data.dayId = dayId;
+    data.updatedAt = stamp;
     localStorage.setItem(KEY, JSON.stringify(data));
   }catch(e){}
 }
@@ -297,12 +523,14 @@ function defaultData(){
     breakActive: false,
     breakStartAt: null,
     breakSessions: [], // {start,end,minutes}
-    shiftClosed: false
+    shiftClosed: false,
+    updatedAt: null
   };
 }
 function normalizeData(raw){
   const d = Object.assign(defaultData(), raw || {});
   d.breakSessions = Array.isArray(d.breakSessions) ? d.breakSessions : [];
+  d.updatedAt = (typeof d.updatedAt === "string" && d.updatedAt) ? d.updatedAt : null;
   if(typeof d.shiftClosed !== "boolean") d.shiftClosed = !!d.returnAt;
   if(d.shiftClosed && d.breakActive){
     d.breakActive = false;
@@ -311,6 +539,21 @@ function normalizeData(raw){
   return d;
 }
 function load(){ return normalizeData(safeParse() || defaultData()); }
+function loadOpsArchive(){
+  try{
+    const raw = localStorage.getItem(OPS_ARCHIVE_KEY);
+    if(!raw) return {};
+    const obj = JSON.parse(raw);
+    return (obj && typeof obj === "object") ? obj : {};
+  }catch(e){
+    return {};
+  }
+}
+function saveOpsArchive(archive){
+  try{
+    localStorage.setItem(OPS_ARCHIVE_KEY, JSON.stringify(archive || {}));
+  }catch(e){}
+}
 
 function calcBreakTotal(d){
   return (d.breakSessions||[]).reduce((s,x)=>s+(Number(x.minutes)||0),0);
@@ -332,10 +575,69 @@ const vBreakTimer = document.getElementById("v_breakTimer");
 const breakList = document.getElementById("breakList");
 
 const btnDepart = document.getElementById("btn_depart");
+const btnDepartCancel = document.getElementById("btn_departCancel");
 const btnReturn = document.getElementById("btn_return");
 const btnBreakStart = document.getElementById("btn_breakStart");
 const btnBreakEnd = document.getElementById("btn_breakEnd");
 const btnReset = document.getElementById("btn_reset");
+const resultModalBg = document.getElementById("resultModalBg");
+const resultModalIcon = document.getElementById("resultModalIcon");
+const resultModalMessage = document.getElementById("resultModalMessage");
+const resultModalCloseBtn = document.getElementById("resultModalCloseBtn");
+const opsSyncMeta = document.getElementById("opsSyncMeta");
+
+function renderCloudSyncStatus(){
+  if(!opsSyncMeta) return;
+  const okAt = localStorage.getItem(CLOUD_LAST_SUCCESS_AT_KEY) || "";
+  const ngAt = localStorage.getItem(CLOUD_LAST_FAILURE_AT_KEY) || "";
+  const okMs = okAt ? new Date(okAt).getTime() : 0;
+  const ngMs = ngAt ? new Date(ngAt).getTime() : 0;
+
+  if(okMs && okMs >= ngMs){
+    opsSyncMeta.classList.remove("error");
+    opsSyncMeta.textContent = `最終クラウド同期: ${fmtSyncDateTime(okAt)}`;
+    return;
+  }
+  if(ngMs){
+    opsSyncMeta.classList.add("error");
+    opsSyncMeta.textContent = "最終クラウド同期: 失敗（再試行してください）";
+    return;
+  }
+  opsSyncMeta.classList.remove("error");
+  opsSyncMeta.textContent = "最終クラウド同期: --";
+}
+
+function showResultModal(message, isSuccess){
+  if(!resultModalBg || !resultModalIcon || !resultModalMessage || !resultModalCloseBtn){
+    alert(String(message || ""));
+    return Promise.resolve();
+  }
+  resultModalMessage.textContent = String(message || "");
+  resultModalIcon.textContent = isSuccess ? "○" : "×";
+  resultModalIcon.classList.toggle("success", !!isSuccess);
+  resultModalIcon.classList.toggle("error", !isSuccess);
+
+  return new Promise((resolve)=>{
+    const close = ()=>{
+      resultModalBg.classList.remove("show");
+      resultModalBg.setAttribute("aria-hidden", "true");
+      resultModalCloseBtn.removeEventListener("click", onClose);
+      resultModalBg.removeEventListener("click", onBg);
+      document.removeEventListener("keydown", onEsc);
+      resolve();
+    };
+    const onClose = ()=> close();
+    const onBg = (e)=>{ if(e.target === resultModalBg) close(); };
+    const onEsc = (e)=>{ if(e.key === "Escape") close(); };
+
+    resultModalBg.classList.add("show");
+    resultModalBg.setAttribute("aria-hidden", "false");
+    resultModalCloseBtn.addEventListener("click", onClose);
+    resultModalBg.addEventListener("click", onBg);
+    document.addEventListener("keydown", onEsc);
+    resultModalCloseBtn.focus();
+  });
+}
 
 function fmtTimer(sec){
   sec = Math.max(0, Math.floor(sec||0));
@@ -357,6 +659,7 @@ function updateBreakTimer(d){
 
 function render(){
   const d = load();
+  renderCloudSyncStatus();
 
   vDepart.textContent = fmt(d.departAt);
   vReturn.textContent = fmt(d.returnAt);
@@ -369,7 +672,7 @@ function render(){
 
   if(d.breakActive){
     vBreakState.textContent = "休憩中";
-  updateBreakTimer(d);
+    updateBreakTimer(d);
     vBreakState.style.borderColor = "#333";
   } else {
     vBreakState.textContent = "未休憩";
@@ -383,12 +686,20 @@ function render(){
 
   if(d.shiftClosed){
     btnDepart.disabled = true;
+    if(btnDepartCancel) btnDepartCancel.disabled = true;
+    btnReturn.disabled = true;
+  } else if(hasReturn){
+    // 帰庫後〜日次クリア前は時刻修正のためデータは保持しつつ、再出庫は不可にする
+    btnDepart.disabled = true;
+    if(btnDepartCancel) btnDepartCancel.disabled = true;
     btnReturn.disabled = true;
   } else if(running){
     btnDepart.disabled = true;
+    if(btnDepartCancel) btnDepartCancel.disabled = false;
     btnReturn.disabled = false;
   } else {
     btnDepart.disabled = false;
+    if(btnDepartCancel) btnDepartCancel.disabled = true;
     btnReturn.disabled = true;
   }
 
@@ -396,6 +707,7 @@ function render(){
   btnBreakEnd.disabled = d.shiftClosed || !d.breakActive;
 
   btnDepart.classList.toggle("next", !btnDepart.disabled);
+  if(btnDepartCancel) btnDepartCancel.classList.toggle("next", !btnDepartCancel.disabled);
   btnReturn.classList.toggle("next", !btnReturn.disabled);
   btnBreakStart.classList.toggle("next", !btnBreakStart.disabled);
   btnBreakEnd.classList.toggle("next", !btnBreakEnd.disabled);
@@ -405,8 +717,7 @@ function render(){
   if(!sessions.length){
     breakList.innerHTML = '<div class="note">休憩履歴なし</div>';
   } else {
-    breakList.innerHTML = '<div class="note" style="margin:10px 0 0 0;">休憩履歴</div>'
-      + sessions.map((s,i)=>`
+    breakList.innerHTML = sessions.map((s,i)=>`
         <div class="item">
           <div class="idx">#${i+1}</div>
           <div class="txt">${fmt(s.start)} → ${fmt(s.end)}</div>
@@ -421,16 +732,30 @@ btnDepart.onclick = ()=>{
   d.departAt = nowISO();
   d.returnAt = null;
   d.shiftClosed = false;
-  if(!localStorage.getItem(CURRENT_DAY_KEY)){
-    localStorage.setItem(CURRENT_DAY_KEY, localYmd());
-  }
-  d.dayId = localStorage.getItem(CURRENT_DAY_KEY) || localYmd();
+  localStorage.removeItem(CONFIRM_FORCE_EMPTY_KEY);
+  const nextDayId = localYmd();
+  localStorage.setItem(CURRENT_DAY_KEY, nextDayId);
+  d.dayId = nextDayId;
   save(d);
   render();
 };
 
-btnReturn.onclick = ()=>{
-  if(!confirm("帰庫しますか？")) return;
+if(btnDepartCancel){
+  btnDepartCancel.onclick = async ()=>{
+    const d = load();
+    if(!d.departAt || d.returnAt || d.shiftClosed) return;
+    if(!(await window.tsmsConfirm("出庫を取り消しますか？（出庫時間・休憩状態を初期化します）"))) return;
+
+    localStorage.removeItem(KEY);
+    localStorage.removeItem(CURRENT_DAY_KEY);
+    localStorage.setItem(CONFIRM_FORCE_EMPTY_KEY, "1");
+    markOpsSyncRevision(nowISO());
+    render();
+  };
+}
+
+btnReturn.onclick = async ()=>{
+  if(!(await window.tsmsConfirm("帰庫しますか？"))) return;
 
   const d = load();
   const end = nowISO();
@@ -448,7 +773,7 @@ btnReturn.onclick = ()=>{
   d.breakActive = false;
   d.breakStartAt = null;
   d.returnAt = end;
-  d.shiftClosed = true;
+  d.shiftClosed = false;
   d.dayId = localStorage.getItem(CURRENT_DAY_KEY) || localYmd();
   save(d);
   render();
@@ -481,42 +806,78 @@ btnBreakEnd.onclick = ()=>{
 };
 
 btnReset.onclick = async ()=>{
-  if(!confirm("この日の記録をクラウドへ保存してからクリアします。よろしいですか？")) return;
+  if(!(await window.tsmsConfirm("この日の記録をクラウドへ保存してからクリアします。よろしいですか？"))) return;
 
   btnReset.disabled = true;
+  const backupNow = (window.tsmsCloud && typeof window.tsmsCloud.backupNow === "function")
+    ? window.tsmsCloud.backupNow
+    : null;
+  let shouldLogoutAfterClear = false;
   try{
-    if(window.tsmsCloud && typeof window.tsmsCloud.backupNow === "function") {
-      await window.tsmsCloud.backupNow();
+    if(!backupNow){
+      throw new Error("cloud_backup_unavailable");
     }
+    await backupNow();
 
     if(window.tsmsCloud && typeof window.tsmsCloud.setSyncPaused === "function") {
       window.tsmsCloud.setSyncPaused(true);
     }
-    const currentDayId = localStorage.getItem(CURRENT_DAY_KEY) || (load().dayId || localYmd());
-    const activeRows = JSON.parse(localStorage.getItem(REPORT_KEY) || "[]");
-    const archiveRows = JSON.parse(localStorage.getItem(REPORT_ARCHIVE_KEY) || "[]");
+    try{
+      const opsData = load();
+      const currentDayId = localStorage.getItem(CURRENT_DAY_KEY) || (opsData.dayId || localYmd());
+      const syncStamp = nowISO();
+      const activeRows = JSON.parse(localStorage.getItem(REPORT_KEY) || "[]");
+      const archiveRows = JSON.parse(localStorage.getItem(REPORT_ARCHIVE_KEY) || "[]");
 
-    const todayRows = (Array.isArray(activeRows) ? activeRows : []).filter((r)=> String((r && r.dayId) || "") === String(currentDayId));
-    const remainRows = (Array.isArray(activeRows) ? activeRows : []).filter((r)=> String((r && r.dayId) || "") !== String(currentDayId));
+      const todayRows = (Array.isArray(activeRows) ? activeRows : []).filter((r)=> String((r && r.dayId) || "") === String(currentDayId));
+      const remainRows = (Array.isArray(activeRows) ? activeRows : []).filter((r)=> String((r && r.dayId) || "") !== String(currentDayId));
 
-    const byId = new Map();
-    (Array.isArray(archiveRows) ? archiveRows : []).forEach((r)=>{ if(r && r.id) byId.set(String(r.id), r); });
-    todayRows.forEach((r)=>{ if(r && r.id) byId.set(String(r.id), r); });
+      const byId = new Map();
+      (Array.isArray(archiveRows) ? archiveRows : []).forEach((r)=>{ if(r && r.id) byId.set(String(r.id), r); });
+      todayRows.forEach((r)=>{ if(r && r.id) byId.set(String(r.id), r); });
 
-    localStorage.removeItem(KEY);
-    localStorage.removeItem(CURRENT_DAY_KEY);
-    localStorage.setItem(REPORT_KEY, JSON.stringify(remainRows));
-    localStorage.setItem(REPORT_ARCHIVE_KEY, JSON.stringify(Array.from(byId.values())));
-    render();
-    alert("この日の記録をクリアしました（過去データは日付選択から確認できます）");
-  }catch(e){
-    alert("クラウド保存に失敗したため、クリアを中止しました");
-  }finally{
-    if(window.tsmsCloud && typeof window.tsmsCloud.setSyncPaused === "function") {
-      window.tsmsCloud.setSyncPaused(false);
+      if(opsData && (opsData.departAt || opsData.returnAt || (Array.isArray(opsData.breakSessions) && opsData.breakSessions.length))){
+        const archive = loadOpsArchive();
+        archive[String(currentDayId)] = Object.assign({}, opsData, {
+          dayId: String(currentDayId),
+          shiftClosed: true,
+          updatedAt: syncStamp
+        });
+        saveOpsArchive(archive);
+      }
+
+      localStorage.removeItem(KEY);
+      localStorage.removeItem(CURRENT_DAY_KEY);
+      localStorage.setItem(CONFIRM_FORCE_EMPTY_KEY, "1");
+      markOpsSyncRevision(syncStamp);
+      localStorage.setItem(REPORT_KEY, JSON.stringify(remainRows));
+      localStorage.setItem(REPORT_ARCHIVE_KEY, JSON.stringify(Array.from(byId.values())));
+      render();
+      shouldLogoutAfterClear = true;
+    } finally {
+      if(window.tsmsCloud && typeof window.tsmsCloud.setSyncPaused === "function") {
+        window.tsmsCloud.setSyncPaused(false);
+      }
     }
-    btnReset.disabled = false;
+
+    await backupNow();
+    renderCloudSyncStatus();
+    await showResultModal("締め作業が完了しました", true);
+  }catch(e){
+    renderCloudSyncStatus();
+    await showResultModal("バックアップに失敗しました。もう一度実行してください。", false);
   }
+
+  if(shouldLogoutAfterClear && window.tsmsCloud && typeof window.tsmsCloud.logout === "function"){
+    try{
+      await window.tsmsCloud.logout();
+      return;
+    }catch(e){
+      alert("ログアウトに失敗しました。いったんそのままご利用ください。");
+    }
+  }
+
+  btnReset.disabled = false;
 };
 
 render();
@@ -527,7 +888,7 @@ setInterval(()=>{ try{ updateBreakTimer(load()); }catch(e){} }, 1000);
 
 
   <script>
-    (function(){if('serviceWorker'in navigator&&location.protocol.indexOf('http')===0){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js?v=20260216-3').catch(function(){});});}})();
+    (function(){if('serviceWorker'in navigator&&location.protocol.indexOf('http')===0){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js?v=20260228-1').catch(function(){});});}})();
   </script>
 
 
@@ -582,8 +943,8 @@ setInterval(()=>{ try{ updateBreakTimer(load()); }catch(e){} }, 1000);
     return !!(hasVal||selected);
   }
   document.querySelectorAll('.tsms-bottom-nav a, .tsms-more-sheet a').forEach(function(a){
-    a.addEventListener('click',function(e){
-      if(guard && isDirtyReport() && !confirm('入力を中止しますか？')){
+    a.addEventListener('click',async function(e){
+      if(guard && isDirtyReport() && !(await window.tsmsConfirm('入力を中止しますか？'))){
         e.preventDefault();
       }
       closeMore();
@@ -592,5 +953,6 @@ setInterval(()=>{ try{ updateBreakTimer(load()); }catch(e){} }, 1000);
 })();
 </script>
 
+  <script src="./cache-version.js"></script>
 </body>
 </html>
