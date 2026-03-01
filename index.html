@@ -32,14 +32,14 @@
   --danger:#d64545;
 }
 :root[data-theme="dark"]{
-  --bg:#0F1417;
-  --surface-1:#151C20;
-  --surface-2:#1B242A;
-  --border:#2A353D;
-  --text-primary:#E6EEF3;
-  --text-secondary:#B7C4CC;
-  --text-muted:#8A949A;
-  --accent:#3B95F0;
+  --bg:#08111b;
+  --surface-1:#0e1a2d;
+  --surface-2:#0a1630;
+  --border:#2f4d77;
+  --text-primary:#ecf3ff;
+  --text-secondary:#b6c8e6;
+  --text-muted:#89a3c7;
+  --accent:#4da3ff;
   --work:#1c9b2d;
   --holiday:#f0ad00;
   --danger:#d64545;
@@ -50,6 +50,11 @@ html,body{
   background:var(--bg);
   color:var(--text-primary);
   font-family:"Noto Sans JP",sans-serif;
+}
+:root[data-theme="dark"] body{
+  background:
+    radial-gradient(120% 65% at 50% -10%, rgba(84,145,233,.18), rgba(8,17,27,0) 70%),
+    linear-gradient(180deg, #08111b 0%, #07101a 45%, #08111b 100%);
 }
 body{padding-bottom:78px;}
 .header{
@@ -65,6 +70,10 @@ body{padding-bottom:78px;}
   gap:10px;
   padding:0 14px;
   font-weight:900;
+}
+:root[data-theme="dark"] .header{
+  background:linear-gradient(180deg, rgba(22,42,76,.95), rgba(10,22,47,.95));
+  box-shadow:0 10px 24px rgba(0,0,0,.3);
 }
 .header-title{
   font-size:36px;
@@ -90,8 +99,12 @@ body{padding-bottom:78px;}
 .card{
   border:2px solid var(--border);
   background:var(--surface-1);
-  border-radius:12px;
+  border-radius:14px;
   padding:10px;
+}
+:root[data-theme="dark"] .card{
+  background:linear-gradient(180deg, rgba(19,38,70,.95), rgba(8,20,42,.95));
+  box-shadow:0 10px 26px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.08);
 }
 .group-title{
   display:flex;
@@ -123,6 +136,10 @@ body{padding-bottom:78px;}
   overflow:hidden;
   touch-action:pan-y;
 }
+:root[data-theme="dark"] .swipe-track{
+  background:linear-gradient(90deg, rgba(20,40,74,.92), rgba(62,118,194,.55));
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.05);
+}
 .swipe-track.locked{ border-color:var(--accent); }
 .swipe-label{
   position:absolute;
@@ -137,6 +154,7 @@ body{padding-bottom:78px;}
   overflow:hidden;
   text-overflow:ellipsis;
 }
+:root[data-theme="dark"] .swipe-label{ color:#e3efff; }
 .swipe-handle{
   position:absolute;
   left:5px;
@@ -155,6 +173,11 @@ body{padding-bottom:78px;}
   touch-action:none;
   transform:translateX(0);
 }
+:root[data-theme="dark"] .swipe-handle{
+  background:linear-gradient(180deg, #78c5ff, #3f9bff);
+  border-color:#8ad0ff;
+  box-shadow:0 4px 14px rgba(45,140,255,.45);
+}
 .swipe-track.dragging .swipe-handle{ transition:none !important; }
 .dispatch-status{
   margin:8px 0 0;
@@ -164,6 +187,9 @@ body{padding-bottom:78px;}
   padding:10px;
   font-size:24px;
   font-weight:900;
+}
+:root[data-theme="dark"] .dispatch-status{
+  background:linear-gradient(180deg, rgba(17,35,64,.95), rgba(11,24,46,.95));
 }
 .dispatch-status.ok{ border-color:var(--accent); }
 .calendar-head{
@@ -207,12 +233,18 @@ body{padding-bottom:78px;}
   color:var(--text-primary);
   padding:2px;
 }
+:root[data-theme="dark"] .calendar-day{
+  background:linear-gradient(180deg, rgba(15,31,58,.9), rgba(9,20,40,.9));
+}
 .calendar-day.empty{
   border-style:dashed;
   opacity:.35;
 }
 .calendar-day.today{
   border-color:var(--accent);
+}
+:root[data-theme="dark"] .calendar-day.today{
+  box-shadow:0 0 0 2px rgba(88,194,255,.18), 0 0 14px rgba(65,148,255,.35);
 }
 .shift-dot{width:8px;height:8px;border-radius:50%;display:block;}
 .shift-dot.work{background:var(--work);}
@@ -226,6 +258,9 @@ body{padding-bottom:78px;}
   padding:8px;
   font-size:13px;
   color:var(--text-secondary);
+}
+:root[data-theme="dark"] .calendar-info{
+  background:linear-gradient(180deg, rgba(14,30,55,.88), rgba(10,22,42,.88));
 }
 .event-list{display:grid;gap:8px;}
 .event-btn{
@@ -245,6 +280,9 @@ body{padding-bottom:78px;}
   text-align:left;
   cursor:pointer;
 }
+:root[data-theme="dark"] .event-btn{
+  background:linear-gradient(180deg, rgba(16,33,62,.9), rgba(9,20,39,.9));
+}
 .event-time{
   min-width:56px;
   font-variant-numeric:tabular-nums;
@@ -256,6 +294,7 @@ body{padding-bottom:78px;}
   font-size:20px;
   line-height:1;
 }
+:root[data-theme="dark"] .event-arrow{ color:#7fb9ff; }
 .modal-bg{
   position:fixed;
   inset:0;
@@ -273,6 +312,9 @@ body{padding-bottom:78px;}
   border-radius:12px;
   background:var(--surface-1);
   padding:12px;
+}
+:root[data-theme="dark"] .modal{
+  background:linear-gradient(180deg, rgba(19,38,70,.96), rgba(10,24,45,.96));
 }
 .modal h3{margin:0 0 8px;font-size:20px;}
 .modal p{margin:0 0 10px;font-size:14px;color:var(--text-secondary);}
@@ -307,6 +349,7 @@ body{padding-bottom:78px;}
   .dispatch-status{font-size:22px;}
 }
 </style>
+
 </head>
 <body>
 
