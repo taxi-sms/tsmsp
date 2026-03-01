@@ -4,117 +4,20 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>TSMS TOP</title>
-  <link rel="icon" href="favicon.ico" sizes="any">
-  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#ffffff">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="TSMS">
+<script>(function(){try{var t=localStorage.getItem("tsms_theme")==="dark"?"dark":"light";document.documentElement.setAttribute("data-theme",t);var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content",t==="dark"?"#0F1417":"#F3F6F8");}catch(e){}})();</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script type="module" src="auth-guard.js?v=20260223-5"></script>
+<script src="./custom-confirm.js"></script>
+<link rel="stylesheet" href="./tsms-design.css?v=20260227-3">
 <style>
-:root{ --border:#000; --bg:#fff; --fg:#000; }
-html,body{
-  margin:0; padding:0;
-  background:var(--bg); color:var(--fg);
-  font-family:"Noto Sans JP", sans-serif;
-  font-size:18px;
-}
-
-/* Header */
-.header{
-  position:sticky; top:0; z-index:10;
-  height:60px;
-  border-bottom:2px solid var(--border);
-  display:flex; align-items:center;
-  padding:0 14px 0 56px;
-  font-weight:900; font-size:22px;
-  background:var(--bg);
-}
-.hamburger{
-  position:absolute; left:14px; top:50%;
-  transform:translateY(-50%);
-  width:32px; height:24px;
-  display:flex; flex-direction:column; justify-content:space-between;
-  cursor:pointer; user-select:none;
-}
-.hamburger span{ height:3px; background:#58C2FF; display:block; }
-
-/* Side menu */
-.menu{
-  position:fixed; top:0; left:0; height:100%; width:280px;
-  background:var(--bg);
-  border-right:2px solid var(--border);
-  transform:translateX(-100%);
-  transition:transform .25s ease;
-  z-index:1000;
-  padding-top:60px;
-}
-.menu.open{ transform:translateX(0); }
-.menu a{
-  display:block;
-  padding:16px;
-  border-bottom:1px solid #ddd;
-  text-decoration:none; color:var(--text-primary);
-  font-size:19px; font-weight:900;
-}
-.menu small{ display:block; margin-top:2px; font-size:12px; font-weight:700; color:#666; }
-
-.menu-bg{
-  position:fixed; inset:0;
-  background:rgba(0,0,0,.25);
-  opacity:0; pointer-events:none;
-  transition:opacity .2s ease;
-  z-index:900;
-}
-.menu-bg.show{ opacity:1; pointer-events:auto; }
-
-/* Content */
-.container{padding:14px;}
-.doc{
-  border:0;
-  background:transparent;
-}
-.doc-head{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  border-bottom:0;
-  padding:6px 0 10px;
-  font-size:22px;
-  font-weight:800;
-  line-height:1.3;
-}
-.doc-head::after{
-  content:"";
-  flex:1 1 auto;
-  border-top:2px solid var(--border);
-  opacity:.95;
-}
-.doc-body{padding:0;line-height:1.7;font-size:16px;}
-.doc-title-row{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:12px;}
-.doc-title{font-size:44px;font-weight:400;line-height:1;}
-.doc-updated{font-size:16px;color:var(--text-secondary);font-weight:700;}
-.doc p{margin:0 0 10px;}
-.guide-list{margin:8px 0 0 0;padding:0;list-style:none;}
-.guide-list>li{margin:0;padding:10px 0;border-bottom:1px solid var(--border);}
-.guide-list>li:last-child{border-bottom:none;}
-.subline{display:block;margin:.35em 0 0 1.2em;}
-.contact{margin-top:18px;}
-.sign{margin-top:6px;text-align:right;font-weight:700;}
-.sign-actions{margin-top:6px;text-align:right;}
-.logout-mini{
-  appearance:none;
-  border:1px solid var(--border);
-  background:var(--surface-2);
-  color:var(--text-primary);
-  padding:4px 8px;
-  font:inherit;
-  font-size:12px;
-  font-weight:700;
-  border-radius:6px;
-  cursor:pointer;
-}
-
-@media (min-width:768px){
-  .container{max-width:760px;margin:0 auto;}
-  .doc-head{font-size:28px;}
-}
-/* ---- Theme tokens ---- */
 :root{
   --bg:#F3F6F8;
   --surface-1:#FFFFFF;
@@ -124,8 +27,9 @@ html,body{
   --text-secondary:#344554;
   --text-muted:#5B6D7C;
   --accent:#2580ED;
-  --accent-hover:#4DA3FF;
-  --link:#187FBF;
+  --work:#1c9b2d;
+  --holiday:#f0ad00;
+  --danger:#d64545;
 }
 :root[data-theme="dark"]{
   --bg:#0F1417;
@@ -136,187 +40,622 @@ html,body{
   --text-secondary:#B7C4CC;
   --text-muted:#8A949A;
   --accent:#3B95F0;
-  --accent-hover:#4DA3FF;
-  --link:#58C2FF;
+  --work:#1c9b2d;
+  --holiday:#f0ad00;
+  --danger:#d64545;
 }
-html,body{ background:var(--bg)!important; color:var(--text-primary)!important; }
-a{ color:var(--link); }
-.tsms-header,.header,.app-header,.card,.wf-panel,.section,.date-switcher,.menu,.tsms-menu,.box{background:var(--surface-1)!important;border-color:var(--border)!important;color:var(--text-primary)!important;}
-.note,.wf-field-label,.label,.k,.idx,.desc,.wf-subnote,.wf-field-label{color:var(--text-muted)!important;}
-.tsms-menu a,.menu a,.header-to-report,.btn,.actionBtn,.key,.input,select,.key.small{background:var(--surface-2)!important;color:var(--text-primary)!important;border-color:var(--border)!important;}
-.menu small,.tsms-menu small{color:var(--text-muted)!important;}
-.btn.next{background:var(--accent)!important;border-color:var(--accent)!important;color:#fff!important;}
-.menu-bg,.tsms-menu-bg{background:rgba(15,23,32,.35)!important;}
-
-.hamburger span,.tsms-hamburger span{background:#58C2FF!important;}
-/* ---- Theme tokens end ---- */
-
+html,body{
+  margin:0;
+  padding:0;
+  background:var(--bg);
+  color:var(--text-primary);
+  font-family:"Noto Sans JP",sans-serif;
+}
+body{padding-bottom:78px;}
+.header{
+  position:sticky;
+  top:0;
+  z-index:20;
+  min-height:60px;
+  border-bottom:2px solid var(--border);
+  background:var(--surface-1);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:0 14px;
+  font-weight:900;
+}
+.header-title{
+  font-size:36px;
+  line-height:1;
+  letter-spacing:.02em;
+}
+.header-meta{
+  display:flex;
+  gap:6px;
+  align-items:center;
+  font-size:13px;
+  color:var(--text-secondary);
+  font-weight:700;
+  text-align:right;
+}
+.main{
+  max-width:760px;
+  margin:0 auto;
+  padding:12px;
+  display:grid;
+  gap:10px;
+}
+.card{
+  border:2px solid var(--border);
+  background:var(--surface-1);
+  border-radius:12px;
+  padding:10px;
+}
+.group-title{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:0 0 8px;
+  font-size:26px;
+  font-weight:900;
+}
+.group-title::after{
+  content:"";
+  flex:1 1 auto;
+  border-top:2px solid var(--border);
+  opacity:.95;
+}
+.group-note{
+  margin:0 0 8px;
+  font-size:13px;
+  color:var(--text-muted);
+  font-weight:700;
+}
+.swipe-track{
+  position:relative;
+  min-height:58px;
+  border:2px solid var(--border);
+  background:var(--surface-2);
+  border-radius:999px;
+  padding:5px;
+  overflow:hidden;
+  touch-action:pan-y;
+}
+.swipe-track.locked{ border-color:var(--accent); }
+.swipe-label{
+  position:absolute;
+  left:72px;
+  right:12px;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:26px;
+  font-weight:900;
+  color:var(--text-secondary);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.swipe-handle{
+  position:absolute;
+  left:5px;
+  top:5px;
+  width:48px;
+  height:48px;
+  border:2px solid var(--accent);
+  border-radius:999px;
+  background:var(--accent);
+  color:#fff;
+  font:inherit;
+  font-size:26px;
+  font-weight:900;
+  line-height:1;
+  cursor:pointer;
+  touch-action:none;
+  transform:translateX(0);
+}
+.swipe-track.dragging .swipe-handle{ transition:none !important; }
+.dispatch-status{
+  margin:8px 0 0;
+  border:2px solid var(--border);
+  border-radius:10px;
+  background:var(--surface-2);
+  padding:10px;
+  font-size:24px;
+  font-weight:900;
+}
+.dispatch-status.ok{ border-color:var(--accent); }
+.calendar-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+  margin-bottom:8px;
+}
+.calendar-month{
+  margin:0;
+  font-size:18px;
+  font-weight:900;
+  color:var(--text-secondary);
+}
+.calendar-week,
+.calendar-grid{
+  display:grid;
+  grid-template-columns:repeat(7,minmax(0,1fr));
+  gap:5px;
+}
+.calendar-week span{
+  text-align:center;
+  font-size:13px;
+  color:var(--text-muted);
+  font-weight:800;
+}
+.calendar-day{
+  border:2px solid var(--border);
+  border-radius:8px;
+  background:var(--surface-2);
+  min-height:44px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:2px;
+  font:inherit;
+  font-size:13px;
+  font-weight:800;
+  color:var(--text-primary);
+  padding:2px;
+}
+.calendar-day.empty{
+  border-style:dashed;
+  opacity:.35;
+}
+.calendar-day.today{
+  border-color:var(--accent);
+}
+.shift-dot{width:8px;height:8px;border-radius:50%;display:block;}
+.shift-dot.work{background:var(--work);}
+.shift-dot.holiday{background:var(--holiday);}
+.shift-dot.absence{background:var(--danger);}
+.calendar-info{
+  margin:8px 0 0;
+  border:1px solid var(--border);
+  border-radius:8px;
+  background:var(--surface-2);
+  padding:8px;
+  font-size:13px;
+  color:var(--text-secondary);
+}
+.event-list{display:grid;gap:8px;}
+.event-btn{
+  appearance:none;
+  border:2px solid var(--border);
+  border-radius:10px;
+  background:var(--surface-2);
+  color:var(--text-primary);
+  font:inherit;
+  width:100%;
+  min-height:52px;
+  padding:0 10px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-weight:900;
+  text-align:left;
+  cursor:pointer;
+}
+.event-time{
+  min-width:56px;
+  font-variant-numeric:tabular-nums;
+  color:var(--text-secondary);
+}
+.event-arrow{
+  margin-left:auto;
+  color:var(--text-muted);
+  font-size:20px;
+  line-height:1;
+}
+.modal-bg{
+  position:fixed;
+  inset:0;
+  z-index:1600;
+  background:rgba(0,0,0,.45);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:12px;
+}
+.modal-bg.show{display:flex;}
+.modal{
+  width:min(420px,100%);
+  border:2px solid var(--border);
+  border-radius:12px;
+  background:var(--surface-1);
+  padding:12px;
+}
+.modal h3{margin:0 0 8px;font-size:20px;}
+.modal p{margin:0 0 10px;font-size:14px;color:var(--text-secondary);}
+.modal .btn{
+  appearance:none;
+  width:100%;
+  min-height:42px;
+  border:2px solid var(--accent);
+  border-radius:8px;
+  background:var(--accent);
+  color:#fff;
+  font:inherit;
+  font-weight:900;
+  cursor:pointer;
+}
+.tsms-bottom-nav{position:fixed;left:0;right:0;bottom:0;z-index:1200;display:grid;grid-template-columns:repeat(5,1fr);background:var(--surface-1,#fff);border-top:2px solid var(--border,#ccc);padding-bottom:env(safe-area-inset-bottom);}
+.tsms-bottom-nav a,.tsms-bottom-nav button{appearance:none;border:0;background:transparent;color:var(--text-secondary,#445);font:inherit;font-size:11px;font-weight:900;padding:8px 2px 9px;min-height:58px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-decoration:none;}
+.tsms-bottom-nav .ico{width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;color:#58C2FF;}
+.tsms-bottom-nav .ico svg{width:22px;height:22px;stroke:#58C2FF;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;display:block;}
+.tsms-bottom-nav .active{color:var(--text-primary,#111);position:relative;}
+.tsms-bottom-nav .active::before{content:"";position:absolute;top:0;left:14%;right:14%;height:2px;background:#58C2FF;}
+.tsms-more-sheet{position:fixed;left:0;right:0;bottom:0;z-index:1300;background:var(--surface-1,#fff);border-top:2px solid var(--border,#ccc);transform:translateY(110%);transition:transform .2s ease;padding:12px 12px calc(12px + env(safe-area-inset-bottom));}
+.tsms-more-sheet.show{transform:translateY(0);}
+.tsms-more-sheet a{display:block;padding:12px;border:2px solid var(--border,#ccc);margin-top:8px;text-decoration:none;color:var(--text-primary,#111);background:var(--surface-2,#f5f5f5);font-weight:900;}
+.tsms-more-bg{position:fixed;inset:0;background:rgba(0,0,0,.35);opacity:0;pointer-events:none;z-index:1250;transition:opacity .2s;}
+.tsms-more-bg.show{opacity:1;pointer-events:auto;}
+@media (max-width:460px){
+  .header-title{font-size:30px;}
+  .header-meta{font-size:12px;}
+  .group-title{font-size:22px;}
+  .swipe-label{font-size:22px;}
+  .dispatch-status{font-size:22px;}
+}
 </style>
-<link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#ffffff">
-  <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="TSMS">
-
-  <script>(function(){try{var t=localStorage.getItem("tsms_theme")==="dark"?"dark":"light";document.documentElement.setAttribute("data-theme",t);var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content",t==="dark"?"#0F1417":"#F3F6F8");}catch(e){}})();</script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<style id="tsms-bottom-nav-style">
-  body{padding-bottom:78px;}
-  .tsms-hamburger,.hamburger,.tsms-menu,.menu,.tsms-menu-bg,.menu-bg{display:none!important;}
-  .tsms-header,.header{padding-left:14px!important;}
-  .tsms-bottom-nav{position:fixed;left:0;right:0;bottom:0;z-index:1200;display:grid;grid-template-columns:repeat(5,1fr);background:var(--surface-1,#fff);border-top:2px solid var(--border,#ccc);padding-bottom:env(safe-area-inset-bottom);}
-  .tsms-bottom-nav a,.tsms-bottom-nav button{appearance:none;border:0;background:transparent;color:var(--text-secondary,#445);font:inherit;font-size:11px;font-weight:900;padding:8px 2px 9px;min-height:58px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-decoration:none;}
-  .tsms-bottom-nav .ico{width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;color:#58C2FF;}
-  .tsms-bottom-nav .ico svg{width:22px;height:22px;stroke:#58C2FF;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;display:block;}
-  .tsms-bottom-nav .active{color:var(--text-primary,#111);position:relative;}
-  .tsms-bottom-nav .active::before{content:"";position:absolute;top:0;left:14%;right:14%;height:2px;background:#58C2FF;}
-  .tsms-more-sheet{position:fixed;left:0;right:0;bottom:0;z-index:1300;background:var(--surface-1,#fff);border-top:2px solid var(--border,#ccc);transform:translateY(110%);transition:transform .2s ease;padding:12px 12px calc(12px + env(safe-area-inset-bottom));}
-  .tsms-more-sheet.show{transform:translateY(0);}
-  .tsms-more-sheet a{display:block;padding:12px;border:2px solid var(--border,#ccc);margin-top:8px;text-decoration:none;color:var(--text-primary,#111);background:var(--surface-2,#f5f5f5);font-weight:900;}
-  .tsms-more-bg{position:fixed;inset:0;background:rgba(0,0,0,.35);opacity:0;pointer-events:none;z-index:1250;transition:opacity .2s;}
-  .tsms-more-bg.show{opacity:1;pointer-events:auto;}
-</style>
-
-  <script type="module" src="auth-guard.js?v=20260223-5"></script>
-  <script src="./custom-confirm.js"></script>
-  <link rel="stylesheet" href="./tsms-design.css?v=20260227-3">
 </head>
 <body>
 
-<nav class="menu" id="menu" aria-label="サイドメニュー">
-  <a href="index.html">TOP<small>メニュー一覧</small></a>
-  <a href="report.html">日報入力<small>乗車データを入力</small></a>
-  <a href="confirm.html">入力確認<small>当日・過去のデータを確認</small></a>
-  <a href="detail.html">詳細確認<small>概算手取、集計結果など</small></a>
-  <a href="ops.html">出庫 / 帰庫 / 休憩<small>休憩タイマーなど</small></a>
-  <a href="sales.html">月間管理<small>当月、過去の売上確認</small></a>
-  <a href="settings.html">設定<small>歩率、締め期間、シフトなど</small></a>
-</nav>
-<div class="menu-bg" id="menuBg" aria-hidden="true"></div>
-
 <header class="header">
-  <div class="hamburger" id="hamburger" aria-label="メニュー" aria-expanded="false" role="button" tabindex="0">
-    <span></span><span></span><span></span>
+  <div class="header-title">TSMS</div>
+  <div class="header-meta">
+    <span id="syncStatusInline">同期状態: --</span>
+    <span>/</span>
+    <span id="cacheVersionInline">cache: --</span>
   </div>
-  TSMs
 </header>
 
-<main class="container" role="main">
-  <section class="doc" aria-label="アプリ説明">
-    
-    <div class="doc-body">
-      <div class="doc-title-row">
-        <div class="doc-title">アプリの説明書</div>
-        <div class="doc-updated">2026/02/15 更新</div>
-      </div>
+<main class="main" role="main">
+  <section class="card" aria-label="出庫開始">
+    <h2 class="group-title">出庫を開始</h2>
+    <div class="swipe-track" id="dispatchSwipeTrack">
+      <span class="swipe-label" id="dispatchSwipeLabel">右にスワイプして出庫</span>
+      <button type="button" class="swipe-handle" id="dispatchSwipeHandle" aria-label="右にスワイプして出庫">›</button>
+    </div>
+    <p class="dispatch-status" id="dispatchState">未出庫</p>
+  </section>
 
-      <p>Taxi Sales Management systemをご利用いただきありがとうございます！</p>
-      <p>先ずは各ページの説明の前に、出庫前に 出庫/帰庫 ページを開いてください！</p>
-      <p>次に出庫準備を進め、SDカードを入れるタイミングになりましたら、アプリの"出庫"ボタンを押して、車両にSDカードを挿入してください。</p>
-      <p>出庫後は、乗車の度に紙に書いていた情報を今後はアプリに入力していきます。</p>
+  <section class="card" aria-label="勤務カレンダー">
+    <div class="calendar-head">
+      <h2 class="group-title" style="margin:0;">カレンダー</h2>
+      <p class="calendar-month" id="calendarMonthTitle">-</p>
+    </div>
+    <div class="calendar-week" aria-hidden="true">
+      <span>日</span><span>月</span><span>火</span><span>水</span><span>木</span><span>金</span><span>土</span>
+    </div>
+    <div class="calendar-grid" id="calendarGrid"></div>
+    <p class="calendar-info" id="calendarInfo">日付をタップすると勤務情報を表示します。</p>
+  </section>
 
-      <p style="margin-top:20px;">各ページの説明です。</p>
-      <ul class="guide-list">
-        <li>日報入力ページ
-          <span class="subline">└ 乗車毎に乗車種別、支払い方法、現収、未収、必要であれば備考欄へ情報を入力していきます。ここで入力した乗車データは入力確認ページで確認出来ます。</span>
-        </li>
-        <li>入力確認ページ
-          <span class="subline">└ 乗車毎に入力したデータを一覧でご覧になれます。事務所へ帰った後、日報と照らし合わせながら支払い方法などを記入していくととても楽です。</span>
-        </li>
-        <li>詳細確認ページ
-          <span class="subline">└ 入力した各データを集計し、合計金額の確認や時給換算などが出来、営業の参考にすることが出来ます。GO Payの件数や値段も表示されるので、日報へそのまま記入が出来ます。</span>
-        </li>
-        <li>出庫 / 帰庫 / 休憩ページ
-          <span class="subline">└ 出庫時間、帰庫時間を管理でき、休憩時間もリアルタイムで表示、集計します。この日の記録をクリアボタンは紙日報を提出した後押し、アプリを終了させます。</span>
-        </li>
-        <li>月間管理ページ
-          <span class="subline">└ シフトの管理、売上目標の設定、月間で売上の管理を行えます。営業後、帰庫ボタンを押すとその日の営業成果が表示されます。予実管理を行うことで効率的な営業を行うことが出来ます。</span>
-        </li>
-        <li>設定ページ
-          <span class="subline">└ アプリの表示をライトモード、ダークモードで切り替えたり、給料の締日を決めることが出来ます。将来的に消費税や歩合のパーセンテージも変更出来ます。</span>
-        </li>
-      </ul>
-        <li>音声入力の設定について
-          <span class="subline">└ 日報入力ページでの音声入力でAndroid端末のChromeでマイク使用の許可が通らない場合は、設定から他のアプリに重ねて表示という項目がどこかにあるので、そこで許可されているアプリを一旦全て許可しないにする事でマイクが使える様です。</span>
-        </li>
-      </ul>
-
-      <p class="contact">アプリについての要望や質問があれば、/n
-        <strong>taxi-sms@sm-s.com</strong>にご連絡下さい。</p>
-      <div class="sign">2026/2/15　B.O.A.T. Tsubakihara</div>
-      <div class="sign-actions">
-        <button type="button" id="btnMiniLogout" class="logout-mini">ログアウト</button>
-      </div>
+  <section class="card" aria-label="本日・近日イベント">
+    <h2 class="group-title">本日・近日イベント</h2>
+    <p class="group-note">イベント連携は準備中（TBA）</p>
+    <div class="event-list">
+      <button type="button" class="event-btn" data-event-title="イベント #1" data-event-detail="TBA（イベント連携未実装）">
+        <span class="event-time">TBA</span>
+        <span>当日イベント（準備中）</span>
+        <span class="event-arrow">›</span>
+      </button>
+      <button type="button" class="event-btn" data-event-title="イベント #2" data-event-detail="TBA（イベント連携未実装）">
+        <span class="event-time">TBA</span>
+        <span>近日イベント（準備中）</span>
+        <span class="event-arrow">›</span>
+      </button>
+      <button type="button" class="event-btn" data-event-title="イベント #3" data-event-detail="TBA（イベント連携未実装）">
+        <span class="event-time">TBA</span>
+        <span>近日イベント（準備中）</span>
+        <span class="event-arrow">›</span>
+      </button>
     </div>
   </section>
 </main>
 
-<script>
-const menu = document.getElementById("menu");
-const bg = document.getElementById("menuBg");
-const burger = document.getElementById("hamburger");
-
-function openMenu(){
-  menu.classList.add("open");
-  bg.classList.add("show");
-  burger.setAttribute("aria-expanded", "true");
-}
-function closeMenu(){
-  menu.classList.remove("open");
-  bg.classList.remove("show");
-  burger.setAttribute("aria-expanded", "false");
-}
-function toggleMenu(){
-  if(menu.classList.contains("open")){
-    closeMenu();
-    return;
-  }
-  openMenu();
-}
-
-burger.addEventListener("click", toggleMenu);
-burger.addEventListener("keydown", (e)=>{
-  if(e.key==="Enter"||e.key===" "){
-    e.preventDefault();
-    toggleMenu();
-  }
-});
-bg.addEventListener("click", closeMenu);
-window.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeMenu(); });
-
-// close on link tap (mobile)
-menu.querySelectorAll("a").forEach(a=>a.addEventListener("click", closeMenu));
-</script>
+<div class="modal-bg" id="eventModalBg" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="eventModalTitle">
+    <h3 id="eventModalTitle">イベント</h3>
+    <p id="eventModalDetail">TBA</p>
+    <button type="button" class="btn" id="eventModalCloseBtn">閉じる</button>
+  </div>
+</div>
 
 <script>
 (function(){
-  var btn = document.getElementById("btnMiniLogout");
-  if(!btn) return;
-  btn.addEventListener("click", async function(){
+  var KEY_OPS = "ops";
+  var KEY_CURRENT_DAY = "tsms_report_current_day";
+  var KEY_CONFIRM_FORCE_EMPTY = "tsms_confirm_force_empty";
+  var KEY_OPS_SYNC_REV = "ops_sync_rev_v1";
+  var KEY_SALES_PLAN = "tsms_sales_plan";
+  var KEY_CLOUD_OK = "tsms_cloud_last_success_at";
+  var KEY_CLOUD_NG = "tsms_cloud_last_failure_at";
+
+  var syncInline = document.getElementById("syncStatusInline");
+  var dispatchTrack = document.getElementById("dispatchSwipeTrack");
+  var dispatchHandle = document.getElementById("dispatchSwipeHandle");
+  var dispatchLabel = document.getElementById("dispatchSwipeLabel");
+  var dispatchState = document.getElementById("dispatchState");
+  var calendarMonthTitle = document.getElementById("calendarMonthTitle");
+  var calendarGrid = document.getElementById("calendarGrid");
+  var calendarInfo = document.getElementById("calendarInfo");
+  var eventModalBg = document.getElementById("eventModalBg");
+  var eventModalTitle = document.getElementById("eventModalTitle");
+  var eventModalDetail = document.getElementById("eventModalDetail");
+  var eventModalCloseBtn = document.getElementById("eventModalCloseBtn");
+
+  function nowISO(){ return new Date().toISOString(); }
+  function localYmd(){
+    var d = new Date();
+    return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+  }
+  function pad2(n){ return String(n).padStart(2,"0"); }
+  function fmtHm(iso){
+    if(!iso) return "--:--";
+    var d = new Date(iso);
+    if(isNaN(d)) return "--:--";
+    return pad2(d.getHours()) + ":" + pad2(d.getMinutes());
+  }
+  function safeJsonParse(raw, fallback){
     try{
-      if(window.tsmsCloud && typeof window.tsmsCloud.safeLogoutWithBackup === "function"){
-        await window.tsmsCloud.safeLogoutWithBackup();
-        return;
-      }
-      if(window.tsmsCloud && typeof window.tsmsCloud.logout === "function"){
-        await window.tsmsCloud.logout();
-        return;
-      }
-      location.href = "login.html";
-    }catch(e){
-      alert("ログアウトに失敗しました。時間をおいて再度お試しください。");
+      var val = JSON.parse(raw);
+      return (val == null ? fallback : val);
+    }catch(_){
+      return fallback;
     }
+  }
+  function defaultOpsData(){
+    return {
+      date: (new Date()).toISOString().slice(0,10),
+      departAt: null,
+      returnAt: null,
+      breakActive: false,
+      breakStartAt: null,
+      breakSessions: [],
+      shiftClosed: false,
+      updatedAt: null,
+      dayId: ""
+    };
+  }
+  function normalizeOpsData(raw){
+    var d = Object.assign(defaultOpsData(), raw || {});
+    d.breakSessions = Array.isArray(d.breakSessions) ? d.breakSessions : [];
+    if(typeof d.shiftClosed !== "boolean") d.shiftClosed = !!d.returnAt;
+    if(d.shiftClosed && d.breakActive){
+      d.breakActive = false;
+      d.breakStartAt = null;
+    }
+    return d;
+  }
+  function loadOps(){
+    return normalizeOpsData(safeJsonParse(localStorage.getItem(KEY_OPS), defaultOpsData()));
+  }
+  function saveOps(data){
+    var stamp = nowISO();
+    var d = normalizeOpsData(data);
+    d.updatedAt = stamp;
+    localStorage.setItem(KEY_OPS_SYNC_REV, stamp);
+    localStorage.setItem(KEY_OPS, JSON.stringify(d));
+  }
+
+  function updateSyncStatus(){
+    if(!syncInline) return;
+    var okAt = localStorage.getItem(KEY_CLOUD_OK) || "";
+    var ngAt = localStorage.getItem(KEY_CLOUD_NG) || "";
+    var okMs = okAt ? new Date(okAt).getTime() : 0;
+    var ngMs = ngAt ? new Date(ngAt).getTime() : 0;
+    if(okMs && okMs >= ngMs){
+      syncInline.textContent = "同期待済み";
+      return;
+    }
+    if(ngMs){
+      syncInline.textContent = "同期エラー";
+      return;
+    }
+    syncInline.textContent = "同期状態: --";
+  }
+
+  var dragging = false;
+  var dragPointerId = null;
+  var dragStartX = 0;
+  var dragStartPos = 0;
+  var currentPos = 0;
+
+  function getMaxHandleX(){
+    if(!dispatchTrack || !dispatchHandle) return 0;
+    return Math.max(0, dispatchTrack.clientWidth - dispatchHandle.offsetWidth - 10);
+  }
+  function setHandlePos(px, animate){
+    if(!dispatchHandle) return;
+    var x = Math.max(0, Math.min(getMaxHandleX(), Number(px)||0));
+    currentPos = x;
+    dispatchHandle.style.transition = animate ? "transform .18s ease" : "none";
+    dispatchHandle.style.transform = "translateX(" + x + "px)";
+  }
+  function lockDispatchSlider(){
+    if(!dispatchTrack || !dispatchLabel) return;
+    dispatchTrack.classList.add("locked");
+    dispatchLabel.textContent = "出庫済み";
+    setHandlePos(getMaxHandleX(), true);
+  }
+  function unlockDispatchSlider(){
+    if(!dispatchTrack || !dispatchLabel) return;
+    dispatchTrack.classList.remove("locked");
+    dispatchTrack.classList.remove("dragging");
+    dispatchLabel.textContent = "右にスワイプして出庫";
+    setHandlePos(0, true);
+  }
+
+  function renderDispatchState(){
+    if(!dispatchState) return;
+    var d = loadOps();
+    if(d.departAt){
+      dispatchState.classList.add("ok");
+      if(d.returnAt){
+        dispatchState.textContent = "出庫 " + fmtHm(d.departAt) + " / 帰庫 " + fmtHm(d.returnAt);
+      }else{
+        dispatchState.textContent = "出庫完了 " + fmtHm(d.departAt);
+      }
+      lockDispatchSlider();
+      return;
+    }
+    dispatchState.classList.remove("ok");
+    dispatchState.textContent = "未出庫";
+    unlockDispatchSlider();
+  }
+
+  function runDispatch(){
+    var d = loadOps();
+    if(d.departAt){
+      renderDispatchState();
+      return;
+    }
+    var dayId = localYmd();
+    localStorage.removeItem(KEY_CONFIRM_FORCE_EMPTY);
+    localStorage.setItem(KEY_CURRENT_DAY, dayId);
+    d.dayId = dayId;
+    d.departAt = nowISO();
+    d.returnAt = null;
+    d.shiftClosed = false;
+    saveOps(d);
+    renderDispatchState();
+  }
+
+  if(dispatchHandle && dispatchTrack){
+    dispatchHandle.addEventListener("pointerdown", function(e){
+      if(dispatchTrack.classList.contains("locked")) return;
+      dragging = true;
+      dragPointerId = e.pointerId;
+      dragStartX = e.clientX;
+      dragStartPos = currentPos;
+      dispatchTrack.classList.add("dragging");
+      try{ dispatchHandle.setPointerCapture(e.pointerId); }catch(_){ }
+      e.preventDefault();
+    });
+
+    dispatchHandle.addEventListener("pointermove", function(e){
+      if(!dragging || e.pointerId !== dragPointerId) return;
+      var dx = e.clientX - dragStartX;
+      setHandlePos(dragStartPos + dx, false);
+      e.preventDefault();
+    });
+
+    function finishDrag(pointerId){
+      if(!dragging || pointerId !== dragPointerId) return;
+      dragging = false;
+      dragPointerId = null;
+      if(dispatchTrack) dispatchTrack.classList.remove("dragging");
+      var max = getMaxHandleX();
+      var passed = (max > 0) && (currentPos >= max * 0.82);
+      if(passed){
+        setHandlePos(max, true);
+        runDispatch();
+      }else{
+        setHandlePos(0, true);
+      }
+    }
+
+    dispatchHandle.addEventListener("pointerup", function(e){ finishDrag(e.pointerId); });
+    dispatchHandle.addEventListener("pointercancel", function(e){ finishDrag(e.pointerId); });
+    window.addEventListener("resize", function(){
+      if(dispatchTrack && dispatchTrack.classList.contains("locked")) setHandlePos(getMaxHandleX(), false);
+      else setHandlePos(0, false);
+    });
+  }
+
+  function loadSalesPlan(){
+    return safeJsonParse(localStorage.getItem(KEY_SALES_PLAN), {});
+  }
+  function shiftMeta(shift){
+    if(shift === "work" || shift === "part" || shift === "furidashi") return {label:"出勤", dot:"work"};
+    if(shift === "holiday" || shift === "furikyu") return {label:"休日", dot:"holiday"};
+    if(shift === "absence") return {label:"欠勤", dot:"absence"};
+    return {label:"未設定", dot:""};
+  }
+  function renderCalendar(){
+    if(!calendarGrid || !calendarMonthTitle) return;
+    var now = new Date();
+    var year = now.getFullYear();
+    var month = now.getMonth();
+    var first = new Date(year, month, 1);
+    var startWeekday = first.getDay();
+    var days = new Date(year, month + 1, 0).getDate();
+    var todayYmd = localYmd();
+    var plan = loadSalesPlan();
+
+    calendarMonthTitle.textContent = year + "年" + (month + 1) + "月";
+    calendarGrid.innerHTML = "";
+
+    for(var blank = 0; blank < startWeekday; blank += 1){
+      var empty = document.createElement("div");
+      empty.className = "calendar-day empty";
+      empty.setAttribute("aria-hidden", "true");
+      calendarGrid.appendChild(empty);
+    }
+
+    for(var day = 1; day <= days; day += 1){
+      var dayId = year + "-" + String(month + 1).padStart(2, "0") + "-" + String(day).padStart(2, "0");
+      var row = plan[dayId] || {};
+      var meta = shiftMeta(row.shift || "");
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "calendar-day" + (dayId === todayYmd ? " today" : "");
+      btn.dataset.dayId = dayId;
+      btn.dataset.shiftLabel = meta.label;
+      btn.innerHTML = '<span>' + day + '</span>' + (meta.dot ? '<span class="shift-dot ' + meta.dot + '"></span>' : '');
+      btn.addEventListener("click", function(ev){
+        var target = ev.currentTarget;
+        if(!calendarInfo || !target) return;
+        calendarInfo.textContent = target.dataset.dayId + " : " + (target.dataset.shiftLabel || "未設定");
+      });
+      calendarGrid.appendChild(btn);
+    }
+  }
+
+  function closeEventModal(){
+    if(!eventModalBg) return;
+    eventModalBg.classList.remove("show");
+    eventModalBg.setAttribute("aria-hidden", "true");
+  }
+  if(eventModalCloseBtn){
+    eventModalCloseBtn.addEventListener("click", closeEventModal);
+  }
+  if(eventModalBg){
+    eventModalBg.addEventListener("click", function(e){
+      if(e.target === eventModalBg) closeEventModal();
+    });
+  }
+  document.querySelectorAll(".event-btn").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      if(!eventModalBg || !eventModalTitle || !eventModalDetail) return;
+      eventModalTitle.textContent = btn.dataset.eventTitle || "イベント";
+      eventModalDetail.textContent = btn.dataset.eventDetail || "TBA";
+      eventModalBg.classList.add("show");
+      eventModalBg.setAttribute("aria-hidden", "false");
+      if(eventModalCloseBtn) eventModalCloseBtn.focus();
+    });
   });
+
+  updateSyncStatus();
+  renderDispatchState();
+  renderCalendar();
 })();
 </script>
 
-
-  <script>
-    (function(){if('serviceWorker'in navigator&&location.protocol.indexOf('http')===0){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js?v=20260228-1').catch(function(){});});}})();
-  </script>
-
+<script>
+(function(){if('serviceWorker'in navigator&&location.protocol.indexOf('http')===0){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js?v=20260228-1').catch(function(){});});}})();
+</script>
 
 <nav class="tsms-bottom-nav" aria-label="ボトムメニュー">
   <a href="report.html" data-tab="report"><span class="ico">📝</span><span>日報入力</span></a>
@@ -354,32 +693,17 @@ menu.querySelectorAll("a").forEach(a=>a.addEventListener("click", closeMenu));
   var btn=document.getElementById('tsmsMoreBtn');
   var bg=document.getElementById('tsmsMoreBg');
   var sheet=document.getElementById('tsmsMoreSheet');
-  function closeMore(){sheet.classList.remove('show');bg.classList.remove('show');}
+  function closeMore(){ if(sheet) sheet.classList.remove('show'); if(bg) bg.classList.remove('show'); }
   if(btn&&bg&&sheet){
     btn.addEventListener('click',function(){sheet.classList.add('show');bg.classList.add('show');});
     bg.addEventListener('click',closeMore);
   }
-  var guard = page==='report';
-  function isDirtyReport(){
-    var cash=document.getElementById('in_cash');
-    var credit=document.getElementById('in_credit');
-    var note=document.getElementById('in_note');
-    var hasVal=((cash&&cash.value)||(credit&&credit.value)||(note&&note.value));
-    var selected=document.querySelector('button[data-group].is-selected');
-    return !!(hasVal||selected);
-  }
   document.querySelectorAll('.tsms-bottom-nav a, .tsms-more-sheet a').forEach(function(a){
-    a.addEventListener('click',async function(e){
-      if(guard && isDirtyReport() && !(await window.tsmsConfirm('入力を中止しますか？'))){
-        e.preventDefault();
-      }
-      closeMore();
-    });
+    a.addEventListener('click',closeMore);
   });
 })();
 </script>
 
-
-  <script src="./cache-version.js"></script>
+<script src="./cache-version.js"></script>
 </body>
 </html>
