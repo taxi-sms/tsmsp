@@ -128,11 +128,11 @@ body{padding-bottom:78px;}
 }
 .swipe-track{
   position:relative;
-  min-height:58px;
+  min-height:60px;
   border:2px solid var(--border);
   background:var(--surface-2);
   border-radius:999px;
-  padding:5px;
+  padding:4px;
   overflow:hidden;
   touch-action:pan-y;
 }
@@ -157,8 +157,8 @@ body{padding-bottom:78px;}
 :root[data-theme="dark"] .swipe-label{ color:#e3efff; }
 .swipe-handle{
   position:absolute;
-  left:5px;
-  top:5px;
+  left:4px;
+  top:50%;
   width:48px;
   height:48px;
   border:2px solid var(--accent);
@@ -171,7 +171,7 @@ body{padding-bottom:78px;}
   line-height:1;
   cursor:pointer;
   touch-action:none;
-  transform:translateX(0);
+  transform:translate3d(0,-50%,0);
 }
 :root[data-theme="dark"] .swipe-handle{
   background:linear-gradient(180deg, #78c5ff, #3f9bff);
@@ -184,14 +184,16 @@ body{padding-bottom:78px;}
   border:2px solid var(--border);
   border-radius:10px;
   background:var(--surface-2);
-  padding:10px;
-  font-size:24px;
-  font-weight:900;
+  padding:8px 10px;
+  font-size:18px;
+  line-height:1.35;
+  letter-spacing:.01em;
+  font-weight:800;
 }
 :root[data-theme="dark"] .dispatch-status{
   background:linear-gradient(180deg, rgba(17,35,64,.95), rgba(11,24,46,.95));
 }
-.dispatch-status.ok{ border-color:var(--accent); }
+.dispatch-status.ok{ border-color:var(--accent); color:var(--text-primary); }
 .calendar-head{
   display:flex;
   justify-content:space-between;
@@ -204,6 +206,30 @@ body{padding-bottom:78px;}
   font-size:18px;
   font-weight:900;
   color:var(--text-secondary);
+}
+.calendar-nav{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.calendar-nav-btn{
+  appearance:none;
+  width:32px;
+  height:32px;
+  border:2px solid var(--border);
+  border-radius:8px;
+  background:var(--surface-2);
+  color:var(--text-primary);
+  font:inherit;
+  font-size:20px;
+  line-height:1;
+  font-weight:900;
+  display:grid;
+  place-items:center;
+  cursor:pointer;
+}
+:root[data-theme="dark"] .calendar-nav-btn{
+  background:linear-gradient(180deg, rgba(16,33,62,.9), rgba(9,20,39,.9));
 }
 .calendar-week,
 .calendar-grid{
@@ -346,7 +372,7 @@ body{padding-bottom:78px;}
   .header-meta{font-size:12px;}
   .group-title{font-size:22px;}
   .swipe-label{font-size:22px;}
-  .dispatch-status{font-size:22px;}
+  .dispatch-status{font-size:17px;}
 }
 </style>
 
@@ -375,7 +401,11 @@ body{padding-bottom:78px;}
   <section class="card" aria-label="勤務カレンダー">
     <div class="calendar-head">
       <h2 class="group-title" style="margin:0;">カレンダー</h2>
-      <p class="calendar-month" id="calendarMonthTitle">-</p>
+      <div class="calendar-nav">
+        <button type="button" class="calendar-nav-btn" id="calendarPrevBtn" aria-label="前月">‹</button>
+        <p class="calendar-month" id="calendarMonthTitle">-</p>
+        <button type="button" class="calendar-nav-btn" id="calendarNextBtn" aria-label="翌月">›</button>
+      </div>
     </div>
     <div class="calendar-week" aria-hidden="true">
       <span>日</span><span>月</span><span>火</span><span>水</span><span>木</span><span>金</span><span>土</span>
@@ -431,8 +461,14 @@ body{padding-bottom:78px;}
   var dispatchLabel = document.getElementById("dispatchSwipeLabel");
   var dispatchState = document.getElementById("dispatchState");
   var calendarMonthTitle = document.getElementById("calendarMonthTitle");
+  var calendarPrevBtn = document.getElementById("calendarPrevBtn");
+  var calendarNextBtn = document.getElementById("calendarNextBtn");
   var calendarGrid = document.getElementById("calendarGrid");
   var calendarInfo = document.getElementById("calendarInfo");
+  var calendarCursor = (function(){
+    var now = new Date();
+    return new Date(now.getFullYear(), now.getMonth(), 1);
+  })();
   var eventModalBg = document.getElementById("eventModalBg");
   var eventModalTitle = document.getElementById("eventModalTitle");
   var eventModalDetail = document.getElementById("eventModalDetail");
@@ -524,7 +560,7 @@ body{padding-bottom:78px;}
     var x = Math.max(0, Math.min(getMaxHandleX(), Number(px)||0));
     currentPos = x;
     dispatchHandle.style.transition = animate ? "transform .18s ease" : "none";
-    dispatchHandle.style.transform = "translateX(" + x + "px)";
+    dispatchHandle.style.transform = "translate3d(" + x + "px,-50%,0)";
   }
   function lockDispatchSlider(){
     if(!dispatchTrack || !dispatchLabel) return;
@@ -626,45 +662,58 @@ body{padding-bottom:78px;}
     if(shift === "absence") return {label:"欠勤", dot:"absence"};
     return {label:"未設定", dot:""};
   }
-  function renderCalendar(){
-    if(!calendarGrid || !calendarMonthTitle) return;
-    var now = new Date();
-    var year = now.getFullYear();
-    var month = now.getMonth();
-    var first = new Date(year, month, 1);
-    var startWeekday = first.getDay();
-    var days = new Date(year, month + 1, 0).getDate();
-    var todayYmd = localYmd();
-    var plan = loadSalesPlan();
+function renderCalendar(){
+  if(!calendarGrid || !calendarMonthTitle) return;
+  var year = calendarCursor.getFullYear();
+  var month = calendarCursor.getMonth();
+  var first = new Date(year, month, 1);
+  var startWeekday = first.getDay();
+  var days = new Date(year, month + 1, 0).getDate();
+  var todayYmd = localYmd();
+  var plan = loadSalesPlan();
 
-    calendarMonthTitle.textContent = year + "年" + (month + 1) + "月";
-    calendarGrid.innerHTML = "";
+  calendarMonthTitle.textContent = year + "年" + (month + 1) + "月";
+  calendarGrid.innerHTML = "";
+  if(calendarInfo) calendarInfo.textContent = "日付をタップすると勤務情報を表示します。";
 
-    for(var blank = 0; blank < startWeekday; blank += 1){
-      var empty = document.createElement("div");
-      empty.className = "calendar-day empty";
-      empty.setAttribute("aria-hidden", "true");
-      calendarGrid.appendChild(empty);
-    }
-
-    for(var day = 1; day <= days; day += 1){
-      var dayId = year + "-" + String(month + 1).padStart(2, "0") + "-" + String(day).padStart(2, "0");
-      var row = plan[dayId] || {};
-      var meta = shiftMeta(row.shift || "");
-      var btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "calendar-day" + (dayId === todayYmd ? " today" : "");
-      btn.dataset.dayId = dayId;
-      btn.dataset.shiftLabel = meta.label;
-      btn.innerHTML = '<span>' + day + '</span>' + (meta.dot ? '<span class="shift-dot ' + meta.dot + '"></span>' : '');
-      btn.addEventListener("click", function(ev){
-        var target = ev.currentTarget;
-        if(!calendarInfo || !target) return;
-        calendarInfo.textContent = target.dataset.dayId + " : " + (target.dataset.shiftLabel || "未設定");
-      });
-      calendarGrid.appendChild(btn);
-    }
+  for(var blank = 0; blank < startWeekday; blank += 1){
+    var empty = document.createElement("div");
+    empty.className = "calendar-day empty";
+    empty.setAttribute("aria-hidden", "true");
+    calendarGrid.appendChild(empty);
   }
+
+  for(var day = 1; day <= days; day += 1){
+    var dayId = year + "-" + String(month + 1).padStart(2, "0") + "-" + String(day).padStart(2, "0");
+    var row = plan[dayId] || {};
+    var meta = shiftMeta(row.shift || "");
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "calendar-day" + (dayId === todayYmd ? " today" : "");
+    btn.dataset.dayId = dayId;
+    btn.dataset.shiftLabel = meta.label;
+    btn.innerHTML = '<span>' + day + '</span>' + (meta.dot ? '<span class="shift-dot ' + meta.dot + '"></span>' : '');
+    btn.addEventListener("click", function(ev){
+      var target = ev.currentTarget;
+      if(!calendarInfo || !target) return;
+      calendarInfo.textContent = target.dataset.dayId + " : " + (target.dataset.shiftLabel || "未設定");
+    });
+    calendarGrid.appendChild(btn);
+  }
+}
+
+if(calendarPrevBtn){
+  calendarPrevBtn.addEventListener("click", function(){
+    calendarCursor = new Date(calendarCursor.getFullYear(), calendarCursor.getMonth() - 1, 1);
+    renderCalendar();
+  });
+}
+if(calendarNextBtn){
+  calendarNextBtn.addEventListener("click", function(){
+    calendarCursor = new Date(calendarCursor.getFullYear(), calendarCursor.getMonth() + 1, 1);
+    renderCalendar();
+  });
+}
 
   function closeEventModal(){
     if(!eventModalBg) return;
