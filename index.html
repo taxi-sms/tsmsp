@@ -32,7 +32,7 @@
   --danger:#d64545;
 }
 :root[data-theme="dark"]{
-  --bg:#08111b;
+  --bg:#0F1417;
   --surface-1:#0e1a2d;
   --surface-2:#0a1630;
   --border:#2f4d77;
@@ -50,11 +50,6 @@ html,body{
   background:var(--bg);
   color:var(--text-primary);
   font-family:"Noto Sans JP",sans-serif;
-}
-:root[data-theme="dark"] body{
-  background:
-    radial-gradient(120% 65% at 50% -10%, rgba(84,145,233,.18), rgba(8,17,27,0) 70%),
-    linear-gradient(180deg, #08111b 0%, #07101a 45%, #08111b 100%);
 }
 body{padding-bottom:78px;}
 .header{
@@ -94,7 +89,7 @@ body{padding-bottom:78px;}
   margin:0 auto;
   padding:12px;
   display:grid;
-  gap:10px;
+  gap:8px;
 }
 .card{
   border:2px solid var(--border);
@@ -102,6 +97,7 @@ body{padding-bottom:78px;}
   border-radius:14px;
   padding:10px;
 }
+.dispatch-card{padding-bottom:8px;}
 :root[data-theme="dark"] .card{
   background:linear-gradient(180deg, rgba(19,38,70,.95), rgba(8,20,42,.95));
   box-shadow:0 10px 26px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.08);
@@ -169,6 +165,10 @@ body{padding-bottom:78px;}
   font-size:26px;
   font-weight:900;
   line-height:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:0;
   cursor:pointer;
   touch-action:none;
   transform:translate3d(0,-50%,0);
@@ -180,20 +180,26 @@ body{padding-bottom:78px;}
 }
 .swipe-track.dragging .swipe-handle{ transition:none !important; }
 .dispatch-status{
-  margin:8px 0 0;
-  border:2px solid var(--border);
-  border-radius:10px;
-  background:var(--surface-2);
-  padding:8px 10px;
-  font-size:18px;
-  line-height:1.35;
+  position:absolute;
+  right:12px;
+  bottom:4px;
+  margin:0;
+  border:0;
+  background:transparent;
+  padding:0;
+  font-size:12px;
+  line-height:1.2;
   letter-spacing:.01em;
-  font-weight:800;
+  font-weight:700;
+  color:var(--text-muted);
+  pointer-events:none;
 }
 :root[data-theme="dark"] .dispatch-status{
-  background:linear-gradient(180deg, rgba(17,35,64,.95), rgba(11,24,46,.95));
+  color:#b7c9e8;
 }
-.dispatch-status.ok{ border-color:var(--accent); color:var(--text-primary); }
+.dispatch-status.ok{
+  color:#9fd0ff;
+}
 .calendar-head{
   display:flex;
   justify-content:space-between;
@@ -372,7 +378,7 @@ body{padding-bottom:78px;}
   .header-meta{font-size:12px;}
   .group-title{font-size:22px;}
   .swipe-label{font-size:22px;}
-  .dispatch-status{font-size:17px;}
+
 }
 </style>
 
@@ -389,13 +395,13 @@ body{padding-bottom:78px;}
 </header>
 
 <main class="main" role="main">
-  <section class="card" aria-label="出庫開始">
+  <section class="card dispatch-card" aria-label="出庫開始">
     <h2 class="group-title">出庫を開始</h2>
     <div class="swipe-track" id="dispatchSwipeTrack">
       <span class="swipe-label" id="dispatchSwipeLabel">右にスワイプして出庫</span>
       <button type="button" class="swipe-handle" id="dispatchSwipeHandle" aria-label="右にスワイプして出庫">›</button>
+      <p class="dispatch-status" id="dispatchState">未出庫</p>
     </div>
-    <p class="dispatch-status" id="dispatchState">未出庫</p>
   </section>
 
   <section class="card" aria-label="勤務カレンダー">
