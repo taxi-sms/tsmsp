@@ -1121,6 +1121,15 @@ ${remaining}秒後に${countdownLabel}`;
     try { activeVoiceRecognition.abort(); } catch (_) {}
   }
 
+  function stopVoiceInputOnPageLeave() {
+    voiceFlowAbortRequested = true;
+    stopActiveVoiceRecognition();
+    closeVoiceInputModal();
+  }
+
+  window.addEventListener("pagehide", stopVoiceInputOnPageLeave);
+  window.addEventListener("beforeunload", stopVoiceInputOnPageLeave);
+
   function setupVoiceStageModal(titleText, stepLabel, promptText, statusText) {
     setVoiceInputModalState({
       title: titleText || "音声入力",
