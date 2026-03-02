@@ -574,7 +574,7 @@ import { cloudBackup, cloudRestore } from "./cloud-store.js";
 </script>
 
 <script type="module">
-import { supabase } from "./supabase-client.js";
+import { loadConfig, supabase } from "./supabase-client.js";
 import { fetchCurrentSubscriptionState, isSubscriptionActive } from "./subscription-state.js";
 
 (function(){
@@ -670,6 +670,44 @@ import { fetchCurrentSubscriptionState, isSubscriptionActive } from "./subscript
     }
   }
 
+  async function createCheckoutSessionDirect(accessToken, body) {
+    const cfg = loadConfig();
+    const baseUrl = String(cfg && cfg.url ? cfg.url : "").trim().replace(/\/+$/, "");
+    const anonKey = String(cfg && cfg.anonKey ? cfg.anonKey : "").trim();
+    if (!baseUrl || !anonKey) throw new Error("missing_supabase_config");
+
+    const endpoint = `${baseUrl}/functions/v1/create-checkout-session`;
+    const res = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        apikey: anonKey,
+        authorization: `Bearer ${accessToken}`
+      },
+      body: JSON.stringify(body)
+    });
+
+    const raw = await res.text();
+    let payload = null;
+    try {
+      payload = raw ? JSON.parse(raw) : null;
+    } catch (_) {
+      payload = null;
+    }
+
+    if (!res.ok) {
+      const apiCode = String(payload?.error || "").trim();
+      const apiDetail = String(payload?.detail?.message || payload?.message || "").trim();
+      const msg = [apiCode, apiDetail].filter(Boolean).join(": ") || `http_${res.status}`;
+      const e = new Error(msg);
+      e.status = res.status;
+      e.responseBody = raw || "";
+      throw e;
+    }
+
+    return payload || {};
+  }
+
   async function refreshSubscriptionState() {
     setStatusText("確認中...");
     try {
@@ -705,15 +743,11 @@ import { fetchCurrentSubscriptionState, isSubscriptionActive } from "./subscript
 
       const successUrl = new URL("settings.html?subscription=success", location.origin).toString();
       const cancelUrl = new URL("settings.html?subscription=cancel", location.origin).toString();
-      const { data, error } = await supabase.functions.invoke("create-checkout-session", {
-        headers: { Authorization: `Bearer ${accessToken}` },
-        body: {
-          planCode: "starter_monthly",
-          successUrl,
-          cancelUrl
-        }
+      const data = await createCheckoutSessionDirect(accessToken, {
+        planCode: "starter_monthly",
+        successUrl,
+        cancelUrl
       });
-      if (error) throw error;
       const url = data && data.url ? String(data.url) : "";
       if (!url) throw new Error("checkout_url_missing");
       redirected = true;
