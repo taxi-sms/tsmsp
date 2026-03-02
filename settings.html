@@ -651,10 +651,17 @@ import { fetchCurrentSubscriptionState, isSubscriptionActive } from "./subscript
     startBtn.disabled = true;
     const originalText = startBtn.textContent;
     startBtn.textContent = "決済ページを準備中...";
+    let redirected = false;
     try {
+      const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+      if (sessionError) throw sessionError;
+      const accessToken = String(sessionData?.session?.access_token || "").trim();
+      if (!accessToken) throw new Error("missing_session");
+
       const successUrl = new URL("settings.html?subscription=success", location.origin).toString();
       const cancelUrl = new URL("settings.html?subscription=cancel", location.origin).toString();
       const { data, error } = await supabase.functions.invoke("create-checkout-session", {
+        headers: { Authorization: `Bearer ${accessToken}` },
         body: {
           planCode: "starter_monthly",
           successUrl,
@@ -664,11 +671,20 @@ import { fetchCurrentSubscriptionState, isSubscriptionActive } from "./subscript
       if (error) throw error;
       const url = data && data.url ? String(data.url) : "";
       if (!url) throw new Error("checkout_url_missing");
+      redirected = true;
       location.href = url;
-    } catch (_) {
-      alert("決済ページの起動に失敗しました。時間をおいて再試行してください。");
-      startBtn.disabled = false;
-      startBtn.textContent = originalText || "月額プランを開始";
+    } catch (err) {
+      const msg = String(err && err.message ? err.message : "");
+      const hint = msg.includes("missing_session") || msg.includes("Missing authorization header")
+        ? "（再ログイン後に再試行）"
+        : "";
+      console.error("checkout_start_failed", err);
+      alert(`決済ページの起動に失敗しました。時間をおいて再試行してください。${hint}`);
+    } finally {
+      if (!redirected) {
+        startBtn.disabled = false;
+        startBtn.textContent = originalText || "月額プランを開始";
+      }
     }
   }
 
