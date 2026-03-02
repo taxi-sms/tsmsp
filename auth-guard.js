@@ -10,6 +10,7 @@ import {
 } from "./cloud-store.js";
 import { migrateLocalStorageSchema } from "./storage-schema.js";
 import { installSwUpdateUi } from "./sw-update-ui.js";
+import { fetchCurrentSubscriptionState, isSubscriptionActive } from "./subscription-state.js";
 
 const PUBLIC_PAGES = new Set(["login.html", "signup.html", "auth-callback.html"]);
 const IDLE_LOGOUT_MS = 6 * 60 * 60 * 1000;
@@ -18,6 +19,9 @@ const SESSION_RETRY_DELAY_MS = 350;
 const OPS_KEY = "ops";
 const OPS_ARCHIVE_KEY = "ops_archive_v1";
 const FORCE_HYDRATION_ONCE_KEY = "tsms_force_hydration_once";
+const SUBSCRIPTION_GATE_ENFORCE_KEY = "tsms_subscription_gate_enforce";
+const SUBSCRIPTION_GATE_ALLOWLIST_KEY = "tsms_subscription_gate_allowlist";
+const SUBSCRIPTION_GATE_EXEMPT_PAGES = new Set(["index.html", "settings.html"]);
 
 function currentPage() {
   const p = location.pathname.split("/").pop();
@@ -70,6 +74,59 @@ function consumeForceHydrationFlag() {
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function parseSubscriptionGateAllowlist() {
+  try {
+    const raw = localStorage.getItem(SUBSCRIPTION_GATE_ALLOWLIST_KEY);
+    if (!raw) return [];
+    const arr = JSON.parse(raw);
+    if (!Array.isArray(arr)) return [];
+    return arr.map((x) => String(x || "").trim()).filter(Boolean);
+  } catch (_) {
+    return [];
+  }
+}
+
+function shouldEnforceSubscriptionGate(userId) {
+  if ((localStorage.getItem(SUBSCRIPTION_GATE_ENFORCE_KEY) || "0") !== "1") return false;
+  const allowlist = parseSubscriptionGateAllowlist();
+  if (!allowlist.length) return true;
+  return allowlist.includes(String(userId || ""));
+}
+
+function shouldSkipSubscriptionGateOnPage() {
+  const p = currentPage();
+  return PUBLIC_PAGES.has(p) || SUBSCRIPTION_GATE_EXEMPT_PAGES.has(p);
+}
+
+async function runSubscriptionGate(userId) {
+  if (!shouldEnforceSubscriptionGate(userId)) {
+    window.tsmsSubscription = { checked: false, enforced: false, active: true, reason: "gate_disabled" };
+    return true;
+  }
+
+  if (shouldSkipSubscriptionGateOnPage()) {
+    window.tsmsSubscription = { checked: false, enforced: true, active: true, reason: "exempt_page" };
+    return true;
+  }
+
+  try {
+    const state = await fetchCurrentSubscriptionState();
+    const active = isSubscriptionActive(state);
+    window.tsmsSubscription = { checked: true, enforced: true, active, state };
+    if (active) return true;
+
+    try {
+      alert("契約状態の確認が必要です。設定画面から契約状態をご確認ください。");
+    } catch (_) {}
+    location.replace(new URL("settings.html?subscription=required", location.href).toString());
+    return false;
+  } catch (_) {
+    // Fail-open to avoid accidental global lockout on transient issues.
+    window.tsmsSubscription = { checked: true, enforced: true, active: true, reason: "check_failed_open" };
+    return true;
+  }
 }
 
 async function getSessionWithRetry() {
@@ -206,6 +263,7 @@ async function guard() {
     }
 
     sessionStorage.removeItem(reloadMarker);
+    if (!(await runSubscriptionGate(userId))) return;
 
     window.tsmsCloud = {
       backupNow: () => requestCloudBackup({ immediate: true }),
