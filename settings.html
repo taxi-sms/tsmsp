@@ -625,6 +625,51 @@ import { fetchCurrentSubscriptionState, isSubscriptionActive } from "./subscript
     }
   }
 
+  async function summarizeCheckoutError(err) {
+    try {
+      const parts = [];
+      const rawMsg = String(err && err.message ? err.message : "").trim();
+      if (rawMsg) parts.push(rawMsg);
+
+      if (err && typeof err === "object") {
+        const code = String(err.code || "").trim();
+        const details = String(err.details || "").trim();
+        const hint = String(err.hint || "").trim();
+        if (code) parts.push(`code=${code}`);
+        if (details) parts.push(`details=${details}`);
+        if (hint) parts.push(`hint=${hint}`);
+
+        if ("context" in err) {
+          const res = err.context;
+          if (res && typeof res === "object") {
+            const status = Number(res.status || 0);
+            if (status) parts.push(`status=${status}`);
+            const statusText = String(res.statusText || "").trim();
+            if (statusText) parts.push(statusText);
+            if (typeof res.clone === "function") {
+              const text = String(await res.clone().text()).trim();
+              if (text) {
+                try {
+                  const payload = JSON.parse(text);
+                  const apiCode = String(payload?.error || "").trim();
+                  const apiMessage = String(payload?.detail?.message || payload?.message || "").trim();
+                  if (apiCode) parts.push(`api=${apiCode}`);
+                  if (apiMessage) parts.push(apiMessage);
+                } catch (_) {
+                  parts.push(text);
+                }
+              }
+            }
+          }
+        }
+      }
+
+      return parts.join(" | ").trim() || "unknown_error";
+    } catch (_) {
+      return "unknown_error";
+    }
+  }
+
   async function refreshSubscriptionState() {
     setStatusText("確認中...");
     try {
@@ -652,7 +697,6 @@ import { fetchCurrentSubscriptionState, isSubscriptionActive } from "./subscript
     const originalText = startBtn.textContent;
     startBtn.textContent = "決済ページを準備中...";
     let redirected = false;
-    let failedReason = "";
     try {
       const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
       if (sessionError) throw sessionError;
@@ -676,23 +720,10 @@ import { fetchCurrentSubscriptionState, isSubscriptionActive } from "./subscript
       location.href = url;
     } catch (err) {
       const msg = String(err && err.message ? err.message : "");
-      if (err && typeof err === "object" && "context" in err) {
-        try {
-          const res = err.context;
-          const payload = res && typeof res.clone === "function"
-            ? await res.clone().json()
-            : null;
-          const code = String(payload?.error || "").trim();
-          const detail = String(payload?.detail?.message || "").trim();
-          failedReason = [code, detail].filter(Boolean).join(": ");
-        } catch (_) {
-          failedReason = "";
-        }
-      }
       const hint = msg.includes("missing_session") || msg.includes("Missing authorization header")
         ? "（再ログイン後に再試行）"
         : "";
-      const reason = failedReason || msg;
+      const reason = await summarizeCheckoutError(err);
       console.error("checkout_start_failed", { err, reason });
       alert(`決済ページの起動に失敗しました。時間をおいて再試行してください。${hint}${reason ? `\n原因: ${reason}` : ""}`);
     } finally {
