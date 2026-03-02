@@ -240,6 +240,18 @@
     </div>
   </section>
 
+  <section class="section">
+    <div class="title">契約</div>
+    <div class="note" id="subscriptionNote">現在の契約状態を確認し、未契約の場合は課金ページへ進めます。</div>
+    <div class="field">
+      <div class="label">現在の契約状態</div>
+      <div class="input" id="subscriptionStatus">確認中...</div>
+    </div>
+    <div class="actions" style="grid-template-columns:1fr;">
+      <button class="btn" id="btnStartSubscription" type="button">月額プランを開始</button>
+    </div>
+  </section>
+
 </main>
 
 <script>
@@ -558,6 +570,112 @@ import { cloudBackup, cloudRestore } from "./cloud-store.js";
       }
     });
   }
+})();
+</script>
+
+<script type="module">
+import { supabase } from "./supabase-client.js";
+import { fetchCurrentSubscriptionState, isSubscriptionActive } from "./subscription-state.js";
+
+(function(){
+  const noteEl = document.getElementById("subscriptionNote");
+  const statusEl = document.getElementById("subscriptionStatus");
+  const startBtn = document.getElementById("btnStartSubscription");
+  const params = new URLSearchParams(location.search);
+
+  function removeSubscriptionQuery() {
+    if (!params.has("subscription")) return;
+    const next = new URL(location.href);
+    next.searchParams.delete("subscription");
+    history.replaceState(null, "", next.toString());
+  }
+
+  function formatStatus(status) {
+    const v = String(status || "");
+    if (v === "active") return "有効";
+    if (v === "trialing") return "トライアル中";
+    if (v === "past_due") return "支払い失敗";
+    if (v === "canceled") return "解約済み";
+    if (v === "incomplete") return "未完了";
+    if (v === "unpaid") return "未払い";
+    return "未契約";
+  }
+
+  function setStatusText(text) {
+    if (statusEl) statusEl.textContent = text;
+  }
+
+  function setGateNoticeIfNeeded() {
+    if (!noteEl) return;
+    if (params.get("subscription") === "required") {
+      noteEl.textContent = "契約が無効のため一部機能は制限中です。下のボタンから再開してください。";
+    }
+  }
+
+  function showCheckoutFlowMessage() {
+    const mode = params.get("subscription");
+    if (mode === "success") {
+      alert("決済が完了しました。契約状態を更新します。");
+      removeSubscriptionQuery();
+      return;
+    }
+    if (mode === "cancel") {
+      alert("決済はキャンセルされました。");
+      removeSubscriptionQuery();
+    }
+  }
+
+  async function refreshSubscriptionState() {
+    setStatusText("確認中...");
+    try {
+      const state = await fetchCurrentSubscriptionState();
+      const statusLabel = formatStatus(state && state.status);
+      const periodEnd = state && state.current_period_end
+        ? new Date(state.current_period_end).toLocaleString("ja-JP")
+        : "";
+      setStatusText(periodEnd ? `${statusLabel}（次回更新: ${periodEnd}）` : statusLabel);
+
+      if (startBtn) {
+        const active = isSubscriptionActive(state);
+        startBtn.disabled = active;
+        startBtn.textContent = active ? "契約は有効です" : "月額プランを開始";
+      }
+    } catch (_) {
+      setStatusText("契約状態の取得に失敗");
+      if (startBtn) startBtn.disabled = false;
+    }
+  }
+
+  async function startCheckout() {
+    if (!startBtn) return;
+    startBtn.disabled = true;
+    const originalText = startBtn.textContent;
+    startBtn.textContent = "決済ページを準備中...";
+    try {
+      const successUrl = new URL("settings.html?subscription=success", location.origin).toString();
+      const cancelUrl = new URL("settings.html?subscription=cancel", location.origin).toString();
+      const { data, error } = await supabase.functions.invoke("create-checkout-session", {
+        body: {
+          planCode: "starter_monthly",
+          successUrl,
+          cancelUrl
+        }
+      });
+      if (error) throw error;
+      const url = data && data.url ? String(data.url) : "";
+      if (!url) throw new Error("checkout_url_missing");
+      location.href = url;
+    } catch (_) {
+      alert("決済ページの起動に失敗しました。時間をおいて再試行してください。");
+      startBtn.disabled = false;
+      startBtn.textContent = originalText || "月額プランを開始";
+    }
+  }
+
+  setGateNoticeIfNeeded();
+  showCheckoutFlowMessage();
+  refreshSubscriptionState();
+  if (startBtn) startBtn.addEventListener("click", startCheckout);
 })();
 </script>
 
