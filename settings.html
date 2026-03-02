@@ -652,6 +652,7 @@ import { fetchCurrentSubscriptionState, isSubscriptionActive } from "./subscript
     const originalText = startBtn.textContent;
     startBtn.textContent = "決済ページを準備中...";
     let redirected = false;
+    let failedReason = "";
     try {
       const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
       if (sessionError) throw sessionError;
@@ -675,11 +676,25 @@ import { fetchCurrentSubscriptionState, isSubscriptionActive } from "./subscript
       location.href = url;
     } catch (err) {
       const msg = String(err && err.message ? err.message : "");
+      if (err && typeof err === "object" && "context" in err) {
+        try {
+          const res = err.context;
+          const payload = res && typeof res.clone === "function"
+            ? await res.clone().json()
+            : null;
+          const code = String(payload?.error || "").trim();
+          const detail = String(payload?.detail?.message || "").trim();
+          failedReason = [code, detail].filter(Boolean).join(": ");
+        } catch (_) {
+          failedReason = "";
+        }
+      }
       const hint = msg.includes("missing_session") || msg.includes("Missing authorization header")
         ? "（再ログイン後に再試行）"
         : "";
-      console.error("checkout_start_failed", err);
-      alert(`決済ページの起動に失敗しました。時間をおいて再試行してください。${hint}`);
+      const reason = failedReason || msg;
+      console.error("checkout_start_failed", { err, reason });
+      alert(`決済ページの起動に失敗しました。時間をおいて再試行してください。${hint}${reason ? `\n原因: ${reason}` : ""}`);
     } finally {
       if (!redirected) {
         startBtn.disabled = false;
