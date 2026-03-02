@@ -682,7 +682,7 @@ import { fetchCurrentSubscriptionState, isSubscriptionActive } from "./subscript
       headers: {
         "content-type": "application/json",
         apikey: anonKey,
-        authorization: `Bearer ${accessToken}`
+        Authorization: `Bearer ${accessToken}`
       },
       body: JSON.stringify(body)
     });
@@ -706,6 +706,23 @@ import { fetchCurrentSubscriptionState, isSubscriptionActive } from "./subscript
     }
 
     return payload || {};
+  }
+
+  async function resolveAccessToken() {
+    const now = Math.floor(Date.now() / 1000);
+    const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+    if (sessionError) throw sessionError;
+    const current = sessionData?.session || null;
+    const currentToken = String(current?.access_token || "").trim();
+    const expiresAt = Number(current?.expires_at || 0);
+    const needsRefresh = !currentToken || (expiresAt > 0 && expiresAt - now < 60);
+    if (!needsRefresh) return currentToken;
+
+    const { data: refreshed, error: refreshError } = await supabase.auth.refreshSession();
+    if (refreshError) throw refreshError;
+    const refreshedToken = String(refreshed?.session?.access_token || "").trim();
+    if (!refreshedToken) throw new Error("missing_session");
+    return refreshedToken;
   }
 
   async function refreshSubscriptionState() {
@@ -736,18 +753,34 @@ import { fetchCurrentSubscriptionState, isSubscriptionActive } from "./subscript
     startBtn.textContent = "決済ページを準備中...";
     let redirected = false;
     try {
-      const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
-      if (sessionError) throw sessionError;
-      const accessToken = String(sessionData?.session?.access_token || "").trim();
-      if (!accessToken) throw new Error("missing_session");
-
       const successUrl = new URL("settings.html?subscription=success", location.origin).toString();
       const cancelUrl = new URL("settings.html?subscription=cancel", location.origin).toString();
-      const data = await createCheckoutSessionDirect(accessToken, {
+      const payload = {
         planCode: "starter_monthly",
         successUrl,
         cancelUrl
-      });
+      };
+
+      let accessToken = await resolveAccessToken();
+      let data;
+      try {
+        data = await createCheckoutSessionDirect(accessToken, payload);
+      } catch (firstErr) {
+        const status = Number(firstErr?.status || 0);
+        const msg = String(firstErr && firstErr.message ? firstErr.message : "");
+        const authLike401 = status === 401
+          || msg.includes("Missing authorization header")
+          || msg.includes("invalid")
+          || msg.includes("JWT");
+        if (!authLike401) throw firstErr;
+        const { data: refreshed, error: refreshError } = await supabase.auth.refreshSession();
+        if (refreshError) throw firstErr;
+        const retriedToken = String(refreshed?.session?.access_token || "").trim();
+        if (!retriedToken) throw firstErr;
+        accessToken = retriedToken;
+        data = await createCheckoutSessionDirect(accessToken, payload);
+      }
+
       const url = data && data.url ? String(data.url) : "";
       if (!url) throw new Error("checkout_url_missing");
       redirected = true;
