@@ -17,7 +17,8 @@ function sanitize(v) {
 function inferConfigByLocation() {
   const host = String(location && location.hostname ? location.hostname : "").toLowerCase();
   const path = String(location && location.pathname ? location.pathname : "");
-  if (host === "taxi-sms.github.io" && path.indexOf(STG_PATH_PREFIX) === 0) {
+  const isStgPath = path === "/tsmsp-stg" || path.indexOf(STG_PATH_PREFIX) === 0;
+  if (host === "taxi-sms.github.io" && isStgPath) {
     return STG_CONFIG;
   }
   return PROD_CONFIG;
