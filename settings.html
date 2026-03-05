@@ -252,6 +252,23 @@
     </div>
   </section>
 
+  <section class="section">
+    <div class="title">アカウント</div>
+    <div class="note">ログイン中にパスワードを変更できます。</div>
+    <div class="field">
+      <div class="label">新しいパスワード（8文字以上）</div>
+      <input class="input" id="newPassword" type="password" autocomplete="new-password" placeholder="********">
+    </div>
+    <div class="field">
+      <div class="label">新しいパスワード（確認用）</div>
+      <input class="input" id="newPasswordConfirm" type="password" autocomplete="new-password" placeholder="********">
+    </div>
+    <div class="actions" style="grid-template-columns:1fr;">
+      <button class="btn" id="btnUpdatePassword" type="button">パスワードを変更</button>
+    </div>
+    <div class="note" id="passwordChangeStatus"></div>
+  </section>
+
 </main>
 
 <script>
@@ -445,6 +462,58 @@
   burger.addEventListener("keydown", (e)=>{ if(e.key==="Enter"||e.key===" ") openMenu(); });
   bg.addEventListener("click", closeMenu);
   menu.querySelectorAll("a").forEach((a)=>a.addEventListener("click", closeMenu));
+})();
+</script>
+
+<script type="module">
+import { supabase } from "./supabase-client.js";
+
+(function(){
+  const btn = document.getElementById("btnUpdatePassword");
+  const pw = document.getElementById("newPassword");
+  const pw2 = document.getElementById("newPasswordConfirm");
+  const status = document.getElementById("passwordChangeStatus");
+  if(!btn || !pw || !pw2 || !status) return;
+
+  function setStatus(text){
+    status.textContent = text || "";
+  }
+
+  btn.addEventListener("click", async ()=>{
+    if(btn.disabled) return;
+    setStatus("");
+
+    const next = String(pw.value || "");
+    const confirm = String(pw2.value || "");
+    if(!next || !confirm){
+      setStatus("新しいパスワードと確認用パスワードを入力してください。");
+      return;
+    }
+    if(next.length < 8){
+      setStatus("パスワードは8文字以上で入力してください。");
+      return;
+    }
+    if(next !== confirm){
+      setStatus("確認用パスワードが一致しません。");
+      return;
+    }
+
+    btn.disabled = true;
+    const originalText = btn.textContent;
+    btn.textContent = "変更中...";
+    try{
+      const { error } = await supabase.auth.updateUser({ password: next });
+      if(error) throw error;
+      pw.value = "";
+      pw2.value = "";
+      setStatus("パスワードを変更しました。次回ログインから新しいパスワードを使用してください。");
+    }catch(err){
+      setStatus((err && err.message) ? ("変更に失敗しました: " + err.message) : "変更に失敗しました。");
+    }finally{
+      btn.disabled = false;
+      btn.textContent = originalText || "パスワードを変更";
+    }
+  });
 })();
 </script>
 
