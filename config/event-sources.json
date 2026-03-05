@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "updated_at": "1970-01-01T00:00:00Z",
+  "sources": [
+    {
+      "id": "official-news",
+      "name": "Official News",
+      "url": "https://example.com/news",
+      "enabled": true,
+      "parserType": "html_list",
+      "timezone": "Asia/Tokyo",
+      "priority": 100,
+      "tags": ["official", "public"],
+      "notes": "Replace with your production source URL"
+    },
+    {
+      "id": "official-events",
+      "name": "Official Events",
+      "url": "https://example.com/events",
+      "enabled": true,
+      "parserType": "html_detail",
+      "timezone": "Asia/Tokyo",
+      "priority": 90,
+      "tags": ["official", "event"],
+      "notes": "Use lower priority for secondary sources"
+    },
+    {
+      "id": "backup-feed",
+      "name": "Backup Feed",
+      "url": "https://example.com/feed.xml",
+      "enabled": false,
+      "parserType": "rss",
+      "timezone": "Asia/Tokyo",
+      "priority": 10,
+      "tags": ["backup"],
+      "notes": "Set enabled=true when needed"
+    }
+  ]
+}
