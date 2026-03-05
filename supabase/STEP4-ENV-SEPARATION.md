@@ -11,6 +11,7 @@
 - Supabase プロジェクトを stg/prod で別々に用意
 - Stripe も test/live で分離
 - `create-checkout-session` は `--no-verify-jwt` デプロイ（関数内で `auth.getUser()` 検証）
+- `stripe-webhook` も `--no-verify-jwt` デプロイ（StripeはAuthorizationヘッダを送らない）
 
 ## 1. ローカル env ファイルを作成
 ```bash

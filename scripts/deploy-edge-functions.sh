@@ -59,9 +59,10 @@ supabase functions deploy create-checkout-session \
   --no-verify-jwt \
   --use-api
 
-echo "[3/3] Deploying stripe-webhook"
+echo "[3/3] Deploying stripe-webhook (no-verify-jwt)"
 supabase functions deploy stripe-webhook \
   --project-ref "$PROJECT_REF" \
+  --no-verify-jwt \
   --use-api
 
 echo "Done: ${TARGET} edge functions deployed to ${PROJECT_REF}."
