@@ -564,7 +564,7 @@ body{padding-bottom:78px;}
 
   <section class="card" aria-label="アカウント">
     <h2 class="group-title">アカウント</h2>
-    <a class="event-btn" href="login.html" aria-label="ログアウトしてログイン画面へ移動">
+    <a class="event-btn" id="accountLogoutLink" href="login.html?logout=1" aria-label="ログアウトしてログイン画面へ移動">
       <span class="event-time">→</span>
       <span>ログアウト</span>
       <span class="event-arrow">›</span>
@@ -902,6 +902,7 @@ if(calendarNextBtn){
     });
   }
   document.querySelectorAll(".event-btn").forEach(function(btn){
+    if(btn.id === "accountLogoutLink") return;
     btn.addEventListener("click", function(){
       if(!eventModalBg || !eventModalTitle || !eventModalDetail) return;
       eventModalTitle.textContent = btn.dataset.eventTitle || "イベント";

@@ -110,7 +110,6 @@
       </div>
 
       <button id="btnLogin" class="btn next" type="button">ログイン</button>
-      <button id="btnLogout" class="btn" type="button">ログアウト</button>
 
       <div class="auth-msg" id="msg"></div>
 
@@ -128,11 +127,15 @@
     const setMsg = (t) => { $("msg").textContent = t || ""; };
     const FORCE_HYDRATION_ONCE_KEY = "tsms_force_hydration_once";
 
-    async function refreshUI() {
-      const { data: { session } } = await supabase.auth.getSession();
-      const loggedIn = !!session;
-      $("btnLogout").style.display = loggedIn ? "block" : "none";
-      if (loggedIn) setMsg("ログイン中: " + (session.user.email || ""));
+    async function consumeLogoutQueryIfNeeded() {
+      const url = new URL(location.href);
+      if (url.searchParams.get("logout") !== "1") return;
+      await supabase.auth.signOut();
+      url.searchParams.delete("logout");
+      try {
+        history.replaceState({}, "", url.toString());
+      } catch (_) {}
+      setMsg("ログアウトしました。");
     }
 
     $("btnLogin").addEventListener("click", async () => {
@@ -150,13 +153,7 @@
       location.href = next;
     });
 
-    $("btnLogout").addEventListener("click", async () => {
-      await supabase.auth.signOut();
-      setMsg("ログアウトしました。");
-      await refreshUI();
-    });
-
-    await refreshUI();
+    await consumeLogoutQueryIfNeeded();
   </script>
   <script src="./cache-version.js"></script>
 </body>
