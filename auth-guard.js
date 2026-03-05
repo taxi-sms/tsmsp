@@ -12,7 +12,7 @@ import { migrateLocalStorageSchema } from "./storage-schema.js";
 import { installSwUpdateUi } from "./sw-update-ui.js";
 import { fetchCurrentSubscriptionState, isSubscriptionActive } from "./subscription-state.js";
 
-const PUBLIC_PAGES = new Set(["login.html", "signup.html", "auth-callback.html"]);
+const PUBLIC_PAGES = new Set(["login.html", "signup.html", "auth-callback.html", "reset-password.html"]);
 const IDLE_LOGOUT_MS = 6 * 60 * 60 * 1000;
 const SESSION_RETRY_COUNT = 5;
 const SESSION_RETRY_DELAY_MS = 350;

@@ -85,23 +85,6 @@
       opacity:.8;
       min-height:0;
     }
-    .auth-subactions{
-      display:grid;
-      gap:var(--space-2);
-      margin-top:var(--space-2);
-    }
-    .auth-recovery{
-      margin-top:var(--space-3);
-      border:var(--line-regular) solid var(--border);
-      background:var(--surface-2);
-      border-radius:var(--radius-sm);
-      padding:var(--space-3);
-      display:none;
-      gap:var(--space-2);
-    }
-    .auth-recovery.show{display:grid;}
-    .auth-recovery .label{font-size:var(--font-md)!important;}
-    .auth-recovery .input{font-size:var(--font-2xl)!important;}
   </style>
 </head>
 <body>
@@ -126,20 +109,11 @@
       </div>
 
       <button id="btnLogin" class="btn next" type="button">ログイン</button>
-      <div class="auth-subactions">
-        <button id="btnSendResetMail" class="btn" type="button">再設定メールを送信</button>
-      </div>
-
-      <div class="auth-recovery" id="recoveryBox" aria-live="polite">
-        <div class="label">メールリンク確認後に新しいパスワードを入力</div>
-        <input id="recoveryPassword" class="input" type="password" autocomplete="new-password" placeholder="新しいパスワード（8文字以上）" />
-        <input id="recoveryPasswordConfirm" class="input" type="password" autocomplete="new-password" placeholder="確認用パスワード" />
-        <button id="btnApplyRecoveryPassword" class="btn next" type="button">新しいパスワードを保存</button>
-      </div>
 
       <div class="auth-msg" id="msg"></div>
 
       <div class="auth-links">
+        <a href="./reset-password.html">PWを忘れた方はこちら</a>
         <a href="./signup.html">新規登録はこちら</a>
         <a href="./index.html">戻る</a>
       </div>
@@ -152,13 +126,6 @@
     const $ = (id) => document.getElementById(id);
     const setMsg = (t) => { $("msg").textContent = t || ""; };
     const FORCE_HYDRATION_ONCE_KEY = "tsms_force_hydration_once";
-    const btnLogin = $("btnLogin");
-    const btnSendResetMail = $("btnSendResetMail");
-    const recoveryBox = $("recoveryBox");
-    const btnApplyRecoveryPassword = $("btnApplyRecoveryPassword");
-    const recoveryPassword = $("recoveryPassword");
-    const recoveryPasswordConfirm = $("recoveryPasswordConfirm");
-    let recoverySessionReady = false;
 
     async function consumeLogoutQueryIfNeeded() {
       const url = new URL(location.href);
@@ -171,55 +138,7 @@
       setMsg("ログアウトしました。");
     }
 
-    function setRecoveryVisible(show) {
-      if (!recoveryBox) return;
-      recoveryBox.classList.toggle("show", !!show);
-    }
-
-    async function initRecoveryFlowIfNeeded() {
-      const url = new URL(location.href);
-      if (url.searchParams.get("mode") !== "recovery") {
-        setRecoveryVisible(false);
-        return;
-      }
-
-      try {
-        const hasCode = !!url.searchParams.get("code");
-        if (hasCode) {
-          const { error } = await supabase.auth.exchangeCodeForSession(location.href);
-          if (error) throw error;
-        } else if (location.hash.includes("access_token=")) {
-          const hash = new URLSearchParams(location.hash.replace(/^#/, ""));
-          const access_token = hash.get("access_token");
-          const refresh_token = hash.get("refresh_token");
-          if (access_token && refresh_token) {
-            const { error } = await supabase.auth.setSession({ access_token, refresh_token });
-            if (error) throw error;
-          }
-        }
-
-        const { data: { session }, error } = await supabase.auth.getSession();
-        if (error) throw error;
-        if (!session) {
-          setMsg("再設定リンクの確認に失敗しました。メールのリンクを開き直してください。");
-          setRecoveryVisible(false);
-          return;
-        }
-        recoverySessionReady = true;
-        setRecoveryVisible(true);
-        setMsg("メールリンクを確認しました。新しいパスワードを入力して保存してください。");
-
-        const clean = new URL(location.href);
-        clean.searchParams.delete("code");
-        clean.hash = "";
-        try { history.replaceState({}, "", clean.toString()); } catch (_) {}
-      } catch (err) {
-        setRecoveryVisible(false);
-        setMsg("再設定リンクの処理に失敗しました: " + (err && err.message ? err.message : String(err)));
-      }
-    }
-
-    btnLogin.addEventListener("click", async () => {
+    $("btnLogin").addEventListener("click", async () => {
       setMsg("");
       const email = $("email").value.trim();
       const password = $("password").value;
@@ -234,84 +153,7 @@
       location.href = next;
     });
 
-    if (btnSendResetMail) {
-      btnSendResetMail.addEventListener("click", async () => {
-        setMsg("");
-        const email = $("email").value.trim();
-        if (!email) {
-          setMsg("再設定メールの送信にはメールアドレス入力が必要です。");
-          return;
-        }
-        btnSendResetMail.disabled = true;
-        const original = btnSendResetMail.textContent;
-        btnSendResetMail.textContent = "送信中...";
-        try {
-          const redirectTo = new URL("login.html?mode=recovery", location.href).toString();
-          const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo });
-          if (error) throw error;
-          setMsg("再設定メールを送信しました。受信ボックス（迷惑メールも）を確認してください。");
-        } catch (err) {
-          setMsg("再設定メール送信に失敗しました: " + (err && err.message ? err.message : String(err)));
-        } finally {
-          btnSendResetMail.disabled = false;
-          btnSendResetMail.textContent = original || "再設定メールを送信";
-        }
-      });
-    }
-
-    if (btnApplyRecoveryPassword) {
-      btnApplyRecoveryPassword.addEventListener("click", async () => {
-        setMsg("");
-        const next = String(recoveryPassword && recoveryPassword.value ? recoveryPassword.value : "");
-        const confirm = String(recoveryPasswordConfirm && recoveryPasswordConfirm.value ? recoveryPasswordConfirm.value : "");
-        if (!next || !confirm) {
-          setMsg("新しいパスワードと確認用パスワードを入力してください。");
-          return;
-        }
-        if (next.length < 8) {
-          setMsg("パスワードは8文字以上で入力してください。");
-          return;
-        }
-        if (next !== confirm) {
-          setMsg("確認用パスワードが一致しません。");
-          return;
-        }
-        if (!recoverySessionReady) {
-          const { data: { session } } = await supabase.auth.getSession();
-          if (!session) {
-            setMsg("再設定セッションが見つかりません。メールリンクを開き直してください。");
-            return;
-          }
-          recoverySessionReady = true;
-        }
-
-        btnApplyRecoveryPassword.disabled = true;
-        const original = btnApplyRecoveryPassword.textContent;
-        btnApplyRecoveryPassword.textContent = "保存中...";
-        try {
-          const { error } = await supabase.auth.updateUser({ password: next });
-          if (error) throw error;
-          try { await supabase.auth.signOut(); } catch (_) {}
-          recoverySessionReady = false;
-          if (recoveryPassword) recoveryPassword.value = "";
-          if (recoveryPasswordConfirm) recoveryPasswordConfirm.value = "";
-          setRecoveryVisible(false);
-          const clean = new URL(location.href);
-          clean.searchParams.delete("mode");
-          clean.hash = "";
-          try { history.replaceState({}, "", clean.toString()); } catch (_) {}
-          setMsg("パスワードを更新しました。新しいパスワードでログインしてください。");
-        } catch (err) {
-          setMsg("パスワード更新に失敗しました: " + (err && err.message ? err.message : String(err)));
-        } finally {
-          btnApplyRecoveryPassword.disabled = false;
-          btnApplyRecoveryPassword.textContent = original || "新しいパスワードを保存";
-        }
-      });
-    }
-
     await consumeLogoutQueryIfNeeded();
-    await initRecoveryFlowIfNeeded();
   </script>
   <script src="./cache-version.js"></script>
 </body>

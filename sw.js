@@ -1,4 +1,4 @@
-const CACHE_NAME = 'tsms-cache-v145';
+const CACHE_NAME = 'tsms-cache-v146';
 const ASSETS = [
   './',
   './index.html',
@@ -11,6 +11,7 @@ const ASSETS = [
   './login.html',
   './signup.html',
   './auth-callback.html',
+  './reset-password.html',
   './manifest.json',
   './sw.js',
   './icon.png',
