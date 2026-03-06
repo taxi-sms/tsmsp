@@ -585,7 +585,7 @@ body{padding-bottom:78px;}
   </section>
 
   <section class="card" aria-label="本日のイベント">
-    <h2 class="group-title">本日のイベント</h2>
+    <h2 class="group-title" id="dailyEventHeading">本日のイベント</h2>
     <p class="group-note" id="dailyEventNote">イベントリストは毎日自動更新されます。</p>
     <div class="event-list" id="dailyEventList"></div>
   </section>
@@ -632,6 +632,7 @@ body{padding-bottom:78px;}
   var calendarNextBtn = document.getElementById("calendarNextBtn");
   var calendarGrid = document.getElementById("calendarGrid");
   var calendarInfo = document.getElementById("calendarInfo");
+  var dailyEventHeading = document.getElementById("dailyEventHeading");
   var dailyEventList = document.getElementById("dailyEventList");
   var dailyEventNote = document.getElementById("dailyEventNote");
   var dailyEventTimer = null;
@@ -656,6 +657,10 @@ body{padding-bottom:78px;}
   }
   function pad2(n){ return String(n).padStart(2,"0"); }
   function weekdayJa(d){ return ["日","月","火","水","木","金","土"][d.getDay()]; }
+  function todayEventHeadingText(){
+    var d = new Date();
+    return (d.getMonth() + 1) + "/" + d.getDate() + "(" + weekdayJa(d) + ")のイベント";
+  }
   function fmtYmdJa(d){
     return d.getFullYear() + "/" + pad2(d.getMonth()+1) + "/" + pad2(d.getDate()) + "(" + weekdayJa(d) + ")";
   }
@@ -850,6 +855,15 @@ body{padding-bottom:78px;}
       source_name: String(raw.source_name || "").trim()
     };
   }
+  function isDisplayableEvent(ev){
+    if(!ev) return false;
+    var title = String(ev.title || "").trim();
+    if(!title) return false;
+    if(/^(イベント|イベント情報|event|events|schedule)(\s*[|｜:].*)?$/i.test(title)) return false;
+    if(/^明日\(\)開催$/.test(title)) return false;
+    if(/宴会場|会議室|客室|宿泊|ご案内|施設案内|公演・チケット情報|イベント一覧/.test(title)) return false;
+    return true;
+  }
   function eventTimeLabel(ev){
     if(!ev) return "終日";
     if(ev.start_time && ev.end_time) return ev.start_time + "-" + ev.end_time;
@@ -866,8 +880,11 @@ body{padding-bottom:78px;}
   }
   function renderDailyEvents(){
     if(!dailyEventList) return;
+    if(dailyEventHeading) dailyEventHeading.textContent = todayEventHeadingText();
     var today = localYmd();
-    var todayEvents = dailyEventData.filter(function(ev){ return ev.start_date === today; });
+    var todayEvents = dailyEventData.filter(function(ev){
+      return ev.start_date === today && isDisplayableEvent(ev);
+    });
     dailyEventList.innerHTML = "";
     if(!todayEvents.length){
       setEventEmptyState("本日のイベントはありません。");

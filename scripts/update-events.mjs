@@ -9,6 +9,9 @@ const OUTPUT_PATH = path.resolve(process.cwd(), 'data/events.json');
 
 const PRIORITY_SCORE = { S: 4, A: 3, B: 2, C: 1 };
 const EVENT_TEXT_RE = /(event|events|schedule|festival|concert|live|seminar|exhibition|show|meetup|fair|開催|公演|展示|ライブ|フェス|祭|イベント|セミナー)/i;
+const BAD_TITLE_RE = /(宴会場|会議室|客室|宿泊|ご案内|施設案内|貸し会議室|トップページ|無料で使える|他のイベントを見る|今週末のおすすめイベント|公演・チケット情報|イベント一覧|大宴会場案内|^明日\(\)開催$)/i;
+const WEAK_TITLE_RE = /^(イベント|イベント情報|event|events|schedule)(\s*[|｜:].*)?$/i;
+const BAD_URL_RE = /\/banq\/|\/banquet\/|\/stay\/|\/guestroom\//i;
 
 function parseArgs(argv) {
   const out = { mode: 'delta' };
@@ -159,7 +162,8 @@ function parseDatesFromText(text, nowYmd) {
 }
 
 function parseTimeRangeFromText(text) {
-  const range = text.match(/([01]?\d|2[0-3])[:：]([0-5]\d)\s*[〜~\-－–]\s*([01]?\d|2[0-3])[:：]([0-5]\d)/);
+  const range = text.match(/(?:開演|開始|開場|start|time)[^0-9]{0,12}([01]?\d|2[0-3])[:：]([0-5]\d)\s*[〜~\-－–]\s*([01]?\d|2[0-3])[:：]([0-5]\d)/i) ||
+    text.match(/([01]?\d|2[0-3])[:：]([0-5]\d)\s*[〜~\-－–]\s*([01]?\d|2[0-3])[:：]([0-5]\d)[^\\n]{0,12}(?:開演|開始|開場|start|time)/i);
   if (range) {
     return {
       start: `${String(range[1]).padStart(2, '0')}:${range[2]}`,
@@ -167,11 +171,26 @@ function parseTimeRangeFromText(text) {
       allDay: false
     };
   }
-  const single = text.match(/([01]?\d|2[0-3])[:：]([0-5]\d)/);
+  const single = text.match(/(?:開演|開始|開場|start|time)[^0-9]{0,12}([01]?\d|2[0-3])[:：]([0-5]\d)/i) ||
+    text.match(/([01]?\d|2[0-3])[:：]([0-5]\d)[^\\n]{0,12}(?:開演|開始|開場|start|time)/i);
   if (single) {
     return { start: `${String(single[1]).padStart(2, '0')}:${single[2]}`, end: '', allDay: false };
   }
+  const hourOnly = text.match(/(?:開演|開始|開場)[^0-9]{0,8}([01]?\d|2[0-3])時/i) ||
+    text.match(/([01]?\d|2[0-3])時[^\\n]{0,8}(?:開演|開始|開場)/i);
+  if (hourOnly) {
+    return { start: `${String(hourOnly[1]).padStart(2, '0')}:00`, end: '', allDay: false };
+  }
   return { start: '', end: '', allDay: true };
+}
+
+function hasEventSignal(title, bodyText) {
+  if (EVENT_TEXT_RE.test(title)) return true;
+  return /(開催|開演|開場|上演|公演|出演|チケット|会期|日時|入場)/.test(bodyText);
+}
+
+function normalizeUrlForCompare(url) {
+  return String(url || '').trim().replace(/\/+$/, '');
 }
 
 function pickVenue(text) {
@@ -215,21 +234,37 @@ function normalizeTitle(text) {
 }
 
 function buildEvent({ source, detailUrl, title, bodyText, html, nowYmd }) {
+  if (BAD_URL_RE.test(detailUrl)) return null;
   const dates = parseDatesFromText(bodyText, nowYmd);
   if (!dates.length) return null;
 
-  const startDate = dates[0].ymd;
+  const firstDate = dates[0];
+  const startDate = firstDate.ymd;
   let endDate = '';
   if (dates.length >= 2) {
     const gap = Math.abs(dates[1].idx - dates[0].idx);
     if (gap < 25) endDate = dates[1].ymd;
   }
 
-  const time = parseTimeRangeFromText(bodyText);
+  const contextStart = Math.max(0, firstDate.idx - 120);
+  const contextEnd = Math.min(bodyText.length, firstDate.idx + 180);
+  const dateContext = bodyText.slice(contextStart, contextEnd);
+  const timeContext = `${title}\n${dateContext}`;
+  const time = /(開演|開場|開始|start|time|時開演|時開場)/i.test(timeContext)
+    ? parseTimeRangeFromText(timeContext)
+    : { start: '', end: '', allDay: true };
   const summary = textPreview(pickMeta(html, 'description') || pickMeta(html, 'og:description') || bodyText, 220);
 
   const eventTitle = normalizeTitle(title) || title || source.name;
-  const seed = `${detailUrl}|${startDate}|${eventTitle}`;
+  if (!eventTitle || eventTitle.length < 4) return null;
+  if (BAD_TITLE_RE.test(eventTitle)) return null;
+  if (WEAK_TITLE_RE.test(eventTitle)) return null;
+  if (!hasEventSignal(eventTitle, dateContext)) return null;
+  if (normalizeUrlForCompare(detailUrl) === normalizeUrlForCompare(source.url) && normalizeTitle(eventTitle) === normalizeTitle(source.name)) {
+    return null;
+  }
+
+  const seed = `${detailUrl}|${startDate}|${time.start || ''}|${time.end || ''}`;
   return {
     id: makeEventId(seed),
     title: textPreview(eventTitle, 120),
@@ -348,6 +383,8 @@ async function crawlSource(source, options) {
       if (/\d{1,2}[\/.月]\d{1,2}日?/.test(x.text) || /20\d{2}[\/.\-年]/.test(x.text)) score += 2;
       return { ...x, score };
     })
+    .filter((x) => !BAD_TITLE_RE.test(x.text))
+    .filter((x) => !BAD_URL_RE.test(x.url))
     .filter((x) => x.score >= 3)
     .sort((a, b) => b.score - a.score)
     .slice(0, detailLimit);
@@ -446,17 +483,18 @@ async function main() {
     }
   }
 
-  const previous = await loadJson(OUTPUT_PATH, { events: [] });
-  const previousEvents = Array.isArray(previous.events) ? previous.events : [];
-
   const mergedById = new Map();
   for (const ev of nextEvents) mergedById.set(ev.id, ev);
 
-  const keepUntil = addDays(today, 120);
-  for (const ev of previousEvents) {
-    if (!ev || !ev.id || mergedById.has(ev.id)) continue;
-    if (!withinWindow(ev, minDate, keepUntil)) continue;
-    mergedById.set(ev.id, ev);
+  if (mode !== 'full') {
+    const previous = await loadJson(OUTPUT_PATH, { events: [] });
+    const previousEvents = Array.isArray(previous.events) ? previous.events : [];
+    const keepUntil = addDays(today, 120);
+    for (const ev of previousEvents) {
+      if (!ev || !ev.id || mergedById.has(ev.id)) continue;
+      if (!withinWindow(ev, minDate, keepUntil)) continue;
+      mergedById.set(ev.id, ev);
+    }
   }
 
   const merged = Array.from(mergedById.values()).sort(sortEvents).slice(0, 900);
