@@ -67,6 +67,21 @@
       flex-wrap:wrap;
       font-size:var(--font-lg);
     }
+    .auth-consent{
+      display:flex;
+      gap:8px;
+      align-items:flex-start;
+      margin:0 0 var(--space-3);
+      font-size:var(--font-md);
+      color:var(--text-secondary);
+      line-height:1.45;
+    }
+    .auth-consent input{
+      margin-top:3px;
+      width:18px;
+      height:18px;
+      flex:0 0 auto;
+    }
   </style>
 </head>
 <body>
@@ -85,6 +100,11 @@
         <label class="label" for="password">パスワード（8文字以上推奨）</label>
         <input id="password" class="input" type="password" autocomplete="new-password" placeholder="********" />
       </div>
+
+      <label class="auth-consent" for="consentLegal">
+        <input id="consentLegal" type="checkbox" />
+        <span><a href="./terms.html" target="_blank" rel="noopener">利用規約</a>・<a href="./privacy.html" target="_blank" rel="noopener">プライバシーポリシー</a>・<a href="./commerce.html" target="_blank" rel="noopener">特定商取引法に基づく表記</a>に同意する</span>
+      </label>
 
       <button id="btn" class="btn next" type="button">認証メールを送信</button>
       <div class="auth-msg" id="msg"></div>
@@ -122,20 +142,31 @@
       setMsg("");
       const email = $("email").value.trim();
       const password = $("password").value;
+      const consentEl = $("consentLegal");
+      const consentLegal = !!(consentEl && consentEl.checked);
 
       if (!email || !password) {
         sending = false;
         return setMsg("メールとパスワードを入力してください。");
       }
+      if (!consentLegal) {
+        sending = false;
+        return setMsg("利用規約・プライバシーポリシー・特商法表記への同意が必要です。");
+      }
 
       btn.disabled = true;
       btn.textContent = "送信中...";
 
+      const LEGAL_VERSION = "2026-03-07";
       const { error } = await supabase.auth.signUp({
         email,
         password,
         options: {
-          emailRedirectTo: new URL("auth-callback.html", location.href).toString()
+          emailRedirectTo: new URL("auth-callback.html", location.href).toString(),
+          data: {
+            legal_version: LEGAL_VERSION,
+            legal_agreed_at: new Date().toISOString()
+          }
         }
       });
 

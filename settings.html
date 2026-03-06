@@ -247,16 +247,29 @@
       <div class="label">現在の契約状態</div>
       <div class="input" id="subscriptionStatus">確認中...</div>
     </div>
-    <div class="actions" style="grid-template-columns:1fr;">
+    <div class="actions">
       <button class="btn" id="btnStartSubscription" type="button">月額プランを開始</button>
+      <button class="btn" id="btnManageBilling" type="button">契約/支払い情報を管理</button>
     </div>
   </section>
 
   <section class="section">
     <div class="title">アカウント</div>
-    <div class="note">パスワード変更は専用画面で行います。</div>
-    <div class="actions" style="grid-template-columns:1fr;">
+    <div class="note">パスワード変更は専用画面で行います。退会時は現在のパスワード確認が必要です。</div>
+    <div class="actions">
       <a class="btn" href="reset-password.html?mode=change" style="display:flex;align-items:center;justify-content:center;text-decoration:none;">パスワード変更画面へ</a>
+      <input class="input" id="accountDeletePassword" type="password" autocomplete="current-password" placeholder="退会確認: 現在のパスワード" style="grid-column:1 / -1;">
+      <button class="btn" id="btnDeleteAccount" type="button" style="grid-column:1 / -1;">アカウントを削除（退会）</button>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="title">利用規約・法務</div>
+    <div class="note">登録・利用前に最新の内容をご確認ください。</div>
+    <div class="actions">
+      <a class="btn" href="terms.html" style="display:flex;align-items:center;justify-content:center;text-decoration:none;">利用規約</a>
+      <a class="btn" href="privacy.html" style="display:flex;align-items:center;justify-content:center;text-decoration:none;">プライバシーポリシー</a>
+      <a class="btn" href="commerce.html" style="display:flex;align-items:center;justify-content:center;text-decoration:none;grid-column:1 / -1;">特定商取引法に基づく表記</a>
     </div>
   </section>
 
@@ -589,6 +602,9 @@ import { fetchCurrentSubscriptionState, isSubscriptionActive } from "./subscript
   const noteEl = document.getElementById("subscriptionNote");
   const statusEl = document.getElementById("subscriptionStatus");
   const startBtn = document.getElementById("btnStartSubscription");
+  const manageBtn = document.getElementById("btnManageBilling");
+  const deleteBtn = document.getElementById("btnDeleteAccount");
+  const deletePasswordInput = document.getElementById("accountDeletePassword");
   const params = new URLSearchParams(location.search);
   let checkoutPending = false;
 
@@ -717,6 +733,80 @@ import { fetchCurrentSubscriptionState, isSubscriptionActive } from "./subscript
     return payload || {};
   }
 
+  async function createBillingPortalSessionDirect(accessToken, body) {
+    const cfg = loadConfig();
+    const baseUrl = String(cfg && cfg.url ? cfg.url : "").trim().replace(/\/+$/, "");
+    const anonKey = String(cfg && cfg.anonKey ? cfg.anonKey : "").trim();
+    if (!baseUrl || !anonKey) throw new Error("missing_supabase_config");
+
+    const endpoint = `${baseUrl}/functions/v1/create-billing-portal-session`;
+    const res = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        apikey: anonKey,
+        Authorization: `Bearer ${accessToken}`
+      },
+      body: JSON.stringify(body || {})
+    });
+
+    const raw = await res.text();
+    let payload = null;
+    try {
+      payload = raw ? JSON.parse(raw) : null;
+    } catch (_) {
+      payload = null;
+    }
+
+    if (!res.ok) {
+      const apiCode = String(payload?.error || "").trim();
+      const apiDetail = String(payload?.detail?.message || payload?.message || "").trim();
+      const msg = [apiCode, apiDetail].filter(Boolean).join(": ") || `http_${res.status}`;
+      const e = new Error(msg);
+      e.status = res.status;
+      throw e;
+    }
+
+    return payload || {};
+  }
+
+  async function deleteAccountDirect(accessToken) {
+    const cfg = loadConfig();
+    const baseUrl = String(cfg && cfg.url ? cfg.url : "").trim().replace(/\/+$/, "");
+    const anonKey = String(cfg && cfg.anonKey ? cfg.anonKey : "").trim();
+    if (!baseUrl || !anonKey) throw new Error("missing_supabase_config");
+
+    const endpoint = `${baseUrl}/functions/v1/delete-account`;
+    const res = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        apikey: anonKey,
+        Authorization: `Bearer ${accessToken}`
+      },
+      body: JSON.stringify({ confirmText: "DELETE" })
+    });
+
+    const raw = await res.text();
+    let payload = null;
+    try {
+      payload = raw ? JSON.parse(raw) : null;
+    } catch (_) {
+      payload = null;
+    }
+
+    if (!res.ok) {
+      const apiCode = String(payload?.error || "").trim();
+      const apiDetail = String(payload?.detail?.message || payload?.message || "").trim();
+      const msg = [apiCode, apiDetail].filter(Boolean).join(": ") || `http_${res.status}`;
+      const e = new Error(msg);
+      e.status = res.status;
+      throw e;
+    }
+
+    return payload || {};
+  }
+
   async function resolveAccessToken() {
     const now = Math.floor(Date.now() / 1000);
     const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
@@ -749,9 +839,14 @@ import { fetchCurrentSubscriptionState, isSubscriptionActive } from "./subscript
         startBtn.disabled = active;
         startBtn.textContent = active ? "契約は有効です" : "月額プランを開始";
       }
+
+      if (manageBtn) {
+        manageBtn.disabled = false;
+      }
     } catch (_) {
       setStatusText("契約状態の取得に失敗");
       if (startBtn) startBtn.disabled = false;
+      if (manageBtn) manageBtn.disabled = false;
     }
   }
 
@@ -797,6 +892,12 @@ import { fetchCurrentSubscriptionState, isSubscriptionActive } from "./subscript
       location.href = url;
     } catch (err) {
       const msg = String(err && err.message ? err.message : "");
+      const alreadySubscribed = Number(err?.status || 0) === 409 || msg.includes("subscription_already_exists");
+      if (alreadySubscribed) {
+        alert("既に有効な契約があるため、新しい決済は開始できません。契約/支払い情報の管理からご確認ください。");
+        await refreshSubscriptionState();
+        return;
+      }
       const hint = msg.includes("missing_session")
         || msg.includes("Missing authorization header")
         || msg.includes("invalid JWT")
@@ -814,6 +915,87 @@ import { fetchCurrentSubscriptionState, isSubscriptionActive } from "./subscript
     }
   }
 
+  async function openBillingPortal() {
+    if (!manageBtn) return;
+    manageBtn.disabled = true;
+    const originalText = manageBtn.textContent;
+    manageBtn.textContent = "管理ページを準備中...";
+    let redirected = false;
+    try {
+      const accessToken = await resolveAccessToken();
+      const returnUrl = new URL("settings.html", location.href).toString();
+      const data = await createBillingPortalSessionDirect(accessToken, { returnUrl });
+      const url = data && data.url ? String(data.url) : "";
+      if (!url) throw new Error("portal_url_missing");
+      redirected = true;
+      location.href = url;
+    } catch (err) {
+      const msg = String(err && err.message ? err.message : "");
+      const noCustomer = Number(err?.status || 0) === 400 || msg.includes("billing_customer_not_found");
+      if (noCustomer) {
+        alert("契約情報が見つかりません。未契約の場合は先に月額プランを開始してください。");
+      } else {
+        alert("契約管理ページの起動に失敗しました。時間をおいて再試行してください。");
+      }
+    } finally {
+      if (!redirected) {
+        manageBtn.disabled = false;
+        manageBtn.textContent = originalText || "契約/支払い情報を管理";
+      }
+    }
+  }
+
+  async function requestDeleteAccount() {
+    if (!deleteBtn || !deletePasswordInput) return;
+    const password = String(deletePasswordInput.value || "");
+    if (!password) {
+      alert("退会には現在のパスワード入力が必要です。");
+      return;
+    }
+
+    const firstConfirm = window.tsmsConfirm
+      ? await window.tsmsConfirm("アカウントを削除します。保存済みデータと契約情報は復元できません。続行しますか？")
+      : window.confirm("アカウントを削除します。保存済みデータと契約情報は復元できません。続行しますか？");
+    if (!firstConfirm) return;
+
+    deleteBtn.disabled = true;
+    const originalText = deleteBtn.textContent;
+    deleteBtn.textContent = "退会処理中...";
+    try {
+      const { data: userData, error: userError } = await supabase.auth.getUser();
+      const email = String(userData?.user?.email || "").trim();
+      if (userError || !email) throw new Error("missing_session");
+
+      const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+      if (signInError) throw new Error("password_mismatch");
+
+      const secondConfirm = window.tsmsConfirm
+        ? await window.tsmsConfirm("最終確認: 本当に退会しますか？")
+        : window.confirm("最終確認: 本当に退会しますか？");
+      if (!secondConfirm) return;
+
+      const accessToken = await resolveAccessToken();
+      await deleteAccountDirect(accessToken);
+
+      try { localStorage.clear(); } catch (_) {}
+      try { sessionStorage.clear(); } catch (_) {}
+      alert("アカウントを削除しました。");
+      location.replace("login.html?deleted=1");
+    } catch (err) {
+      const msg = String(err && err.message ? err.message : "");
+      if (msg.includes("password_mismatch")) {
+        alert("現在のパスワードが一致しません。");
+      } else if (msg.includes("missing_session")) {
+        alert("セッションが確認できません。再ログイン後に再試行してください。");
+      } else {
+        alert("退会処理に失敗しました。時間をおいて再試行してください。");
+      }
+    } finally {
+      deleteBtn.disabled = false;
+      deleteBtn.textContent = originalText || "アカウントを削除（退会）";
+    }
+  }
+
   function recoverCheckoutButtonIfNeeded() {
     if (!checkoutPending || !startBtn) return;
     checkoutPending = false;
@@ -826,6 +1008,8 @@ import { fetchCurrentSubscriptionState, isSubscriptionActive } from "./subscript
   showCheckoutFlowMessage();
   refreshSubscriptionState();
   if (startBtn) startBtn.addEventListener("click", startCheckout);
+  if (manageBtn) manageBtn.addEventListener("click", openBillingPortal);
+  if (deleteBtn) deleteBtn.addEventListener("click", requestDeleteAccount);
   window.addEventListener("pageshow", recoverCheckoutButtonIfNeeded);
   window.addEventListener("focus", recoverCheckoutButtonIfNeeded);
   document.addEventListener("visibilitychange", () => {

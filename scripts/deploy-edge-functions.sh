@@ -53,13 +53,25 @@ supabase secrets set \
   STRIPE_PRICE_STARTER_MONTHLY="$STRIPE_PRICE_STARTER_MONTHLY" \
   APP_BASE_URL="$APP_BASE_URL"
 
-echo "[2/3] Deploying create-checkout-session (no-verify-jwt)"
+echo "[2/5] Deploying create-checkout-session (no-verify-jwt)"
 supabase functions deploy create-checkout-session \
   --project-ref "$PROJECT_REF" \
   --no-verify-jwt \
   --use-api
 
-echo "[3/3] Deploying stripe-webhook (no-verify-jwt)"
+echo "[3/5] Deploying create-billing-portal-session (no-verify-jwt)"
+supabase functions deploy create-billing-portal-session \
+  --project-ref "$PROJECT_REF" \
+  --no-verify-jwt \
+  --use-api
+
+echo "[4/5] Deploying delete-account (no-verify-jwt)"
+supabase functions deploy delete-account \
+  --project-ref "$PROJECT_REF" \
+  --no-verify-jwt \
+  --use-api
+
+echo "[5/5] Deploying stripe-webhook (no-verify-jwt)"
 supabase functions deploy stripe-webhook \
   --project-ref "$PROJECT_REF" \
   --no-verify-jwt \

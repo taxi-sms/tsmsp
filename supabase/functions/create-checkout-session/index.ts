@@ -9,6 +9,7 @@ const STRIPE_PRICE_STARTER_MONTHLY = Deno.env.get("STRIPE_PRICE_STARTER_MONTHLY"
 const APP_BASE_URL = Deno.env.get("APP_BASE_URL") || "";
 
 const stripe = new Stripe(STRIPE_SECRET_KEY, { apiVersion: "2024-06-20" });
+const BLOCKED_CHECKOUT_STATUSES = new Set(["trialing", "active", "past_due", "incomplete", "unpaid"]);
 
 const CORS_HEADERS = {
   "access-control-allow-origin": "*",
@@ -54,6 +55,16 @@ function safeHttpUrl(value: unknown, fallback: string) {
     // ignore and fallback
   }
   return fallback;
+}
+
+function shouldBlockCheckout(existing: {
+  status?: string | null;
+  stripe_subscription_id?: string | null;
+}) {
+  const status = String(existing?.status || "").trim();
+  const subscriptionId = String(existing?.stripe_subscription_id || "").trim();
+  if (!status || !subscriptionId) return false;
+  return BLOCKED_CHECKOUT_STATUSES.has(status);
 }
 
 async function createStripeCustomer(userId: string, email: string, planCode: string) {
@@ -123,9 +134,21 @@ Deno.serve(async (req) => {
   try {
     const { data: existing } = await serviceSupabase
       .from("billing_subscriptions")
-      .select("stripe_customer_id")
+      .select("stripe_customer_id,status,cancel_at_period_end,current_period_end,stripe_subscription_id")
       .eq("user_id", user.id)
       .maybeSingle();
+
+    if (shouldBlockCheckout(existing || {})) {
+      return json({
+        ok: false,
+        error: "subscription_already_exists",
+        detail: {
+          status: String(existing?.status || ""),
+          cancelAtPeriodEnd: !!existing?.cancel_at_period_end,
+          currentPeriodEnd: String(existing?.current_period_end || "")
+        }
+      }, 409);
+    }
 
     let customerId = String(existing?.stripe_customer_id || "").trim();
     if (!customerId) {

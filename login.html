@@ -138,6 +138,16 @@
       setMsg("ログアウトしました。");
     }
 
+    function consumeDeletedQueryIfNeeded() {
+      const url = new URL(location.href);
+      if (url.searchParams.get("deleted") !== "1") return;
+      url.searchParams.delete("deleted");
+      try {
+        history.replaceState({}, "", url.toString());
+      } catch (_) {}
+      setMsg("アカウントを削除しました。");
+    }
+
     $("btnLogin").addEventListener("click", async () => {
       setMsg("");
       const email = $("email").value.trim();
@@ -154,6 +164,7 @@
     });
 
     await consumeLogoutQueryIfNeeded();
+    consumeDeletedQueryIfNeeded();
   </script>
   <script src="./cache-version.js"></script>
 </body>
