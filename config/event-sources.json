@@ -8,6 +8,22 @@
   },
   "sources": [
     {
+      "id": "wess-jp-concert-schedule",
+      "name": "WESS",
+      "url": "https://wess.jp/concert-schedule/",
+      "category": "WESS",
+      "priority": "S",
+      "enabled": true
+    },
+    {
+      "id": "www-mountalive-com-schedule",
+      "name": "Mount Alive",
+      "url": "https://www.mountalive.com/schedule/",
+      "category": "Mount Alive",
+      "priority": "S",
+      "enabled": true
+    },
+    {
       "id": "www-city-sapporo-jp-keizai-kanko-event-event-html",
       "name": "札幌市（イベントカレンダー）",
       "url": "https://www.city.sapporo.jp/keizai/kanko/event/event.html",
@@ -421,102 +437,6 @@
       "url": "https://l-tike.com/hokkaido/",
       "category": "チケット（一次プラットフォーム）",
       "priority": "A",
-      "enabled": true
-    },
-    {
-      "id": "ticket-rakuten-co-jp-area-all-hokkaido",
-      "name": "楽天チケット",
-      "url": "https://ticket.rakuten.co.jp/area/all/hokkaido/",
-      "category": "チケット（一次プラットフォーム）",
-      "priority": "B",
-      "enabled": true
-    },
-    {
-      "id": "connpass-com",
-      "name": "connpass",
-      "url": "https://connpass.com/",
-      "category": "イベントプラットフォーム",
-      "priority": "B",
-      "enabled": true
-    },
-    {
-      "id": "www-doorkeeper-jp",
-      "name": "Doorkeeper",
-      "url": "https://www.doorkeeper.jp/",
-      "category": "イベントプラットフォーム",
-      "priority": "B",
-      "enabled": true
-    },
-    {
-      "id": "peatix-com",
-      "name": "Peatix",
-      "url": "https://peatix.com/",
-      "category": "イベントプラットフォーム",
-      "priority": "B",
-      "enabled": true
-    },
-    {
-      "id": "eventregist-com",
-      "name": "EventRegist",
-      "url": "https://eventregist.com/",
-      "category": "イベント運営SaaS",
-      "priority": "B",
-      "enabled": true
-    },
-    {
-      "id": "t-livepocket-jp",
-      "name": "LivePocket-Ticket-",
-      "url": "https://t.livepocket.jp/",
-      "category": "チケット/受付",
-      "priority": "B",
-      "enabled": true
-    },
-    {
-      "id": "sapporo-magazine-events",
-      "name": "サツイベ",
-      "url": "https://sapporo.magazine.events/",
-      "category": "イベント告知メディア",
-      "priority": "C",
-      "enabled": true
-    },
-    {
-      "id": "www-gutabi-jp-event",
-      "name": "ぐうたび北海道（イベント）",
-      "url": "https://www.gutabi.jp/event/",
-      "category": "旅行・地域メディア",
-      "priority": "C",
-      "enabled": true
-    },
-    {
-      "id": "www-walkerplus-com-spot-ar0101s03469-e-list-html",
-      "name": "ウォーカープラス（イベント）",
-      "url": "https://www.walkerplus.com/spot/ar0101s03469/e_list.html",
-      "category": "マス向けイベントDB",
-      "priority": "C",
-      "enabled": true
-    },
-    {
-      "id": "www-pref-hokkaido-lg-jp-ks-bns-217522-html",
-      "name": "北海道（後援イベント一覧）",
-      "url": "https://www.pref.hokkaido.lg.jp/ks/bns/217522.html",
-      "category": "官公庁（道の後援一覧）",
-      "priority": "C",
-      "enabled": true
-    },
-    {
-      "id": "www-kokuchpro-com",
-      "name": "こくちーずプロ",
-      "url": "https://www.kokuchpro.com/",
-      "category": "イベント告知（汎用）",
-      "priority": "C",
-      "enabled": true
-    },
-    {
-      "id": "www-eventbank-jp",
-      "name": "イベントバンク",
-      "url": "https://www.eventbank.jp/",
-      "category": "イベントデータ/API",
-      "priority": "C",
       "enabled": true
     }
   ]

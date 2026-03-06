@@ -161,27 +161,53 @@ function parseDatesFromText(text, nowYmd) {
   return out;
 }
 
-function parseTimeRangeFromText(text) {
-  const range = text.match(/(?:開演|開始|開場|start|time)[^0-9]{0,12}([01]?\d|2[0-3])[:：]([0-5]\d)\s*[〜~\-－–]\s*([01]?\d|2[0-3])[:：]([0-5]\d)/i) ||
-    text.match(/([01]?\d|2[0-3])[:：]([0-5]\d)\s*[〜~\-－–]\s*([01]?\d|2[0-3])[:：]([0-5]\d)[^\\n]{0,12}(?:開演|開始|開場|start|time)/i);
+function normalizeHm(hour, minute = '00') {
+  return `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+}
+
+function parseTimeTagged(text, labels, preferBefore = true) {
+  const label = labels.join('|');
+  const beforeMinute = text.match(new RegExp(`([01]?\\d|2[0-3])[:：]([0-5]\\d)\\s*(?:${label})`, 'i'));
+  const beforeHour = text.match(new RegExp(`([01]?\\d|2[0-3])時\\s*(?:${label})`, 'i'));
+  const afterMinute = text.match(new RegExp(`(?:${label})\\s*[:：]?\\s*([01]?\\d|2[0-3])[:：]([0-5]\\d)`, 'i'));
+  const afterHour = text.match(new RegExp(`(?:${label})\\s*[:：]?\\s*([01]?\\d|2[0-3])時`, 'i'));
+
+  const order = preferBefore
+    ? [beforeMinute, beforeHour, afterMinute, afterHour]
+    : [afterMinute, afterHour, beforeMinute, beforeHour];
+
+  for (const m of order) {
+    if (!m) continue;
+    if (m[2] != null) return normalizeHm(m[1], m[2]);
+    return normalizeHm(m[1], '00');
+  }
+  return '';
+}
+
+function parseEventTimes(text) {
+  const open = parseTimeTagged(text, ['開場', 'door\\s*open'], true);
+  const start = parseTimeTagged(text, ['開演', '開始', 'start\\s*time'], true);
+  const end = parseTimeTagged(text, ['終演', '終了', 'end\\s*time'], true);
+
+  if (open || start || end) {
+    return {
+      open,
+      start,
+      end,
+      allDay: !(open || start || end)
+    };
+  }
+
+  const range = text.match(/([01]?\d|2[0-3])[:：]([0-5]\d)\s*[〜~\-－–]\s*([01]?\d|2[0-3])[:：]([0-5]\d)/);
   if (range) {
     return {
-      start: `${String(range[1]).padStart(2, '0')}:${range[2]}`,
-      end: `${String(range[3]).padStart(2, '0')}:${range[4]}`,
+      open: '',
+      start: normalizeHm(range[1], range[2]),
+      end: normalizeHm(range[3], range[4]),
       allDay: false
     };
   }
-  const single = text.match(/(?:開演|開始|開場|start|time)[^0-9]{0,12}([01]?\d|2[0-3])[:：]([0-5]\d)/i) ||
-    text.match(/([01]?\d|2[0-3])[:：]([0-5]\d)[^\\n]{0,12}(?:開演|開始|開場|start|time)/i);
-  if (single) {
-    return { start: `${String(single[1]).padStart(2, '0')}:${single[2]}`, end: '', allDay: false };
-  }
-  const hourOnly = text.match(/(?:開演|開始|開場)[^0-9]{0,8}([01]?\d|2[0-3])時/i) ||
-    text.match(/([01]?\d|2[0-3])時[^\\n]{0,8}(?:開演|開始|開場)/i);
-  if (hourOnly) {
-    return { start: `${String(hourOnly[1]).padStart(2, '0')}:00`, end: '', allDay: false };
-  }
-  return { start: '', end: '', allDay: true };
+  return { open: '', start: '', end: '', allDay: true };
 }
 
 function hasEventSignal(title, bodyText) {
@@ -197,6 +223,16 @@ function pickVenue(text) {
   const m = text.match(/(?:会場|場所|venue)\s*[：:]\s*([^\n]{2,80})/i);
   if (!m || !m[1]) return '';
   return textPreview(m[1], 80);
+}
+
+function pickAddress(text) {
+  const m = text.match(/(?:住所|所在地|address)\s*[：:]\s*([^\n]{6,140})/i);
+  if (m && m[1]) return textPreview(m[1], 140);
+  const postal = text.match(/(〒\s*\d{3}-\d{4}[^\n]{3,120})/);
+  if (postal && postal[1]) return textPreview(postal[1], 140);
+  const sapporoAddress = text.match(/(札幌市[^\n]{4,120})/);
+  if (sapporoAddress && sapporoAddress[1]) return textPreview(sapporoAddress[1], 140);
+  return '';
 }
 
 function pickImage(html, baseUrl) {
@@ -250,9 +286,7 @@ function buildEvent({ source, detailUrl, title, bodyText, html, nowYmd }) {
   const contextEnd = Math.min(bodyText.length, firstDate.idx + 180);
   const dateContext = bodyText.slice(contextStart, contextEnd);
   const timeContext = `${title}\n${dateContext}`;
-  const time = /(開演|開場|開始|start|time|時開演|時開場)/i.test(timeContext)
-    ? parseTimeRangeFromText(timeContext)
-    : { start: '', end: '', allDay: true };
+  const time = parseEventTimes(timeContext);
   const summary = textPreview(pickMeta(html, 'description') || pickMeta(html, 'og:description') || bodyText, 220);
 
   const eventTitle = normalizeTitle(title) || title || source.name;
@@ -264,16 +298,18 @@ function buildEvent({ source, detailUrl, title, bodyText, html, nowYmd }) {
     return null;
   }
 
-  const seed = `${detailUrl}|${startDate}|${time.start || ''}|${time.end || ''}`;
+  const seed = `${detailUrl}|${startDate}|${time.open || ''}|${time.start || ''}|${time.end || ''}`;
   return {
     id: makeEventId(seed),
     title: textPreview(eventTitle, 120),
     start_date: startDate,
     end_date: endDate,
+    open_time: time.open,
     start_time: time.start,
     end_time: time.end,
     all_day: !!time.allDay,
     venue: pickVenue(bodyText),
+    venue_address: pickAddress(bodyText),
     summary,
     flyer_image_url: pickImage(html, detailUrl),
     detail_url: detailUrl,
