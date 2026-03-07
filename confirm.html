@@ -24,91 +24,76 @@
   <script src="./custom-confirm.js"></script>
   <link rel="stylesheet" href="./tsms-design.css?v=20260227-3">
   <style id="confirm-unified-layout-tweaks">
-    body{
-      margin:0;
-      font-family:"Noto Sans JP",sans-serif;
-      background:var(--bg);
-      color:var(--text-primary);
-    }
-    .wrap{
+    .main{
       max-width:760px;
       margin:0 auto;
       padding:var(--space-3) 14px;
       display:grid;
       gap:8px;
     }
-    .wrap > .date-switcher{
-      margin:0 !important;
-      border:2px solid var(--border) !important;
-      border-radius:14px !important;
-      background:var(--surface-1) !important;
-      padding:10px !important;
+    main .wf-panel{
+      margin:0;
+      border:2px solid var(--border);
+      border-radius:14px;
+      background:var(--surface-1);
+      padding:10px;
     }
-    .wrap > #cards{
-      margin:0 !important;
+    main > #cards{
+      margin:0;
       display:grid;
       gap:8px;
     }
-    .wrap #cards .card{
-      margin:0 !important;
-      padding:10px !important;
-      border:2px solid var(--border) !important;
-      border-radius:14px !important;
-      background:var(--surface-1) !important;
-      box-shadow:none !important;
-    }
     .date-switcher select{
-      border:2px solid var(--border) !important;
-      border-radius:10px !important;
-      background:var(--surface-2) !important;
-      color:var(--text-primary) !important;
+      border:2px solid var(--border);
+      border-radius:10px;
+      background:var(--surface-2);
+      color:var(--text-primary);
       min-height:var(--control-h-md);
+      padding:11px 36px 11px 12px;
     }
     .entry-head::after{
-      border-top:2px solid var(--border) !important;
-      height:0 !important;
-      background:none !important;
+      border-top:var(--line-regular) solid var(--border);
     }
     .time-text{
-      color:var(--text-secondary) !important;
-      font-size:var(--font-xl) !important;
+      color:var(--text-secondary);
+      font-size:var(--font-2xl);
+      font-weight:900;
     }
     .kv{
-      grid-template-columns:88px 1fr;
+      grid-template-columns:90px 1fr;
       gap:var(--space-2);
-      padding:2px 0;
+      padding:3px 0;
     }
     .kv .label{
-      font-size:var(--font-md) !important;
-      color:var(--text-muted) !important;
+      font-size:var(--font-md);
+      color:var(--text-muted);
     }
     .kv .value{
-      font-size:var(--font-2xl);
-      color:var(--text-primary) !important;
-    }
-    .kv.payment-row .value{
-      color:var(--text-primary) !important;
+      font-size:var(--font-xl);
+      color:var(--text-primary);
+      font-weight:800;
     }
     .note{
       margin-top:var(--space-1);
-      color:var(--text-secondary) !important;
+      color:var(--text-secondary);
       white-space:pre-wrap;
       word-break:break-word;
     }
     .tag{
-      border:2px solid var(--border) !important;
-      border-radius:10px !important;
-      background:var(--surface-2) !important;
-      color:var(--text-secondary) !important;
+      border:2px solid var(--border);
+      border-radius:10px;
+      background:var(--surface-2);
+      color:var(--text-secondary);
     }
     .actionBtn{
-      border:2px solid var(--border) !important;
-      border-radius:10px !important;
-      background:var(--surface-2) !important;
-      color:var(--text-primary) !important;
-      min-height:var(--touch-min);
-      padding:8px 12px;
+      border:2px solid var(--border);
+      border-radius:10px;
+      background:var(--surface-2);
+      color:var(--text-primary);
+      min-height:var(--control-h-md);
+      padding:10px 8px;
       font-size:var(--font-2xl);
+      font-weight:900;
     }
     .empty{
       color:var(--text-muted);
@@ -150,16 +135,9 @@
       box-shadow:0 10px 24px rgba(0,0,0,.3);
     }
     :root[data-theme="dark"] .tsms-hamburger span{background:#e3efff;}
-    :root[data-theme="dark"] .wrap > .date-switcher,
-    :root[data-theme="dark"] .wrap #cards .card{
-      background:linear-gradient(180deg, rgba(19,38,70,.95), rgba(8,20,42,.95)) !important;
-      box-shadow:0 10px 26px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.08) !important;
-    }
-    :root[data-theme="dark"] .date-switcher select,
-    :root[data-theme="dark"] .tag,
-    :root[data-theme="dark"] .actionBtn{
-      background:linear-gradient(180deg, rgba(16,33,62,.9), rgba(9,20,39,.9)) !important;
-      color:#eaf3ff !important;
+    :root[data-theme="dark"] main .wf-panel{
+      background:linear-gradient(180deg, rgba(19,38,70,.95), rgba(8,20,42,.95));
+      box-shadow:0 10px 26px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.08);
     }
     :root[data-theme="dark"] .tsms-menu{
       background:linear-gradient(180deg, rgba(19,38,70,.96), rgba(8,20,42,.96));
@@ -193,8 +171,7 @@
     }
   </style>
 </head>
-<body>
-<div class="wrap">
+<body class="page-block-unified">
 <nav class="tsms-menu" id="tsmsMenu" aria-label="サイドメニュー">
   <a href="index.html">TOP<small>メニュー一覧</small></a>
   <a href="report.html">日報入力<small>乗車データを入力</small></a>
@@ -213,11 +190,12 @@
   <a class="header-to-report" href="report.html">入力画面へ</a>
 </header>
 
-<section class="date-switcher">
+<main class="main">
+<section class="date-switcher wf-panel">
   <select id="confirmDateSelect" aria-label="表示日付"></select>
 </section>
 <div id="cards"></div>
-</div>
+</main>
 
 <script>
 (function(){
@@ -366,14 +344,14 @@ function todayLocalYmd(){
 
     const rows = filteredDataWithIndex();
     if(rows.length === 0){
-      root.innerHTML = '<div class="empty">この日付のデータがありません</div>';
+      root.innerHTML = '<div class="card wf-panel"><div class="empty">この日付のデータがありません</div></div>';
       return;
     }
 
     root.innerHTML = "";
     rows.forEach(({row:r, idx})=>{
       const card = document.createElement("div");
-      card.className = "card";
+      card.className = "card wf-panel";
       const lines = [];
       lines.push(`<div class="kv"><span class="label">乗車種別</span><span class="value">${esc(r.rideType||"")}</span></div>`);
       lines.push(`<div class="kv payment-row"><span class="label">支払い方法</span><span class="value">${esc(r.payMethod||"")}</span></div>`);
@@ -389,8 +367,8 @@ function todayLocalYmd(){
         </div>
       ` + lines.join("\n") + `
         <div class="actions entry-actions">
-          <button type="button" class="actionBtn" data-action="edit" data-idx="${idx}">修正</button>
-          <button type="button" class="actionBtn" data-action="delete" data-idx="${idx}">削除</button>
+          <button type="button" class="actionBtn btn" data-action="edit" data-idx="${idx}">修正</button>
+          <button type="button" class="actionBtn btn" data-action="delete" data-idx="${idx}">削除</button>
         </div>`;
       root.appendChild(card);
     });

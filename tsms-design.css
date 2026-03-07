@@ -2029,3 +2029,41 @@ select,
   font-size: var(--font-lg) !important;
   line-height: 1.2 !important;
 }
+
+/* ============================================================
+   Unified Flat Blocks (opt-in)
+   見出し + 区切り線を基本に、セクションの箱を非表示
+   ============================================================ */
+.page-block-unified .main .card,
+.page-block-unified .main .section,
+.page-block-unified .main .panel,
+.page-block-unified main .wf-panel,
+.page-block-unified .date-switcher {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  margin: 10px 0 !important;
+  padding: 4px 0 2px !important;
+}
+
+.page-block-unified .group-title::after,
+.page-block-unified .wf-label::after,
+.page-block-unified .entry-head::after {
+  border-top: var(--line-regular) solid var(--border) !important;
+}
+
+.page-block-unified .section .title {
+  display: flex !important;
+  align-items: center !important;
+  gap: var(--space-2) !important;
+}
+.page-block-unified .section .title::after {
+  content: "" !important;
+  display: block !important;
+  flex: 1 1 auto !important;
+  height: 0 !important;
+  border-top: var(--line-regular) solid var(--border) !important;
+  background: none !important;
+  opacity: 0.95 !important;
+}
