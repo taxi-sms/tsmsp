@@ -16,6 +16,7 @@ const WEAK_TITLE_RE = /^(イベント|イベント情報|event|events|schedule)(
 const BAD_URL_RE = /\/banq\/|\/banquet\/|\/stay\/|\/guestroom\//i;
 const BAD_VENUE_RE = /(ご案内|ご了承ください|公開される場合|お問い合わせ|お問合せ|チケット|SOLD\s*OUT|当日券|販売|先行|整列|詳細|一覧|トップ|公式サイト|アクセスはこちら)/i;
 const DETAIL_URL_SIGNAL_RE = /(event[_-]?detail|\/detail\/|eventid=|eventcd=|eventbundlecd=|[?&](id|num|no|eid)=|\/seminar\/\d+|\/\d{4}\/\d{1,2}\/\d{1,2}\/)/i;
+const LISTING_URL_SIGNAL_RE = /(schedule|event|events|calendar|live|program|news|archive|month|hall|concert|seminar)/i;
 const JSONLD_SCRIPT_RE = /<script\b[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi;
 const MIN_QUALITY_SCORE = 0.56;
 const MIN_QUALITY_SCORE_HEURISTIC = 0.58;
@@ -321,6 +322,31 @@ function enumerateMonthStarts(fromYmd, toYmd) {
   return out;
 }
 
+function buildWindowTokens(fromYmd, toYmd, maxMonths = 6) {
+  const months = enumerateMonthStarts(fromYmd, toYmd).slice(0, maxMonths);
+  const tokens = new Set();
+  for (const ymd of months) {
+    const [y, m] = String(ymd).split('-').map((n) => Number(n));
+    if (!y || !m) continue;
+    tokens.add(`${y}/${m}`);
+    tokens.add(`${y}/${String(m).padStart(2, '0')}`);
+    tokens.add(`${y}.${m}`);
+    tokens.add(`${y}.${String(m).padStart(2, '0')}`);
+    tokens.add(`${y}-${m}`);
+    tokens.add(`${y}-${String(m).padStart(2, '0')}`);
+    tokens.add(`${y}年${m}月`);
+    tokens.add(`${String(m).padStart(2, '0')}月`);
+    tokens.add(`${m}月`);
+  }
+  return Array.from(tokens);
+}
+
+function hasWindowToken(text, tokens) {
+  const t = String(text || '');
+  if (!t) return false;
+  return tokens.some((token) => token && t.includes(token));
+}
+
 function parseDatesFromText(text, nowYmd) {
   const out = [];
   const nowYear = Number(String(nowYmd).slice(0, 4)) || new Date().getFullYear();
@@ -599,6 +625,19 @@ function pickSectionById(html, id) {
   return stripTags(m[1]);
 }
 
+function pickLabeledValue(html, label) {
+  const escaped = escapeRegExp(label);
+  const patterns = [
+    new RegExp(`<dt\\b[^>]*>\\s*${escaped}\\s*<\\/dt>\\s*<dd\\b[^>]*>([\\s\\S]*?)<\\/dd>`, 'i'),
+    new RegExp(`<th\\b[^>]*>\\s*${escaped}\\s*<\\/th>\\s*<td\\b[^>]*>([\\s\\S]*?)<\\/td>`, 'i')
+  ];
+  for (const re of patterns) {
+    const m = html.match(re);
+    if (m && m[1]) return stripTags(m[1]);
+  }
+  return '';
+}
+
 function buildSiteRuleEvent({
   source,
   detailUrl,
@@ -693,6 +732,30 @@ function extractSapporoTravelSeasonEvent({ source, url, html, nowYmd }) {
     venueAddress: address,
     time: { open: '', start: '', end: '', allDay: true },
     summary,
+    flyerImageUrl: pickImage(html, url)
+  });
+}
+
+function extractSapporoCommunityPlazaSiteRuleEvent({ source, url, html, nowYmd }) {
+  if (source.id !== 'www-sapporo-community-plaza-jp-event-php') return null;
+  if (!/\/event\.php\?num=\d+/i.test(url)) return null;
+  const title = String(extractTitle(html) || '').split('|')[0].trim();
+  if (!title || BAD_TITLE_RE.test(title) || WEAK_TITLE_RE.test(title)) return null;
+
+  const dateBlock = pickLabeledValue(html, '日時');
+  const venue = textPreview(pickLabeledValue(html, '会場'), 80);
+  const dates = parseDatesFromText(dateBlock, nowYmd);
+  if (!dates.length) return null;
+
+  return buildSiteRuleEvent({
+    source,
+    detailUrl: url,
+    title,
+    startDate: dates[0].ymd,
+    endDate: dates.length >= 2 ? dates[1].ymd : '',
+    venue,
+    time: parseEventTimes(dateBlock),
+    summary: pickMeta(html, 'description') || dateBlock || stripTags(html),
     flyerImageUrl: pickImage(html, url)
   });
 }
@@ -1094,6 +1157,8 @@ function extractEventsFromPage({ source, url, html, titleHint, nowYmd }) {
   if (kitaraEvent) events.push(withQuality(kitaraEvent));
   const seasonEvent = extractSapporoTravelSeasonEvent({ source, url, html, nowYmd });
   if (seasonEvent) events.push(withQuality(seasonEvent));
+  const plazaEvent = extractSapporoCommunityPlazaSiteRuleEvent({ source, url, html, nowYmd });
+  if (plazaEvent) events.push(withQuality(plazaEvent));
   const mountAliveEvent = extractMountAliveSiteRuleEvent({ source, url, html, nowYmd });
   if (mountAliveEvent) events.push(withQuality(mountAliveEvent));
   const zeppEvent = extractZeppSapporoSiteRuleEvent({ source, url, html, nowYmd });
@@ -1320,6 +1385,117 @@ async function crawlWessSource(source, options) {
   };
 }
 
+async function crawlMonthlyDetailSource(source, options, buildMonthUrl, detailUrlRe) {
+  const { nowYmd, maxDate } = options;
+  const months = enumerateMonthStarts(nowYmd, maxDate);
+  const monthPages = await mapLimit(months, 4, async (monthYmd) => {
+    try {
+      return await fetchText(buildMonthUrl(monthYmd), 12000);
+    } catch (_) {
+      return null;
+    }
+  });
+
+  const events = [];
+  const detailLinks = [];
+  for (const page of monthPages) {
+    if (!page || page.error) continue;
+    const pageEvents = extractEventsFromPage({
+      source,
+      url: page.url,
+      html: page.html,
+      titleHint: extractTitle(page.html) || source.name,
+      nowYmd
+    });
+    for (const ev of pageEvents) events.push(withQuality(ev));
+
+    const links = extractLinks(page.html, page.url);
+    for (const link of links) {
+      if (detailUrlRe.test(link.url)) detailLinks.push(link.url);
+    }
+  }
+
+  const detailPages = await mapLimit(uniqueBy(detailLinks, (x) => x), 4, async (url) => {
+    try {
+      return await fetchText(url, 10000);
+    } catch (_) {
+      return null;
+    }
+  });
+
+  for (const page of detailPages) {
+    if (!page || page.error) continue;
+    const pageEvents = extractEventsFromPage({
+      source,
+      url: page.url,
+      html: page.html,
+      titleHint: extractTitle(page.html) || source.name,
+      nowYmd
+    });
+    for (const ev of pageEvents) events.push(withQuality(ev));
+  }
+
+  return {
+    sourceId: source.id,
+    events: uniqueBy(events, (x) => x.id),
+    error: ''
+  };
+}
+
+async function crawlSeededDetailSource(source, options, seedUrls, detailUrlRe) {
+  const { nowYmd } = options;
+  const seeds = await mapLimit(seedUrls, 4, async (url) => {
+    try {
+      return await fetchText(url, 12000);
+    } catch (_) {
+      return null;
+    }
+  });
+
+  const events = [];
+  const detailLinks = [];
+  for (const page of seeds) {
+    if (!page || page.error) continue;
+    const pageEvents = extractEventsFromPage({
+      source,
+      url: page.url,
+      html: page.html,
+      titleHint: extractTitle(page.html) || source.name,
+      nowYmd
+    });
+    for (const ev of pageEvents) events.push(withQuality(ev));
+    for (const link of extractLinks(page.html, page.url)) {
+      if (detailUrlRe.test(link.url)) detailLinks.push(link.url);
+    }
+  }
+
+  const details = await mapLimit(uniqueBy(detailLinks, (x) => x), 4, async (url) => {
+    try {
+      return await fetchText(url, 10000);
+    } catch (_) {
+      return null;
+    }
+  });
+
+  for (const page of details) {
+    if (!page || page.error) continue;
+    const pageEvents = extractEventsFromPage({
+      source,
+      url: page.url,
+      html: page.html,
+      titleHint: extractTitle(page.html) || source.name,
+      nowYmd
+    });
+    for (const ev of pageEvents) events.push(withQuality(ev));
+  }
+
+  return {
+    sourceId: source.id,
+    events: uniqueBy(events, (x) => x.id),
+    error: ''
+  };
+}
+
 function resolveSourceStrategy(source, strategyMap) {
   const raw = String(
     source?.crawl_strategy ||
@@ -1365,11 +1541,44 @@ function buildCrawlPlan(source, mode, strategy) {
 }
 
 async function crawlSource(source, options) {
-  const { mode, nowYmd, strategy } = options;
+  const { mode, nowYmd, maxDate, strategy } = options;
   if (source.id === 'wess-jp-concert-schedule') {
     return crawlWessSource(source, options);
   }
+  if (source.id === 'www-kitara-sapporo-or-jp-event') {
+    return crawlMonthlyDetailSource(
+      source,
+      options,
+      (monthYmd) => `https://www.kitara-sapporo.or.jp/event/index.html?month=${monthYmd.slice(0, 7)}`,
+      /\/event\/event_detail\.php\?num=\d+/i
+    );
+  }
+  if (source.id === 'www-zepp-co-jp-hall-sapporo-schedule') {
+    return crawlMonthlyDetailSource(
+      source,
+      options,
+      (monthYmd) => {
+        const [y, m] = monthYmd.slice(0, 7).split('-');
+        return `https://www.zepp.co.jp/hall/sapporo/schedule/?_y=${Number(y)}&_m=${Number(m)}`;
+      },
+      /\/schedule\/single\/\?rid=\d+/i
+    );
+  }
+  if (source.id === 'www-sapporo-community-plaza-jp-event-php') {
+    return crawlSeededDetailSource(
+      source,
+      options,
+      [
+        'https://www.sapporo-community-plaza.jp/event.php',
+        'https://www.sapporo-community-plaza.jp/event_theater.php',
+        'https://www.sapporo-community-plaza.jp/event_scarts.php'
+      ],
+      /\/event\.php\?num=\d+/i
+    );
+  }
   const plan = buildCrawlPlan(source, mode, strategy);
+  const listingLimit = Math.max(3, Math.min(10, Math.floor(plan.detailLimit * 0.8)));
+  const windowTokens = buildWindowTokens(nowYmd, maxDate, 6);
 
   let root;
   try {
@@ -1389,7 +1598,54 @@ async function crawlSource(source, options) {
   });
   for (const ev of rootEvents) events.push(ev);
 
-  const links = extractLinks(root.html, root.url);
+  const rootLinks = extractLinks(root.html, root.url);
+  const listingCandidates = uniqueBy(rootLinks, (x) => x.url)
+    .map((x) => {
+      let score = 0;
+      if (x.url.startsWith(source.url)) score += 2;
+      if (LISTING_URL_SIGNAL_RE.test(x.url)) score += 2;
+      if (LISTING_URL_SIGNAL_RE.test(x.text)) score += 1;
+      if (EVENT_TEXT_RE.test(x.text) || EVENT_TEXT_RE.test(x.url)) score += 2;
+      if (hasWindowToken(`${x.url}\n${x.text}\n${x.context || ''}`, windowTokens)) score += 4;
+      if (parseDatesFromText(String(x.context || ''), nowYmd).length) score += 2;
+      if (hasDetailUrlSignal(x.url)) score -= 2;
+      return { ...x, score };
+    })
+    .filter((x) => !BAD_TITLE_RE.test(x.text))
+    .filter((x) => !BAD_URL_RE.test(x.url))
+    .filter((x) => x.score >= 4)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, listingLimit);
+
+  const listingPages = [];
+  if (listingCandidates.length) {
+    const perSourceConcurrency = mode === 'full' ? 4 : 3;
+    const fetched = await mapLimit(listingCandidates, perSourceConcurrency, async (link) => {
+      try {
+        const page = await fetchText(link.url, 9000);
+        return { ...page, titleHint: link.text || extractTitle(page.html) || source.name };
+      } catch (_) {
+        return null;
+      }
+    });
+    for (const row of fetched) {
+      if (!row || row.error) continue;
+      listingPages.push(row);
+      const pageEvents = extractEventsFromPage({
+        source,
+        url: row.url,
+        html: row.html,
+        titleHint: row.titleHint,
+        nowYmd
+      });
+      for (const ev of pageEvents) events.push(ev);
+    }
+  }
+
+  const links = [
+    ...rootLinks,
+    ...listingPages.flatMap((page) => extractLinks(page.html, page.url))
+  ];
   const detailCandidates = uniqueBy(links, (x) => x.url)
     .map((x) => {
       let score = 0;
@@ -1397,6 +1653,7 @@ async function crawlSource(source, options) {
       if (EVENT_TEXT_RE.test(x.text)) score += 3;
       if (EVENT_TEXT_RE.test(x.url)) score += 2;
       if (/\d{1,2}[\/.月]\d{1,2}日?/.test(x.text) || /20\d{2}[\/.\-年]/.test(x.text)) score += 2;
+      if (hasWindowToken(`${x.url}\n${x.text}\n${x.context || ''}`, windowTokens)) score += 3;
       if (parseDatesFromText(String(x.context || ''), nowYmd).length) score += 2;
       if (hasEventSignal(x.text, String(x.context || ''))) score += 1;
       if (hasDetailUrlSignal(x.url)) score += 3;

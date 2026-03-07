@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-07T16:13:42.242Z",
+  "generated_at": "2026-03-07T16:28:41.774Z",
   "test_dates": [
     "2026-04-01",
     "2026-07-01",
@@ -69,29 +69,36 @@
       "url": "https://www.mountalive.com/schedule/",
       "strategy": "feed_then_detail",
       "status": "ok",
-      "best_event_count": 3,
+      "best_event_count": 14,
       "snapshots": [
         {
           "date": "2026-04-01",
           "error": "",
-          "event_count": 3,
+          "event_count": 14,
           "sample_titles": [
             "全国ホールツアー2026「PERSONAL DISTANCE」",
-            "THE ALFEE",
-            "「20周年でウンザウンザを踊るツアー」"
+            "Northern19 “FIVE FLESH tour”",
+            "KK60 ?コイズミ記念館? KYOKO KOIZUMI TOUR 2026",
+            "全員優勝VICTORY25 「全員優勝パレードツアー?全員優勝決定シリーズ?」",
+            "aiko Live Tour「Love Like Pop Vol.25」"
           ]
         },
         {
           "date": "2026-07-01",
           "error": "",
-          "event_count": 0,
-          "sample_titles": []
+          "event_count": 2,
+          "sample_titles": [
+            "さかいゆう自身初の日本全国47都道府県ツアー \"mYUsic\"",
+            "VOX LETTER TOUR 2026"
+          ]
         },
         {
           "date": "2026-10-01",
           "error": "",
-          "event_count": 0,
-          "sample_titles": []
+          "event_count": 1,
+          "sample_titles": [
+            "VOX LETTER TOUR 2026"
+          ]
         },
         {
           "date": "2027-01-01",
@@ -106,32 +113,43 @@
       "name": "札幌市（イベントカレンダー）",
       "url": "https://www.city.sapporo.jp/keizai/kanko/event/event.html",
       "strategy": "feed_then_detail",
-      "status": "zero_events",
-      "best_event_count": 0,
+      "status": "ok",
+      "best_event_count": 2,
       "snapshots": [
         {
           "date": "2026-04-01",
           "error": "",
-          "event_count": 0,
-          "sample_titles": []
+          "event_count": 2,
+          "sample_titles": [
+            "SAPPORO CITY JAZZ 2024パークジャズライブ",
+            "花フェスタ2024札幌"
+          ]
         },
         {
           "date": "2026-07-01",
           "error": "",
-          "event_count": 0,
-          "sample_titles": []
+          "event_count": 1,
+          "sample_titles": [
+            "SAPPORO CITY JAZZ 2024パークジャズライブ"
+          ]
         },
         {
           "date": "2026-10-01",
           "error": "",
-          "event_count": 0,
-          "sample_titles": []
+          "event_count": 2,
+          "sample_titles": [
+            "SAPPORO CITY JAZZ 2024パークジャズライブ",
+            "花フェスタ2024札幌"
+          ]
         },
         {
           "date": "2027-01-01",
           "error": "",
-          "event_count": 0,
-          "sample_titles": []
+          "event_count": 2,
+          "sample_titles": [
+            "花フェスタ2024札幌",
+            "SAPPORO CITY JAZZ 2024パークジャズライブ"
+          ]
         }
       ]
     },
@@ -338,8 +356,14 @@
         {
           "date": "2026-04-01",
           "error": "",
-          "event_count": 0,
-          "sample_titles": []
+          "event_count": 5,
+          "sample_titles": [
+            "対象者限定のイベント",
+            "対象者限定のイベント",
+            "対象者限定のイベント",
+            "to HEROes ~TOBE 3rd Super Live~",
+            "to HEROes ~TOBE 3rd Super Live~"
+          ]
         },
         {
           "date": "2026-07-01",
@@ -350,31 +374,29 @@
             "イベント・広告を お考えの方へ",
             "季節ごとのイベント(ナイトラン・DOME Snow Zone supported by JAPAN AIRLINES)",
             "年表・イベント実績",
-            "イベントアップデート"
+            "03(火) イベント マイナビ 就職EXPO 札幌会場"
           ]
         },
         {
           "date": "2026-10-01",
           "error": "",
-          "event_count": 5,
+          "event_count": 4,
           "sample_titles": [
             "北海道コンサドーレ札幌×大和ハウス プレミストドーム 特別インタビュー Vol.5 青木亮太選手 EVENT",
             "イベント・広告を お考えの方へ",
             "季節ごとのイベント(ナイトラン・DOME Snow Zone supported by JAPAN AIRLINES)",
-            "年表・イベント実績",
-            "イベントアップデート"
+            "年表・イベント実績"
           ]
         },
         {
           "date": "2027-01-01",
           "error": "",
-          "event_count": 5,
+          "event_count": 4,
           "sample_titles": [
             "北海道コンサドーレ札幌×大和ハウス プレミストドーム 特別インタビュー Vol.5 青木亮太選手 EVENT",
             "イベント・広告を お考えの方へ",
             "季節ごとのイベント(ナイトラン・DOME Snow Zone supported by JAPAN AIRLINES)",
-            "年表・イベント実績",
-            "イベントアップデート"
+            "年表・イベント実績"
           ]
         }
       ]
@@ -486,32 +508,43 @@
       "name": "札幌市民交流プラザ",
       "url": "https://www.sapporo-community-plaza.jp/event.php",
       "strategy": "detail",
-      "status": "zero_events",
-      "best_event_count": 0,
+      "status": "ok",
+      "best_event_count": 4,
       "snapshots": [
         {
           "date": "2026-04-01",
           "error": "",
-          "event_count": 0,
-          "sample_titles": []
+          "event_count": 4,
+          "sample_titles": [
+            "hitaruバレエプロジェクト「眠れる森の美女」オーディション",
+            "第七回さっぽろ落語まつり",
+            "ミュージカル「アイ・ラブ・坊っちゃん」",
+            "hitaruバレエプロジェクト「眠れる森の美女」"
+          ]
         },
         {
           "date": "2026-07-01",
           "error": "",
-          "event_count": 0,
-          "sample_titles": []
+          "event_count": 1,
+          "sample_titles": [
+            "hitaruバレエプロジェクト「眠れる森の美女」"
+          ]
         },
         {
           "date": "2026-10-01",
           "error": "",
-          "event_count": 0,
-          "sample_titles": []
+          "event_count": 1,
+          "sample_titles": [
+            "hitaruバレエプロジェクト「眠れる森の美女」"
+          ]
         },
         {
           "date": "2027-01-01",
           "error": "",
-          "event_count": 0,
-          "sample_titles": []
+          "event_count": 1,
+          "sample_titles": [
+            "hitaruバレエプロジェクト「眠れる森の美女」"
+          ]
         }
       ]
     },
@@ -520,20 +553,30 @@
       "name": "札幌コンサートホール Kitara",
       "url": "https://www.kitara-sapporo.or.jp/event/",
       "strategy": "detail",
-      "status": "zero_events",
-      "best_event_count": 0,
+      "status": "ok",
+      "best_event_count": 59,
       "snapshots": [
         {
           "date": "2026-04-01",
           "error": "",
-          "event_count": 0,
-          "sample_titles": []
+          "event_count": 59,
+          "sample_titles": [
+            "紀平凱成ピアノコンサートツアー2026～ツアーファイナル～ スペシャルゲスト：ソプラニスタ 岡本知高",
+            "関係者のみの公演がございます",
+            "【Web限定販売】 BRA★BRA FAINAL FANTASY BRASS de BRAVO 2026 with Siena Wind Orchestra",
+            "関係者のみの公演がございます",
+            "トヨタ・マスター・プレイヤーズ，ウィーン"
+          ]
         },
         {
           "date": "2026-07-01",
           "error": "",
-          "event_count": 0,
-          "sample_titles": []
+          "event_count": 3,
+          "sample_titles": [
+            "木下美穂子 ソプラノリサイタル",
+            "札幌交響楽団 第679回定期演奏会（17時公演）",
+            "札幌交響楽団 第679回定期演奏会（13時公演）"
+          ]
         },
         {
           "date": "2026-10-01",
@@ -554,20 +597,32 @@
       "name": "Zepp Sapporo",
       "url": "https://www.zepp.co.jp/hall/sapporo/schedule/",
       "strategy": "feed_then_detail",
-      "status": "zero_events",
-      "best_event_count": 0,
+      "status": "ok",
+      "best_event_count": 39,
       "snapshots": [
         {
           "date": "2026-04-01",
           "error": "",
-          "event_count": 0,
-          "sample_titles": []
+          "event_count": 39,
+          "sample_titles": [
+            "muque muque LIVE TOUR 2026 “GLHF”",
+            "ambitious ambitious Zepp Sapporo単独公演-5th Anniversary PartY-",
+            "にしな にしな ツアー2026",
+            "＃らぶしっく #らぶしっく Zepp TOUR 2026",
+            "IFM NORTH WAVE & WESS PRESENTS IMPACT! XXIII supported by アルキタ 12/29 (月)第一弾アーティスト発表 2026 年2 月9 日第二弾アーティスト24組発表 今回発表になった…"
+          ]
         },
         {
           "date": "2026-07-01",
           "error": "",
-          "event_count": 0,
-          "sample_titles": []
+          "event_count": 11,
+          "sample_titles": [
+            "竹中雄大 竹中雄大「DIVA」Release Tour 2026 02.10 振替公演",
+            "[Alexandros] YOU ARE WELCOME",
+            "斉藤壮馬 斉藤壮馬 Zepp Live Tour 2026",
+            "HARRY&THE BIRTHDAY HARRY＆THE BIRTHDAY TOUR2026 「Gotta Move」01.26振替公演",
+            "ファントムシータ ファントムシータ Zepp TOUR 2026 「ふぁんとむ♥らんど」"
+          ]
         },
         {
           "date": "2026-10-01",
@@ -732,20 +787,24 @@
       "name": "札幌芸術の森",
       "url": "https://artpark.or.jp/tenrankai-events/",
       "strategy": "detail_light",
-      "status": "zero_events",
-      "best_event_count": 0,
+      "status": "ok",
+      "best_event_count": 1,
       "snapshots": [
         {
           "date": "2026-04-01",
           "error": "",
-          "event_count": 0,
-          "sample_titles": []
+          "event_count": 1,
+          "sample_titles": [
+            "予告：札幌芸術の森開園40周年記念 Flowering Garden 花と獣 いろとかたち"
+          ]
         },
         {
           "date": "2026-07-01",
           "error": "",
-          "event_count": 0,
-          "sample_titles": []
+          "event_count": 1,
+          "sample_titles": [
+            "予告：札幌芸術の森開園40周年記念 Flowering Garden 花と獣 いろとかたち"
+          ]
         },
         {
           "date": "2026-10-01",
@@ -766,14 +825,16 @@
       "name": "サッポロファクトリー（イベント）",
       "url": "https://sapporofactory.jp/event/",
       "strategy": "detail_light",
-      "status": "zero_events",
-      "best_event_count": 0,
+      "status": "ok",
+      "best_event_count": 1,
       "snapshots": [
         {
           "date": "2026-04-01",
           "error": "",
-          "event_count": 0,
-          "sample_titles": []
+          "event_count": 1,
+          "sample_titles": [
+            "THEE MICHELLE GUN ELEPHANT フィルムライブ"
+          ]
         },
         {
           "date": "2026-07-01",
@@ -1089,7 +1150,7 @@
       "name": "SAPPORO CITY JAZZ",
       "url": "https://sapporocityjazz.jp/",
       "strategy": "feed_then_detail",
-      "status": "ok",
+      "status": "error",
       "best_event_count": 6,
       "snapshots": [
         {
@@ -1106,38 +1167,26 @@
         },
         {
           "date": "2026-07-01",
-          "error": "",
-          "event_count": 6,
-          "sample_titles": [
-            "【(土)】札幌藻岩山スキー場 WINTER FES ドローンショー～五感でめぐる札幌物語～ 開催！",
-            "【・25】ノルウェーImprobasenのライブ開催！",
-            "（土）サッポロ・サウンド・スクエア開催！",
-            "(土)サッポロ・シティ・ジャズ後援「ARTPARK JAZZ ASSEMBLE. Live At “D-Bop” Jazz Club Sapporo」開催！",
-            "市民ロビーコンサート開催！"
-          ]
+          "error": "This operation was aborted",
+          "event_count": 0,
+          "sample_titles": []
         },
         {
           "date": "2026-10-01",
-          "error": "",
-          "event_count": 6,
-          "sample_titles": [
-            "【(土)】札幌藻岩山スキー場 WINTER FES ドローンショー～五感でめぐる札幌物語～ 開催！",
-            "【・25】ノルウェーImprobasenのライブ開催！",
-            "（土）サッポロ・サウンド・スクエア開催！",
-            "(土)サッポロ・シティ・ジャズ後援「ARTPARK JAZZ ASSEMBLE. Live At “D-Bop” Jazz Club Sapporo」開催！",
-            "市民ロビーコンサート開催！"
-          ]
+          "error": "This operation was aborted",
+          "event_count": 0,
+          "sample_titles": []
         },
         {
           "date": "2027-01-01",
           "error": "",
           "event_count": 6,
           "sample_titles": [
-            "【(土)】札幌藻岩山スキー場 WINTER FES ドローンショー～五感でめぐる札幌物語～ 開催！",
-            "【・25】ノルウェーImprobasenのライブ開催！",
             "（土）サッポロ・サウンド・スクエア開催！",
-            "(土)サッポロ・シティ・ジャズ後援「ARTPARK JAZZ ASSEMBLE. Live At “D-Bop” Jazz Club Sapporo」開催！",
-            "市民ロビーコンサート開催！"
+            "市民ロビーコンサート開催！",
+            "（火）サッポロ・サウンド・スクエア開催！",
+            "【(土)】札幌藻岩山スキー場 WINTER FES ドローンショー～五感でめぐる札幌物語～ 開催！",
+            "【・25】ノルウェーImprobasenのライブ開催！"
           ]
         }
       ]
@@ -1148,7 +1197,7 @@
       "url": "https://www.pmf.or.jp/jp/schedule/",
       "strategy": "detail",
       "status": "ok",
-      "best_event_count": 3,
+      "best_event_count": 2,
       "snapshots": [
         {
           "date": "2026-04-01",
@@ -1162,11 +1211,10 @@
         {
           "date": "2026-07-01",
           "error": "",
-          "event_count": 3,
+          "event_count": 2,
           "sample_titles": [
             "PMFアンサンブル清田区公演",
-            "PMFアンサンブル江別公演",
-            "PMF Connects LIVE！"
+            "PMFアンサンブル江別公演"
           ]
         },
         {
@@ -1298,14 +1346,18 @@
       "name": "札幌市（企業向けセミナー情報）",
       "url": "https://www.city.sapporo.jp/keizai/seminar/index.html",
       "strategy": "feed_then_detail",
-      "status": "zero_events",
-      "best_event_count": 0,
+      "status": "ok",
+      "best_event_count": 3,
       "snapshots": [
         {
           "date": "2026-04-01",
           "error": "",
-          "event_count": 0,
-          "sample_titles": []
+          "event_count": 3,
+          "sample_titles": [
+            "ビジネスマナー 開催 対面 社会人としての基本を学ぶための「若手社員研修」",
+            "開催 ＩＴ・セキュリティ関連 対面 若手社員のうちに身に着けるべき、正しい生成AI活用法",
+            "開催 コミュニケーション 対面 伝え方を変えた人が伸びる。現場で結果を出すための「コミュニケーションデザイン」"
+          ]
         },
         {
           "date": "2026-07-01",
@@ -1672,14 +1724,17 @@
       "name": "SPiCE",
       "url": "https://spice-sapporo.jp/schedule/",
       "strategy": "feed_then_detail",
-      "status": "zero_events",
-      "best_event_count": 0,
+      "status": "ok",
+      "best_event_count": 2,
       "snapshots": [
         {
           "date": "2026-04-01",
           "error": "",
-          "event_count": 0,
-          "sample_titles": []
+          "event_count": 2,
+          "sample_titles": [
+            "COMING SOON",
+            "EMNW To KAMASU – GOOD VIBES ONLY JAPAN TOUR 2026"
+          ]
         },
         {
           "date": "2026-07-01",
@@ -1740,14 +1795,16 @@
       "name": "STV札幌テレビ（イベント）",
       "url": "https://www.stv.jp/event/index.html",
       "strategy": "detail",
-      "status": "zero_events",
-      "best_event_count": 0,
+      "status": "ok",
+      "best_event_count": 1,
       "snapshots": [
         {
           "date": "2026-04-01",
           "error": "",
-          "event_count": 0,
-          "sample_titles": []
+          "event_count": 1,
+          "sample_titles": [
+            "ご参加お待ちしております！ 目から鱗のお金のセミナー 開催日 (土) 開催場所 TKPガーデンシティPREMIUM札幌大通 ホール6D"
+          ]
         },
         {
           "date": "2026-07-01",
@@ -1880,7 +1937,7 @@
       ]
     }
   ],
-  "ok_sources": 13,
-  "zero_event_sources": 37,
-  "error_sources": 1
+  "ok_sources": 21,
+  "zero_event_sources": 28,
+  "error_sources": 2
 }
