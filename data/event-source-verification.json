@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-07T17:20:51.215Z",
+  "generated_at": "2026-03-07T18:03:07.727Z",
   "test_dates": [
     "2026-04-01",
     "2026-07-01",
@@ -627,20 +627,32 @@
       "name": "Zepp Sapporo",
       "url": "https://www.zepp.co.jp/hall/sapporo/schedule/",
       "strategy": "feed_then_detail",
-      "status": "zero_events",
-      "best_event_count": 0,
+      "status": "ok",
+      "best_event_count": 39,
       "snapshots": [
         {
           "date": "2026-04-01",
           "error": "",
-          "event_count": 0,
-          "sample_titles": []
+          "event_count": 39,
+          "sample_titles": [
+            "muque muque LIVE TOUR 2026 “GLHF”",
+            "ambitious ambitious Zepp Sapporo単独公演-5th Anniversary PartY-",
+            "にしな にしな ツアー2026",
+            "＃らぶしっく #らぶしっく Zepp TOUR 2026",
+            "IFM NORTH WAVE & WESS PRESENTS IMPACT! XXIII supported by アルキタ 12/29 (月)第一弾アーティスト発表 2026 年2 月9 日第二弾アーティスト24組発表 今回発表になった…"
+          ]
         },
         {
           "date": "2026-07-01",
           "error": "",
-          "event_count": 0,
-          "sample_titles": []
+          "event_count": 11,
+          "sample_titles": [
+            "竹中雄大 竹中雄大「DIVA」Release Tour 2026 02.10 振替公演",
+            "[Alexandros] YOU ARE WELCOME",
+            "斉藤壮馬 斉藤壮馬 Zepp Live Tour 2026",
+            "HARRY&THE BIRTHDAY HARRY＆THE BIRTHDAY TOUR2026 「Gotta Move」01.26振替公演",
+            "ファントムシータ ファントムシータ Zepp TOUR 2026 「ふぁんとむ♥らんど」"
+          ]
         },
         {
           "date": "2026-10-01",
@@ -661,26 +673,42 @@
       "name": "カナモトホール（札幌市民ホール）",
       "url": "https://www.sapporo-shiminhall.org/",
       "strategy": "detail",
-      "status": "zero_events",
-      "best_event_count": 0,
+      "status": "ok",
+      "best_event_count": 38,
       "snapshots": [
         {
           "date": "2026-04-01",
           "error": "",
-          "event_count": 0,
-          "sample_titles": []
+          "event_count": 38,
+          "sample_titles": [
+            "令和８年度 大原学園札幌校 入学式",
+            "社会風刺コント集団 ザ・ニュースペーパー",
+            "真田ナオキコンサート2026",
+            "令和8年度北海道情報専門学校 入学式",
+            "令和8年度 学校法人吉田学園専門学校グループ 入学式"
+          ]
         },
         {
           "date": "2026-07-01",
           "error": "",
-          "event_count": 0,
-          "sample_titles": []
+          "event_count": 9,
+          "sample_titles": [
+            "令和8年度 HBC北海道文化塾 第4回千住真理子さん ≪年会員制≫",
+            "八神純子 WITH 塩谷哲 ～キミの街へ チョコッとライブ～",
+            "令和8年度 HBC北海道文化塾 第5回野口健さん ≪年会員制≫",
+            "ディズニー・ワールド・ビート2026",
+            "令和8年度 HBC北海道文化塾 第6回五十嵐亮太さん ≪年会員制≫"
+          ]
         },
         {
           "date": "2026-10-01",
           "error": "",
-          "event_count": 0,
-          "sample_titles": []
+          "event_count": 3,
+          "sample_titles": [
+            "令和8年度 HBC北海道文化塾 第8回瀬尾まなほさん ≪年会員制≫",
+            "令和8年度 HBC北海道文化塾 第9回中井貴惠さん ≪年会員制≫",
+            "令和8年度 HBC北海道文化塾 第10回森永康平さん ≪年会員制≫"
+          ]
         },
         {
           "date": "2027-01-01",
@@ -747,14 +775,16 @@
       "name": "札幌市生涯学習センター ちえりあ",
       "url": "https://chieria.slp.or.jp/schedule/",
       "strategy": "feed_then_detail",
-      "status": "zero_events",
-      "best_event_count": 0,
+      "status": "ok",
+      "best_event_count": 1,
       "snapshots": [
         {
           "date": "2026-04-01",
           "error": "",
-          "event_count": 0,
-          "sample_titles": []
+          "event_count": 1,
+          "sample_titles": [
+            "遠回りしてDiveする オモテもウラも抱きしめて 昭和レディ・心"
+          ]
         },
         {
           "date": "2026-07-01",
@@ -2028,7 +2058,7 @@
       ]
     }
   ],
-  "ok_sources": 26,
-  "zero_event_sources": 24,
+  "ok_sources": 29,
+  "zero_event_sources": 21,
   "error_sources": 1
 }

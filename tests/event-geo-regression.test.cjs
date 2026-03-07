@@ -254,6 +254,55 @@ async function testExtractJetroJmesseHandlesZeroPaddedDates() {
   assert.strictEqual(events[0].start_date, "2026-10-07");
 }
 
+async function testExtractSapporoShiminhallScheduleEventsFromMonthlyPage() {
+  const mod = await loadModule();
+  const source = { id: "www-sapporo-shiminhall-org", name: "カナモトホール", url: "https://www.sapporo-shiminhall.org/", priority: "A" };
+  const html = `
+    <main>
+      <span id="year"><span>2026</span>年</span>
+      <span id="month"><span>04</span>月</span>
+      <tr id="event2044-2">
+        <td class="tbody-date"><div class="s-date"><p class="day">2</p><p class="week">木</p></div></td>
+        <td class="tbody01">社会風刺コント集団 ザ・ニュースペーパー</td>
+        <td class="tbody02 tb-label" data-label="開場"><p>1回目 <span class='time'>12:30</span></p></td>
+        <td class="tbody03 tb-label" data-label="開演"><p><span class='fwb'>13:00</span></p></td>
+        <td class="tbody04 tb-label" data-label="お問合せ先"><p>株式会社トラスト企画クリエート</p></td>
+      </tr>
+    </main>
+  `;
+  const events = mod.extractSapporoShiminhallScheduleEvents({
+    source,
+    url: "https://www.sapporo-shiminhall.org/event/?ymd=2026/04/01",
+    html,
+    nowYmd: "2026-04-01"
+  });
+  assert.strictEqual(events.length, 1);
+  assert.strictEqual(events[0].start_date, "2026-04-02");
+  assert.strictEqual(events[0].venue, "カナモトホール");
+}
+
+async function testExtractChieriaHallScheduleEventsFromCalendarView() {
+  const mod = await loadModule();
+  const source = { id: "chieria-slp-or-jp-schedule", name: "ちえりあ", url: "https://chieria.slp.or.jp/schedule/", priority: "A" };
+  const html = `
+    <table>
+      <tr>
+        <th scope="rows"><p>4月29日（水曜日）</p></th>
+        <td>遠回りしてDiveする オモテもウラも抱きしめて 昭和レディ・心 [13時半開場：14時00分～]</td>
+      </tr>
+    </table>
+  `;
+  const events = mod.extractChieriaHallScheduleEvents({
+    source,
+    url: "https://chieria.slp.or.jp/_wcv/calendar/viewcal/QWQWlO/202604.html",
+    html,
+    nowYmd: "2026-04-01"
+  });
+  assert.strictEqual(events.length, 1);
+  assert.strictEqual(events[0].start_date, "2026-04-29");
+  assert.strictEqual(events[0].venue, "札幌市生涯学習センター ちえりあホール");
+}
+
 async function runTests() {
   const tests = [
     ["札幌圏会場は通す", testAllowSapporoAreaVenue],
@@ -267,7 +316,9 @@ async function runTests() {
     ["CLI 引数で未来日と対象ソースを指定できる", testParseArgsSupportsTodayAndSource],
     ["HBC 一覧は札幌圏会場だけ拾う", testExtractHbcConcertEventsFiltersToSapporoArea],
     ["教文一覧はホール情報付きで組み立てる", testExtractKyobunScheduleEventsBuildsHallVenue],
-    ["JETRO 一覧はゼロ埋め日付を正しく拾う", testExtractJetroJmesseHandlesZeroPaddedDates]
+    ["JETRO 一覧はゼロ埋め日付を正しく拾う", testExtractJetroJmesseHandlesZeroPaddedDates],
+    ["カナモトホール月別ページを組み立てる", testExtractSapporoShiminhallScheduleEventsFromMonthlyPage],
+    ["ちえりあカレンダーHTMLを組み立てる", testExtractChieriaHallScheduleEventsFromCalendarView]
   ];
   let passed = 0;
   for (const [name, fn] of tests) {

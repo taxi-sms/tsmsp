@@ -966,6 +966,81 @@ function extractTsudomeCalendarEvents({ source, url, html }) {
   return uniqueBy(events, (ev) => ev.id);
 }
 
+function extractSapporoShiminhallScheduleEvents({ source, url, html, nowYmd }) {
+  if (source.id !== 'www-sapporo-shiminhall-org') return [];
+  if (!/\/event\/(?:index\.asp|\?ymd=|$)/i.test(url)) return [];
+  const ymdMatch = url.match(/[?&]ymd=(\d{4})%2F(\d{2})%2F\d{2}|[?&]ymd=(\d{4})\/(\d{2})\/\d{2}/i);
+  const year = Number(ymdMatch?.[1] || ymdMatch?.[3] || '');
+  const month = Number(ymdMatch?.[2] || ymdMatch?.[4] || '');
+  const fallbackYear = Number((html.match(/id="year"><span>(\d{4})<\/span>/i) || [])[1] || '');
+  const fallbackMonth = Number((html.match(/id="month"><span>(\d{1,2})<\/span>/i) || [])[1] || '');
+  const baseYear = year || fallbackYear;
+  const baseMonth = month || fallbackMonth;
+  if (!baseYear || !baseMonth) return [];
+
+  const events = [];
+  const rows = [...html.matchAll(/<tr\b[^>]*id=["']event[^"']*["'][^>]*>([\s\S]*?)<\/tr>/gi)];
+  for (const match of rows) {
+    const rowHtml = String(match[1] || '');
+    const day = Number(stripTags((rowHtml.match(/<p\b[^>]*class=["'][^"']*day[^"']*["'][^>]*>([\s\S]*?)<\/p>/i) || [])[1] || ''));
+    const title = textPreview(stripTags((rowHtml.match(/<td\b[^>]*class=["'][^"']*tbody01[^"']*["'][^>]*>([\s\S]*?)<\/td>/i) || [])[1] || ''), 120);
+    if (!day || !title) continue;
+    if (/関係者のみの使用がございます|休館/.test(title)) continue;
+    if (BAD_TITLE_RE.test(title) || WEAK_TITLE_RE.test(title)) continue;
+    const openText = stripTags((rowHtml.match(/<td\b[^>]*class=["'][^"']*tbody02[^"']*["'][^>]*>([\s\S]*?)<\/td>/i) || [])[1] || '').replace(/\s+/g, ' ').trim();
+    const startText = stripTags((rowHtml.match(/<td\b[^>]*class=["'][^"']*tbody03\b[^"']*tb-label[^"']*["'][^>]*>([\s\S]*?)<\/td>/i) || [])[1] || '').replace(/\s+/g, ' ').trim();
+    const inquiry = stripTags((rowHtml.match(/<td\b[^>]*class=["'][^"']*tbody04[^"']*["'][^>]*>([\s\S]*?)<\/td>/i) || [])[1] || '').replace(/\s+/g, ' ').trim();
+    const flyerUrl = absolutizeUrl(url, (rowHtml.match(/<p\b[^>]*class=["'][^"']*flyer[^"']*["'][^>]*>\s*<a\b[^>]*href=["']([^"']+)["']/i) || [])[1] || '') || '';
+    const startDate = `${String(baseYear).padStart(4, '0')}-${String(baseMonth).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    const detailUrl = `${url.split('#')[0]}#${(match[0].match(/id=["']([^"']+)["']/i) || [])[1] || `event-${day}`}`;
+    const ev = buildSiteRuleEvent({
+      source,
+      detailUrl,
+      title,
+      startDate,
+      venue: 'カナモトホール',
+      venueAddress: '札幌市中央区北1条西1丁目',
+      time: parseEventTimes(`${openText} ${startText}`),
+      summary: [openText, startText, inquiry].filter(Boolean).join(' / '),
+      flyerImageUrl: flyerUrl
+    });
+    if (ev) events.push(ev);
+  }
+  return uniqueBy(events, (ev) => ev.id);
+}
+
+function extractChieriaHallScheduleEvents({ source, url, html, nowYmd }) {
+  if (source.id !== 'chieria-slp-or-jp-schedule') return [];
+  if (!/\/_wcv\/calendar\/viewcal\/[^/]+\/20\d{4}\.html$/i.test(url)) return [];
+  const yearMonth = url.match(/\/(20\d{2})(\d{2})\.html$/i);
+  const year = Number(yearMonth?.[1] || '');
+  const month = Number(yearMonth?.[2] || '');
+  if (!year || !month) return [];
+  const events = [];
+  const rows = [...html.matchAll(/<tr\b[^>]*>\s*<th\b[^>]*>[\s\S]*?<p>([\s\S]*?)<\/p>[\s\S]*?<\/th>\s*<td\b[^>]*>([\s\S]*?)<\/td>\s*<\/tr>/gi)];
+  for (const match of rows) {
+    const dateText = stripTags(match[1]).replace(/\s+/g, ' ').trim();
+    const cellText = stripTags(match[2]).replace(/\s+/g, ' ').trim();
+    const dates = parseDatesFromText(`${year}年${dateText}`, nowYmd);
+    if (!dates.length || !cellText || cellText === '&nbsp;') continue;
+    if (/関係者のみの催事がございます|休館日|点検日/.test(cellText)) continue;
+    const title = textPreview(cellText.replace(/\[[^\]]+\]/g, '').trim(), 120);
+    if (!title || BAD_TITLE_RE.test(title) || WEAK_TITLE_RE.test(title)) continue;
+    const ev = buildSiteRuleEvent({
+      source,
+      detailUrl: `${url}#${compactYmd(dates[0].ymd)}`,
+      title,
+      startDate: dates[0].ymd,
+      venue: '札幌市生涯学習センター ちえりあホール',
+      venueAddress: '札幌市西区宮の沢1条1丁目1-10',
+      time: parseEventTimes(cellText),
+      summary: cellText
+    });
+    if (ev) events.push(ev);
+  }
+  return uniqueBy(events, (ev) => ev.id);
+}
+
 function extractDoshinPlayguideSiteRuleEvent({ source, url, html, nowYmd }) {
   if (source.id !== 'doshin-playguide-jp') return null;
   if (!/doshin-playguide\.jp\/(?:ticket\/detail\/\d+|event\/)/i.test(url)) return null;
@@ -1487,6 +1562,10 @@ function extractEventsFromPage({ source, url, html, titleHint, nowYmd }) {
   for (const ev of kyobunEvents) events.push(withQuality(ev));
   const tsudomeEvents = extractTsudomeCalendarEvents({ source, url, html, nowYmd });
   for (const ev of tsudomeEvents) events.push(withQuality(ev));
+  const shiminhallEvents = extractSapporoShiminhallScheduleEvents({ source, url, html, nowYmd });
+  for (const ev of shiminhallEvents) events.push(withQuality(ev));
+  const chieriaEvents = extractChieriaHallScheduleEvents({ source, url, html, nowYmd });
+  for (const ev of chieriaEvents) events.push(withQuality(ev));
   const doshinEvent = extractDoshinPlayguideSiteRuleEvent({ source, url, html, nowYmd });
   if (doshinEvent) events.push(withQuality(doshinEvent));
   const jetroEvents = extractJetroJmesseSiteRuleEvents({ source, url, html, nowYmd });
@@ -2001,6 +2080,28 @@ async function crawlSource(source, options) {
       extractJetroJmesseSiteRuleEvents
     );
   }
+  if (source.id === 'www-sapporo-shiminhall-org') {
+    return crawlMonthlyListSource(
+      source,
+      options,
+      (monthYmd) => {
+        const [y, m] = monthYmd.slice(0, 7).split('-');
+        return `https://www.sapporo-shiminhall.org/event/?ymd=${y}/${m}/01`;
+      },
+      extractSapporoShiminhallScheduleEvents
+    );
+  }
+  if (source.id === 'chieria-slp-or-jp-schedule') {
+    return crawlMonthlyListSource(
+      source,
+      options,
+      (monthYmd) => {
+        const [y, m] = monthYmd.slice(0, 7).split('-');
+        return `https://chieria.slp.or.jp/_wcv/calendar/viewcal/QWQWlO/${y}${m}.html`;
+      },
+      extractChieriaHallScheduleEvents
+    );
+  }
   if (source.id === 'www-pl24-jp-schedule-html') {
     return crawlSeededListSource(
       source,
@@ -2393,9 +2494,11 @@ async function main() {
 export {
   crawlSource,
   eventFromWessPost,
+  extractChieriaHallScheduleEvents,
   extractHbcConcertEvents,
   extractJetroJmesseSiteRuleEvents,
   extractKyobunScheduleEvents,
+  extractSapporoShiminhallScheduleEvents,
   extractSoraConventionEvents,
   extractTicketPiaLocalSiteRuleEvents,
   extractTsudomeCalendarEvents,
