@@ -42,6 +42,10 @@ const SOURCE_CUSTOM_RULE_IDS = new Set([
   'www-sapporo-travel-summerfes',
   'www-sapporo-travel-white-illumination'
 ]);
+const SOURCE_DETAIL_LIMIT_OVERRIDE = {
+  'eplus-jp-sf-area-hokkaido-tohoku-hokkaido-sapporo': { full: 40, delta: 28, minScore: 2 },
+  't-pia-jp-hokkaido': { full: 35, delta: 24, minScore: 2 }
+};
 
 function parseArgs(argv) {
   const out = { mode: 'delta' };
@@ -978,6 +982,12 @@ function buildCrawlPlan(source, mode, strategy) {
   } else if (strategy === 'browser_required') {
     detailLimit = 0;
     skipDetails = true;
+  }
+
+  const override = SOURCE_DETAIL_LIMIT_OVERRIDE[String(source?.id || '')];
+  if (override) {
+    detailLimit = Number(mode === 'full' ? override.full : override.delta) || detailLimit;
+    minScore = Number(override.minScore || minScore) || minScore;
   }
 
   return { detailLimit, minScore, skipDetails };
