@@ -57,13 +57,61 @@ async function testRejectTitleOnlyLocalWithoutVenueProof() {
   assert.strictEqual(mod.isSapporoAreaEvent(ev), false);
 }
 
+async function testExtractTicketPiaLocalCardDate() {
+  const mod = await loadModule();
+  const source = { id: "t-pia-jp-hokkaido", name: "チケットぴあ", url: "https://t.pia.jp/hokkaido/", priority: "A" };
+  const html = `
+    <html>
+      <head>
+        <title>福山雅治 | チケットぴあ[チケット購入・予約]</title>
+        <meta property="og:description" content="2026年1月より、13ヶ所28公演をめぐる全国アリーナツアー開催！" />
+        <meta property="og:image" content="https://example.com/flyer.jpg" />
+      </head>
+      <body>
+        <li class="ticketSalesList-2024__item">
+          <p class="ticketSalesCard-2024__date">
+            <span class="ticketSalesCard-2024__startDate"><time itemprop="startDate" datetime="2026-03-07T00:00:00+09:00"></time></span>
+            <span class="ticketSalesCard-2024__endDate"><time itemprop="endDate" datetime="2026-03-08T00:00:00+09:00"></time></span>
+          </p>
+          <p class="ticketSalesCard-2024__location">
+            <span class="ticketSalesCard-2024__place">マリンメッセ福岡Ａ館</span>
+            (<span class="ticketSalesCard-2024__address"><span class="ticketSalesCard-2024__region">福岡県</span></span>)
+          </p>
+        </li>
+        <li class="ticketSalesList-2024__item">
+          <p class="ticketSalesCard-2024__date">
+            <span class="ticketSalesCard-2024__startDate"><time itemprop="startDate" datetime="2026-06-06T00:00:00+09:00"></time></span>
+            <span class="ticketSalesCard-2024__endDate"><time itemprop="endDate" datetime="2026-06-07T00:00:00+09:00"></time></span>
+          </p>
+          <p class="ticketSalesCard-2024__location">
+            <span class="ticketSalesCard-2024__place">真駒内セキスイハイムアイスアリーナ</span>
+            (<span class="ticketSalesCard-2024__address"><span class="ticketSalesCard-2024__region">北海道</span></span>)
+          </p>
+        </li>
+      </body>
+    </html>
+  `;
+
+  const events = mod.extractTicketPiaLocalSiteRuleEvents({
+    source,
+    url: "https://t.pia.jp/pia/event/event.do?eventBundleCd=b2563621",
+    html
+  });
+
+  assert.strictEqual(events.length, 1);
+  assert.strictEqual(events[0].start_date, "2026-06-06");
+  assert.strictEqual(events[0].end_date, "2026-06-07");
+  assert.strictEqual(events[0].venue, "真駒内セキスイハイムアイスアリーナ (北海道)");
+}
+
 async function runTests() {
   const tests = [
     ["札幌圏会場は通す", testAllowSapporoAreaVenue],
     ["札幌圏外会場は落とす", testRejectOutsideAreaVenue],
     ["札幌文字列ノイズでは通さない", testRejectOutsideAreaWithLocalNoiseAddress],
     ["複数都市まとめ会場は落とす", testRejectMultiLocationListing],
-    ["タイトルだけ札幌は通さない", testRejectTitleOnlyLocalWithoutVenueProof]
+    ["タイトルだけ札幌は通さない", testRejectTitleOnlyLocalWithoutVenueProof],
+    ["ぴあ bundle は札幌カードの日付を使う", testExtractTicketPiaLocalCardDate]
   ];
   let passed = 0;
   for (const [name, fn] of tests) {

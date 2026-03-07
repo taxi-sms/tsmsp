@@ -708,6 +708,47 @@ function extractZeppSapporoSiteRuleEvent({ source, url, html, nowYmd }) {
   });
 }
 
+function extractTicketPiaLocalSiteRuleEvents({ source, url, html }) {
+  if (source.id !== 't-pia-jp-hokkaido') return [];
+  if (!/[?&]eventBundleCd=/.test(url)) return [];
+
+  const title = textPreview(extractTitle(html).split('|')[0], 120) || source.name;
+  const summary = pickMeta(html, 'og:description') || pickMeta(html, 'description') || stripTags(html);
+  const flyerImageUrl = pickImage(html, url);
+  const events = [];
+
+  const cardRe = /<p\b[^>]*class=["'][^"']*ticketSalesCard-2024__date[^"']*["'][^>]*>([\s\S]*?)<\/p>\s*<p\b[^>]*class=["'][^"']*ticketSalesCard-2024__location[^"']*["'][^>]*>([\s\S]*?)<\/p>/gi;
+  let m;
+  while ((m = cardRe.exec(html)) !== null) {
+    const dateHtml = String(m[1] || '');
+    const locationHtml = String(m[2] || '');
+    const start = parseIsoDateParts((dateHtml.match(/<time\b[^>]*itemprop=["']startDate["'][^>]*datetime=["']([^"']+)["']/i) || [])[1] || '');
+    if (!start.date) continue;
+    const end = parseIsoDateParts((dateHtml.match(/<time\b[^>]*itemprop=["']endDate["'][^>]*datetime=["']([^"']+)["']/i) || [])[1] || '');
+    const place = textPreview(stripTags((locationHtml.match(/<span\b[^>]*class=["'][^"']*ticketSalesCard-2024__place[^"']*["'][^>]*>([\s\S]*?)<\/span>/i) || [])[1] || ''), 80);
+    const address = textPreview(stripTags((locationHtml.match(/<span\b[^>]*class=["'][^"']*ticketSalesCard-2024__address[^"']*["'][^>]*>([\s\S]*?)<\/span>/i) || [])[1] || ''), 80);
+    const geoText = [place, address].filter(Boolean).join('\n');
+    if (!place || !hasSapporoAreaSignal(geoText)) continue;
+
+    const venue = address ? `${place} (${address})` : place;
+    const ev = buildSiteRuleEvent({
+      source,
+      detailUrl: url,
+      title,
+      startDate: start.date,
+      endDate: end.date || '',
+      venue,
+      venueAddress: '',
+      time: { open: '', start: '', end: '', allDay: true },
+      summary,
+      flyerImageUrl
+    });
+    if (ev) events.push(ev);
+  }
+
+  return uniqueBy(events, (ev) => ev.id);
+}
+
 function makeEventId(seed) {
   return crypto.createHash('sha1').update(seed).digest('hex').slice(0, 20);
 }
@@ -995,6 +1036,8 @@ function extractEventsFromPage({ source, url, html, titleHint, nowYmd }) {
   if (mountAliveEvent) events.push(withQuality(mountAliveEvent));
   const zeppEvent = extractZeppSapporoSiteRuleEvent({ source, url, html, nowYmd });
   if (zeppEvent) events.push(withQuality(zeppEvent));
+  const ticketPiaEvents = extractTicketPiaLocalSiteRuleEvents({ source, url, html });
+  for (const ev of ticketPiaEvents) events.push(withQuality(ev));
 
   const jsonLdEvents = extractJsonLdEvents({ html, source, detailUrl: url });
   for (const ev of jsonLdEvents) {
@@ -1021,7 +1064,7 @@ function extractEventsFromPage({ source, url, html, titleHint, nowYmd }) {
     }
   }
 
-  if (!mountAliveEvent && !zeppEvent) {
+  if (!mountAliveEvent && !zeppEvent && ticketPiaEvents.length === 0) {
     const heuristicEvent = buildEvent({
       source,
       detailUrl: url,
@@ -1416,6 +1459,8 @@ async function main() {
 
   console.log(`[events] mode=${mode} sources=${crawlTargets.length}/${enabledSources.length} errors=${errorCount} events=${mergedPublic.length} today=${todayCount}`);
 }
+
+export { extractTicketPiaLocalSiteRuleEvents };
 
 const isDirectRun = (() => {
   const entry = process.argv[1];
