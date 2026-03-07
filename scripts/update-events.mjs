@@ -852,6 +852,84 @@ function extractDoshinPlayguideSiteRuleEvent({ source, url, html, nowYmd }) {
   });
 }
 
+function extractJetroJmesseSiteRuleEvents({ source, url, html, nowYmd }) {
+  if (source.id !== 'www-jetro-go-jp-j-messe-country-asia-jp-001') return [];
+  const links = extractLinks(html, url);
+  const events = [];
+  for (const link of links) {
+    const text = String(link.text || '').trim();
+    if (!/会期\s*20\d{2}年\d{1,2}月\d{1,2}日/u.test(text)) continue;
+    if (!/札幌/u.test(text)) continue;
+    const title = textPreview(text.split('会期')[0].trim(), 120);
+    const dates = parseDatesFromText(text, nowYmd);
+    if (!title || dates.length === 0) continue;
+    const ev = buildSiteRuleEvent({
+      source,
+      detailUrl: link.url,
+      title,
+      startDate: dates[0].ymd,
+      endDate: dates.length >= 2 ? dates[1].ymd : '',
+      venue: 'アクセスサッポロ',
+      venueAddress: '札幌市白石区流通センター4丁目3-55',
+      time: { open: '', start: '', end: '', allDay: true },
+      summary: text
+    });
+    if (ev) events.push(ev);
+  }
+  return uniqueBy(events, (ev) => ev.id);
+}
+
+function extractJetroTradefairDetailEvent({ source, url, html, nowYmd }) {
+  if (source.id !== 'www-jetro-go-jp-j-messe-country-asia-jp-001') return null;
+  if (!/\/j-messe\/tradefair\/detail\//i.test(url)) return null;
+  const title = String(extractTitle(html) || '').split('|')[0].replace(/\s*-\s*20\d{2}年\d{1,2}月.*$/, '').trim();
+  if (!title || BAD_TITLE_RE.test(title) || WEAK_TITLE_RE.test(title)) return null;
+  const body = stripTags(html);
+  const dates = parseDatesFromText(body, nowYmd);
+  if (!dates.length) return null;
+  const venueMatch = body.match(/会場\s+([^\n ]{2,80})/);
+  const venue = venueMatch ? cleanVenue(venueMatch[1]) : 'アクセスサッポロ';
+  return buildSiteRuleEvent({
+    source,
+    detailUrl: url,
+    title,
+    startDate: dates[0].ymd,
+    endDate: dates.length >= 2 ? dates[1].ymd : '',
+    venue,
+    venueAddress: '札幌市白石区流通センター4丁目3-55',
+    time: { open: '', start: '', end: '', allDay: true },
+    summary: body.slice(0, 220)
+  });
+}
+
+function extractJmaHokkaidoExpoSiteRuleEvents({ source, url, html, nowYmd }) {
+  if (source.id !== 'www-jma-or-jp-toshiken-hkd-index-php') return [];
+  const body = stripTags(html);
+  const dates = parseDatesFromText(body, nowYmd);
+  if (dates.length < 2) return [];
+  const startDate = dates[0].ymd;
+  const endDate = dates[1].ymd;
+  const titles = [
+    '第7回 北海道 建設開発総合展',
+    '第7回 北海道 災害リスク対策推進展',
+    '第4回 北海道 エネルギー技術革新EXPO',
+    '第2回 北海道 インフラ検査・維持管理・更新展',
+    '第1回 土木・建設DX/システム/ツール展',
+    '観光・ホテル・産業展-HOKKAIDO2026-'
+  ].filter((title) => body.includes(title));
+  return titles.map((title) => buildSiteRuleEvent({
+    source,
+    detailUrl: url,
+    title,
+    startDate,
+    endDate,
+    venue: 'アクセスサッポロ',
+    venueAddress: '札幌市白石区流通センター4丁目3-55',
+    time: { open: '', start: '10:00', end: '16:00', allDay: false },
+    summary: `${title} ${startDate}〜${endDate}`
+  })).filter(Boolean);
+}
+
 function extractMountAliveSiteRuleEvent({ source, url, html, nowYmd }) {
   if (source.id !== 'www-mountalive-com-schedule') return null;
   if (!/\/schedule\/more\.php/i.test(url)) return null;
@@ -1257,6 +1335,12 @@ function extractEventsFromPage({ source, url, html, titleHint, nowYmd }) {
   for (const ev of cubeEvents) events.push(withQuality(ev));
   const doshinEvent = extractDoshinPlayguideSiteRuleEvent({ source, url, html, nowYmd });
   if (doshinEvent) events.push(withQuality(doshinEvent));
+  const jetroEvents = extractJetroJmesseSiteRuleEvents({ source, url, html, nowYmd });
+  for (const ev of jetroEvents) events.push(withQuality(ev));
+  const jetroDetailEvent = extractJetroTradefairDetailEvent({ source, url, html, nowYmd });
+  if (jetroDetailEvent) events.push(withQuality(jetroDetailEvent));
+  const jmaEvents = extractJmaHokkaidoExpoSiteRuleEvents({ source, url, html, nowYmd });
+  for (const ev of jmaEvents) events.push(withQuality(ev));
   const mountAliveEvent = extractMountAliveSiteRuleEvent({ source, url, html, nowYmd });
   if (mountAliveEvent) events.push(withQuality(mountAliveEvent));
   const zeppEvent = extractZeppSapporoSiteRuleEvent({ source, url, html, nowYmd });
@@ -1753,6 +1837,14 @@ async function crawlSource(source, options) {
         'https://www.sapporo-community-plaza.jp/event_scarts.php'
       ],
       /\/event\.php\?num=\d+/i
+    );
+  }
+  if (source.id === 'www-jetro-go-jp-j-messe-country-asia-jp-001') {
+    return crawlSeededDetailSource(
+      source,
+      options,
+      ['https://www.jetro.go.jp/j-messe/country/asia/jp/001/'],
+      /\/j-messe\/tradefair\/detail\/\d+/i
     );
   }
   if (source.id === 'www-pl24-jp-schedule-html') {

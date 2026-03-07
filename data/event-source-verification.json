@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-07T16:42:02.541Z",
+  "generated_at": "2026-03-07T16:54:09.457Z",
   "test_dates": [
     "2026-04-01",
     "2026-07-01",
@@ -276,26 +276,44 @@
       "name": "日本能率協会（北海道展示会総合ページ）",
       "url": "https://www.jma.or.jp/toshiken/hkd/index.php",
       "strategy": "detail",
-      "status": "zero_events",
-      "best_event_count": 0,
+      "status": "ok",
+      "best_event_count": 6,
       "snapshots": [
         {
           "date": "2026-04-01",
           "error": "",
-          "event_count": 0,
-          "sample_titles": []
+          "event_count": 6,
+          "sample_titles": [
+            "第7回 北海道 建設開発総合展",
+            "第7回 北海道 災害リスク対策推進展",
+            "第4回 北海道 エネルギー技術革新EXPO",
+            "第2回 北海道 インフラ検査・維持管理・更新展",
+            "第1回 土木・建設DX/システム/ツール展"
+          ]
         },
         {
           "date": "2026-07-01",
           "error": "",
-          "event_count": 0,
-          "sample_titles": []
+          "event_count": 6,
+          "sample_titles": [
+            "第7回 北海道 建設開発総合展",
+            "第7回 北海道 災害リスク対策推進展",
+            "第4回 北海道 エネルギー技術革新EXPO",
+            "第2回 北海道 インフラ検査・維持管理・更新展",
+            "第1回 土木・建設DX/システム/ツール展"
+          ]
         },
         {
           "date": "2026-10-01",
           "error": "",
-          "event_count": 0,
-          "sample_titles": []
+          "event_count": 6,
+          "sample_titles": [
+            "第7回 北海道 建設開発総合展",
+            "第7回 北海道 災害リスク対策推進展",
+            "第4回 北海道 エネルギー技術革新EXPO",
+            "第2回 北海道 インフラ検査・維持管理・更新展",
+            "第1回 土木・建設DX/システム/ツール展"
+          ]
         },
         {
           "date": "2027-01-01",
@@ -1474,30 +1492,30 @@
       "name": "グランドメルキュール札幌大通公園",
       "url": "https://grand-mercure-sapporo-odoripark.jp/events/",
       "strategy": "detail",
-      "status": "error",
+      "status": "zero_events",
       "best_event_count": 0,
       "snapshots": [
         {
           "date": "2026-04-01",
-          "error": "fetch failed",
+          "error": "",
           "event_count": 0,
           "sample_titles": []
         },
         {
           "date": "2026-07-01",
-          "error": "fetch failed",
+          "error": "",
           "event_count": 0,
           "sample_titles": []
         },
         {
           "date": "2026-10-01",
-          "error": "fetch failed",
+          "error": "",
           "event_count": 0,
           "sample_titles": []
         },
         {
           "date": "2027-01-01",
-          "error": "fetch failed",
+          "error": "",
           "event_count": 0,
           "sample_titles": []
         }
@@ -1965,7 +1983,7 @@
       ]
     }
   ],
-  "ok_sources": 23,
+  "ok_sources": 24,
   "zero_event_sources": 26,
-  "error_sources": 2
+  "error_sources": 1
 }
