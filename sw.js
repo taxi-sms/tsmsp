@@ -1,4 +1,4 @@
-const CACHE_NAME = 'tsms-cache-v169';
+const CACHE_NAME = 'tsms-cache-v170';
 const ASSETS = [
   './',
   './index.html',

@@ -107,7 +107,16 @@
     .v.value-highlight{
       color:var(--value-highlight) !important;
       font-weight:900;
+    }
+    .v .value-number{
+      font-size:inherit;
+    }
+    .v .value-number.emphasis{
       font-size:calc(var(--font-2xl) + 8px);
+      line-height:1;
+    }
+    .v .value-unit{
+      font-size:inherit;
     }
     .tsms-header{
       border-bottom:2px solid var(--border);
@@ -241,7 +250,11 @@
     return "";
   }
   function num(v){ return Number(v||0); }
-  function yen(v){ return `${Math.round(num(v)).toLocaleString("ja-JP")}円`; }
+  function yenNumber(v){ return Math.round(num(v)).toLocaleString("ja-JP"); }
+  function yen(v){ return `${yenNumber(v)}円`; }
+  function yenMarkup(v, emphasizeNumber=false){
+    return `<span class="value-number${emphasizeNumber ? " emphasis" : ""}">${yenNumber(v)}</span><span class="value-unit">円</span>`;
+  }
   function fmtDateTime(d){
     return `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,"0")}/${String(d.getDate()).padStart(2,"0")} ${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}:${String(d.getSeconds()).padStart(2,"0")}`;
   }
@@ -398,11 +411,11 @@
       line("実車回数", `${tripCount}回`),
       line("現収合計", yen(cashSum)),
       line("未収合計", yen(creditSum)),
-      line("売上合計（税込）", yen(salesInTax), true, true),
+      line("売上合計（税込）", yenMarkup(salesInTax, true), true, true),
       line("売上合計（税抜）", yen(salesExTax)),
       line("決済手数料", yen(fee)),
-      line("概算収入", yen(takeHome), true, true),
-      line("時給換算", yen(hourly), false, true)
+      line("概算収入", yenMarkup(takeHome, true), true, true),
+      line("時給換算", yenMarkup(hourly, true), false, true)
     ].join("");
 
     document.getElementById("goBox").innerHTML = [
