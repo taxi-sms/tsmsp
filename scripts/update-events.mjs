@@ -351,7 +351,7 @@ function parseDatesFromText(text, nowYmd) {
   const out = [];
   const nowYear = Number(String(nowYmd).slice(0, 4)) || new Date().getFullYear();
 
-  const fullRe = /(20\d{2})\s*[\/.\-年]\s*(1[0-2]|0?[1-9])\s*[\/.\-月]\s*(3[01]|[12]?\d)\s*日?/g;
+  const fullRe = /(20\d{2})\s*[\/.\-年]\s*(1[0-2]|0?[1-9])\s*[\/.\-月]\s*(3[01]|[12]\d|0?[1-9])\s*日?/g;
   let m;
   while ((m = fullRe.exec(text)) !== null) {
     const y = Number(m[1]);
@@ -363,7 +363,7 @@ function parseDatesFromText(text, nowYmd) {
   }
 
   if (out.length === 0) {
-    const mdRe = /(1[0-2]|0?[1-9])\s*[\/.月]\s*(3[01]|[12]?\d)\s*日?/g;
+    const mdRe = /(1[0-2]|0?[1-9])\s*[\/.月]\s*(3[01]|[12]\d|0?[1-9])\s*日?/g;
     while ((m = mdRe.exec(text)) !== null) {
       const mo = Number(m[1]);
       const d = Number(m[2]);
@@ -823,6 +823,149 @@ function extractCubeGardenScheduleEvents({ source, url, html, nowYmd }) {
   return uniqueBy(events, (ev) => ev.id);
 }
 
+function extractHbcConcertEvents({ source, url, html, nowYmd }) {
+  if (source.id !== 'www-hbc-co-jp-event') return [];
+  if (!/\/event\/concert\/index\.html$/i.test(url)) return [];
+  const events = [];
+  let currentTitle = '';
+  let currentDetailUrl = '';
+  let currentTime = '';
+  let currentVenue = '';
+  let currentContact = '';
+  let currentNote = '';
+  const rows = [...html.matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/gi)];
+  for (const match of rows) {
+    const rowHtml = String(match[1] || '');
+    const titleCell = rowHtml.match(/<th\b[^>]*>([\s\S]*?)<\/th>/i);
+    if (titleCell && titleCell[1]) {
+      currentTitle = textPreview(stripTags(titleCell[1]), 120);
+      currentDetailUrl = absolutizeUrl(url, (titleCell[1].match(/<a\b[^>]*href="([^"]+)"/i) || [])[1] || '') || url;
+    }
+    const fields = {};
+    for (const cell of rowHtml.matchAll(/<td\b[^>]*data-label=["']([^"']+)["'][^>]*>([\s\S]*?)<\/td>/gi)) {
+      fields[String(cell[1] || '').trim()] = stripTags(cell[2]).replace(/\s+/g, ' ').trim();
+    }
+    if (fields['時間']) currentTime = fields['時間'];
+    if (fields['場所']) currentVenue = cleanVenue(fields['場所']);
+    if (fields['お問い合わせ']) currentContact = fields['お問い合わせ'];
+    if (fields['☎']) currentContact = fields['☎'];
+    if (fields['☏']) currentContact = fields['☏'];
+    if (fields['備考']) currentNote = fields['備考'];
+
+    const dateText = fields['日程'] || '';
+    const dates = parseDatesFromText(dateText, nowYmd);
+    if (!currentTitle || !dates.length || !currentVenue) continue;
+    if (!hasSapporoAreaSignal(currentVenue)) continue;
+    if (BAD_TITLE_RE.test(currentTitle) || WEAK_TITLE_RE.test(currentTitle)) continue;
+    const ev = buildSiteRuleEvent({
+      source,
+      detailUrl: currentDetailUrl || url,
+      title: currentTitle,
+      startDate: dates[0].ymd,
+      venue: currentVenue,
+      time: parseEventTimes(currentTime || dateText),
+      summary: [dateText, currentTime, currentVenue, currentContact, currentNote].filter(Boolean).join(' / ')
+    });
+    if (ev) events.push(ev);
+  }
+  return uniqueBy(events, (ev) => ev.id);
+}
+
+function extractSoraConventionEvents({ source, url, html, nowYmd }) {
+  if (source.id !== 'www-sora-scc-jp') return [];
+  if (!/\/event\/?$/i.test(url)) return [];
+  const events = [];
+  const items = [...html.matchAll(/<li>\s*<time[^>]*>([\s\S]*?)<\/time>([\s\S]*?)<\/li>/gi)];
+  for (const [index, match] of items.entries()) {
+    const dateText = stripTags(match[1]).replace(/\s+/g, ' ').trim();
+    const bodyHtml = String(match[2] || '');
+    const title = textPreview(stripTags((bodyHtml.match(/<dt>\s*催事名\s*<\/dt>\s*<dd>([\s\S]*?)<\/dd>/i) || [])[1] || ''), 120);
+    const dates = parseDatesFromText(dateText, nowYmd);
+    if (!title || !dates.length) continue;
+    if (BAD_TITLE_RE.test(title) || WEAK_TITLE_RE.test(title)) continue;
+    const summary = stripTags(bodyHtml).replace(/\s+/g, ' ').trim();
+    const ev = buildSiteRuleEvent({
+      source,
+      detailUrl: `${url}?event=${compactYmd(dates[0].ymd)}-${index + 1}`,
+      title,
+      startDate: dates[0].ymd,
+      venue: '札幌コンベンションセンター',
+      venueAddress: '札幌市白石区東札幌6条1丁目1-1',
+      time: { open: '', start: '', end: '', allDay: true },
+      summary
+    });
+    if (ev) events.push(ev);
+  }
+  return uniqueBy(events, (ev) => ev.id);
+}
+
+function extractKyobunScheduleEvents({ source, url, html, nowYmd }) {
+  if (source.id !== 'www-kyobun-org-event-schedule-html') return [];
+  if (!/\/event_schedule\.html/i.test(url)) return [];
+  const events = [];
+  const pairs = [...html.matchAll(/<dt\b[^>]*class=["'][^"']*date[^"']*["'][^>]*>([\s\S]*?)<\/dt>\s*<dd\b[^>]*class=["'][^"']*event_link[^"']*["'][^>]*>([\s\S]*?)<\/dd>/gi)];
+  for (const match of pairs) {
+    const dateText = stripTags(match[1]).replace(/\s+/g, ' ').trim();
+    const block = String(match[2] || '');
+    const titleHtml = (block.match(/<p\b[^>]*class=["'][^"']*title[^"']*["'][^>]*>([\s\S]*?)<\/p>/i) || [])[1] || '';
+    const title = textPreview(stripTags(titleHtml), 120);
+    if (!title || title === '催事あり' || BAD_TITLE_RE.test(title) || WEAK_TITLE_RE.test(title)) continue;
+    const dates = parseDatesFromText(dateText, nowYmd);
+    if (!dates.length) continue;
+    const hall = textPreview(stripTags((block.match(/<p\b[^>]*class=["'][^"']*(mainhall|smallhall|gallery)[^"']*["'][^>]*>([\s\S]*?)<\/p>/i) || [])[2] || ''), 40);
+    const timeText = stripTags((block.match(/<p\b[^>]*class=["'][^"']*time[^"']*["'][^>]*>([\s\S]*?)<\/p>/i) || [])[1] || '').replace(/\s+/g, ' ').trim();
+    const detailUrl = absolutizeUrl(url, (titleHtml.match(/<a\b[^>]*href="([^"]+)"/i) || [])[1] || '') || url;
+    const venue = [SOURCE_VENUE_FALLBACK[source.id], hall].filter(Boolean).join(' ').trim();
+    const ev = buildSiteRuleEvent({
+      source,
+      detailUrl,
+      title,
+      startDate: dates[0].ymd,
+      endDate: dates.length >= 2 ? dates[1].ymd : '',
+      venue,
+      time: parseEventTimes(timeText || dateText),
+      summary: [dateText, timeText].filter(Boolean).join(' '),
+      flyerImageUrl: absolutizeUrl(url, (block.match(/<img\b[^>]*src="([^"]+)"/i) || [])[1] || '') || ''
+    });
+    if (ev) events.push(ev);
+  }
+  return uniqueBy(events, (ev) => ev.id);
+}
+
+function extractTsudomeCalendarEvents({ source, url, html }) {
+  if (source.id !== 'www-sapporo-sport-jp-tsudome-calendar') return [];
+  if (!/\/tsudome\/calendar\//i.test(url)) return [];
+  const ym = url.match(/[?&]ty=(\d{4})[^\d]+tm=(\d{1,2})/i);
+  if (!ym) return [];
+  const year = Number(ym[1]);
+  const month = Number(ym[2]);
+  if (!year || !month) return [];
+  const events = [];
+  const rows = [...html.matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/gi)];
+  for (const match of rows) {
+    const rowHtml = String(match[1] || '');
+    const day = Number(stripTags((rowHtml.match(/<td\b[^>]*class=["'][^"']*cdate[^"']*["'][^>]*>([\s\S]*?)<\/td>/i) || [])[1] || ''));
+    const content = stripTags((rowHtml.match(/<td\b[^>]*class=["'][^"']*ccont[^"']*["'][^>]*>([\s\S]*?)<\/td>/i) || [])[1] || '').replace(/\s+/g, ' ').trim();
+    if (!day || !content) continue;
+    if (/(一般開放|施設整備日|休館|時間割)/.test(content)) continue;
+    const title = textPreview(content.replace(/（[^）]*\d{1,2}:\d{2}[^）]*）/g, '').trim(), 120);
+    if (!title || BAD_TITLE_RE.test(title) || WEAK_TITLE_RE.test(title)) continue;
+    const startDate = `${String(year).padStart(4, '0')}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    const ev = buildSiteRuleEvent({
+      source,
+      detailUrl: `${url}#d${day}`,
+      title,
+      startDate,
+      venue: 'つどーむ',
+      venueAddress: '札幌市東区栄町885番地1',
+      time: parseEventTimes(content),
+      summary: content
+    });
+    if (ev) events.push(ev);
+  }
+  return uniqueBy(events, (ev) => ev.id);
+}
+
 function extractDoshinPlayguideSiteRuleEvent({ source, url, html, nowYmd }) {
   if (source.id !== 'doshin-playguide-jp') return null;
   if (!/doshin-playguide\.jp\/(?:ticket\/detail\/\d+|event\/)/i.test(url)) return null;
@@ -854,25 +997,28 @@ function extractDoshinPlayguideSiteRuleEvent({ source, url, html, nowYmd }) {
 
 function extractJetroJmesseSiteRuleEvents({ source, url, html, nowYmd }) {
   if (source.id !== 'www-jetro-go-jp-j-messe-country-asia-jp-001') return [];
-  const links = extractLinks(html, url);
   const events = [];
-  for (const link of links) {
-    const text = String(link.text || '').trim();
-    if (!/会期\s*20\d{2}年\d{1,2}月\d{1,2}日/u.test(text)) continue;
-    if (!/札幌/u.test(text)) continue;
-    const title = textPreview(text.split('会期')[0].trim(), 120);
-    const dates = parseDatesFromText(text, nowYmd);
-    if (!title || dates.length === 0) continue;
+  const items = [...html.matchAll(/<li>\s*<a\b[^>]*href="([^"]*\/j-messe\/tradefair\/detail\/\d+[^"]*)"[^>]*>([\s\S]*?)<\/a>\s*<\/li>/gi)];
+  for (const match of items) {
+    const detailUrl = absolutizeUrl(url, match[1]) || '';
+    const block = String(match[2] || '');
+    const title = textPreview(stripTags((block.match(/<p\b[^>]*class=["'][^"']*font18[^"']*font_bold[^"']*["'][^>]*>([\s\S]*?)<\/p>/i) || [])[1] || ''), 120);
+    const dateText = stripTags((block.match(/<dt>\s*会期\s*<\/dt>\s*<dd>([\s\S]*?)<\/dd>/i) || [])[1] || '').replace(/\s+/g, ' ').trim();
+    const locationText = stripTags((block.match(/<dt>\s*開催地\s*<\/dt>\s*<dd>([\s\S]*?)<\/dd>/i) || [])[1] || '').replace(/\s+/g, ' ').trim();
+    const dates = parseDatesFromText(dateText, nowYmd);
+    if (!title || !detailUrl || !dates.length) continue;
+    if (!hasSapporoAreaSignal(locationText)) continue;
+    const summary = [dateText, locationText].filter(Boolean).join(' / ');
     const ev = buildSiteRuleEvent({
       source,
-      detailUrl: link.url,
+      detailUrl,
       title,
       startDate: dates[0].ymd,
       endDate: dates.length >= 2 ? dates[1].ymd : '',
       venue: 'アクセスサッポロ',
       venueAddress: '札幌市白石区流通センター4丁目3-55',
       time: { open: '', start: '', end: '', allDay: true },
-      summary: text
+      summary
     });
     if (ev) events.push(ev);
   }
@@ -884,11 +1030,11 @@ function extractJetroTradefairDetailEvent({ source, url, html, nowYmd }) {
   if (!/\/j-messe\/tradefair\/detail\//i.test(url)) return null;
   const title = String(extractTitle(html) || '').split('|')[0].replace(/\s*-\s*20\d{2}年\d{1,2}月.*$/, '').trim();
   if (!title || BAD_TITLE_RE.test(title) || WEAK_TITLE_RE.test(title)) return null;
-  const body = stripTags(html);
-  const dates = parseDatesFromText(body, nowYmd);
+  const schedule = pickLabeledValue(html, '会期') || stripTags(html);
+  const dates = parseDatesFromText(schedule, nowYmd);
   if (!dates.length) return null;
-  const venueMatch = body.match(/会場\s+([^\n ]{2,80})/);
-  const venue = venueMatch ? cleanVenue(venueMatch[1]) : 'アクセスサッポロ';
+  const venue = cleanVenue(pickLabeledValue(html, '会場')) || 'アクセスサッポロ';
+  const summary = pickLabeledValue(html, '出展対象品目') || pickMeta(html, 'description') || stripTags(html).slice(0, 220);
   return buildSiteRuleEvent({
     source,
     detailUrl: url,
@@ -898,7 +1044,7 @@ function extractJetroTradefairDetailEvent({ source, url, html, nowYmd }) {
     venue,
     venueAddress: '札幌市白石区流通センター4丁目3-55',
     time: { open: '', start: '', end: '', allDay: true },
-    summary: body.slice(0, 220)
+    summary
   });
 }
 
@@ -1333,6 +1479,14 @@ function extractEventsFromPage({ source, url, html, titleHint, nowYmd }) {
   for (const ev of pl24Events) events.push(withQuality(ev));
   const cubeEvents = extractCubeGardenScheduleEvents({ source, url, html, nowYmd });
   for (const ev of cubeEvents) events.push(withQuality(ev));
+  const hbcEvents = extractHbcConcertEvents({ source, url, html, nowYmd });
+  for (const ev of hbcEvents) events.push(withQuality(ev));
+  const soraEvents = extractSoraConventionEvents({ source, url, html, nowYmd });
+  for (const ev of soraEvents) events.push(withQuality(ev));
+  const kyobunEvents = extractKyobunScheduleEvents({ source, url, html, nowYmd });
+  for (const ev of kyobunEvents) events.push(withQuality(ev));
+  const tsudomeEvents = extractTsudomeCalendarEvents({ source, url, html, nowYmd });
+  for (const ev of tsudomeEvents) events.push(withQuality(ev));
   const doshinEvent = extractDoshinPlayguideSiteRuleEvent({ source, url, html, nowYmd });
   if (doshinEvent) events.push(withQuality(doshinEvent));
   const jetroEvents = extractJetroJmesseSiteRuleEvents({ source, url, html, nowYmd });
@@ -1840,11 +1994,11 @@ async function crawlSource(source, options) {
     );
   }
   if (source.id === 'www-jetro-go-jp-j-messe-country-asia-jp-001') {
-    return crawlSeededDetailSource(
+    return crawlSeededListSource(
       source,
       options,
       ['https://www.jetro.go.jp/j-messe/country/asia/jp/001/'],
-      /\/j-messe\/tradefair\/detail\/\d+/i
+      extractJetroJmesseSiteRuleEvents
     );
   }
   if (source.id === 'www-pl24-jp-schedule-html') {
@@ -1868,6 +2022,44 @@ async function crawlSource(source, options) {
       options,
       (monthYmd) => `https://www.cube-garden.com/live.php?month=${monthYmd.slice(0, 7).replace('-', '')}`,
       extractCubeGardenScheduleEvents
+    );
+  }
+  if (source.id === 'www-hbc-co-jp-event') {
+    return crawlSeededListSource(
+      source,
+      options,
+      ['https://www.hbc.co.jp/event/concert/index.html'],
+      extractHbcConcertEvents
+    );
+  }
+  if (source.id === 'www-sora-scc-jp') {
+    return crawlSeededListSource(
+      source,
+      options,
+      ['https://www.sora-scc.jp/event/'],
+      extractSoraConventionEvents
+    );
+  }
+  if (source.id === 'www-kyobun-org-event-schedule-html') {
+    return crawlMonthlyListSource(
+      source,
+      options,
+      (monthYmd) => {
+        const [y, m] = monthYmd.slice(0, 7).split('-');
+        return `https://www.kyobun.org/event_schedule.html?k=lst&ym=${y}${m}`;
+      },
+      extractKyobunScheduleEvents
+    );
+  }
+  if (source.id === 'www-sapporo-sport-jp-tsudome-calendar') {
+    return crawlMonthlyListSource(
+      source,
+      options,
+      (monthYmd) => {
+        const [y, m] = monthYmd.slice(0, 7).split('-');
+        return `https://www.sapporo-sport.jp/tsudome/calendar/?ty=${y}&tm=${Number(m)}`;
+      },
+      extractTsudomeCalendarEvents
     );
   }
   const plan = buildCrawlPlan(source, mode, strategy);
@@ -2198,7 +2390,19 @@ async function main() {
   console.log(`[events] mode=${mode} sources=${crawlTargets.length}/${enabledSources.length} errors=${errorCount} events=${mergedPublic.length} today=${todayCount}`);
 }
 
-export { crawlSource, eventFromWessPost, extractTicketPiaLocalSiteRuleEvents, isPublishable, parseArgs, resolveSourceStrategy };
+export {
+  crawlSource,
+  eventFromWessPost,
+  extractHbcConcertEvents,
+  extractJetroJmesseSiteRuleEvents,
+  extractKyobunScheduleEvents,
+  extractSoraConventionEvents,
+  extractTicketPiaLocalSiteRuleEvents,
+  extractTsudomeCalendarEvents,
+  isPublishable,
+  parseArgs,
+  resolveSourceStrategy
+};
 
 const isDirectRun = (() => {
   const entry = process.argv[1];

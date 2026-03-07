@@ -161,6 +161,99 @@ async function testParseArgsSupportsTodayAndSource() {
   assert.strictEqual(args.outputPath.endsWith(path.join("tmp", "events.json")), true);
 }
 
+async function testExtractHbcConcertEventsFiltersToSapporoArea() {
+  const mod = await loadModule();
+  const source = { id: "www-hbc-co-jp-event", name: "HBC", url: "https://www.hbc.co.jp/event/", priority: "A" };
+  const html = `
+    <table><tbody>
+      <tr>
+        <th><a href="https://example.com/a">札幌公演A</a></th>
+        <td data-label="日程">4月4日(土)</td>
+        <td data-label="時間">13:00開場/13:30開演</td>
+        <td data-label="場所">札幌文化芸術劇場 hitaru</td>
+        <td data-label="お問い合わせ">HBC</td>
+        <td data-label="備考">販売中</td>
+      </tr>
+      <tr>
+        <th rowspan="2"><a href="https://example.com/b">北海道ツアー</a></th>
+        <td data-label="日程">5月13日(水)</td>
+        <td data-label="時間">18:00開場/18:30開演</td>
+        <td data-label="場所">北見市民会館</td>
+        <td data-label="お問い合わせ" rowspan="2">HBC</td>
+        <td data-label="備考" rowspan="2">販売中</td>
+      </tr>
+      <tr>
+        <td data-label="日程">5月21日(木)</td>
+        <td data-label="時間">14:00開場/14:30開演</td>
+        <td data-label="場所">カナモトホール</td>
+      </tr>
+    </tbody></table>
+  `;
+  const events = mod.extractHbcConcertEvents({
+    source,
+    url: "https://www.hbc.co.jp/event/concert/index.html",
+    html,
+    nowYmd: "2026-03-08"
+  });
+  assert.strictEqual(events.length, 2);
+  assert.strictEqual(events[0].venue, "札幌文化芸術劇場 hitaru");
+  assert.strictEqual(events[1].venue, "カナモトホール");
+}
+
+async function testExtractKyobunScheduleEventsBuildsHallVenue() {
+  const mod = await loadModule();
+  const source = { id: "www-kyobun-org-event-schedule-html", name: "教文", url: "https://www.kyobun.org/event_schedule.html", priority: "A" };
+  const html = `
+    <dl class="schedule_all">
+      <dt class="date">2026年3月8日（日）</dt>
+      <dd class="event_link">
+        <div class="event_text">
+          <p class="icon mainhall">大ホール</p>
+          <p class="title"><a href="event_schedule.html?id=11816&k=lst&ym=202603">札幌北野少年少女合唱団35周年記念コンサート</a></p>
+          <p class="time">【開場】14:30 【開演】15:00</p>
+        </div>
+      </dd>
+    </dl>
+  `;
+  const events = mod.extractKyobunScheduleEvents({
+    source,
+    url: "https://www.kyobun.org/event_schedule.html?k=lst&ym=202603",
+    html,
+    nowYmd: "2026-03-08"
+  });
+  assert.strictEqual(events.length, 1);
+  assert.strictEqual(events[0].venue, "札幌市教育文化会館 大ホール");
+  assert.strictEqual(events[0].start_time, "15:00");
+}
+
+async function testExtractJetroJmesseHandlesZeroPaddedDates() {
+  const mod = await loadModule();
+  const source = { id: "www-jetro-go-jp-j-messe-country-asia-jp-001", name: "JETRO", url: "https://www.jetro.go.jp/j-messe/country/asia/jp/001/", priority: "A" };
+  const html = `
+    <ul class="var_border_bottom var_blocklink">
+      <li>
+        <a href="/j-messe/tradefair/detail/158950">
+          <p class="font18 font_bold">北海道 エネルギー技術革新EXPO 2026</p>
+          <div class="elem_text_list_note">
+            <dl class="w80">
+              <dt>会期</dt><dd>2026年10月07日～2026年10月08日</dd>
+              <dt>開催地</dt><dd>札幌 （北海道） / 日本 / アジア</dd>
+            </dl>
+          </div>
+        </a>
+      </li>
+    </ul>
+  `;
+  const events = mod.extractJetroJmesseSiteRuleEvents({
+    source,
+    url: source.url,
+    html,
+    nowYmd: "2026-04-01"
+  });
+  assert.strictEqual(events.length, 1);
+  assert.strictEqual(events[0].start_date, "2026-10-07");
+}
+
 async function runTests() {
   const tests = [
     ["札幌圏会場は通す", testAllowSapporoAreaVenue],
@@ -171,7 +264,10 @@ async function runTests() {
     ["ぴあ bundle は札幌カードの日付を使う", testExtractTicketPiaLocalCardDate],
     ["札幌既知会場は地名なしでも通す", testAllowKnownSapporoVenueWithoutCityName],
     ["WESS API から札幌公演を組み立てる", testBuildWessEventFromApiPost],
-    ["CLI 引数で未来日と対象ソースを指定できる", testParseArgsSupportsTodayAndSource]
+    ["CLI 引数で未来日と対象ソースを指定できる", testParseArgsSupportsTodayAndSource],
+    ["HBC 一覧は札幌圏会場だけ拾う", testExtractHbcConcertEventsFiltersToSapporoArea],
+    ["教文一覧はホール情報付きで組み立てる", testExtractKyobunScheduleEventsBuildsHallVenue],
+    ["JETRO 一覧はゼロ埋め日付を正しく拾う", testExtractJetroJmesseHandlesZeroPaddedDates]
   ];
   let passed = 0;
   for (const [name, fn] of tests) {

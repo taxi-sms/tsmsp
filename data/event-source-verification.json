@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-07T16:54:09.457Z",
+  "generated_at": "2026-03-07T17:20:51.215Z",
   "test_dates": [
     "2026-04-01",
     "2026-07-01",
@@ -200,48 +200,6 @@
       "name": "札幌コンベンションビューロー",
       "url": "https://www.conventionsapporo.jp/",
       "strategy": "detail_light",
-      "status": "ok",
-      "best_event_count": 1,
-      "snapshots": [
-        {
-          "date": "2026-04-01",
-          "error": "",
-          "event_count": 1,
-          "sample_titles": [
-            "Report GDS-Index 2025都市ランキング発表 世界の観光MICE都市の持続可能性を評価する「Global Destination Sustainability Index（GDS-Index）」の2025年ランキングが発表…"
-          ]
-        },
-        {
-          "date": "2026-07-01",
-          "error": "",
-          "event_count": 1,
-          "sample_titles": [
-            "Report GDS-Index 2025都市ランキング発表 世界の観光MICE都市の持続可能性を評価する「Global Destination Sustainability Index（GDS-Index）」の2025年ランキングが発表…"
-          ]
-        },
-        {
-          "date": "2026-10-01",
-          "error": "",
-          "event_count": 1,
-          "sample_titles": [
-            "Report GDS-Index 2025都市ランキング発表 世界の観光MICE都市の持続可能性を評価する「Global Destination Sustainability Index（GDS-Index）」の2025年ランキングが発表…"
-          ]
-        },
-        {
-          "date": "2027-01-01",
-          "error": "",
-          "event_count": 1,
-          "sample_titles": [
-            "Report GDS-Index 2025都市ランキング発表 世界の観光MICE都市の持続可能性を評価する「Global Destination Sustainability Index（GDS-Index）」の2025年ランキングが発表…"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "www-jetro-go-jp-j-messe-country-asia-jp-001",
-      "name": "J-messe（JETRO）",
-      "url": "https://www.jetro.go.jp/j-messe/country/asia/jp/001/",
-      "strategy": "detail",
       "status": "zero_events",
       "best_event_count": 0,
       "snapshots": [
@@ -262,6 +220,58 @@
           "error": "",
           "event_count": 0,
           "sample_titles": []
+        },
+        {
+          "date": "2027-01-01",
+          "error": "",
+          "event_count": 0,
+          "sample_titles": []
+        }
+      ]
+    },
+    {
+      "id": "www-jetro-go-jp-j-messe-country-asia-jp-001",
+      "name": "J-messe（JETRO）",
+      "url": "https://www.jetro.go.jp/j-messe/country/asia/jp/001/",
+      "strategy": "detail",
+      "status": "ok",
+      "best_event_count": 5,
+      "snapshots": [
+        {
+          "date": "2026-04-01",
+          "error": "",
+          "event_count": 5,
+          "sample_titles": [
+            "北海道 エネルギー技術革新EXPO 2026",
+            "北海道 災害リスク対策推進展2026",
+            "北海道 建設開発総合展2026",
+            "北海道 インフラ検査・維持管理・更新展2026",
+            "第9回 観光・ホテル・外食産業展 HOKKAIDO 2026"
+          ]
+        },
+        {
+          "date": "2026-07-01",
+          "error": "",
+          "event_count": 5,
+          "sample_titles": [
+            "北海道 エネルギー技術革新EXPO 2026",
+            "北海道 災害リスク対策推進展2026",
+            "北海道 建設開発総合展2026",
+            "北海道 インフラ検査・維持管理・更新展2026",
+            "第9回 観光・ホテル・外食産業展 HOKKAIDO 2026"
+          ]
+        },
+        {
+          "date": "2026-10-01",
+          "error": "",
+          "event_count": 5,
+          "sample_titles": [
+            "北海道 エネルギー技術革新EXPO 2026",
+            "北海道 災害リスク対策推進展2026",
+            "北海道 建設開発総合展2026",
+            "北海道 インフラ検査・維持管理・更新展2026",
+            "第9回 観光・ホテル・外食産業展 HOKKAIDO 2026"
+          ]
         },
         {
           "date": "2027-01-01",
@@ -369,38 +379,35 @@
       "url": "https://www.sapporo-dome.co.jp/dome/",
       "strategy": "detail",
       "status": "ok",
-      "best_event_count": 5,
+      "best_event_count": 7,
       "snapshots": [
         {
           "date": "2026-04-01",
           "error": "",
-          "event_count": 5,
+          "event_count": 7,
           "sample_titles": [
+            "北海道最大のハンドメイドフェスティバルサッポロ モノ ヴィレッジ 2026 春",
             "対象者限定のイベント",
             "対象者限定のイベント",
             "対象者限定のイベント",
-            "to HEROes ~TOBE 3rd Super Live~",
-            "to HEROes ~TOBE 3rd Super Live~"
+            "北海道最大のハンドメイドフェスティバルサッポロ モノ ヴィレッジ 2026 春"
           ]
         },
         {
           "date": "2026-07-01",
           "error": "",
-          "event_count": 5,
+          "event_count": 3,
           "sample_titles": [
-            "北海道コンサドーレ札幌×大和ハウス プレミストドーム 特別インタビュー Vol.5 青木亮太選手 EVENT",
             "イベント・広告を お考えの方へ",
             "季節ごとのイベント(ナイトラン・DOME Snow Zone supported by JAPAN AIRLINES)",
-            "年表・イベント実績",
-            "03(火) イベント マイナビ 就職EXPO 札幌会場"
+            "年表・イベント実績"
           ]
         },
         {
           "date": "2026-10-01",
           "error": "",
-          "event_count": 4,
+          "event_count": 3,
           "sample_titles": [
-            "北海道コンサドーレ札幌×大和ハウス プレミストドーム 特別インタビュー Vol.5 青木亮太選手 EVENT",
             "イベント・広告を お考えの方へ",
             "季節ごとのイベント(ナイトラン・DOME Snow Zone supported by JAPAN AIRLINES)",
             "年表・イベント実績"
@@ -409,9 +416,8 @@
         {
           "date": "2027-01-01",
           "error": "",
-          "event_count": 4,
+          "event_count": 3,
           "sample_titles": [
-            "北海道コンサドーレ札幌×大和ハウス プレミストドーム 特別インタビュー Vol.5 青木亮太選手 EVENT",
             "イベント・広告を お考えの方へ",
             "季節ごとのイベント(ナイトラン・DOME Snow Zone supported by JAPAN AIRLINES)",
             "年表・イベント実績"
@@ -458,14 +464,20 @@
       "name": "札幌コンベンションセンター",
       "url": "https://www.sora-scc.jp/",
       "strategy": "detail",
-      "status": "zero_events",
-      "best_event_count": 0,
+      "status": "ok",
+      "best_event_count": 6,
       "snapshots": [
         {
           "date": "2026-04-01",
           "error": "",
-          "event_count": 0,
-          "sample_titles": []
+          "event_count": 6,
+          "sample_titles": [
+            "親栄グループ 安全大会",
+            "サンワード証券（株）資産運用セミナー",
+            "ファイテンビジネス提案会",
+            "令和8年度 株式会社西岡建設 安全衛生大会",
+            "第40回マンション大規模修繕セミナー"
+          ]
         },
         {
           "date": "2026-07-01",
@@ -649,48 +661,6 @@
       "name": "カナモトホール（札幌市民ホール）",
       "url": "https://www.sapporo-shiminhall.org/",
       "strategy": "detail",
-      "status": "ok",
-      "best_event_count": 1,
-      "snapshots": [
-        {
-          "date": "2026-04-01",
-          "error": "",
-          "event_count": 1,
-          "sample_titles": [
-            "大ホール一斉受付開催のお知らせ ※2027年 4月利用分 NEW"
-          ]
-        },
-        {
-          "date": "2026-07-01",
-          "error": "",
-          "event_count": 1,
-          "sample_titles": [
-            "【訂正とお詫び】改定料金金額に関して"
-          ]
-        },
-        {
-          "date": "2026-10-01",
-          "error": "",
-          "event_count": 1,
-          "sample_titles": [
-            "【訂正とお詫び】改定料金金額に関して"
-          ]
-        },
-        {
-          "date": "2027-01-01",
-          "error": "",
-          "event_count": 1,
-          "sample_titles": [
-            "【訂正とお詫び】改定料金金額に関して"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "www-kyobun-org-event-schedule-html",
-      "name": "札幌市教育文化会館",
-      "url": "https://www.kyobun.org/event_schedule.html",
-      "strategy": "detail",
       "status": "zero_events",
       "best_event_count": 0,
       "snapshots": [
@@ -711,6 +681,58 @@
           "error": "",
           "event_count": 0,
           "sample_titles": []
+        },
+        {
+          "date": "2027-01-01",
+          "error": "",
+          "event_count": 0,
+          "sample_titles": []
+        }
+      ]
+    },
+    {
+      "id": "www-kyobun-org-event-schedule-html",
+      "name": "札幌市教育文化会館",
+      "url": "https://www.kyobun.org/event_schedule.html",
+      "strategy": "detail",
+      "status": "ok",
+      "best_event_count": 27,
+      "snapshots": [
+        {
+          "date": "2026-04-01",
+          "error": "",
+          "event_count": 27,
+          "sample_titles": [
+            "第23回北海道バレエコンクール・第8回北海道プレバレエコンクール",
+            "Laura day romance hall tour 2026 “Fixing a hall”",
+            "10周年プロジェクト 全国3都市リアルイベント「QuizKnock出張中 in 北海道」",
+            "バンタン入学式 2026",
+            "学校法人西野学園 4校合同入学式"
+          ]
+        },
+        {
+          "date": "2026-07-01",
+          "error": "",
+          "event_count": 8,
+          "sample_titles": [
+            "吉澤吉澤",
+            "吉澤吉澤",
+            "吉澤吉澤",
+            "吉澤吉澤",
+            "吉澤吉澤"
+          ]
+        },
+        {
+          "date": "2026-10-01",
+          "error": "",
+          "event_count": 8,
+          "sample_titles": [
+            "吉澤吉澤",
+            "吉澤吉澤",
+            "吉澤吉澤",
+            "吉澤吉澤",
+            "吉澤吉澤"
+          ]
         },
         {
           "date": "2027-01-01",
@@ -1687,30 +1709,30 @@
       "url": "https://www.cube-garden.com/live.php",
       "strategy": "detail",
       "status": "ok",
-      "best_event_count": 27,
+      "best_event_count": 35,
       "snapshots": [
         {
           "date": "2026-04-01",
           "error": "",
-          "event_count": 27,
+          "event_count": 35,
           "sample_titles": [
+            "a flood of circle guest bandあり a flood of circle 20周年記念ツアー \"日本武道館への道\"",
+            "甘い暴力 甘い暴力 2026春のプレゼンツツアー「虎伏戦吼」",
+            "甘い暴力 甘い暴力 2026春のプレゼンツツアー「虎伏戦吼」",
             "FIVE NEW OLD FIVE NEW OLD ONEMAN TOUR 2026「Feel」",
-            "FOMARE FOMARE OVER TOUR 25-26",
-            "LINDBERG LINDBERG LIVE TOUR 2026 「Hello！New Days」",
-            "脱走/杏地 Vacchus(TATSUAKI/Fuga)/A-COMPANY ICE GROUND vol.2",
-            "First Love is Never Returned ※ゲストあり #FLiNR S/S TOUR 2026 \"LEAP OUT\""
+            "FOMARE FOMARE OVER TOUR 25-26"
           ]
         },
         {
           "date": "2026-07-01",
           "error": "",
-          "event_count": 7,
+          "event_count": 10,
           "sample_titles": [
+            "米倉利紀 sTYle72 inc. presents toshinori YONEKURA concert tour 2026 “yelow BEAR”",
+            "米倉利紀 sTYle72 inc. presents toshinori YONEKURA concert tour 2026 “yelow BEAR”",
             "摩天楼オペラ 摩天楼オペラ TOUR 2026",
             "松原健之 松原健之 トーク＆ライブ2026",
-            "竹渕慶 竹渕慶 TOUR 2026 〜この歌をあなたに〜 BAND with 齊藤ジョニー",
-            "TENSONG TENSONG全国ツアー 2026『これからの話をしよう』",
-            "ザ・リーサルウェポンズ ザ・リーサルウェポンズ 全国ツアー2026​"
+            "竹渕慶 竹渕慶 TOUR 2026 〜この歌をあなたに〜 BAND with 齊藤ジョニー"
           ]
         },
         {
@@ -1767,15 +1789,14 @@
       "url": "https://spice-sapporo.jp/schedule/",
       "strategy": "feed_then_detail",
       "status": "ok",
-      "best_event_count": 2,
+      "best_event_count": 1,
       "snapshots": [
         {
           "date": "2026-04-01",
           "error": "",
-          "event_count": 2,
+          "event_count": 1,
           "sample_titles": [
-            "COMING SOON",
-            "EMNW To KAMASU – GOOD VIBES ONLY JAPAN TOUR 2026"
+            "COMING SOON"
           ]
         },
         {
@@ -1803,32 +1824,56 @@
       "name": "HBC北海道放送（イベント）",
       "url": "https://www.hbc.co.jp/event/",
       "strategy": "detail_light",
-      "status": "zero_events",
-      "best_event_count": 0,
+      "status": "ok",
+      "best_event_count": 20,
       "snapshots": [
         {
           "date": "2026-04-01",
           "error": "",
-          "event_count": 0,
-          "sample_titles": []
+          "event_count": 16,
+          "sample_titles": [
+            "紀平凱成 ピアノコンサートツアー2026",
+            "南こうせつコンサートツアー2026 ～君と僕のうた～",
+            "はやしべさとし 三十歳の旅立ち ～叙情歌を道づれに～ 小樽編",
+            "SPYAIR TOUR 2026 - RE-BIRTH -",
+            "山内惠介 北海道ツアー2026"
+          ]
         },
         {
           "date": "2026-07-01",
           "error": "",
-          "event_count": 0,
-          "sample_titles": []
+          "event_count": 13,
+          "sample_titles": [
+            "森山良子 コンサートツアー2026",
+            "布施明 AKIRA FUSE LIVE TOUR 2025-2026",
+            "三山ひろし コンサート2026",
+            "Vaundy DOME TOUR 2026",
+            "紀平凱成 ピアノコンサートツアー2026"
+          ]
         },
         {
           "date": "2026-10-01",
           "error": "",
-          "event_count": 0,
-          "sample_titles": []
+          "event_count": 19,
+          "sample_titles": [
+            "森山良子 コンサートツアー2026",
+            "布施明 AKIRA FUSE LIVE TOUR 2025-2026",
+            "三山ひろし コンサート2026",
+            "Vaundy DOME TOUR 2026",
+            "紀平凱成 ピアノコンサートツアー2026"
+          ]
         },
         {
           "date": "2027-01-01",
           "error": "",
-          "event_count": 0,
-          "sample_titles": []
+          "event_count": 20,
+          "sample_titles": [
+            "森山良子 コンサートツアー2026",
+            "布施明 AKIRA FUSE LIVE TOUR 2025-2026",
+            "三山ひろし コンサート2026",
+            "Vaundy DOME TOUR 2026",
+            "紀平凱成 ピアノコンサートツアー2026"
+          ]
         }
       ]
     },
@@ -1983,7 +2028,7 @@
       ]
     }
   ],
-  "ok_sources": 24,
-  "zero_event_sources": 26,
+  "ok_sources": 26,
+  "zero_event_sources": 24,
   "error_sources": 1
 }
