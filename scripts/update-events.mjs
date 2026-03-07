@@ -175,12 +175,15 @@ function parseDatesFromText(text, nowYmd) {
 function parseIsoDateParts(value) {
   const raw = String(value || '').trim();
   if (!raw) return { date: '', time: '' };
-  const m = raw.match(/^(\d{4}-\d{2}-\d{2})(?:[T\s](\d{2}):?(\d{2})?)?/);
+  const m = raw.match(/^(\d{4})[-/.年](\d{1,2})[-/.月](\d{1,2})(?:日)?(?:[T\s](\d{1,2}):?(\d{2})?)?/);
   if (!m) return { date: '', time: '' };
-  const date = m[1] || '';
-  const hh = m[2] || '';
-  const mm = m[3] || '00';
-  return { date, time: hh ? `${hh}:${mm}` : '' };
+  const yyyy = m[1] || '';
+  const mo = String(m[2] || '').padStart(2, '0');
+  const dd = String(m[3] || '').padStart(2, '0');
+  const date = `${yyyy}-${mo}-${dd}`;
+  const hh = m[4] || '';
+  const mm = m[5] || '00';
+  return { date, time: hh ? `${String(hh).padStart(2, '0')}:${mm}` : '' };
 }
 
 function flattenJsonLd(input) {
@@ -249,11 +252,15 @@ function normalizeHm(hour, minute = '00') {
 }
 
 function parseTimeTagged(text, labels, preferBefore = true) {
+  const normalized = String(text || '')
+    .replace(/[【】\[\]（）()]/g, ' ')
+    .replace(/\s+/g, ' ');
   const label = labels.join('|');
-  const beforeMinute = text.match(new RegExp(`([01]?\\d|2[0-3])[:：]([0-5]\\d)\\s*(?:${label})`, 'i'));
-  const beforeHour = text.match(new RegExp(`([01]?\\d|2[0-3])時\\s*(?:${label})`, 'i'));
-  const afterMinute = text.match(new RegExp(`(?:${label})\\s*[:：]?\\s*([01]?\\d|2[0-3])[:：]([0-5]\\d)`, 'i'));
-  const afterHour = text.match(new RegExp(`(?:${label})\\s*[:：]?\\s*([01]?\\d|2[0-3])時`, 'i'));
+  const sep = '(?:\\s|[:：/／\\-ー〜~]|予定|開始|開演|開場)*';
+  const beforeMinute = normalized.match(new RegExp(`([01]?\\d|2[0-3])[:：]([0-5]\\d)\\s*(?:${label})`, 'i'));
+  const beforeHour = normalized.match(new RegExp(`([01]?\\d|2[0-3])時\\s*(?:${label})`, 'i'));
+  const afterMinute = normalized.match(new RegExp(`(?:${label})${sep}([01]?\\d|2[0-3])[:：]([0-5]\\d)`, 'i'));
+  const afterHour = normalized.match(new RegExp(`(?:${label})${sep}([01]?\\d|2[0-3])時`, 'i'));
 
   const order = preferBefore
     ? [beforeMinute, beforeHour, afterMinute, afterHour]
@@ -268,9 +275,9 @@ function parseTimeTagged(text, labels, preferBefore = true) {
 }
 
 function parseEventTimes(text) {
-  const open = parseTimeTagged(text, ['開場', 'door\\s*open'], true);
-  const start = parseTimeTagged(text, ['開演', '開始', 'start\\s*time'], true);
-  const end = parseTimeTagged(text, ['終演', '終了', 'end\\s*time'], true);
+  const open = parseTimeTagged(text, ['開場', 'door\\s*open', 'open'], true);
+  const start = parseTimeTagged(text, ['開演', '開始', 'start\\s*time', 'start'], false);
+  const end = parseTimeTagged(text, ['終演', '終了', 'end\\s*time', 'end'], false);
 
   if (open || start || end) {
     return {
@@ -495,6 +502,7 @@ function qualityScore(ev) {
   if (ev?.venue_address) score += 0.04;
   if (String(ev?.summary || '').length >= 30) score += 0.04;
   if (String(ev?.extraction_method || '') === 'jsonld') score += 0.15;
+  if (String(ev?.extraction_method || '') === 'jsonld' && !ev?.open_time && !ev?.start_time && !ev?.end_time) score -= 0.08;
   const priority = String(ev?.source_priority || 'B').toUpperCase();
   if (priority === 'S') score += 0.07;
   if (priority === 'A') score += 0.04;
@@ -551,7 +559,11 @@ function buildEvent({ source, detailUrl, title, bodyText, html, nowYmd }) {
   const contextEnd = Math.min(bodyText.length, firstDate.idx + 180);
   const dateContext = bodyText.slice(contextStart, contextEnd);
   const timeContext = `${title}\n${dateContext}`;
-  const time = parseEventTimes(timeContext);
+  let time = parseEventTimes(timeContext);
+  if (!(time.open || time.start || time.end) && hasDetailUrlSignal(detailUrl)) {
+    const bodyTime = parseEventTimes(bodyText);
+    if (bodyTime.open || bodyTime.start || bodyTime.end) time = bodyTime;
+  }
   const summary = textPreview(pickMeta(html, 'description') || pickMeta(html, 'og:description') || bodyText, 220);
 
   const eventTitle = normalizeTitle(title) || title || source.name;
@@ -598,7 +610,12 @@ function eventFromJsonLdNode(node, source, detailUrl) {
   const start = parseIsoDateParts(node.startDate || node.doorTime || '');
   if (!start.date) return null;
   const end = parseIsoDateParts(node.endDate || '');
-  const startTime = (start.time === '00:00' && !end.time) ? '' : start.time;
+  let startTime = start.time || '';
+  let endTime = end.time || '';
+  if (startTime === '00:00') {
+    startTime = '';
+    if (endTime === '23:59') endTime = '';
+  }
 
   const location = node.location && Array.isArray(node.location) ? node.location[0] : node.location;
   const venue = toVenueText(location);
@@ -617,8 +634,8 @@ function eventFromJsonLdNode(node, source, detailUrl) {
     end_date: end.date || '',
     open_time: '',
     start_time: startTime || '',
-    end_time: end.time || '',
-    all_day: !start.time,
+    end_time: endTime,
+    all_day: !(startTime || endTime),
     venue,
     venue_address: venueAddress,
     summary,
@@ -651,15 +668,37 @@ function extractJsonLdEvents({ html, source, detailUrl }) {
 
 function extractEventsFromPage({ source, url, html, titleHint, nowYmd }) {
   const events = [];
+  const bodyText = stripTags(html);
   const kitaraEvent = extractKitaraSiteRuleEvent({ source, url, html, nowYmd });
   if (kitaraEvent) events.push(withQuality(kitaraEvent));
   const seasonEvent = extractSapporoTravelSeasonEvent({ source, url, html, nowYmd });
   if (seasonEvent) events.push(withQuality(seasonEvent));
 
   const jsonLdEvents = extractJsonLdEvents({ html, source, detailUrl: url });
-  for (const ev of jsonLdEvents) events.push(ev);
+  for (const ev of jsonLdEvents) {
+    const hasPreciseTime = (
+      (ev?.start_time && ev.start_time !== '00:00') ||
+      (ev?.open_time && ev.open_time !== '00:00') ||
+      (ev?.end_time && ev.end_time !== '00:00' && ev.end_time !== '23:59')
+    );
+    if (hasPreciseTime) {
+      events.push(ev);
+      continue;
+    }
+    const fallbackTime = parseEventTimes(`${titleHint || ''}\n${bodyText}`);
+    if (fallbackTime.open || fallbackTime.start || fallbackTime.end) {
+      events.push({
+        ...ev,
+        open_time: fallbackTime.open || ev.open_time || '',
+        start_time: fallbackTime.start || ev.start_time || '',
+        end_time: fallbackTime.end || ev.end_time || '',
+        all_day: !(fallbackTime.open || fallbackTime.start || fallbackTime.end)
+      });
+    } else {
+      events.push(ev);
+    }
+  }
 
-  const bodyText = stripTags(html);
   const heuristicEvent = buildEvent({
     source,
     detailUrl: url,
