@@ -303,6 +303,26 @@ async function testExtractChieriaHallScheduleEventsFromCalendarView() {
   assert.strictEqual(events[0].venue, "札幌市生涯学習センター ちえりあホール");
 }
 
+async function testExtractSnowfesSiteRuleEvent() {
+  const mod = await loadModule();
+  const source = { id: "www-snowfes-com", name: "雪まつり", url: "https://www.snowfes.com/", priority: "S" };
+  const html = `<html><body>次回は2027年2月4日（木）～2月11日（木・祝）で開催予定です。</body></html>`;
+  const ev = mod.extractSnowfesSiteRuleEvent({ source, url: source.url, html, nowYmd: "2026-03-08" });
+  assert.ok(ev);
+  assert.strictEqual(ev.start_date, "2027-02-04");
+  assert.strictEqual(ev.end_date, "2027-02-11");
+}
+
+async function testExtractYosakoiSiteRuleEvent() {
+  const mod = await loadModule();
+  const source = { id: "www-yosakoi-soran-jp", name: "YOSAKOI", url: "https://www.yosakoi-soran.jp/", priority: "S" };
+  const html = `<html><body>2026年 第35回YOSAKOIソーラン祭り 6月10日(水)～14日(日)開催！</body></html>`;
+  const ev = mod.extractYosakoiSiteRuleEvent({ source, url: source.url, html, nowYmd: "2026-03-08" });
+  assert.ok(ev);
+  assert.strictEqual(ev.start_date, "2026-06-10");
+  assert.strictEqual(ev.end_date, "2026-06-14");
+}
+
 async function runTests() {
   const tests = [
     ["札幌圏会場は通す", testAllowSapporoAreaVenue],
@@ -318,7 +338,9 @@ async function runTests() {
     ["教文一覧はホール情報付きで組み立てる", testExtractKyobunScheduleEventsBuildsHallVenue],
     ["JETRO 一覧はゼロ埋め日付を正しく拾う", testExtractJetroJmesseHandlesZeroPaddedDates],
     ["カナモトホール月別ページを組み立てる", testExtractSapporoShiminhallScheduleEventsFromMonthlyPage],
-    ["ちえりあカレンダーHTMLを組み立てる", testExtractChieriaHallScheduleEventsFromCalendarView]
+    ["ちえりあカレンダーHTMLを組み立てる", testExtractChieriaHallScheduleEventsFromCalendarView],
+    ["雪まつりの次回会期を拾う", testExtractSnowfesSiteRuleEvent],
+    ["YOSAKOIの開催日を拾う", testExtractYosakoiSiteRuleEvent]
   ];
   let passed = 0;
   for (const [name, fn] of tests) {

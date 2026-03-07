@@ -736,6 +736,58 @@ function extractSapporoTravelSeasonEvent({ source, url, html, nowYmd }) {
   });
 }
 
+function extractSnowfesSiteRuleEvent({ source, url, html, nowYmd }) {
+  if (source.id !== 'www-snowfes-com') return null;
+  const bodyText = stripTags(html);
+  const periodMatch = bodyText.match(/次回は(\d{4}年\d{1,2}月\d{1,2}日[^0-9]{0,6}\d{1,2}月\d{1,2}日)/);
+  const periodText = periodMatch ? periodMatch[1] : (bodyText.match(/2026年2月4日[^0-9]{0,12}2月11日/) || [])[0] || '';
+  const dates = parseDatesFromText(periodText, nowYmd);
+  if (!dates.length) return null;
+  let endDate = dates.length >= 2 ? dates[1].ymd : '';
+  if (!endDate) {
+    const startYear = String(dates[0].ymd || '').slice(0, 4);
+    const endMd = periodText.match(/[～\-ー〜]\s*(\d{1,2})月(\d{1,2})日/);
+    if (startYear && endMd) {
+      endDate = `${startYear}-${String(endMd[1]).padStart(2, '0')}-${String(endMd[2]).padStart(2, '0')}`;
+    }
+  }
+  const summary = textPreview(periodText || pickMeta(html, 'description') || bodyText, 220);
+  return buildSiteRuleEvent({
+    source,
+    detailUrl: url,
+    title: 'さっぽろ雪まつり',
+    startDate: dates[0].ymd,
+    endDate,
+    venue: '大通公園・つどーむ・すすきの',
+    venueAddress: '札幌市内各会場',
+    time: { open: '', start: '', end: '', allDay: true },
+    summary
+  });
+}
+
+function extractYosakoiSiteRuleEvent({ source, url, html, nowYmd }) {
+  if (source.id !== 'www-yosakoi-soran-jp') return null;
+  const bodyText = stripTags(html);
+  const title = 'YOSAKOIソーラン祭り';
+  const period = bodyText.match(/(20\d{2})年[^0-9]{0,12}(?:第\s*\d+\s*回)?YOSAKOIソーラン祭り[^0-9]{0,20}(\d{1,2})月(\d{1,2})日[^0-9]{0,12}[～\-ー〜]\s*(?:(\d{1,2})月)?(\d{1,2})日/i)
+    || bodyText.match(/(20\d{2})年[^0-9]{0,20}第\s*\d+\s*回YOSAKOIソーラン祭り[^0-9]{0,20}(\d{1,2})月(\d{1,2})日[^0-9]{0,12}[～\-ー〜]\s*(?:(\d{1,2})月)?(\d{1,2})日/i);
+  if (!period) return null;
+  const startDate = `${period[1]}-${String(period[2]).padStart(2, '0')}-${String(period[3]).padStart(2, '0')}`;
+  const endMonth = period[4] || period[2];
+  const endDate = `${period[1]}-${String(endMonth).padStart(2, '0')}-${String(period[5]).padStart(2, '0')}`;
+  return buildSiteRuleEvent({
+    source,
+    detailUrl: url,
+    title,
+    startDate,
+    endDate,
+    venue: '大通公園をはじめとする札幌市内各会場',
+    venueAddress: '札幌市内各会場',
+    time: { open: '', start: '', end: '', allDay: true },
+    summary: textPreview(period[0] || bodyText, 220)
+  });
+}
+
 function extractSapporoCommunityPlazaSiteRuleEvent({ source, url, html, nowYmd }) {
   if (source.id !== 'www-sapporo-community-plaza-jp-event-php') return null;
   if (!/\/event\.php\?num=\d+/i.test(url)) return null;
@@ -1548,6 +1600,10 @@ function extractEventsFromPage({ source, url, html, titleHint, nowYmd }) {
   if (kitaraEvent) events.push(withQuality(kitaraEvent));
   const seasonEvent = extractSapporoTravelSeasonEvent({ source, url, html, nowYmd });
   if (seasonEvent) events.push(withQuality(seasonEvent));
+  const snowfesEvent = extractSnowfesSiteRuleEvent({ source, url, html, nowYmd });
+  if (snowfesEvent) events.push(withQuality(snowfesEvent));
+  const yosakoiEvent = extractYosakoiSiteRuleEvent({ source, url, html, nowYmd });
+  if (yosakoiEvent) events.push(withQuality(yosakoiEvent));
   const plazaEvent = extractSapporoCommunityPlazaSiteRuleEvent({ source, url, html, nowYmd });
   if (plazaEvent) events.push(withQuality(plazaEvent));
   const pl24Events = extractPl24ScheduleEvents({ source, url, html, nowYmd });
@@ -2498,10 +2554,12 @@ export {
   extractHbcConcertEvents,
   extractJetroJmesseSiteRuleEvents,
   extractKyobunScheduleEvents,
+  extractSnowfesSiteRuleEvent,
   extractSapporoShiminhallScheduleEvents,
   extractSoraConventionEvents,
   extractTicketPiaLocalSiteRuleEvents,
   extractTsudomeCalendarEvents,
+  extractYosakoiSiteRuleEvent,
   isPublishable,
   parseArgs,
   resolveSourceStrategy

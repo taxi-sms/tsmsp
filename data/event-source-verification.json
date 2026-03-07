@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-07T18:03:07.727Z",
+  "generated_at": "2026-03-07T18:26:18.241Z",
   "test_dates": [
     "2026-04-01",
     "2026-07-01",
@@ -987,14 +987,20 @@
       "name": "YOSAKOIソーラン祭り 公式ホームページ",
       "url": "https://www.yosakoi-soran.jp/",
       "strategy": "detail",
-      "status": "zero_events",
-      "best_event_count": 0,
+      "status": "ok",
+      "best_event_count": 11,
       "snapshots": [
         {
           "date": "2026-04-01",
           "error": "",
-          "event_count": 0,
-          "sample_titles": []
+          "event_count": 11,
+          "sample_titles": [
+            "YOSAKOIソーラン祭り",
+            "YOSAKOIソーラン祭り",
+            "YOSAKOIソーラン祭り",
+            "YOSAKOIソーラン祭り",
+            "YOSAKOIソーラン祭り"
+          ]
         },
         {
           "date": "2026-07-01",
@@ -2058,7 +2064,7 @@
       ]
     }
   ],
-  "ok_sources": 29,
-  "zero_event_sources": 21,
+  "ok_sources": 30,
+  "zero_event_sources": 20,
   "error_sources": 1
 }
