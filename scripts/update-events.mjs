@@ -1071,6 +1071,17 @@ function sortEvents(a, b) {
   );
 }
 
+function mergeEventCompleteness(primary, secondary) {
+  const out = { ...primary };
+  if (!out.flyer_image_url && secondary?.flyer_image_url) out.flyer_image_url = secondary.flyer_image_url;
+  if ((!out.venue || isInvalidVenueCandidate(out.venue)) && secondary?.venue && !isInvalidVenueCandidate(secondary.venue)) out.venue = secondary.venue;
+  if (!out.venue_address && secondary?.venue_address) out.venue_address = secondary.venue_address;
+  if ((!out.open_time || out.open_time === '00:00') && secondary?.open_time && secondary.open_time !== '00:00') out.open_time = secondary.open_time;
+  if ((!out.start_time || out.start_time === '00:00') && secondary?.start_time && secondary.start_time !== '00:00') out.start_time = secondary.start_time;
+  if ((!out.end_time || out.end_time === '00:00') && secondary?.end_time && secondary.end_time !== '00:00') out.end_time = secondary.end_time;
+  return out;
+}
+
 function canonicalEventKey(ev) {
   const t = normalizeTitleKey(ev?.title || '');
   const d = String(ev?.start_date || '');
@@ -1182,12 +1193,14 @@ async function main() {
     const prevScore = Number(prev.quality_score || 0);
     const nextScore = Number(ev.quality_score || 0);
     if (nextScore > prevScore) {
-      bestByCanonical.set(key, ev);
+      bestByCanonical.set(key, mergeEventCompleteness(ev, prev));
       continue;
     }
     if (nextScore === prevScore && Number(ev.source_priority_score || 0) > Number(prev.source_priority_score || 0)) {
-      bestByCanonical.set(key, ev);
+      bestByCanonical.set(key, mergeEventCompleteness(ev, prev));
+      continue;
     }
+    bestByCanonical.set(key, mergeEventCompleteness(prev, ev));
   }
 
   const mergedCanonical = Array.from(bestByCanonical.values())
@@ -1207,12 +1220,14 @@ async function main() {
     const prevScore = Number(prev.quality_score || 0);
     const nextScore = Number(ev.quality_score || 0);
     if (nextScore > prevScore) {
-      bestByUrlDate.set(key, ev);
+      bestByUrlDate.set(key, mergeEventCompleteness(ev, prev));
       continue;
     }
     if (nextScore === prevScore && Number(ev.source_priority_score || 0) > Number(prev.source_priority_score || 0)) {
-      bestByUrlDate.set(key, ev);
+      bestByUrlDate.set(key, mergeEventCompleteness(ev, prev));
+      continue;
     }
+    bestByUrlDate.set(key, mergeEventCompleteness(prev, ev));
   }
 
   const mergedPublic = Array.from(bestByUrlDate.values()).sort(sortEvents).slice(0, 900);
