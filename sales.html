@@ -233,7 +233,7 @@
       const pay=String(r.payMethod||'');
       if(['QR','クレカ','電子M'].includes(pay)) feeBase += cash + credit;
       const ride=String(r.rideType||'');
-      if(ride==='GO' && !['GO pay','GO Pay','乗込GO Pay'].includes(pay)) goFeeCases += 1;
+      if(ride==='GO' && !['GO pay','GO Pay'].includes(pay)) goFeeCases += 1;
     });
     const fee = feeBase * (Number(settings.feeRate)||0) / 100;
     const goFee = goFeeCases * (Number(settings.goFeeYen)||0);

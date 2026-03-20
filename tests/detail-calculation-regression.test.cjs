@@ -170,13 +170,13 @@ function testStandardDailySummary() {
   assert.strictEqual(extractRenderedValue(rendered.salesHtml, "現収合計"), "3,400円");
   assert.strictEqual(extractRenderedValue(rendered.salesHtml, "未収合計"), "3,500円");
   assert.strictEqual(extractRenderedValue(rendered.salesHtml, "決済手数料"), "100円");
-  assert.strictEqual(extractRenderedValue(rendered.salesHtml, "売上合計（税込）"), "6,700円");
-  assert.strictEqual(extractRenderedValue(rendered.salesHtml, "売上合計（税抜）"), "6,091円");
-  assert.strictEqual(extractRenderedValue(rendered.salesHtml, "概算収入"), "3,045円");
-  assert.strictEqual(extractRenderedValue(rendered.salesHtml, "時給換算"), "381円");
+  assert.strictEqual(extractRenderedValue(rendered.salesHtml, "売上合計（税込）"), "6,600円");
+  assert.strictEqual(extractRenderedValue(rendered.salesHtml, "売上合計（税抜）"), "6,000円");
+  assert.strictEqual(extractRenderedValue(rendered.salesHtml, "概算収入"), "3,000円");
+  assert.strictEqual(extractRenderedValue(rendered.salesHtml, "時給換算"), "375円");
 
   assert.strictEqual(extractRenderedValue(rendered.goHtml, "GO予約数"), "3回");
-  assert.strictEqual(extractRenderedValue(rendered.goHtml, "GO手配料"), "100円");
+  assert.strictEqual(extractRenderedValue(rendered.goHtml, "GO手配料"), "200円");
   assert.strictEqual(extractRenderedValue(rendered.goHtml, "GO Pay件数"), "2件");
   assert.strictEqual(extractRenderedValue(rendered.goHtml, "（内、乗込GO Pay）"), "1件");
   assert.strictEqual(extractRenderedValue(rendered.goHtml, "GO計金額"), "3,400円");
@@ -223,7 +223,8 @@ function testFormulaGuards() {
     "const salesInTax = grossBase - fee - goFeeTotal;",
     "const salesExTax = salesInTax / (1 + num(settings.taxRate)/100);",
     "const takeHome = salesExTax * (num(settings.walkRate)/100);",
-    "const hourly = workMin > 0 ? (takeHome / (workMin/60)) : 0;"
+    "const hourly = workMin > 0 ? (takeHome / (workMin/60)) : 0;",
+    'const goFeeCases = rows.filter(r => String(r.rideType||"")==="GO" && !["GO pay","GO Pay"].includes(String(r.payMethod||""))).length;'
   ];
   requiredSnippets.forEach((snippet) => {
     assert.ok(html.includes(snippet), `計算/保存仕様ガード不一致: ${snippet}`);

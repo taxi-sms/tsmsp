@@ -262,7 +262,7 @@
     const fee = feeBase * (num(settings.feeRate) / 100);
 
     const goFeeCases = rows
-      .filter((r) => String(r.rideType || "") === "GO" && !["GO pay", "GO Pay", "乗込GO Pay"].includes(String(r.payMethod || "")))
+      .filter((r) => String(r.rideType || "") === "GO" && !["GO pay", "GO Pay"].includes(String(r.payMethod || "")))
       .length;
     const goFeeTotal = goFeeCases * num(settings.goFeeYen);
 

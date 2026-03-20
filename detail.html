@@ -288,7 +288,7 @@
     const goPayCount = rows.filter(r => ["GO pay","GO Pay","乗込GO Pay"].includes(String(r.payMethod||""))).length;
     const norikomiGoPayCount = rows.filter(r => String(r.payMethod||"") === "乗込GO Pay").length;
     const goAmount = rows.filter(r => ["GO pay","GO Pay","乗込GO Pay"].includes(String(r.payMethod||""))).reduce((s,r)=> s + num(r.cash) + num(r.credit), 0);
-    const goFeeCases = rows.filter(r => String(r.rideType||"")==="GO" && !["GO pay","GO Pay","乗込GO Pay"].includes(String(r.payMethod||""))).length;
+    const goFeeCases = rows.filter(r => String(r.rideType||"")==="GO" && !["GO pay","GO Pay"].includes(String(r.payMethod||""))).length;
     const goFeeTotal = goFeeCases * num(settings.goFeeYen);
 
     const salesInTax = grossBase - fee - goFeeTotal;

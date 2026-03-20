@@ -41,6 +41,7 @@ function testConfirmUsesExplicitSelectionAndTestRows() {
   assert.match(html, /const salesExTax = salesInTax \/ \(1 \+ num\(settings\.taxRate\) \/ 100\);/);
   assert.match(html, /const takeHome = salesExTax \* \(num\(settings\.walkRate\) \/ 100\);/);
   assert.match(html, /const hourly = workMin > 0 \? \(takeHome \/ \(workMin \/ 60\)\) : 0;/);
+  assert.match(html, /String\(r\.rideType \|\| ""\) === "GO" && !\["GO pay", "GO Pay"\]\.includes\(String\(r\.payMethod \|\| ""\)\)/);
   assert.match(html, /line\("実働時間", fmtMinutes\(summary\.workMin\), true\)/);
   assert.match(html, /line\("売上合計（税込）", yenMarkup\(summary\.salesInTax, true\), true, true\)/);
   assert.match(html, /line\("概算収入", yenMarkup\(summary\.takeHome, true\), true, true\)/);

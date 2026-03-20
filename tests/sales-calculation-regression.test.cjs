@@ -340,6 +340,40 @@ async function testManualModeIncludesReturnAndBoundInputs() {
   assert.match(firstRow, /data-manual="bound"/);
 }
 
+async function testNorikomiGoPayStillCountsGoFee() {
+  const rendered = await runSalesScript({
+    fixedNowIso: "2026-03-02T12:00:00+09:00",
+    storageSeed: {
+      tsms_reports: JSON.stringify([
+        { dayId: "2026-03-01", rideType: "GO", payMethod: "乗込GO Pay", cash: 400, credit: 0 }
+      ]),
+      tsms_reports_archive: JSON.stringify([]),
+      ops_archive_v1: JSON.stringify({
+        "2026-03-01": {
+          dayId: "2026-03-01",
+          departAt: "2026-03-01T09:00:00+09:00",
+          returnAt: "2026-03-01T10:00:00+09:00",
+          breakSessions: []
+        }
+      }),
+      tsms_sales_plan: JSON.stringify({
+        "2026-03-01": { shift: "work", target: "0" }
+      }),
+      tsms_sales_manual_v1: JSON.stringify({}),
+      tsms_settings: JSON.stringify({
+        taxRate: 10,
+        feeRate: 4,
+        goFeeYen: 100,
+        walkRate: 50,
+        closeStartDay: 16,
+        closeEndDay: 15
+      })
+    }
+  });
+
+  assert.strictEqual(rendered.sumResult, "136");
+}
+
 function testFormulaGuards() {
   const html = fs.readFileSync(SALES_HTML, "utf8");
   const requiredSnippets = [
@@ -358,6 +392,7 @@ function testFormulaGuards() {
     "const manualBoundMin=parseHmToMin(manualRow.bound);",
     "const showReturn=hasManualReturn?manualRow.return:(opsData?opsData.return:'--');",
     "const derivedBoundMin=calcSpanMin(showDepart, showReturn);",
+    "if(ride==='GO' && !['GO pay','GO Pay'].includes(pay)) goFeeCases += 1;",
     "const salesInTax = gross - fee - goFee;",
     "const salesExTax = salesInTax / (1 + taxRate);",
     "return Math.round(salesExTax * (Number(settings.walkRate)||0) / 100);"
@@ -372,6 +407,7 @@ async function runTests() {
     ["月次集計（目標あり）", testMonthlySummaryWithTargets],
     ["手動入力の上書き反映", testManualOverridesAffectSummary],
     ["手動編集列の追加", testManualModeIncludesReturnAndBoundInputs],
+    ["乗込GO Pay の GO手配料", testNorikomiGoPayStillCountsGoFee],
     ["計算式・保存キーガード", testFormulaGuards]
   ];
 
