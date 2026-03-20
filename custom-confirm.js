@@ -8,12 +8,12 @@
 
     var overlay = document.createElement("div");
     overlay.id = "tsmsConfirmOverlay";
-    overlay.className = "tsms-confirm-overlay";
+    overlay.className = "result-modal-bg tsms-confirm-overlay";
     overlay.setAttribute("aria-hidden", "true");
     overlay.innerHTML = '' +
-      '<div class="tsms-confirm-card" id="tsmsConfirmCard" role="dialog" aria-modal="true" aria-labelledby="tsmsConfirmTitle">' +
+      '<div class="result-modal-card tsms-confirm-card" id="tsmsConfirmCard" role="dialog" aria-modal="true" aria-labelledby="tsmsConfirmTitle">' +
       '  <p class="tsms-confirm-title" id="tsmsConfirmTitle"></p>' +
-      '  <div class="tsms-confirm-actions" id="tsmsConfirmActions">' +
+      '  <div class="result-modal-actions tsms-confirm-actions" id="tsmsConfirmActions">' +
       '    <button class="btn" type="button" id="tsmsConfirmNoBtn">いいえ</button>' +
       '    <button class="btn next" type="button" id="tsmsConfirmYesBtn">はい</button>' +
       '  </div>' +
