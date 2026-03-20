@@ -11,6 +11,9 @@ function read(name) {
 function testCustomConfirmSupportsAlertMode() {
   const js = read("custom-confirm.js");
   assert.match(js, /window\.tsmsAlert = function\(message, options\)/);
+  assert.match(js, /overlay\.className = "result-modal-bg tsms-confirm-overlay";/);
+  assert.match(js, /<div class="result-modal-card tsms-confirm-card" id="tsmsConfirmCard"/);
+  assert.match(js, /<div class="result-modal-actions tsms-confirm-actions" id="tsmsConfirmActions">/);
   assert.match(js, /noBtn\.hidden = mode === "alert";/);
   assert.match(js, /mode === "alert" \? "閉じる" : "はい"/);
   assert.match(js, /card\.dataset\.mode = mode;/);
@@ -18,6 +21,8 @@ function testCustomConfirmSupportsAlertMode() {
 
 function testAlertModalStylesExist() {
   const css = read("tsms-design.css");
+  assert.match(css, /\.tsms-confirm-overlay \{[\s\S]*z-index: var\(--z-confirm\);/);
+  assert.match(css, /\.tsms-confirm-card \{[\s\S]*width: min\(480px, 100%\);[\s\S]*text-align: left;/);
   assert.match(css, /\.tsms-confirm-title \{[\s\S]*white-space: pre-line;/);
   assert.match(css, /\.tsms-confirm-card\[data-mode="alert"\] \{/);
   assert.match(css, /\.tsms-confirm-card\[data-mode="alert"\] \.tsms-confirm-actions \{/);

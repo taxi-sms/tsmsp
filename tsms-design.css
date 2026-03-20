@@ -1974,30 +1974,12 @@ select.input {
    17. Custom Confirm Modal
    ============================================================ */
 .tsms-confirm-overlay {
-  position: fixed !important;
-  inset: 0;
   z-index: var(--z-confirm);
-  background: rgba(10, 15, 20, 0.5) !important;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-}
-.tsms-confirm-overlay.show {
-  display: flex;
-  animation: fadeIn 0.15s ease;
 }
 
 .tsms-confirm-card {
   width: min(480px, 100%);
-  background: var(--surface-1) !important;
-  border: var(--line-regular) solid var(--border) !important;
-  border-radius: var(--radius-lg);
-  padding: 20px 18px 16px;
-  box-shadow: var(--shadow-overlay);
-  animation: slideUp 0.2s cubic-bezier(0.34, 1.4, 0.64, 1);
+  text-align: left;
 }
 
 .tsms-confirm-title {
