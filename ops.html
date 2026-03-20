@@ -140,6 +140,7 @@ const REPORT_ARCHIVE_KEY = "tsms_reports_archive";
 const CURRENT_DAY_KEY = "tsms_report_current_day";
 const CONFIRM_FORCE_EMPTY_KEY = "tsms_confirm_force_empty";
 const TEST_REPORT_KEY = "tsms_test_reports_v1";
+const WORKING_MUTATION_AT_KEY = "tsms_working_last_mutation_at";
 
 function nowISO(){ return new Date().toISOString(); }
 function localYmd(){
@@ -234,6 +235,97 @@ function saveOpsArchive(archive){
   try{
     localStorage.setItem(OPS_ARCHIVE_KEY, JSON.stringify(archive || {}));
   }catch(e){}
+}
+
+function hasMeaningfulOpsState(data){
+  return !!(
+    data &&
+    (data.departAt || data.returnAt || data.breakActive || (Array.isArray(data.breakSessions) && data.breakSessions.length))
+  );
+}
+
+function buildResetCloseState(){
+  const captureStateForBackup = (window.tsmsCloud && typeof window.tsmsCloud.captureStateForBackup === "function")
+    ? window.tsmsCloud.captureStateForBackup
+    : null;
+  if(!captureStateForBackup){
+    throw new Error("cloud_state_capture_unavailable");
+  }
+
+  const baseState = captureStateForBackup() || {};
+  const baseSafePayload = (baseState.safePayload && typeof baseState.safePayload === "object") ? baseState.safePayload : {};
+  const baseWorkingPayload = (baseState.workingPayload && typeof baseState.workingPayload === "object") ? baseState.workingPayload : {};
+  const opsData = load();
+  const currentDayId = String((opsData && opsData.dayId) || "").trim() || localStorage.getItem(CURRENT_DAY_KEY) || localYmd();
+  const syncStamp = nowISO();
+  const activeRows = JSON.parse(localStorage.getItem(REPORT_KEY) || "[]");
+  const archiveRows = JSON.parse(localStorage.getItem(REPORT_ARCHIVE_KEY) || "[]");
+  const nextOpsArchive = loadOpsArchive();
+  const todayRows = (Array.isArray(activeRows) ? activeRows : []).filter((r)=> String((r && r.dayId) || "") === String(currentDayId));
+  const remainRows = (Array.isArray(activeRows) ? activeRows : []).filter((r)=> String((r && r.dayId) || "") !== String(currentDayId));
+  const byId = new Map();
+
+  (Array.isArray(archiveRows) ? archiveRows : []).forEach((r)=>{
+    if(r && r.id) byId.set(String(r.id), r);
+  });
+  todayRows.forEach((r)=>{
+    if(r && r.id) byId.set(String(r.id), r);
+  });
+
+  if(hasMeaningfulOpsState(opsData)){
+    nextOpsArchive[String(currentDayId)] = Object.assign({}, opsData, {
+      dayId: String(currentDayId),
+      shiftClosed: true,
+      updatedAt: syncStamp
+    });
+  }
+
+  const nextArchiveRows = Array.from(byId.values());
+  const syncPayloads = {
+    safePayload: Object.assign({}, baseSafePayload, {
+      [REPORT_ARCHIVE_KEY]: JSON.stringify(nextArchiveRows),
+      [OPS_ARCHIVE_KEY]: JSON.stringify(nextOpsArchive)
+    }),
+    workingPayload: Object.assign({}, baseWorkingPayload, {
+      [REPORT_KEY]: JSON.stringify(remainRows),
+      [CONFIRM_FORCE_EMPTY_KEY]: "1",
+      [OPS_SYNC_REV_KEY]: syncStamp,
+      [WORKING_MUTATION_AT_KEY]: syncStamp
+    })
+  };
+
+  delete syncPayloads.workingPayload[KEY];
+  delete syncPayloads.workingPayload[CURRENT_DAY_KEY];
+
+  return {
+    syncStamp,
+    remainRows,
+    nextArchiveRows,
+    nextOpsArchive,
+    syncPayloads
+  };
+}
+
+function commitResetCloseState(closeState){
+  if(!closeState) return;
+  if(window.tsmsCloud && typeof window.tsmsCloud.setSyncPaused === "function"){
+    window.tsmsCloud.setSyncPaused(true);
+  }
+  try{
+    localStorage.removeItem(KEY);
+    localStorage.removeItem(CURRENT_DAY_KEY);
+    localStorage.setItem(CONFIRM_FORCE_EMPTY_KEY, "1");
+    markOpsSyncRevision(closeState.syncStamp);
+    localStorage.setItem(WORKING_MUTATION_AT_KEY, closeState.syncStamp);
+    localStorage.setItem(REPORT_KEY, JSON.stringify(Array.isArray(closeState.remainRows) ? closeState.remainRows : []));
+    localStorage.setItem(REPORT_ARCHIVE_KEY, JSON.stringify(Array.isArray(closeState.nextArchiveRows) ? closeState.nextArchiveRows : []));
+    saveOpsArchive(closeState.nextOpsArchive || {});
+    render();
+  } finally {
+    if(window.tsmsCloud && typeof window.tsmsCloud.setSyncPaused === "function"){
+      window.tsmsCloud.setSyncPaused(false);
+    }
+  }
 }
 
 function calcBreakTotal(d){
@@ -491,63 +583,30 @@ btnReset.onclick = async ()=>{
   if(!(await window.tsmsConfirm("この日の記録をクラウドへ保存してからクリアします。よろしいですか？"))) return;
 
   btnReset.disabled = true;
-  const backupNow = (window.tsmsCloud && typeof window.tsmsCloud.backupNow === "function")
-    ? window.tsmsCloud.backupNow
+  const syncStateNow = (window.tsmsCloud && typeof window.tsmsCloud.syncStateNow === "function")
+    ? window.tsmsCloud.syncStateNow
     : null;
   let shouldLogoutAfterClear = false;
+  let cloudSynced = false;
   try{
-    if(!backupNow){
-      throw new Error("cloud_backup_unavailable");
+    if(!syncStateNow){
+      throw new Error("cloud_sync_unavailable");
     }
-    await backupNow();
-
-    if(window.tsmsCloud && typeof window.tsmsCloud.setSyncPaused === "function") {
-      window.tsmsCloud.setSyncPaused(true);
-    }
-    try{
-      const opsData = load();
-      const currentDayId = String((opsData && opsData.dayId) || "").trim() || localStorage.getItem(CURRENT_DAY_KEY) || localYmd();
-      const syncStamp = nowISO();
-      const activeRows = JSON.parse(localStorage.getItem(REPORT_KEY) || "[]");
-      const archiveRows = JSON.parse(localStorage.getItem(REPORT_ARCHIVE_KEY) || "[]");
-
-      const todayRows = (Array.isArray(activeRows) ? activeRows : []).filter((r)=> String((r && r.dayId) || "") === String(currentDayId));
-      const remainRows = (Array.isArray(activeRows) ? activeRows : []).filter((r)=> String((r && r.dayId) || "") !== String(currentDayId));
-
-      const byId = new Map();
-      (Array.isArray(archiveRows) ? archiveRows : []).forEach((r)=>{ if(r && r.id) byId.set(String(r.id), r); });
-      todayRows.forEach((r)=>{ if(r && r.id) byId.set(String(r.id), r); });
-
-      if(opsData && (opsData.departAt || opsData.returnAt || (Array.isArray(opsData.breakSessions) && opsData.breakSessions.length))){
-        const archive = loadOpsArchive();
-        archive[String(currentDayId)] = Object.assign({}, opsData, {
-          dayId: String(currentDayId),
-          shiftClosed: true,
-          updatedAt: syncStamp
-        });
-        saveOpsArchive(archive);
-      }
-
-      localStorage.removeItem(KEY);
-      localStorage.removeItem(CURRENT_DAY_KEY);
-      localStorage.setItem(CONFIRM_FORCE_EMPTY_KEY, "1");
-      markOpsSyncRevision(syncStamp);
-      localStorage.setItem(REPORT_KEY, JSON.stringify(remainRows));
-      localStorage.setItem(REPORT_ARCHIVE_KEY, JSON.stringify(Array.from(byId.values())));
-      render();
-      shouldLogoutAfterClear = true;
-    } finally {
-      if(window.tsmsCloud && typeof window.tsmsCloud.setSyncPaused === "function") {
-        window.tsmsCloud.setSyncPaused(false);
-      }
-    }
-
-    await backupNow();
+    const closeState = buildResetCloseState();
+    await syncStateNow(closeState.syncPayloads);
+    cloudSynced = true;
+    commitResetCloseState(closeState);
+    shouldLogoutAfterClear = true;
     renderCloudSyncStatus();
     await showResultModal("締め作業が完了しました", true);
   }catch(e){
     renderCloudSyncStatus();
-    await showResultModal("バックアップに失敗しました。もう一度実行してください。", false);
+    const errorMessage = cloudSynced
+      ? "クラウド保存は完了しましたが、端末側の締め反映に失敗しました。再読み込み後に状態を確認してください。"
+      : "クラウド同期に失敗したため、締め処理は実行していません。ネットワークやログイン状態を確認して再度お試しください。";
+    await showResultModal(errorMessage, false);
+  } finally {
+    btnReset.disabled = false;
   }
 
   if(shouldLogoutAfterClear && window.tsmsCloud && typeof window.tsmsCloud.logout === "function"){

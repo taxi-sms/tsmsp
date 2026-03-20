@@ -1,6 +1,8 @@
 import { loadConfig, supabase } from "./supabase-client.js";
 import {
+  captureCloudBackupState,
   clearSyncedLocalState,
+  cloudBackupState,
   ensureCloudSyncRuntime,
   getLastSyncedUserId,
   hydrateCloudState,
@@ -320,6 +322,9 @@ async function guard() {
       window.tsmsCloud = {
         backupNow: () => requestCloudBackup({ immediate: true }),
         backupDebounced: () => requestCloudBackup({ immediate: false }),
+        backupNowStrict: () => cloudBackupState(),
+        captureStateForBackup: () => captureCloudBackupState(),
+        syncStateNow: ({ safePayload = null, workingPayload = null } = {}) => cloudBackupState({ safePayload, workingPayload }),
         setSyncPaused: (paused) => setCloudSyncPaused(paused),
         logout: async () => { await supabase.auth.signOut(); redirectToLogin(); },
         safeLogoutWithBackup: async () => {
@@ -344,6 +349,9 @@ async function guard() {
     window.tsmsCloud = {
       backupNow: () => requestCloudBackup({ immediate: true }),
       backupDebounced: () => requestCloudBackup({ immediate: false }),
+      backupNowStrict: () => cloudBackupState(),
+      captureStateForBackup: () => captureCloudBackupState(),
+      syncStateNow: ({ safePayload = null, workingPayload = null } = {}) => cloudBackupState({ safePayload, workingPayload }),
       setSyncPaused: (paused) => setCloudSyncPaused(paused),
       logout: async () => {
         await supabase.auth.signOut();

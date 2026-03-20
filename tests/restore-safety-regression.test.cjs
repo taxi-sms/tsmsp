@@ -163,7 +163,7 @@ function loadCloudStoreModule(initialRows = {}) {
     .replace(/^import .*;\n/gm, "")
     .replace(/export async function /g, "async function ")
     .replace(/export function /g, "function ");
-  const wrapped = `${source}\nmodule.exports = { cloudBackup, cloudRestore, cloudRestoreWorkingState, hydrateCloudState, restoreLocalStorage };`;
+  const wrapped = `${source}\nmodule.exports = { captureCloudBackupState, cloudBackup, cloudBackupState, cloudRestore, cloudRestoreWorkingState, hydrateCloudState, restoreLocalStorage };`;
 
   const localStorage = new StorageMock();
   const supabase = createSupabaseMock(initialRows);
@@ -312,6 +312,57 @@ async function testCloudBackupAllowsNewerEmptyWorkingAfterClear() {
   assert.strictEqual(working.tsms_confirm_force_empty, "1");
 }
 
+async function testCloudBackupStateSyncsPreparedCloseSnapshots() {
+  const { cloudBackupState, localStorage, supabase } = loadCloudStoreModule({
+    localStorage_dump_v1: {
+      tsms_reports_archive: JSON.stringify([{ id: "a1" }]),
+      ops_archive_v1: JSON.stringify({}),
+      tsms_settings: "{\"taxRate\":8}",
+      tsms_theme: "dark"
+    },
+    localStorage_working_v1: {
+      tsms_reports: JSON.stringify([{ id: "r1" }]),
+      ops: JSON.stringify({ dayId: "2026-03-15", departAt: "2026-03-15T00:00:00Z" }),
+      tsms_report_current_day: "2026-03-15",
+      tsms_working_last_mutation_at: "2026-03-15T00:00:00.000Z"
+    }
+  });
+
+  const res = await cloudBackupState({
+    safePayload: {
+      tsms_reports_archive: JSON.stringify([{ id: "a1" }, { id: "r1" }]),
+      ops_archive_v1: JSON.stringify({
+        "2026-03-15": { dayId: "2026-03-15", shiftClosed: true }
+      }),
+      tsms_settings: "{\"taxRate\":8}",
+      tsms_theme: "dark",
+      ignored_key: "should_not_sync"
+    },
+    workingPayload: {
+      tsms_reports: "[]",
+      tsms_confirm_force_empty: "1",
+      ops_sync_rev_v1: "2026-03-15T00:10:00.000Z",
+      tsms_working_last_mutation_at: "2026-03-15T00:10:00.000Z",
+      ignored_working_key: "should_not_sync"
+    }
+  });
+
+  const safe = supabase._store.get("localStorage_dump_v1").value;
+  const working = supabase._store.get("localStorage_working_v1").value;
+
+  assert.strictEqual(res.archiveCount, 2);
+  assert.strictEqual(res.workingReportCount, 0);
+  assert.strictEqual(localStorage.getItem("tsms_cloud_last_success_at") !== null, true);
+  assert.strictEqual(safe.tsms_reports_archive, JSON.stringify([{ id: "a1" }, { id: "r1" }]));
+  assert.strictEqual(safe.ignored_key, undefined);
+  assert.strictEqual(working.tsms_reports, "[]");
+  assert.strictEqual(working.tsms_confirm_force_empty, "1");
+  assert.strictEqual(working.ops_sync_rev_v1, "2026-03-15T00:10:00.000Z");
+  assert.strictEqual(working.ops, undefined);
+  assert.strictEqual(working.tsms_report_current_day, undefined);
+  assert.strictEqual(working.ignored_working_key, undefined);
+}
+
 async function testCloudRestorePreservesWorkingState() {
   const { cloudRestore, localStorage } = loadCloudStoreModule({
     localStorage_dump_v1: {
@@ -442,6 +493,7 @@ async function runTests() {
     ["クラウド保存の safe 上書きガード", testCloudBackupBlocksOlderSafeSnapshot],
     ["クラウド保存の empty working 上書きガード", testCloudBackupBlocksEmptyWorkingOverwrite],
     ["締め直後の空 working 保存許可", testCloudBackupAllowsNewerEmptyWorkingAfterClear],
+    ["締め用 prepared snapshot の厳密同期", testCloudBackupStateSyncsPreparedCloseSnapshots],
     ["クラウド復元の作業中データ保護", testCloudRestorePreservesWorkingState],
     ["専用引き継ぎで current 復元", testCloudRestoreWorkingStateLoadsDedicatedSnapshot],
     ["自動 hydration の作業中データ保護", testHydrateCloudStateSkipsWorkingStateByDefault],

@@ -239,6 +239,44 @@ function dumpSelectedKeys(keys) {
   return obj;
 }
 
+function filterPayloadByKeys(payload, allowedKeys = []) {
+  const result = {};
+  const allowed = new Set(Array.isArray(allowedKeys) ? allowedKeys.map((key) => String(key)) : []);
+  Object.entries(payload || {}).forEach(([key, value]) => {
+    const normalizedKey = String(key || "");
+    if (!allowed.has(normalizedKey) || value == null) return;
+    result[normalizedKey] = String(value);
+  });
+  return result;
+}
+
+function filterPayloadByPrefix(payload, prefix = "") {
+  const result = {};
+  Object.entries(payload || {}).forEach(([key, value]) => {
+    const normalizedKey = String(key || "");
+    if (!normalizedKey || !normalizedKey.startsWith(prefix) || value == null) return;
+    result[normalizedKey] = String(value);
+  });
+  return result;
+}
+
+function buildBackupPayloads({ prefix = "", safePayload = null, workingPayload = null } = {}) {
+  if (prefix) {
+    return {
+      safePayload: safePayload ? filterPayloadByPrefix(safePayload, prefix) : dumpLocalStorage(prefix),
+      workingPayload: {}
+    };
+  }
+  return {
+    safePayload: safePayload ? filterPayloadByKeys(safePayload, SAFE_SNAPSHOT_KEYS) : dumpSelectedKeys(SAFE_SNAPSHOT_KEYS),
+    workingPayload: workingPayload ? filterPayloadByKeys(workingPayload, WORKING_STATE_KEYS) : dumpSelectedKeys(WORKING_STATE_KEYS)
+  };
+}
+
+export function captureCloudBackupState(prefix = "") {
+  return buildBackupPayloads({ prefix });
+}
+
 export function restoreLocalStorage(obj, prefix = "", options = {}) {
   const preserveKeys = new Set(Array.isArray(options.preserveKeys) ? options.preserveKeys : []);
   const shouldClearExisting = options.clearExisting !== false;
@@ -331,18 +369,19 @@ async function assertCloudOverwriteAllowed({ safePayload, workingPayload }) {
   }
 }
 
-export async function cloudBackup(prefix = "") {
+async function performCloudBackup({ prefix = "", safePayload = null, workingPayload = null } = {}) {
   try {
-    const payload = prefix ? dumpLocalStorage(prefix) : dumpSelectedKeys(SAFE_SNAPSHOT_KEYS);
-    const workingPayload = prefix ? {} : dumpSelectedKeys(WORKING_STATE_KEYS);
+    const payloads = buildBackupPayloads({ prefix, safePayload, workingPayload });
+    const payload = payloads.safePayload;
+    const currentWorkingPayload = payloads.workingPayload;
     const summary = summarizePayload(payload);
-    const workingSummary = summarizePayload(workingPayload);
+    const workingSummary = summarizePayload(currentWorkingPayload);
     const userId = await getCurrentUserId();
     if (!prefix) {
-      await assertCloudOverwriteAllowed({ safePayload: payload, workingPayload });
+      await assertCloudOverwriteAllowed({ safePayload: payload, workingPayload: currentWorkingPayload });
     }
     const snapshot = await upsertCloudSnapshot(CLOUD_KEY, payload);
-    const workingSnapshot = prefix ? { updatedAt: "", historyKey: "" } : await upsertCloudSnapshot(CLOUD_WORKING_KEY, workingPayload);
+    const workingSnapshot = prefix ? { updatedAt: "", historyKey: "" } : await upsertCloudSnapshot(CLOUD_WORKING_KEY, currentWorkingPayload);
     const updatedAt = snapshot.updatedAt || workingSnapshot.updatedAt || new Date().toISOString();
     markSyncSuccess(updatedAt);
 
@@ -366,6 +405,14 @@ export async function cloudBackup(prefix = "") {
     markSyncFailure(error);
     throw error;
   }
+}
+
+export async function cloudBackup(prefix = "") {
+  return performCloudBackup({ prefix });
+}
+
+export async function cloudBackupState({ safePayload = null, workingPayload = null } = {}) {
+  return performCloudBackup({ safePayload, workingPayload });
 }
 
 export async function cloudRestore(prefix = "", options = {}) {
