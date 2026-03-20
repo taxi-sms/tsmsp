@@ -3424,26 +3424,30 @@ select,
   line-height: 1.15;
 }
 
-:where(.confirm-page) .confirm-summary-modal-card {
+:where(.confirm-page) .confirm-summary-modal-card,
+:where(.report-entry-page) .report-submit-confirm-modal-card {
   width: min(460px, 100%);
   padding: 20px 18px;
   text-align: left;
 }
 
-:where(.confirm-page) .confirm-summary-modal-head {
+:where(.confirm-page) .confirm-summary-modal-head,
+:where(.report-entry-page) .report-submit-confirm-modal-head {
   display: grid;
   gap: 4px;
   margin-bottom: var(--space-2);
 }
 
-:where(.confirm-page) .confirm-summary-modal-title {
+:where(.confirm-page) .confirm-summary-modal-title,
+:where(.report-entry-page) .report-submit-confirm-modal-card .confirm-summary-modal-title {
   margin: 0;
   font-size: var(--font-3xl);
   font-weight: 900;
   color: var(--text-primary);
 }
 
-:where(.confirm-page) .confirm-summary-modal-subtitle {
+:where(.confirm-page) .confirm-summary-modal-subtitle,
+:where(.report-entry-page) .report-submit-confirm-modal-card .confirm-summary-modal-subtitle {
   margin: 0;
   font-size: var(--font-md);
   font-weight: 700;
@@ -3457,22 +3461,41 @@ select,
   color: var(--value-highlight);
 }
 
-:where(.confirm-page) .confirm-summary-modal-list {
+:where(.confirm-page) .confirm-summary-modal-list,
+:where(.report-entry-page) .report-submit-confirm-modal-list {
   display: grid;
   gap: 0;
 }
 
-:where(.confirm-page) .confirm-summary-modal-list .line {
+:where(.confirm-page) .confirm-summary-modal-list .line,
+:where(.report-entry-page) .report-submit-confirm-modal-list .line {
   align-items: flex-start;
 }
 
-:where(.confirm-page) .confirm-summary-modal-list .v {
+:where(.confirm-page) .confirm-summary-modal-list .v,
+:where(.report-entry-page) .report-submit-confirm-modal-list .v {
   white-space: nowrap;
 }
 
-:where(.confirm-page) .confirm-summary-modal-list .v .value-number.emphasis {
+:where(.confirm-page) .confirm-summary-modal-list .v .value-number.emphasis,
+:where(.report-entry-page) .report-submit-confirm-modal-list .v .value-number.emphasis {
   font-size: calc(var(--font-2xl) + 8px);
   line-height: 1;
+}
+
+:where(.report-entry-page) .report-submit-confirm-modal-list .v {
+  white-space: normal;
+}
+
+:where(.report-entry-page) .report-submit-confirm-modal-actions {
+  margin-top: var(--space-2);
+}
+
+:where(.report-entry-page) .report-submit-confirm-modal-actions .btn {
+  min-height: 58px;
+  border-radius: 10px;
+  font-size: 21px;
+  font-weight: 900;
 }
 
 :where(.detail-page) .main .section {

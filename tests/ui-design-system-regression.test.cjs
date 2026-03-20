@@ -80,9 +80,14 @@ function testPageWidthModifiersExist() {
   assert.match(css, /:where\(\.confirm-page\) \.actions\.entry-actions \.actionBtn \{[\s\S]*min-height: 32px;[\s\S]*padding: 6px 10px;[\s\S]*font-size: var\(--font-md\);/);
   assert.match(read("confirm.html"), /id="confirmSummaryModalBg"/);
   assert.match(read("confirm.html"), /id="confirmSummaryModalCountdown"/);
-  assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-card \{/);
+  assert.match(read("report.html"), /id="submitConfirmModalBg"/);
+  assert.match(read("report.html"), /class="result-modal-card confirm-summary-modal-card report-submit-confirm-modal-card"/);
+  assert.match(read("report.html"), /class="confirm-summary-modal-list report-submit-confirm-modal-list"/);
+  assert.doesNotMatch(read("report.html"), /submit-confirm-modal-step/);
+  assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-card,\s*:where\(\.report-entry-page\) \.report-submit-confirm-modal-card \{/);
   assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-countdown \{/);
-  assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-list \.v \.value-number\.emphasis \{/);
+  assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-list \.v \.value-number\.emphasis,\s*:where\(\.report-entry-page\) \.report-submit-confirm-modal-list \.v \.value-number\.emphasis \{/);
+  assert.match(css, /:where\(\.report-entry-page\) \.report-submit-confirm-modal-actions \.btn \{/);
   assert.match(css, /:where\(\.report-entry-page\),[\s\S]*--legacy-page-border: #999;/);
   assert.match(css, /body:where\(\.report-entry-page\),[\s\S]*background: var\(--bg\);[\s\S]*color: var\(--text-primary\);/);
 }

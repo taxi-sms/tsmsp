@@ -122,22 +122,22 @@
   </section>
 </main>
 
-<div class="confirm-modal-bg" id="submitConfirmModalBg" aria-hidden="true">
-  <div class="confirm-modal-card submit-confirm-modal-card" role="dialog" aria-modal="true" aria-labelledby="submitConfirmTitle">
-    <div class="submit-confirm-modal-head">
-      <p class="confirm-modal-title" id="submitConfirmTitle">この内容で登録しますか？</p>
-      <p class="submit-confirm-modal-step">8/8</p>
+<div class="result-modal-bg" id="submitConfirmModalBg" aria-hidden="true">
+  <div class="result-modal-card confirm-summary-modal-card report-submit-confirm-modal-card" role="dialog" aria-modal="true" aria-labelledby="submitConfirmTitle">
+    <div class="confirm-summary-modal-head report-submit-confirm-modal-head">
+      <p class="confirm-summary-modal-title" id="submitConfirmTitle">今回の入力内容</p>
+      <p class="confirm-summary-modal-subtitle" id="submitConfirmModalSubtitle">この内容で登録しますか？</p>
     </div>
-    <div class="confirm-modal-list">
-      <div class="confirm-modal-item"><span class="confirm-modal-key">乗車種別</span><span id="confirmRideType">-</span></div>
-      <div class="confirm-modal-item"><span class="confirm-modal-key">支払方法</span><span id="confirmPayMethod">-</span></div>
-      <div class="confirm-modal-item"><span class="confirm-modal-key">チケット種別</span><span id="confirmTicketSub">-</span></div>
-      <div class="confirm-modal-item"><span class="confirm-modal-key">現収</span><span id="confirmCash">0</span></div>
-      <div class="confirm-modal-item"><span class="confirm-modal-key">未収</span><span id="confirmCredit">0</span></div>
-      <div class="confirm-modal-item"><span class="confirm-modal-key">障害割引</span><span id="confirmDiscount">なし</span></div>
-      <div class="confirm-modal-item"><span class="confirm-modal-key">備考</span><span id="confirmNote">-</span></div>
+    <div class="confirm-summary-modal-list report-submit-confirm-modal-list">
+      <div class="line"><div class="k">乗車種別</div><div class="v" id="confirmRideType">-</div></div>
+      <div class="line"><div class="k">支払方法</div><div class="v" id="confirmPayMethod">-</div></div>
+      <div class="line"><div class="k">チケット種別</div><div class="v" id="confirmTicketSub">-</div></div>
+      <div class="line"><div class="k">現収</div><div class="v" id="confirmCash">0</div></div>
+      <div class="line"><div class="k">未収</div><div class="v" id="confirmCredit">0</div></div>
+      <div class="line"><div class="k">障害割引</div><div class="v" id="confirmDiscount">なし</div></div>
+      <div class="line"><div class="k">備考</div><div class="v" id="confirmNote">-</div></div>
     </div>
-    <div class="confirm-modal-actions">
+    <div class="confirm-modal-actions report-submit-confirm-modal-actions">
       <button class="btn" type="button" id="confirmNoBtn">いいえ</button>
       <button class="btn next" type="button" id="confirmYesBtn">はい</button>
     </div>
