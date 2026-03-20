@@ -3487,6 +3487,34 @@ select,
   white-space: normal;
 }
 
+:where(.report-entry-page) .report-submit-confirm-modal-card {
+  border: var(--line-regular) solid var(--border) !important;
+  border-radius: var(--radius-lg);
+}
+
+:where(.report-entry-page) .report-submit-confirm-modal-card .confirm-summary-modal-title {
+  font-size: calc(var(--font-3xl) + 4px);
+  font-weight: 900;
+}
+
+:where(.report-entry-page) .report-submit-confirm-modal-card .confirm-summary-modal-subtitle {
+  font-size: calc(var(--font-md) + 3px);
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+:where(.report-entry-page) .report-submit-confirm-modal-list .k {
+  font-size: calc(var(--font-xl) + 3px);
+  font-weight: 800;
+  color: var(--text-primary) !important;
+}
+
+:where(.report-entry-page) .report-submit-confirm-modal-list .v {
+  font-size: calc(var(--font-2xl) + 3px);
+  font-weight: 900;
+  color: var(--text-primary);
+}
+
 :where(.report-entry-page) .report-submit-confirm-modal-actions {
   margin-top: var(--space-2);
 }

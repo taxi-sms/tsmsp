@@ -87,6 +87,9 @@ function testPageWidthModifiersExist() {
   assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-card,\s*:where\(\.report-entry-page\) \.report-submit-confirm-modal-card \{/);
   assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-countdown \{/);
   assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-list \.v \.value-number\.emphasis,\s*:where\(\.report-entry-page\) \.report-submit-confirm-modal-list \.v \.value-number\.emphasis \{/);
+  assert.match(css, /:where\(\.report-entry-page\) \.report-submit-confirm-modal-card \{[\s\S]*border: var\(--line-regular\) solid var\(--border\) !important;[\s\S]*border-radius: var\(--radius-lg\);/);
+  assert.match(css, /:where\(\.report-entry-page\) \.report-submit-confirm-modal-list \.k \{[\s\S]*font-size: calc\(var\(--font-xl\) \+ 3px\);[\s\S]*font-weight: 800;/);
+  assert.match(css, /:where\(\.report-entry-page\) \.report-submit-confirm-modal-list \.v \{[\s\S]*font-size: calc\(var\(--font-2xl\) \+ 3px\);[\s\S]*font-weight: 900;/);
   assert.match(css, /:where\(\.report-entry-page\) \.report-submit-confirm-modal-actions \.btn \{/);
   assert.match(css, /:where\(\.report-entry-page\),[\s\S]*--legacy-page-border: #999;/);
   assert.match(css, /body:where\(\.report-entry-page\),[\s\S]*background: var\(--bg\);[\s\S]*color: var\(--text-primary\);/);
