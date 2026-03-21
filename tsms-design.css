@@ -20,6 +20,8 @@
   --brand:        #58C2FF;
   --brand-dark:   #2580ED;
   --brand-dim:    rgba(88, 194, 255, 0.18);
+  --modal-shell-border: #58C2FF;
+  --modal-shell-shadow: 0 0 0 2px rgba(88, 194, 255, 0.16), 0 0 20px rgba(88, 194, 255, 0.20), 0 16px 48px rgba(0,0,0,.18);
 
   /* ── ライトモード (デフォルト) ── */
   --bg:           #F3F6F8;
@@ -790,11 +792,11 @@ body:where(.settings-report-legacy-page) {
 :where(.settings-report-legacy-page) .editor-modal-card {
   width: min(520px,100%);
   border-radius: 16px;
-  border: 1px solid #3d5f94;
+  border: var(--line-strong) solid var(--modal-shell-border);
   background:
     radial-gradient(120% 100% at 50% 0%, rgba(86,148,255,.18), rgba(10,21,44,0) 55%),
     linear-gradient(180deg, #0f1f42 0%, #0a1733 100%);
-  box-shadow: 0 10px 28px rgba(0,0,0,.45), 0 0 0 1px rgba(126,167,235,.22) inset;
+  box-shadow: var(--modal-shell-shadow), 0 0 0 1px rgba(126,167,235,.22) inset;
   padding: 12px;
 }
 
@@ -923,11 +925,11 @@ body:where(.settings-report-legacy-page) {
 }
 
 :root[data-theme="light"] :where(.settings-report-legacy-page) .editor-modal-card {
-  border-color: #9db9dd;
+  border-color: var(--modal-shell-border);
   background:
     radial-gradient(120% 100% at 50% 0%, rgba(76,134,230,.16), rgba(245,249,255,0) 60%),
     linear-gradient(180deg, #f5f9ff 0%, #ebf3ff 100%);
-  box-shadow: 0 8px 24px rgba(16,39,79,.16), 0 0 0 1px rgba(135,172,224,.32) inset;
+  box-shadow: var(--modal-shell-shadow), 0 0 0 1px rgba(135,172,224,.32) inset;
 }
 
 :root[data-theme="light"] :where(.settings-report-legacy-page) .settings-top-note {
@@ -1933,11 +1935,11 @@ select.input {
 .result-modal-card {
   width: min(360px, 100%);
   background: var(--surface-1) !important;
-  border: var(--line-regular) solid var(--border) !important;
+  border: var(--line-strong) solid var(--modal-shell-border) !important;
   border-radius: var(--radius-lg);
   padding: 24px 18px 18px;
   text-align: center;
-  box-shadow: var(--shadow-overlay);
+  box-shadow: var(--modal-shell-shadow);
   animation: slideUp 0.22s cubic-bezier(0.34, 1.4, 0.64, 1);
 }
 
@@ -3470,7 +3472,7 @@ select,
 }
 
 :where(.report-entry-page) .report-submit-confirm-modal-card {
-  border: var(--line-regular) solid var(--border) !important;
+  border: var(--line-strong) solid var(--modal-shell-border) !important;
   border-radius: var(--radius-lg);
 }
 
@@ -3528,8 +3530,9 @@ select,
 
 :where(.report-entry-page) .confirm-modal-card,
 :where(.report-entry-page) .result-modal-card {
-  border: var(--line-strong) solid var(--border);
+  border: var(--line-strong) solid var(--modal-shell-border);
   border-radius: var(--radius-md);
+  box-shadow: var(--modal-shell-shadow);
 }
 
 :where(.report-entry-page) .confirm-modal-title {
