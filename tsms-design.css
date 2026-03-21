@@ -3472,15 +3472,13 @@ select,
 }
 
 :where(.report-entry-page) .report-submit-confirm-modal-card {
-  --report-submit-modal-title-size: clamp(32px, 5.8vw, 44px);
-  --report-submit-modal-subtitle-size: clamp(24px, 4.4vw, 32px);
-  --report-submit-modal-label-size: clamp(26px, 4.8vw, 36px);
-  --report-submit-modal-value-size: clamp(28px, 5vw, 38px);
-  --report-submit-modal-button-size: clamp(30px, 5.5vw, 42px);
+  --report-submit-modal-title-size: clamp(38px, 8.6vw, 44px);
+  --report-submit-modal-subtitle-size: clamp(28px, 6.8vw, 32px);
+  --report-submit-modal-label-size: clamp(28px, 6.4vw, 36px);
+  --report-submit-modal-value-size: clamp(30px, 6.8vw, 38px);
+  --report-submit-modal-button-size: clamp(32px, 7.2vw, 42px);
   border: var(--line-strong) solid var(--modal-shell-border) !important;
   border-radius: var(--radius-lg);
-  width: min(720px, 100%);
-  padding: 28px 24px 24px;
 }
 
 :where(.report-entry-page) .report-submit-confirm-modal-card .confirm-summary-modal-title {
@@ -3496,19 +3494,7 @@ select,
   line-height: 1.25;
 }
 
-:where(.report-entry-page) .report-submit-confirm-modal-head {
-  gap: 10px;
-  margin-bottom: var(--space-4);
-}
-
-:where(.report-entry-page) .report-submit-confirm-modal-list .line {
-  gap: 18px;
-  padding: 18px 0;
-}
-
 :where(.report-entry-page) .report-submit-confirm-modal-list .k {
-  width: 220px;
-  max-width: 48%;
   font-size: var(--report-submit-modal-label-size);
   font-weight: 800;
   color: var(--text-primary) !important;
@@ -3523,29 +3509,14 @@ select,
 }
 
 :where(.report-entry-page) .report-submit-confirm-modal-actions {
-  margin-top: var(--space-4);
+  margin-top: var(--space-2);
 }
 
 :where(.report-entry-page) .report-submit-confirm-modal-actions .btn {
-  min-height: 92px;
+  min-height: 58px;
   border-radius: 10px;
   font-size: var(--report-submit-modal-button-size);
   font-weight: 900;
-}
-
-@media (max-width: 640px) {
-  :where(.report-entry-page) .report-submit-confirm-modal-list .line {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 8px;
-  }
-
-  :where(.report-entry-page) .report-submit-confirm-modal-list .k,
-  :where(.report-entry-page) .report-submit-confirm-modal-list .v {
-    width: 100%;
-    max-width: none;
-    text-align: left;
-  }
 }
 
 :where(.detail-page) .main .section {
