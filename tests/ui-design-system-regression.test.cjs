@@ -11,7 +11,7 @@ function read(name) {
 
 function testSharedShellRulesExist() {
   assert.match(css, /--modal-shell-border: #58C2FF;/);
-  assert.match(css, /--modal-shell-shadow: 0 0 0 2px rgba\(88, 194, 255, 0\.16\), 0 0 20px rgba\(88, 194, 255, 0\.20\), 0 16px 48px rgba\(0,0,0,\.18\);/);
+  assert.match(css, /--modal-shell-shadow: 0 0 20px rgba\(88, 194, 255, 0\.20\), 0 16px 48px rgba\(0,0,0,\.18\);/);
   assert.match(css, /\.page-block-unified \.main \{/);
   assert.match(css, /\.page-block-unified\.page-main-wide \.main \{ max-width: 1080px !important; \}/);
   assert.match(css, /\.page-block-unified\.page-main-xl \.main \{ max-width: 1220px !important; \}/);

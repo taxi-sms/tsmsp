@@ -21,7 +21,7 @@
   --brand-dark:   #2580ED;
   --brand-dim:    rgba(88, 194, 255, 0.18);
   --modal-shell-border: #58C2FF;
-  --modal-shell-shadow: 0 0 0 2px rgba(88, 194, 255, 0.16), 0 0 20px rgba(88, 194, 255, 0.20), 0 16px 48px rgba(0,0,0,.18);
+  --modal-shell-shadow: 0 0 20px rgba(88, 194, 255, 0.20), 0 16px 48px rgba(0,0,0,.18);
 
   /* ── ライトモード (デフォルト) ── */
   --bg:           #F3F6F8;
