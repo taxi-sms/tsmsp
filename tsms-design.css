@@ -3417,12 +3417,13 @@ select,
 }
 
 :where(.confirm-page) .confirm-summary-modal-card {
-  --confirm-summary-modal-title-size: calc(var(--font-3xl) * 1.5);
-  --confirm-summary-modal-subtitle-size: calc(var(--font-md) * 1.5);
-  --confirm-summary-modal-countdown-size: calc(var(--font-md) * 1.5);
-  --confirm-summary-modal-label-size: calc(var(--font-md) * 1.5);
-  --confirm-summary-modal-value-size: calc(var(--font-2xl) * 1.5);
-  --confirm-summary-modal-emphasis-size: calc(var(--font-2xl) * 1.5 + 12px);
+  --confirm-summary-modal-type-scale: 1.34;
+  --confirm-summary-modal-title-size: calc(var(--font-3xl) * var(--confirm-summary-modal-type-scale));
+  --confirm-summary-modal-subtitle-size: calc(var(--font-md) * var(--confirm-summary-modal-type-scale));
+  --confirm-summary-modal-countdown-size: calc(var(--font-md) * var(--confirm-summary-modal-type-scale));
+  --confirm-summary-modal-label-size: calc(var(--font-md) * var(--confirm-summary-modal-type-scale));
+  --confirm-summary-modal-value-size: calc(var(--font-2xl) * var(--confirm-summary-modal-type-scale));
+  --confirm-summary-modal-emphasis-size: calc(24px * var(--confirm-summary-modal-type-scale));
 }
 
 :where(.confirm-page) .confirm-summary-modal-head,
