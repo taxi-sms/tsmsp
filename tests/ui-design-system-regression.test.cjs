@@ -10,6 +10,8 @@ function read(name) {
 }
 
 function testSharedShellRulesExist() {
+  assert.match(css, /--modal-shell-border: #58C2FF;/);
+  assert.match(css, /--modal-shell-shadow: 0 0 0 2px rgba\(88, 194, 255, 0\.16\), 0 0 20px rgba\(88, 194, 255, 0\.20\), 0 16px 48px rgba\(0,0,0,\.18\);/);
   assert.match(css, /\.page-block-unified \.main \{/);
   assert.match(css, /\.page-block-unified\.page-main-wide \.main \{ max-width: 1080px !important; \}/);
   assert.match(css, /\.page-block-unified\.page-main-xl \.main \{ max-width: 1220px !important; \}/);
@@ -81,16 +83,20 @@ function testPageWidthModifiersExist() {
   assert.match(read("confirm.html"), /id="confirmSummaryModalBg"/);
   assert.match(read("confirm.html"), /id="confirmSummaryModalCountdown"/);
   assert.match(read("report.html"), /id="submitConfirmModalBg"/);
+  assert.match(read("index.html"), /\.modal\{\s*width:min\(560px,100%\);[\s\S]*border:2px solid var\(--modal-shell-border\);[\s\S]*box-shadow:var\(--modal-shell-shadow\);/);
   assert.match(read("report.html"), /class="result-modal-card confirm-summary-modal-card report-submit-confirm-modal-card"/);
   assert.match(read("report.html"), /class="confirm-summary-modal-list report-submit-confirm-modal-list"/);
   assert.doesNotMatch(read("report.html"), /submit-confirm-modal-step/);
   assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-card,\s*:where\(\.report-entry-page\) \.report-submit-confirm-modal-card \{/);
   assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-countdown \{/);
   assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-list \.v \.value-number\.emphasis,\s*:where\(\.report-entry-page\) \.report-submit-confirm-modal-list \.v \.value-number\.emphasis \{/);
-  assert.match(css, /:where\(\.report-entry-page\) \.report-submit-confirm-modal-card \{[\s\S]*border: var\(--line-regular\) solid var\(--border\) !important;[\s\S]*border-radius: var\(--radius-lg\);/);
+  assert.match(css, /:where\(\.report-entry-page\) \.report-submit-confirm-modal-card \{[\s\S]*border: var\(--line-strong\) solid var\(--modal-shell-border\) !important;[\s\S]*border-radius: var\(--radius-lg\);/);
   assert.match(css, /:where\(\.report-entry-page\) \.report-submit-confirm-modal-list \.k \{[\s\S]*font-size: calc\(var\(--font-xl\) \+ 3px\);[\s\S]*font-weight: 800;/);
   assert.match(css, /:where\(\.report-entry-page\) \.report-submit-confirm-modal-list \.v \{[\s\S]*font-size: calc\(var\(--font-2xl\) \+ 3px\);[\s\S]*font-weight: 900;/);
   assert.match(css, /:where\(\.report-entry-page\) \.report-submit-confirm-modal-actions \.btn \{/);
+  assert.match(css, /\.result-modal-card \{[\s\S]*border: var\(--line-strong\) solid var\(--modal-shell-border\) !important;[\s\S]*box-shadow: var\(--modal-shell-shadow\);/);
+  assert.match(css, /:where\(\.settings-report-legacy-page\) \.editor-modal-card \{[\s\S]*border: var\(--line-strong\) solid var\(--modal-shell-border\);[\s\S]*box-shadow: var\(--modal-shell-shadow\), 0 0 0 1px rgba\(126,167,235,\.22\) inset;/);
+  assert.match(css, /:where\(\.report-entry-page\) \.confirm-modal-card,\s*:where\(\.report-entry-page\) \.result-modal-card \{[\s\S]*border: var\(--line-strong\) solid var\(--modal-shell-border\);[\s\S]*box-shadow: var\(--modal-shell-shadow\);/);
   assert.match(css, /:where\(\.report-entry-page\),[\s\S]*--legacy-page-border: #999;/);
   assert.match(css, /body:where\(\.report-entry-page\),[\s\S]*background: var\(--bg\);[\s\S]*color: var\(--text-primary\);/);
 }
