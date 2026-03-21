@@ -3422,16 +3422,14 @@ select,
   margin-bottom: var(--space-2);
 }
 
-:where(.confirm-page) .confirm-summary-modal-title,
-:where(.report-entry-page) .report-submit-confirm-modal-card .confirm-summary-modal-title {
+:where(.confirm-page) .confirm-summary-modal-title {
   margin: 0;
   font-size: var(--font-3xl);
   font-weight: 900;
   color: var(--text-primary);
 }
 
-:where(.confirm-page) .confirm-summary-modal-subtitle,
-:where(.report-entry-page) .report-submit-confirm-modal-card .confirm-summary-modal-subtitle {
+:where(.confirm-page) .confirm-summary-modal-subtitle {
   margin: 0;
   font-size: var(--font-md);
   font-weight: 700;
@@ -3456,8 +3454,7 @@ select,
   align-items: flex-start;
 }
 
-:where(.confirm-page) .confirm-summary-modal-list .v,
-:where(.report-entry-page) .report-submit-confirm-modal-list .v {
+:where(.confirm-page) .confirm-summary-modal-list .v {
   white-space: nowrap;
 }
 
@@ -3467,45 +3464,48 @@ select,
   line-height: 1;
 }
 
-:where(.report-entry-page) .report-submit-confirm-modal-list .v {
-  white-space: normal;
-}
-
+/* Keep the report submit modal on the shared shell while isolating typography. */
 :where(.report-entry-page) .report-submit-confirm-modal-card {
-  --report-submit-modal-title-size: clamp(28px, 5.6vw, 32px);
-  --report-submit-modal-subtitle-size: clamp(20px, 4.4vw, 24px);
-  --report-submit-modal-label-size: clamp(22px, 4.8vw, 26px);
-  --report-submit-modal-value-size: clamp(24px, 5.2vw, 28px);
-  --report-submit-modal-button-size: clamp(24px, 5vw, 28px);
+  --report-submit-confirm-title-size: clamp(32px, 6.2vw, 36px);
+  --report-submit-confirm-subtitle-size: clamp(22px, 4.6vw, 24px);
+  --report-submit-confirm-label-size: clamp(24px, 5vw, 28px);
+  --report-submit-confirm-value-size: clamp(28px, 5.6vw, 32px);
+  --report-submit-confirm-button-size: clamp(28px, 5.4vw, 30px);
   border: var(--line-strong) solid var(--modal-shell-border) !important;
   border-radius: var(--radius-lg);
 }
 
-:where(.report-entry-page) .report-submit-confirm-modal-card .confirm-summary-modal-title {
-  font-size: var(--report-submit-modal-title-size);
+:where(.report-entry-page) .report-submit-confirm-modal-title {
+  margin: 0;
+  font-size: var(--report-submit-confirm-title-size);
   font-weight: 900;
+  color: var(--text-primary);
   line-height: 1.08;
 }
 
-:where(.report-entry-page) .report-submit-confirm-modal-card .confirm-summary-modal-subtitle {
-  font-size: var(--report-submit-modal-subtitle-size);
+:where(.report-entry-page) .report-submit-confirm-modal-subtitle {
+  margin: 0;
+  font-size: var(--report-submit-confirm-subtitle-size);
   font-weight: 800;
   color: var(--text-primary);
   line-height: 1.18;
 }
 
 :where(.report-entry-page) .report-submit-confirm-modal-list .k {
-  font-size: var(--report-submit-modal-label-size);
+  font-size: var(--report-submit-confirm-label-size) !important;
   font-weight: 800;
   color: var(--text-primary) !important;
   line-height: 1.2;
 }
 
 :where(.report-entry-page) .report-submit-confirm-modal-list .v {
-  font-size: var(--report-submit-modal-value-size);
+  font-size: var(--report-submit-confirm-value-size) !important;
   font-weight: 900;
   color: var(--text-primary);
-  line-height: 1.2;
+  white-space: normal;
+  word-break: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.2 !important;
 }
 
 :where(.report-entry-page) .report-submit-confirm-modal-actions {
@@ -3513,9 +3513,9 @@ select,
 }
 
 :where(.report-entry-page) .report-submit-confirm-modal-actions .btn {
-  min-height: 58px;
+  min-height: 58px !important;
   border-radius: 10px;
-  font-size: var(--report-submit-modal-button-size);
+  font-size: var(--report-submit-confirm-button-size) !important;
   font-weight: 900;
 }
 
