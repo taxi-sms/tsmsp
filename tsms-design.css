@@ -3416,6 +3416,15 @@ select,
   text-align: left;
 }
 
+:where(.confirm-page) .confirm-summary-modal-card {
+  --confirm-summary-modal-title-size: calc(var(--font-3xl) * 1.5);
+  --confirm-summary-modal-subtitle-size: calc(var(--font-md) * 1.5);
+  --confirm-summary-modal-countdown-size: calc(var(--font-md) * 1.5);
+  --confirm-summary-modal-label-size: calc(var(--font-md) * 1.5);
+  --confirm-summary-modal-value-size: calc(var(--font-2xl) * 1.5);
+  --confirm-summary-modal-emphasis-size: calc(var(--font-2xl) * 1.5 + 12px);
+}
+
 :where(.confirm-page) .confirm-summary-modal-head,
 :where(.report-entry-page) .report-submit-confirm-modal-head {
   display: grid;
@@ -3425,23 +3434,26 @@ select,
 
 :where(.confirm-page) .confirm-summary-modal-title {
   margin: 0;
-  font-size: var(--font-3xl);
+  font-size: var(--confirm-summary-modal-title-size);
   font-weight: 900;
   color: var(--text-primary);
+  line-height: 1.08;
 }
 
 :where(.confirm-page) .confirm-summary-modal-subtitle {
   margin: 0;
-  font-size: var(--font-md);
+  font-size: var(--confirm-summary-modal-subtitle-size);
   font-weight: 700;
   color: var(--text-muted);
+  line-height: 1.2;
 }
 
 :where(.confirm-page) .confirm-summary-modal-countdown {
   margin: 0;
-  font-size: var(--font-md);
+  font-size: var(--confirm-summary-modal-countdown-size);
   font-weight: 800;
   color: var(--value-highlight);
+  line-height: 1.15;
 }
 
 :where(.confirm-page) .confirm-summary-modal-list,
@@ -3456,13 +3468,29 @@ select,
 }
 
 :where(.confirm-page) .confirm-summary-modal-list .v {
-  white-space: nowrap;
+  font-size: var(--confirm-summary-modal-value-size) !important;
+  font-weight: 900;
+  line-height: 1.15 !important;
+  white-space: normal;
+  word-break: normal;
+  overflow-wrap: anywhere;
+}
+
+:where(.confirm-page) .confirm-summary-modal-list .k {
+  font-size: var(--confirm-summary-modal-label-size) !important;
+  font-weight: 800;
+  color: var(--text-muted) !important;
+  line-height: 1.2 !important;
 }
 
 :where(.confirm-page) .confirm-summary-modal-list .v .value-number.emphasis,
 :where(.report-entry-page) .report-submit-confirm-modal-list .v .value-number.emphasis {
   font-size: calc(var(--font-2xl) + 8px);
   line-height: 1;
+}
+
+:where(.confirm-page) .confirm-summary-modal-list .v .value-number.emphasis {
+  font-size: var(--confirm-summary-modal-emphasis-size);
 }
 
 /* Keep the report submit modal on the shared shell while isolating typography. */
