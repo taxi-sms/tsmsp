@@ -95,8 +95,15 @@ function testPageWidthModifiersExist() {
   assert.match(read("report.html"), /<div class="line"><div class="k">支払方法<\/div><div class="v value-highlight" id="confirmPayMethod">-<\/div><\/div>/);
   assert.doesNotMatch(read("report.html"), /submit-confirm-modal-step/);
   assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-card,\s*:where\(\.report-entry-page\) \.report-submit-confirm-modal-card \{/);
+  assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-card \{[\s\S]*--confirm-summary-modal-title-size: calc\(var\(--font-3xl\) \* 1\.5\);[\s\S]*--confirm-summary-modal-subtitle-size: calc\(var\(--font-md\) \* 1\.5\);[\s\S]*--confirm-summary-modal-countdown-size: calc\(var\(--font-md\) \* 1\.5\);[\s\S]*--confirm-summary-modal-label-size: calc\(var\(--font-md\) \* 1\.5\);[\s\S]*--confirm-summary-modal-value-size: calc\(var\(--font-2xl\) \* 1\.5\);[\s\S]*--confirm-summary-modal-emphasis-size: calc\(var\(--font-2xl\) \* 1\.5 \+ 12px\);/);
+  assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-title \{[\s\S]*font-size: var\(--confirm-summary-modal-title-size\);[\s\S]*line-height: 1\.08;/);
+  assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-subtitle \{[\s\S]*font-size: var\(--confirm-summary-modal-subtitle-size\);[\s\S]*line-height: 1\.2;/);
   assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-countdown \{/);
+  assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-countdown \{[\s\S]*font-size: var\(--confirm-summary-modal-countdown-size\);[\s\S]*line-height: 1\.15;/);
+  assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-list \.k \{[\s\S]*font-size: var\(--confirm-summary-modal-label-size\) !important;[\s\S]*font-weight: 800;[\s\S]*line-height: 1\.2 !important;/);
+  assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-list \.v \{[\s\S]*font-size: var\(--confirm-summary-modal-value-size\) !important;[\s\S]*font-weight: 900;[\s\S]*line-height: 1\.15 !important;[\s\S]*white-space: normal;[\s\S]*overflow-wrap: anywhere;/);
   assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-list \.v \.value-number\.emphasis,\s*:where\(\.report-entry-page\) \.report-submit-confirm-modal-list \.v \.value-number\.emphasis \{/);
+  assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-list \.v \.value-number\.emphasis \{[\s\S]*font-size: var\(--confirm-summary-modal-emphasis-size\);/);
   assert.doesNotMatch(css, /:where\(\.confirm-page\) \.confirm-summary-modal-title,\s*:where\(\.report-entry-page\) \.report-submit-confirm-modal-card \.confirm-summary-modal-title \{/);
   assert.doesNotMatch(css, /:where\(\.confirm-page\) \.confirm-summary-modal-subtitle,\s*:where\(\.report-entry-page\) \.report-submit-confirm-modal-card \.confirm-summary-modal-subtitle \{/);
   assert.doesNotMatch(css, /:where\(\.confirm-page\) \.confirm-summary-modal-list \.v,\s*:where\(\.report-entry-page\) \.report-submit-confirm-modal-list \.v \{/);
