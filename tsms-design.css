@@ -68,8 +68,14 @@
   --header-h: 60px;
 
   /* ── ボトムナビ高さ ── */
-  --bottom-nav-h: 58px;
+  --bottom-nav-h: 60px;
   --bottom-nav-safe-zone: 20px;
+  --bottom-nav-label-size: 16px;
+  --bottom-nav-icon-size: 29px;
+  --bottom-nav-item-gap: 1px;
+  --bottom-nav-item-pad-top: 6px;
+  --bottom-nav-item-pad-bottom: 7px;
+  --bottom-nav-active-glow: rgba(88, 194, 255, 0.56);
 
   /* ── 週カラー ── */
   --week-sat-bg:  #D8EEFF;
@@ -1299,22 +1305,32 @@ textarea {
   -webkit-appearance: none;
   border: 0 !important;
   background: transparent !important;
-  color: var(--text-muted) !important;
+  color: var(--text-disabled) !important;
   font: inherit;
-  font-size: var(--font-2xs);
-  font-weight: 700;
-  letter-spacing: 0.01em;
-  padding: 9px 2px 10px;
+  font-size: var(--bottom-nav-label-size);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  padding: var(--bottom-nav-item-pad-top) 0 var(--bottom-nav-item-pad-bottom);
   min-height: max(var(--bottom-nav-h), var(--touch-min));
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3px;
+  gap: var(--bottom-nav-item-gap);
   text-decoration: none;
-  transition: color var(--ease-default), background var(--ease-default);
+  transition: color var(--ease-default), background var(--ease-default), text-shadow var(--ease-default), box-shadow var(--ease-default);
   position: relative;
 }
+
+.tsms-bottom-nav a > span:last-child,
+.tsms-bottom-nav button > span:last-child {
+  display: block;
+  max-width: 100%;
+  white-space: nowrap;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
 .tsms-bottom-nav a:hover,
 .tsms-bottom-nav button:hover {
   color: var(--text-primary) !important;
@@ -1324,8 +1340,16 @@ textarea {
 
 /* アクティブタブ */
 .tsms-bottom-nav .active {
-  color: var(--text-primary) !important;
+  color: var(--brand) !important;
+  background:
+    linear-gradient(180deg, rgba(88, 194, 255, 0.22) 0%, rgba(88, 194, 255, 0) 72%) !important;
+  box-shadow: inset 0 10px 18px rgba(88, 194, 255, 0.12);
 }
+
+.tsms-bottom-nav .active > span:last-child {
+  text-shadow: 0 0 10px var(--bottom-nav-active-glow);
+}
+
 .tsms-bottom-nav .active::before {
   content: "";
   position: absolute;
@@ -1335,28 +1359,35 @@ textarea {
   height: 2.5px;
   background: var(--brand);
   border-radius: 0 0 3px 3px;
+  box-shadow: 0 0 10px var(--bottom-nav-active-glow);
 }
 
 /* アイコン */
 .tsms-bottom-nav .ico {
-  width: 22px;
-  height: 22px;
+  width: var(--bottom-nav-icon-size);
+  height: var(--bottom-nav-icon-size);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--brand) !important;
-  transition: transform var(--ease-spring);
+  color: currentColor !important;
+  transition: transform var(--ease-spring), filter var(--ease-default);
 }
 .tsms-bottom-nav .ico svg {
-  width: 22px;
-  height: 22px;
-  stroke: var(--brand) !important;
+  width: var(--bottom-nav-icon-size);
+  height: var(--bottom-nav-icon-size);
+  stroke: currentColor !important;
   fill: none;
   stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
   display: block;
 }
+
+.tsms-bottom-nav .active .ico,
+.tsms-bottom-nav .active .ico svg {
+  filter: drop-shadow(0 0 8px var(--bottom-nav-active-glow));
+}
+
 .tsms-bottom-nav a:active .ico,
 .tsms-bottom-nav button:active .ico {
   transform: scale(0.88);
@@ -2624,13 +2655,12 @@ button[data-group]:active {
 
   .tsms-bottom-nav a,
   .tsms-bottom-nav button {
-    font-size: 9px;
+    --bottom-nav-label-size: 15px;
+    --bottom-nav-icon-size: 28px;
+    --bottom-nav-item-gap: 1px;
+    --bottom-nav-item-pad-top: 7px;
+    --bottom-nav-item-pad-bottom: 8px;
     min-height: 54px;
-    padding: 8px 1px 9px;
-  }
-  .tsms-bottom-nav .ico svg {
-    width: 20px;
-    height: 20px;
   }
 }
 
@@ -2674,8 +2704,10 @@ button[data-group]:active {
 
   /* ボトムナビ: タブレットで少し広く */
   .tsms-bottom-nav a,
-  .tsms-bottom-nav button { font-size: 12px; }
-  .tsms-bottom-nav .ico svg { width: 24px; height: 24px; }
+  .tsms-bottom-nav button {
+    --bottom-nav-label-size: 17px;
+    --bottom-nav-icon-size: 31px;
+  }
 
   /* セクション */
   .section,
