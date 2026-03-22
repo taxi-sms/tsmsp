@@ -40,8 +40,9 @@ function testSharedShellRulesExist() {
   assert.match(css, /\.tsms-bottom-nav a,\s*\.tsms-bottom-nav button \{[\s\S]*color: var\(--text-disabled\) !important;[\s\S]*font-size: var\(--bottom-nav-label-size\);[\s\S]*padding: var\(--bottom-nav-item-pad-top\) 0 var\(--bottom-nav-item-pad-bottom\);[\s\S]*gap: var\(--bottom-nav-item-gap\);/);
   assert.match(css, /\.tsms-bottom-nav a > span:last-child,\s*\.tsms-bottom-nav button > span:last-child \{[\s\S]*white-space: nowrap;[\s\S]*line-height: 1;[\s\S]*letter-spacing: -0\.02em;/);
   assert.match(css, /\.tsms-bottom-nav a:hover,\s*\.tsms-bottom-nav button:hover \{[\s\S]*background: var\(--bottom-nav-hover-surface\) !important;/);
-  assert.match(css, /\.tsms-bottom-nav \.active \{[\s\S]*color: var\(--brand\) !important;[\s\S]*linear-gradient\(180deg, rgba\(88, 194, 255, 0\.22\) 0%, rgba\(88, 194, 255, 0\) 72%\) !important;[\s\S]*box-shadow: inset 0 10px 18px rgba\(88, 194, 255, 0\.12\);/);
+  assert.match(css, /\.tsms-bottom-nav \.active \{[\s\S]*color: var\(--brand\) !important;[\s\S]*background: transparent !important;[\s\S]*box-shadow: none;/);
   assert.match(css, /\.tsms-bottom-nav \.active > span:last-child \{[\s\S]*text-shadow: 0 0 10px var\(--bottom-nav-active-glow\);/);
+  assert.match(css, /\.tsms-bottom-nav \.active::before \{[\s\S]*content: none;/);
   assert.match(css, /\.tsms-bottom-nav \.ico \{[\s\S]*width: var\(--bottom-nav-icon-size\);[\s\S]*color: currentColor !important;/);
   assert.match(css, /\.tsms-bottom-nav \.ico svg \{[\s\S]*width: var\(--bottom-nav-icon-size\);[\s\S]*stroke: currentColor !important;/);
   assert.match(css, /\.tsms-bottom-nav \.active \.ico,\s*\.tsms-bottom-nav \.active \.ico svg \{[\s\S]*filter: drop-shadow\(0 0 8px var\(--bottom-nav-active-glow\)\);/);
