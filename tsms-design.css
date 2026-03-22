@@ -68,13 +68,14 @@
   --header-h: 60px;
 
   /* ── ボトムナビ高さ ── */
-  --bottom-nav-h: 60px;
+  --bottom-nav-size-scale: 0.95;
+  --bottom-nav-h: calc(60px * var(--bottom-nav-size-scale));
   --bottom-nav-safe-zone: 20px;
-  --bottom-nav-label-size: 16px;
-  --bottom-nav-icon-size: 29px;
+  --bottom-nav-label-size: calc(16px * var(--bottom-nav-size-scale));
+  --bottom-nav-icon-size: calc(29px * var(--bottom-nav-size-scale));
   --bottom-nav-item-gap: 1px;
-  --bottom-nav-item-pad-top: 6px;
-  --bottom-nav-item-pad-bottom: 7px;
+  --bottom-nav-item-pad-top: calc(6px * var(--bottom-nav-size-scale));
+  --bottom-nav-item-pad-bottom: calc(7px * var(--bottom-nav-size-scale));
   --bottom-nav-active-glow: rgba(88, 194, 255, 0.56);
   --bottom-nav-surface: var(--surface-1);
   --bottom-nav-hover-surface: var(--surface-2);
@@ -2656,12 +2657,12 @@ button[data-group]:active {
 
   .tsms-bottom-nav a,
   .tsms-bottom-nav button {
-    --bottom-nav-label-size: 15px;
-    --bottom-nav-icon-size: 28px;
+    --bottom-nav-label-size: calc(15px * var(--bottom-nav-size-scale));
+    --bottom-nav-icon-size: calc(28px * var(--bottom-nav-size-scale));
     --bottom-nav-item-gap: 1px;
-    --bottom-nav-item-pad-top: 7px;
-    --bottom-nav-item-pad-bottom: 8px;
-    min-height: 54px;
+    --bottom-nav-item-pad-top: calc(7px * var(--bottom-nav-size-scale));
+    --bottom-nav-item-pad-bottom: calc(8px * var(--bottom-nav-size-scale));
+    min-height: calc(54px * var(--bottom-nav-size-scale));
   }
 }
 
@@ -2706,8 +2707,8 @@ button[data-group]:active {
   /* ボトムナビ: タブレットで少し広く */
   .tsms-bottom-nav a,
   .tsms-bottom-nav button {
-    --bottom-nav-label-size: 17px;
-    --bottom-nav-icon-size: 31px;
+    --bottom-nav-label-size: calc(17px * var(--bottom-nav-size-scale));
+    --bottom-nav-icon-size: calc(31px * var(--bottom-nav-size-scale));
   }
 
   /* セクション */
