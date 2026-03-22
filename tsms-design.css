@@ -76,6 +76,11 @@
   --bottom-nav-item-pad-top: 6px;
   --bottom-nav-item-pad-bottom: 7px;
   --bottom-nav-active-glow: rgba(88, 194, 255, 0.56);
+  --bottom-nav-surface: var(--surface-1);
+  --bottom-nav-hover-surface: var(--surface-2);
+  --more-sheet-surface: var(--surface-1);
+  --more-sheet-item-surface: var(--surface-2);
+  --more-sheet-item-hover-surface: var(--surface-3);
 
   /* ── 週カラー ── */
   --week-sat-bg:  #D8EEFF;
@@ -157,6 +162,11 @@
   --text-secondary: #B7C4CC;
   --text-muted:     #8A949A;
   --text-disabled:  #4D5A63;
+  --bottom-nav-surface: #0e1a2d;
+  --bottom-nav-hover-surface: #0a1630;
+  --more-sheet-surface: #0e1a2d;
+  --more-sheet-item-surface: #0a1630;
+  --more-sheet-item-hover-surface: #132644;
 
   --accent:       #3B95F0;
   --accent-hover: #4DA3FF;
@@ -1288,7 +1298,7 @@ textarea {
   z-index: var(--z-bottom-nav);
   display: grid !important;
   grid-template-columns: repeat(5, 1fr);
-  background: var(--surface-1) !important;
+  background: var(--bottom-nav-surface) !important;
   border-top: var(--line-regular) solid var(--border) !important;
   padding-bottom: calc(env(safe-area-inset-bottom) + var(--bottom-nav-safe-zone));
 
@@ -1334,7 +1344,7 @@ textarea {
 .tsms-bottom-nav a:hover,
 .tsms-bottom-nav button:hover {
   color: var(--text-primary) !important;
-  background: var(--surface-2) !important;
+  background: var(--bottom-nav-hover-surface) !important;
   opacity: 1;
 }
 
@@ -1400,7 +1410,7 @@ textarea {
   right: 0;
   bottom: 0;
   z-index: var(--z-more-sheet);
-  background: var(--surface-1) !important;
+  background: var(--more-sheet-surface) !important;
   border-top: var(--line-regular) solid var(--border) !important;
   transform: translateY(110%);
   transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1419,14 +1429,14 @@ textarea {
   margin-top: 8px;
   text-decoration: none;
   color: var(--text-primary) !important;
-  background: var(--surface-2) !important;
+  background: var(--more-sheet-item-surface) !important;
   font-weight: 800;
   font-size: var(--font-xl);
   border-radius: var(--radius-sm);
   transition: background var(--ease-default);
 }
 .tsms-more-sheet a:hover {
-  background: var(--surface-3) !important;
+  background: var(--more-sheet-item-hover-surface) !important;
   opacity: 1;
 }
 
