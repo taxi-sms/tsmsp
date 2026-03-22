@@ -23,10 +23,13 @@ function testSharedShellRulesExist() {
   assert.match(css, /:root\[data-theme="dark"\] \.page-block-unified \.input:focus,[\s\S]*background: var\(--field-focus-bg\) !important;[\s\S]*0 0 0 4px var\(--field-focus-ring\) !important/);
   assert.match(css, /--choice-btn-ratio: 1\.22 \/ 1;/);
   assert.match(css, /--choice-btn-min-h: 72px;/);
-  assert.match(css, /--bottom-nav-h: 60px;/);
-  assert.match(css, /--bottom-nav-label-size: 16px;/);
-  assert.match(css, /--bottom-nav-icon-size: 29px;/);
+  assert.match(css, /--bottom-nav-size-scale: 0\.95;/);
+  assert.match(css, /--bottom-nav-h: calc\(60px \* var\(--bottom-nav-size-scale\)\);/);
+  assert.match(css, /--bottom-nav-label-size: calc\(16px \* var\(--bottom-nav-size-scale\)\);/);
+  assert.match(css, /--bottom-nav-icon-size: calc\(29px \* var\(--bottom-nav-size-scale\)\);/);
   assert.match(css, /--bottom-nav-item-gap: 1px;/);
+  assert.match(css, /--bottom-nav-item-pad-top: calc\(6px \* var\(--bottom-nav-size-scale\)\);/);
+  assert.match(css, /--bottom-nav-item-pad-bottom: calc\(7px \* var\(--bottom-nav-size-scale\)\);/);
   assert.match(css, /--bottom-nav-active-glow: rgba\(88, 194, 255, 0\.56\);/);
   assert.match(css, /--bottom-nav-surface: var\(--surface-1\);/);
   assert.match(css, /--bottom-nav-hover-surface: var\(--surface-2\);/);
@@ -63,8 +66,8 @@ function testSharedShellRulesExist() {
   assert.match(css, /@media \(min-width: 768px\) \{[\s\S]*\.btn\.action-main \{ min-height: 132px; font-size: 20px; \}[\s\S]*\.btn\.reset-final \{ min-height: 144px; \}/);
   assert.match(css, /@media \(min-width: 376px\) and \(max-width: 767px\) \{[\s\S]*\.page-block-unified \.btn\.action-main,[\s\S]*min-height: 124px !important;[\s\S]*font-size: 19px !important;[\s\S]*\.page-block-unified \.btn\.reset-final \{[\s\S]*min-height: 136px !important;/);
   assert.match(css, /@media \(min-width: 768px\) \{[\s\S]*\.page-block-unified \.btn\.action-main,[\s\S]*min-height: 132px !important;[\s\S]*font-size: 20px !important;[\s\S]*\.page-block-unified \.btn\.reset-final \{[\s\S]*min-height: 144px !important;/);
-  assert.match(css, /@media \(max-width: 375px\) \{[\s\S]*\.tsms-bottom-nav a,[\s\S]*--bottom-nav-label-size: 15px;[\s\S]*--bottom-nav-icon-size: 28px;[\s\S]*--bottom-nav-item-gap: 1px;[\s\S]*--bottom-nav-item-pad-top: 7px;[\s\S]*--bottom-nav-item-pad-bottom: 8px;[\s\S]*min-height: 54px;/);
-  assert.match(css, /@media \(min-width: 768px\) \{[\s\S]*\.tsms-bottom-nav a,[\s\S]*--bottom-nav-label-size: 17px;[\s\S]*--bottom-nav-icon-size: 31px;/);
+  assert.match(css, /@media \(max-width: 375px\) \{[\s\S]*\.tsms-bottom-nav a,[\s\S]*--bottom-nav-label-size: calc\(15px \* var\(--bottom-nav-size-scale\)\);[\s\S]*--bottom-nav-icon-size: calc\(28px \* var\(--bottom-nav-size-scale\)\);[\s\S]*--bottom-nav-item-gap: 1px;[\s\S]*--bottom-nav-item-pad-top: calc\(7px \* var\(--bottom-nav-size-scale\)\);[\s\S]*--bottom-nav-item-pad-bottom: calc\(8px \* var\(--bottom-nav-size-scale\)\);[\s\S]*min-height: calc\(54px \* var\(--bottom-nav-size-scale\)\);/);
+  assert.match(css, /@media \(min-width: 768px\) \{[\s\S]*\.tsms-bottom-nav a,[\s\S]*--bottom-nav-label-size: calc\(17px \* var\(--bottom-nav-size-scale\)\);[\s\S]*--bottom-nav-icon-size: calc\(31px \* var\(--bottom-nav-size-scale\)\);/);
   assert.match(css, /\.main\[style\*="justify-content:center"\],\s*\.auth-main \{/);
 }
 
