@@ -23,9 +23,21 @@ function testSharedShellRulesExist() {
   assert.match(css, /:root\[data-theme="dark"\] \.page-block-unified \.input:focus,[\s\S]*background: var\(--field-focus-bg\) !important;[\s\S]*0 0 0 4px var\(--field-focus-ring\) !important/);
   assert.match(css, /--choice-btn-ratio: 1\.22 \/ 1;/);
   assert.match(css, /--choice-btn-min-h: 72px;/);
+  assert.match(css, /--bottom-nav-h: 60px;/);
+  assert.match(css, /--bottom-nav-label-size: 16px;/);
+  assert.match(css, /--bottom-nav-icon-size: 29px;/);
+  assert.match(css, /--bottom-nav-item-gap: 1px;/);
+  assert.match(css, /--bottom-nav-active-glow: rgba\(88, 194, 255, 0\.56\);/);
   assert.match(css, /--bottom-nav-safe-zone: 20px;/);
   assert.match(css, /body \{[\s\S]*padding-bottom: calc\(var\(--bottom-nav-h\) \+ env\(safe-area-inset-bottom\) \+ var\(--bottom-nav-safe-zone\)\);/);
   assert.match(css, /\.tsms-bottom-nav \{[\s\S]*padding-bottom: calc\(env\(safe-area-inset-bottom\) \+ var\(--bottom-nav-safe-zone\)\);/);
+  assert.match(css, /\.tsms-bottom-nav a,\s*\.tsms-bottom-nav button \{[\s\S]*color: var\(--text-disabled\) !important;[\s\S]*font-size: var\(--bottom-nav-label-size\);[\s\S]*padding: var\(--bottom-nav-item-pad-top\) 0 var\(--bottom-nav-item-pad-bottom\);[\s\S]*gap: var\(--bottom-nav-item-gap\);/);
+  assert.match(css, /\.tsms-bottom-nav a > span:last-child,\s*\.tsms-bottom-nav button > span:last-child \{[\s\S]*white-space: nowrap;[\s\S]*line-height: 1;[\s\S]*letter-spacing: -0\.02em;/);
+  assert.match(css, /\.tsms-bottom-nav \.active \{[\s\S]*color: var\(--brand\) !important;[\s\S]*linear-gradient\(180deg, rgba\(88, 194, 255, 0\.22\) 0%, rgba\(88, 194, 255, 0\) 72%\) !important;[\s\S]*box-shadow: inset 0 10px 18px rgba\(88, 194, 255, 0\.12\);/);
+  assert.match(css, /\.tsms-bottom-nav \.active > span:last-child \{[\s\S]*text-shadow: 0 0 10px var\(--bottom-nav-active-glow\);/);
+  assert.match(css, /\.tsms-bottom-nav \.ico \{[\s\S]*width: var\(--bottom-nav-icon-size\);[\s\S]*color: currentColor !important;/);
+  assert.match(css, /\.tsms-bottom-nav \.ico svg \{[\s\S]*width: var\(--bottom-nav-icon-size\);[\s\S]*stroke: currentColor !important;/);
+  assert.match(css, /\.tsms-bottom-nav \.active \.ico,\s*\.tsms-bottom-nav \.active \.ico svg \{[\s\S]*filter: drop-shadow\(0 0 8px var\(--bottom-nav-active-glow\)\);/);
   assert.match(css, /\.table-wrap \{[\s\S]*overflow-y: auto;[\s\S]*max-height: calc\(100dvh - var\(--header-h\) - var\(--bottom-nav-h\) - var\(--bottom-nav-safe-zone\) - 120px - env\(safe-area-inset-bottom\)\);/);
   assert.match(css, /\[aria-label="cache-version"\] \{[\s\S]*margin: 6px 12px calc\(var\(--bottom-nav-h\) \+ 10px \+ env\(safe-area-inset-bottom\) \+ var\(--bottom-nav-safe-zone\)\);/);
   assert.match(css, /\.table-wrap thead th \{[\s\S]*position: sticky;[\s\S]*top: 0;[\s\S]*z-index: 3;/);
@@ -40,6 +52,8 @@ function testSharedShellRulesExist() {
   assert.match(css, /@media \(min-width: 768px\) \{[\s\S]*\.btn\.action-main \{ min-height: 132px; font-size: 20px; \}[\s\S]*\.btn\.reset-final \{ min-height: 144px; \}/);
   assert.match(css, /@media \(min-width: 376px\) and \(max-width: 767px\) \{[\s\S]*\.page-block-unified \.btn\.action-main,[\s\S]*min-height: 124px !important;[\s\S]*font-size: 19px !important;[\s\S]*\.page-block-unified \.btn\.reset-final \{[\s\S]*min-height: 136px !important;/);
   assert.match(css, /@media \(min-width: 768px\) \{[\s\S]*\.page-block-unified \.btn\.action-main,[\s\S]*min-height: 132px !important;[\s\S]*font-size: 20px !important;[\s\S]*\.page-block-unified \.btn\.reset-final \{[\s\S]*min-height: 144px !important;/);
+  assert.match(css, /@media \(max-width: 375px\) \{[\s\S]*\.tsms-bottom-nav a,[\s\S]*--bottom-nav-label-size: 15px;[\s\S]*--bottom-nav-icon-size: 28px;[\s\S]*--bottom-nav-item-gap: 1px;[\s\S]*--bottom-nav-item-pad-top: 7px;[\s\S]*--bottom-nav-item-pad-bottom: 8px;[\s\S]*min-height: 54px;/);
+  assert.match(css, /@media \(min-width: 768px\) \{[\s\S]*\.tsms-bottom-nav a,[\s\S]*--bottom-nav-label-size: 17px;[\s\S]*--bottom-nav-icon-size: 31px;/);
   assert.match(css, /\.main\[style\*="justify-content:center"\],\s*\.auth-main \{/);
 }
 
