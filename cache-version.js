@@ -23,7 +23,7 @@
     var hasBottomNav = !!document.querySelector('.tsms-bottom-nav');
     var bottomGap = hasBottomNav ? '66px' : '8px';
     el.style.cssText = [
-      'font-size:10px',
+      'font-size:var(--font-2xs)',
       'line-height:1.2',
       'color:var(--text-muted,#7a7a7a)',
       'text-align:right',

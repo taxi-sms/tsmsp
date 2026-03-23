@@ -22,7 +22,7 @@ function ensureStyle() {
   background:var(--surface-1,#fff);
   color:var(--text-primary,#111);
   box-shadow:0 8px 22px rgba(0,0,0,.16);
-  font-size:13px;
+  font-size:var(--font-sm);
   line-height:1.35;
 }
 #${BANNER_ID}.show{display:flex;}
@@ -36,7 +36,7 @@ function ensureStyle() {
   min-height:40px;
   padding:0 10px;
   font-weight:900;
-  font-size:13px;
+  font-size:var(--font-sm);
   white-space:nowrap;
 }
 #${BANNER_ID} .btn.primary{
@@ -132,4 +132,3 @@ export function installSwUpdateUi() {
     }
   });
 }
-

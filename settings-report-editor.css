@@ -13,7 +13,7 @@ html,body{
   border:2px solid #9d1111;
   background:#d93025;
   color:#fff;
-  font-size:22px;
+  font-size:var(--font-xl);
   font-weight:900;
   text-align:center;
   letter-spacing:.04em;
@@ -21,7 +21,7 @@ html,body{
 
 .settings-report-page .settings-top-note{
   margin:0 0 12px;
-  font-size:13px;
+  font-size:var(--font-sm);
   color:#f7fbff;
   line-height:1.6;
 }
@@ -38,7 +38,7 @@ html,body{
   align-items:center;
   gap:10px;
   font-weight:800;
-  font-size:16px;
+  font-size:var(--font-md);
   margin:0 0 8px 0;
   text-align:left;
 }
@@ -51,7 +51,7 @@ html,body{
 }
 
 .settings-report-page .wf-subnote{
-  font-size:12px;
+  font-size:var(--font-xs);
   color:var(--text-muted);
   margin:-2px 0 8px 0;
   line-height:1.5;
@@ -70,7 +70,7 @@ html,body{
 }
 
 .settings-report-page .save-note{
-  font-size:13px;
+  font-size:var(--font-sm);
   line-height:1.5;
   white-space:pre-line;
 }
@@ -118,14 +118,14 @@ html,body{
 .settings-report-page .editor-modal-title{
   margin:0;
   color:#eaf3ff;
-  font-size:20px;
+  font-size:clamp(24px, 5.8vw, 28px);
   font-weight:900;
 }
 
 .settings-report-page .editor-modal-step{
   margin:0;
   color:#9fc4ff;
-  font-size:12px;
+  font-size:var(--font-lg);
   font-weight:800;
   letter-spacing:.08em;
 }
@@ -143,14 +143,14 @@ html,body{
 
 .settings-report-page .editor-modal-label{
   color:#dce9ff;
-  font-size:14px;
+  font-size:var(--font-md);
   font-weight:800;
 }
 
 .settings-report-page .editor-modal-help{
   margin:0;
   color:#c5d9ff;
-  font-size:12px;
+  font-size:var(--font-sm);
   line-height:1.6;
 }
 
@@ -169,7 +169,7 @@ html,body{
   border-radius:12px;
   background:rgba(12,29,57,.72);
   color:#eef5ff;
-  font-size:14px;
+  font-size:var(--font-md);
   font-weight:800;
 }
 
