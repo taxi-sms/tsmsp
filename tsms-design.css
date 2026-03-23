@@ -2515,20 +2515,22 @@ main .wf-panel {
   display: block;
   inline-size: min(100%, 4em);
   margin: 0 auto;
+  font-size: calc(var(--font-lg) - 1px);
   text-align: center;
   text-wrap: wrap;
   word-break: break-all;
   overflow-wrap: normal;
-  line-height: 1.2;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
 }
 
 .wf-row > .btn.is-label-long .btn-label {
-  font-size: calc(var(--font-lg) - 1px);
+  font-size: var(--font-md);
 }
 
 .wf-row > .btn.is-label-xlong .btn-label {
-  font-size: var(--font-md);
-  line-height: 1.15;
+  font-size: calc(var(--font-md) - 1px);
+  line-height: 1.1;
 }
 
 /* 乗車種別・支払方法などのボタングループ */
