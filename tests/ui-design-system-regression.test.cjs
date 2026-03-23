@@ -62,6 +62,10 @@ function testSharedShellRulesExist() {
   assert.match(css, /\.wf-row > \.btn \.btn-label \{[\s\S]*display: block;[\s\S]*inline-size: min\(100%, 4em\);[\s\S]*margin: 0 auto;[\s\S]*text-wrap: wrap;[\s\S]*word-break: break-all;[\s\S]*overflow-wrap: normal;/);
   assert.match(css, /\.wf-row > \.btn\.is-label-long \.btn-label \{[\s\S]*font-size: calc\(var\(--font-lg\) - 1px\);/);
   assert.match(css, /\.wf-row > \.btn\.is-label-xlong \.btn-label \{[\s\S]*font-size: var\(--font-md\);[\s\S]*line-height: 1\.15;/);
+  assert.match(css, /:where\(\.report-entry-page\) \.keypad-grid \{[\s\S]*grid-template-columns: repeat\(4, 1fr\);/);
+  assert.match(css, /:where\(\.report-entry-page\) \.key-wide \{[\s\S]*grid-column: span 2;/);
+  assert.match(css, /:where\(\.report-entry-page\) \.key-tall \{[\s\S]*grid-row: span 2;/);
+  assert.match(css, /:where\(\.report-entry-page\) \.key-submit \{[\s\S]*font-size: var\(--font-xl\);[\s\S]*font-weight: 900;/);
   assert.match(css, /\.btn\.action-main \{[\s\S]*min-height: 118px;[\s\S]*font-size: var\(--font-4xl\);/);
   assert.match(css, /\.btn\.reset-final \{[\s\S]*min-height: 128px;/);
   assert.match(css, /\.page-block-unified \.btn\.action-main,[\s\S]*min-height: 118px !important;[\s\S]*font-size: var\(--font-4xl\) !important;/);
@@ -119,6 +123,10 @@ function testPageWidthModifiersExist() {
   assert.match(read("confirm.html"), /id="confirmSummaryModalBg"/);
   assert.match(read("confirm.html"), /id="confirmSummaryModalCountdown"/);
   assert.match(read("report.html"), /id="submitConfirmModalBg"/);
+  assert.match(read("report.html"), /<button class="key small key-utility" type="button" data-key="back" aria-label="1文字削除">⌫<\/button>/);
+  assert.match(read("report.html"), /<button class="key small key-utility" type="button" data-key="clear" aria-label="現在の金額をクリア">C<\/button>/);
+  assert.match(read("report.html"), /<button class="key key-tall key-submit" type="button" data-key="submit">確定<\/button>/);
+  assert.match(read("report.html"), /<button class="key key-wide" type="button" data-key="0">0<\/button>/);
   assert.match(read("index.html"), /\.modal\{\s*width:min\(560px,100%\);[\s\S]*border:2px solid var\(--modal-shell-border\);[\s\S]*box-shadow:var\(--modal-shell-shadow\);/);
   assert.match(read("report.html"), /class="result-modal-card confirm-summary-modal-card report-submit-confirm-modal-card"/);
   assert.match(read("report.html"), /class="confirm-summary-modal-title report-submit-confirm-modal-title"/);

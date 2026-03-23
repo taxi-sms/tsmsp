@@ -105,18 +105,20 @@
     <div class="wf-label">テンキー</div>
     <div class="keypad" id="keypad">
       <div class="keypad-grid">
-        <button class="key" type="button" data-key="1">1</button>
-        <button class="key" type="button" data-key="2">2</button>
-        <button class="key" type="button" data-key="3">3</button>
-        <button class="key" type="button" data-key="4">4</button>
-        <button class="key" type="button" data-key="5">5</button>
-        <button class="key" type="button" data-key="6">6</button>
         <button class="key" type="button" data-key="7">7</button>
         <button class="key" type="button" data-key="8">8</button>
         <button class="key" type="button" data-key="9">9</button>
-        <button class="key" type="button" data-key="0">0</button>
+        <button class="key small key-utility" type="button" data-key="back" aria-label="1文字削除">⌫</button>
+        <button class="key" type="button" data-key="4">4</button>
+        <button class="key" type="button" data-key="5">5</button>
+        <button class="key" type="button" data-key="6">6</button>
+        <button class="key small key-utility" type="button" data-key="clear" aria-label="現在の金額をクリア">C</button>
+        <button class="key" type="button" data-key="1">1</button>
+        <button class="key" type="button" data-key="2">2</button>
+        <button class="key" type="button" data-key="3">3</button>
+        <button class="key key-tall key-submit" type="button" data-key="submit">確定</button>
+        <button class="key key-wide" type="button" data-key="0">0</button>
         <button class="key" type="button" data-key="00">00</button>
-        <button class="key small" type="button" data-key="back">BS</button>
       </div>
     </div>
   </section>
@@ -1958,6 +1960,11 @@ ${remaining}秒後に${countdownLabel}`;
     const k = keyBtn.dataset.key;
     const cur = String(focused.value || "");
     if (k === "back") focused.value = cur.slice(0, -1);
+    else if (k === "clear") focused.value = "";
+    else if (k === "submit") {
+      btnSubmit.click();
+      return;
+    }
     else if (k === "00") focused.value = cur + "00";
     else if (/^[0-9]$/.test(k)) focused.value = cur + k;
     focused.focus();
