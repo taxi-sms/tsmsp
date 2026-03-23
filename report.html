@@ -311,6 +311,17 @@
     return second ? `${first}\n${second}` : first;
   }
 
+  function applyButtonLabelText(label, text) {
+    const lines = String(formatButtonLabelText(text) || "").split("\n").filter(Boolean);
+    label.textContent = "";
+    lines.forEach((lineText) => {
+      const line = document.createElement("span");
+      line.className = "btn-label-line";
+      line.textContent = lineText;
+      label.appendChild(line);
+    });
+  }
+
   function renderButtonGroup(container, group, values) {
     if (!container) return;
     container.innerHTML = "";
@@ -327,7 +338,8 @@
       if (labelMeta.sizeClass) btn.classList.add(labelMeta.sizeClass);
       const label = document.createElement("span");
       label.className = "btn-label";
-      label.textContent = formatButtonLabelText(labelMeta.text);
+      btn.setAttribute("aria-label", labelMeta.text);
+      applyButtonLabelText(label, labelMeta.text);
       btn.appendChild(label);
       container.appendChild(btn);
     });

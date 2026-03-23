@@ -2512,16 +2512,22 @@ main .wf-panel {
 }
 
 .wf-row > .btn .btn-label {
-  display: block;
+  display: grid;
+  justify-items: center;
+  align-content: center;
   inline-size: min(100%, 4em);
   margin: 0 auto;
   font-size: calc(var(--font-lg) - 1px);
   text-align: center;
-  white-space: pre-line;
   word-break: normal;
   overflow-wrap: normal;
   line-height: 1.15;
   letter-spacing: -0.02em;
+}
+
+.wf-row > .btn .btn-label-line {
+  display: block;
+  white-space: nowrap;
 }
 
 .wf-row > .btn.is-label-long .btn-label {
