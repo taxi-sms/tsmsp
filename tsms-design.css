@@ -3587,6 +3587,296 @@ select,
   font-weight: 900;
 }
 
+:root[data-theme="dark"] :where(.report-entry-page) {
+  --legacy-page-text: #F8FAFC;
+  --legacy-page-muted: #94A3B8;
+  --legacy-page-border: #2B3240;
+  --value-highlight: #E2FF31;
+  --modal-shell-border: #E2FF31;
+  --modal-shell-shadow: 0 0 18px rgba(226, 255, 49, 0.10), 0 16px 36px rgba(0,0,0,.42);
+  --report-night-bg: #0F1115;
+  --report-night-header: #121924;
+  --report-night-panel: #161B22;
+  --report-night-surface: #232833;
+  --report-night-surface-hover: #2A303B;
+  --report-night-modal-surface: #1E222A;
+  --report-night-modal-surface-strong: #171C23;
+  --report-night-line: #1B2028;
+  --report-night-text: #F8FAFC;
+  --report-night-muted: #A5B4C8;
+  --report-night-neon: #E2FF31;
+  --report-night-neon-text: #10130B;
+  --report-night-neon-glow: rgba(226, 255, 49, 0.18);
+  --report-night-danger: #FF5A52;
+}
+
+:root[data-theme="dark"] body:where(.report-entry-page) {
+  background: var(--report-night-bg) !important;
+  color: var(--report-night-text) !important;
+}
+
+:root[data-theme="dark"] body:where(.report-entry-page) .tsms-header {
+  background: var(--report-night-header) !important;
+  border-bottom-color: var(--legacy-page-border) !important;
+  color: var(--report-night-text) !important;
+  box-shadow: none;
+}
+
+:root[data-theme="dark"] body:where(.report-entry-page) .tsms-hamburger span {
+  background: var(--report-night-text) !important;
+}
+
+:root[data-theme="dark"] body:where(.report-entry-page) .header-to-report {
+  background: var(--report-night-surface) !important;
+  border-color: var(--legacy-page-border) !important;
+  color: var(--report-night-text) !important;
+  box-shadow: none;
+}
+
+:root[data-theme="dark"] body:where(.report-entry-page) .header-to-report:hover {
+  background: var(--report-night-surface-hover) !important;
+}
+
+:root[data-theme="dark"] :where(.report-entry-page) .wf-label,
+:root[data-theme="dark"] :where(.report-entry-page) .wf-field-label {
+  color: var(--report-night-text) !important;
+}
+
+:root[data-theme="dark"] :where(.report-entry-page) .wf-label::after {
+  border-top-color: var(--legacy-page-border) !important;
+}
+
+:root[data-theme="dark"] :where(.report-entry-page) .wf-subnote,
+:root[data-theme="dark"] :where(.report-entry-page) .note {
+  color: var(--report-night-muted) !important;
+}
+
+:root[data-theme="dark"] :where(.report-entry-page) .btn:not(.next):not(.danger):not(.is-selected),
+:root[data-theme="dark"] :where(.report-entry-page) button[data-group]:not(.is-selected) {
+  background: var(--report-night-surface) !important;
+  border-color: var(--legacy-page-border) !important;
+  color: var(--report-night-text) !important;
+  box-shadow: none !important;
+  text-shadow: none;
+}
+
+:root[data-theme="dark"] :where(.report-entry-page) .btn:not(.next):not(.danger):not(.is-selected):hover,
+:root[data-theme="dark"] :where(.report-entry-page) button[data-group]:not(.is-selected):hover {
+  background: var(--report-night-surface-hover) !important;
+}
+
+:root[data-theme="dark"] :where(.report-entry-page) .btn.is-selected,
+:root[data-theme="dark"] :where(.report-entry-page) .actionBtn.is-selected,
+:root[data-theme="dark"] :where(.report-entry-page) button[data-group].is-selected,
+:root[data-theme="dark"] :where(.report-entry-page) #btn_discount.is-selected,
+:root[data-theme="dark"] :where(.report-entry-page) #btn_submit,
+:root[data-theme="dark"] :where(.report-entry-page) .btn.next {
+  background: var(--report-night-neon) !important;
+  border-color: var(--report-night-neon) !important;
+  color: var(--report-night-neon-text) !important;
+  box-shadow: 0 0 0 1px var(--report-night-neon-glow) inset !important;
+  text-shadow: none;
+}
+
+:root[data-theme="dark"] :where(.report-entry-page) #btn_clear {
+  background: #10141B !important;
+  border-color: rgba(248, 250, 252, 0.72) !important;
+  color: var(--report-night-text) !important;
+  box-shadow: none !important;
+  text-shadow: none;
+}
+
+:root[data-theme="dark"] :where(.report-entry-page) .input {
+  background: var(--report-night-surface) !important;
+  border-color: var(--legacy-page-border) !important;
+  color: var(--report-night-text) !important;
+  box-shadow: none !important;
+}
+
+:root[data-theme="dark"] :where(.report-entry-page) .input::placeholder {
+  color: var(--report-night-muted) !important;
+  opacity: 0.95;
+}
+
+:root[data-theme="dark"] :where(.report-entry-page) .input:focus {
+  border-color: var(--report-night-neon) !important;
+  background: var(--report-night-surface) !important;
+  box-shadow:
+    0 0 0 1px var(--report-night-neon) inset !important,
+    0 0 18px var(--report-night-neon-glow) !important;
+}
+
+:root[data-theme="dark"] :where(.report-entry-page) .key,
+:root[data-theme="dark"] :where(.report-entry-page) .key.small {
+  background: var(--report-night-surface) !important;
+  border-color: var(--report-night-surface) !important;
+  color: var(--report-night-text) !important;
+  box-shadow: none !important;
+}
+
+:root[data-theme="dark"] :where(.report-entry-page) .key:hover,
+:root[data-theme="dark"] :where(.report-entry-page) .key.small:hover {
+  background: var(--report-night-surface-hover) !important;
+}
+
+:root[data-theme="dark"] :where(.report-entry-page) .key.small {
+  color: var(--report-night-muted) !important;
+}
+
+:root[data-theme="dark"] body:where(.report-entry-page) .tsms-menu {
+  background: var(--report-night-panel) !important;
+  border-right-color: var(--legacy-page-border) !important;
+}
+
+:root[data-theme="dark"] body:where(.report-entry-page) .tsms-menu a {
+  background: var(--report-night-surface) !important;
+  border-bottom-color: var(--legacy-page-border) !important;
+  color: var(--report-night-text) !important;
+}
+
+:root[data-theme="dark"] body:where(.report-entry-page) .tsms-menu a:hover {
+  background: var(--report-night-surface-hover) !important;
+}
+
+:root[data-theme="dark"] body:where(.report-entry-page) .tsms-menu small {
+  color: var(--report-night-muted) !important;
+}
+
+:root[data-theme="dark"] body:where(.report-entry-page) .tsms-menu-bg,
+:root[data-theme="dark"] body:where(.report-entry-page) .tsms-more-bg {
+  background: rgba(0, 0, 0, 0.58) !important;
+}
+
+:root[data-theme="dark"] :where(.report-entry-page) .tsms-more-sheet {
+  background: var(--report-night-panel) !important;
+  border-top-color: var(--legacy-page-border) !important;
+  box-shadow: 0 -16px 36px rgba(0, 0, 0, 0.40);
+}
+
+:root[data-theme="dark"] :where(.report-entry-page) .tsms-more-sheet a {
+  background: var(--report-night-surface) !important;
+  border-color: var(--legacy-page-border) !important;
+  color: var(--report-night-text) !important;
+}
+
+:root[data-theme="dark"] :where(.report-entry-page) .tsms-more-sheet a:hover {
+  background: var(--report-night-surface-hover) !important;
+}
+
+:root[data-theme="dark"] :where(.report-entry-page) .tsms-bottom-nav {
+  background: #0A0D13 !important;
+  border-top-color: var(--legacy-page-border) !important;
+}
+
+:root[data-theme="dark"] :where(.report-entry-page) .tsms-bottom-nav a,
+:root[data-theme="dark"] :where(.report-entry-page) .tsms-bottom-nav button {
+  color: #7C8798 !important;
+}
+
+:root[data-theme="dark"] :where(.report-entry-page) .tsms-bottom-nav .active {
+  color: var(--report-night-neon) !important;
+}
+
+:root[data-theme="dark"] :where(.report-entry-page) .tsms-bottom-nav .active > span:last-child {
+  text-shadow: 0 0 10px rgba(226, 255, 49, 0.28);
+}
+
+:root[data-theme="dark"] :where(.report-entry-page) .tsms-bottom-nav .active .ico,
+:root[data-theme="dark"] :where(.report-entry-page) .tsms-bottom-nav .active .ico svg {
+  filter: drop-shadow(0 0 8px rgba(226, 255, 49, 0.32));
+}
+
+:root[data-theme="dark"] :where(.report-entry-page) .confirm-modal-bg,
+:root[data-theme="dark"] :where(.report-entry-page) .result-modal-bg {
+  background: rgba(0, 0, 0, 0.68) !important;
+}
+
+:root[data-theme="dark"] :where(.report-entry-page) .confirm-modal-card,
+:root[data-theme="dark"] :where(.report-entry-page) .result-modal-card,
+:root[data-theme="dark"] :where(.report-entry-page) .report-submit-confirm-modal-card,
+:root[data-theme="dark"] :where(.report-entry-page) .voice-input-modal-card {
+  background: var(--report-night-modal-surface) !important;
+  color: var(--report-night-text) !important;
+}
+
+:root[data-theme="dark"] :where(.report-entry-page) .report-submit-confirm-modal-head,
+:root[data-theme="dark"] :where(.report-entry-page) .voice-input-modal-head {
+  border-bottom-color: var(--legacy-page-border) !important;
+}
+
+:root[data-theme="dark"] :where(.report-entry-page) .report-submit-confirm-modal-title,
+:root[data-theme="dark"] :where(.report-entry-page) .report-submit-confirm-modal-subtitle,
+:root[data-theme="dark"] :where(.report-entry-page) .voice-input-modal-head .confirm-modal-title,
+:root[data-theme="dark"] :where(.report-entry-page) .confirm-modal-title,
+:root[data-theme="dark"] :where(.report-entry-page) .result-modal-message {
+  color: var(--report-night-text) !important;
+}
+
+:root[data-theme="dark"] :where(.report-entry-page) .voice-input-modal-step,
+:root[data-theme="dark"] :where(.report-entry-page) .voice-input-modal-status,
+:root[data-theme="dark"] :where(.report-entry-page) .voice-choice-guide,
+:root[data-theme="dark"] :where(.report-entry-page) .voice-amount-guide,
+:root[data-theme="dark"] :where(.report-entry-page) .voice-amount-label,
+:root[data-theme="dark"] :where(.report-entry-page) .report-submit-confirm-modal-list .k,
+:root[data-theme="dark"] :where(.report-entry-page) .confirm-modal-key {
+  color: var(--report-night-muted) !important;
+}
+
+:root[data-theme="dark"] :where(.report-entry-page) .report-submit-confirm-modal-list,
+:root[data-theme="dark"] :where(.report-entry-page) .voice-input-modal-body,
+:root[data-theme="dark"] :where(.report-entry-page) .voice-input-modal-transcript,
+:root[data-theme="dark"] :where(.report-entry-page) .voice-amount-box,
+:root[data-theme="dark"] :where(.report-entry-page) .voice-choice-no {
+  background: var(--report-night-modal-surface-strong) !important;
+  border-color: var(--legacy-page-border) !important;
+  color: var(--report-night-text) !important;
+}
+
+:root[data-theme="dark"] :where(.report-entry-page) .report-submit-confirm-modal-list .line,
+:root[data-theme="dark"] :where(.report-entry-page) .confirm-modal-item {
+  border-bottom-color: var(--legacy-page-border) !important;
+}
+
+:root[data-theme="dark"] :where(.report-entry-page) .voice-input-modal-prompt,
+:root[data-theme="dark"] :where(.report-entry-page) .voice-amount-value {
+  color: var(--report-night-text) !important;
+}
+
+:root[data-theme="dark"] :where(.report-entry-page) .voice-choice-btn {
+  background: var(--report-night-surface) !important;
+  border-color: var(--legacy-page-border) !important;
+}
+
+:root[data-theme="dark"] :where(.report-entry-page) .voice-choice-btn.is-selected {
+  background: var(--report-night-neon) !important;
+  border-color: var(--report-night-neon) !important;
+  box-shadow: 0 0 0 1px var(--report-night-neon-glow) inset !important;
+}
+
+:root[data-theme="dark"] :where(.report-entry-page) .voice-choice-btn.is-selected .voice-choice-label,
+:root[data-theme="dark"] :where(.report-entry-page) .voice-choice-btn.is-selected .voice-choice-no {
+  color: var(--report-night-neon-text) !important;
+}
+
+:root[data-theme="dark"] :where(.report-entry-page) .voice-choice-btn.is-selected .voice-choice-no {
+  background: rgba(255, 255, 255, 0.28) !important;
+  border-color: rgba(16, 19, 11, 0.18) !important;
+}
+
+:root[data-theme="dark"] :where(.report-entry-page) .voice-amount-box.active {
+  border-color: var(--report-night-neon) !important;
+  box-shadow: 0 0 0 1px var(--report-night-neon-glow) inset !important;
+}
+
+:root[data-theme="dark"] :where(.report-entry-page) .result-modal-icon.success {
+  background: var(--report-night-neon) !important;
+  color: var(--report-night-neon-text) !important;
+}
+
+:root[data-theme="dark"] :where(.report-entry-page) .result-modal-icon.error {
+  background: var(--report-night-danger) !important;
+}
+
 :where(.detail-page) .main .section {
   display: grid;
   gap: var(--space-2);

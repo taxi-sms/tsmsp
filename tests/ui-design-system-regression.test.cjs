@@ -150,6 +150,11 @@ function testPageWidthModifiersExist() {
   assert.match(css, /:where\(\.report-entry-page\) \.confirm-modal-card,\s*:where\(\.report-entry-page\) \.result-modal-card \{[\s\S]*border: var\(--line-strong\) solid var\(--modal-shell-border\);[\s\S]*box-shadow: var\(--modal-shell-shadow\);/);
   assert.match(css, /:where\(\.report-entry-page\),[\s\S]*--legacy-page-border: #999;/);
   assert.match(css, /body:where\(\.report-entry-page\),[\s\S]*background: var\(--bg\);[\s\S]*color: var\(--text-primary\);/);
+  assert.match(css, /:root\[data-theme="dark"\] :where\(\.report-entry-page\) \{[\s\S]*--value-highlight: #E2FF31;[\s\S]*--modal-shell-border: #E2FF31;[\s\S]*--report-night-bg: #0F1115;[\s\S]*--report-night-neon: #E2FF31;/);
+  assert.match(css, /:root\[data-theme="dark"\] :where\(\.report-entry-page\) \.btn\.is-selected,[\s\S]*#btn_submit,[\s\S]*background: var\(--report-night-neon\) !important;[\s\S]*color: var\(--report-night-neon-text\) !important;/);
+  assert.match(css, /:root\[data-theme="dark"\] :where\(\.report-entry-page\) \.key,[\s\S]*background: var\(--report-night-surface\) !important;[\s\S]*border-color: var\(--report-night-surface\) !important;[\s\S]*color: var\(--report-night-text\) !important;/);
+  assert.match(css, /:root\[data-theme="dark"\] :where\(\.report-entry-page\) \.tsms-bottom-nav \.active \{[\s\S]*color: var\(--report-night-neon\) !important;/);
+  assert.match(css, /:root\[data-theme="dark"\] :where\(\.report-entry-page\) \.confirm-modal-card,[\s\S]*\.voice-input-modal-card \{[\s\S]*background: var\(--report-night-modal-surface\) !important;[\s\S]*color: var\(--report-night-text\) !important;/);
 }
 
 function testSettingsReportEditorUsesSharedTypeScale() {
