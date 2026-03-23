@@ -290,7 +290,7 @@
       if (labelMeta.sizeClass) btn.classList.add(labelMeta.sizeClass);
       const label = document.createElement("span");
       label.className = "btn-label";
-      label.textContent = labelMeta.text;
+      label.textContent = labelMeta.text.replace(/ /g, "\u00A0");
       btn.appendChild(label);
       container.appendChild(btn);
     });
