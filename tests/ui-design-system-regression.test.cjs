@@ -59,7 +59,7 @@ function testSharedShellRulesExist() {
   assert.match(css, /\.table-wrap thead th \{[\s\S]*position: sticky;[\s\S]*top: 0;[\s\S]*z-index: 3;/);
   assert.match(css, /:root\[data-theme="dark"\] \.table-wrap thead th \{[\s\S]*box-shadow:/);
   assert.match(css, /\.wf-row > \.btn \{[\s\S]*aspect-ratio: var\(--choice-btn-ratio\);[\s\S]*min-height: var\(--choice-btn-min-h\);/);
-  assert.match(css, /\.wf-row > \.btn \.btn-label \{[\s\S]*display: block;[\s\S]*max-inline-size: 4em;[\s\S]*margin: 0 auto;[\s\S]*overflow-wrap: anywhere;/);
+  assert.match(css, /\.wf-row > \.btn \.btn-label \{[\s\S]*display: block;[\s\S]*inline-size: min\(100%, 4em\);[\s\S]*margin: 0 auto;[\s\S]*text-wrap: wrap;[\s\S]*word-break: break-all;[\s\S]*overflow-wrap: normal;/);
   assert.match(css, /\.wf-row > \.btn\.is-label-long \.btn-label \{[\s\S]*font-size: calc\(var\(--font-lg\) - 1px\);/);
   assert.match(css, /\.wf-row > \.btn\.is-label-xlong \.btn-label \{[\s\S]*font-size: var\(--font-md\);[\s\S]*line-height: 1\.15;/);
   assert.match(css, /\.btn\.action-main \{[\s\S]*min-height: 118px;[\s\S]*font-size: var\(--font-4xl\);/);
