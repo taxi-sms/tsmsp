@@ -2517,8 +2517,8 @@ main .wf-panel {
   margin: 0 auto;
   font-size: calc(var(--font-lg) - 1px);
   text-align: center;
-  text-wrap: wrap;
-  word-break: break-all;
+  white-space: pre-line;
+  word-break: normal;
   overflow-wrap: normal;
   line-height: 1.15;
   letter-spacing: -0.02em;
