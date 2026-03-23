@@ -28,6 +28,10 @@ function ensureStyle() {
 #${BANNER_ID}.show{display:flex;}
 #${BANNER_ID} .msg{flex:1 1 auto;min-width:0;}
 #${BANNER_ID} .btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  flex:0 0 auto;
   appearance:none;
   border:2px solid var(--border,#D5DEE6);
   background:var(--surface-2,#EEF3F6);
@@ -43,6 +47,19 @@ function ensureStyle() {
   border-color:var(--accent,#2580ED);
   background:var(--accent,#2580ED);
   color:#fff;
+}
+@media (max-width: 767px){
+  #${BANNER_ID}{
+    flex-wrap:wrap;
+    align-items:flex-start;
+  }
+  #${BANNER_ID} .msg{
+    flex:1 0 100%;
+  }
+  #${BANNER_ID} .btn{
+    flex:1 1 0;
+    min-width:0;
+  }
 }
 `;
   document.head.appendChild(style);

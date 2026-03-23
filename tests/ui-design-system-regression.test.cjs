@@ -5,6 +5,7 @@ const assert = require("assert");
 const ROOT = path.resolve(__dirname, "..");
 const css = fs.readFileSync(path.join(ROOT, "tsms-design.css"), "utf8");
 const settingsReportEditorCss = fs.readFileSync(path.join(ROOT, "settings-report-editor.css"), "utf8");
+const swUpdateUi = fs.readFileSync(path.join(ROOT, "sw-update-ui.js"), "utf8");
 
 function read(name) {
   return fs.readFileSync(path.join(ROOT, name), "utf8");
@@ -58,7 +59,9 @@ function testSharedShellRulesExist() {
   assert.match(css, /\.table-wrap thead th \{[\s\S]*position: sticky;[\s\S]*top: 0;[\s\S]*z-index: 3;/);
   assert.match(css, /:root\[data-theme="dark"\] \.table-wrap thead th \{[\s\S]*box-shadow:/);
   assert.match(css, /\.wf-row > \.btn \{[\s\S]*aspect-ratio: var\(--choice-btn-ratio\);[\s\S]*min-height: var\(--choice-btn-min-h\);/);
-  assert.match(css, /\.wf-row > \.btn \.btn-label \{[\s\S]*-webkit-line-clamp: 2;[\s\S]*overflow-wrap: anywhere;/);
+  assert.match(css, /\.wf-row > \.btn \.btn-label \{[\s\S]*display: block;[\s\S]*max-inline-size: 4em;[\s\S]*margin: 0 auto;[\s\S]*overflow-wrap: anywhere;/);
+  assert.match(css, /\.wf-row > \.btn\.is-label-long \.btn-label \{[\s\S]*font-size: calc\(var\(--font-lg\) - 1px\);/);
+  assert.match(css, /\.wf-row > \.btn\.is-label-xlong \.btn-label \{[\s\S]*font-size: var\(--font-md\);[\s\S]*line-height: 1\.15;/);
   assert.match(css, /\.btn\.action-main \{[\s\S]*min-height: 118px;[\s\S]*font-size: var\(--font-4xl\);/);
   assert.match(css, /\.btn\.reset-final \{[\s\S]*min-height: 128px;/);
   assert.match(css, /\.page-block-unified \.btn\.action-main,[\s\S]*min-height: 118px !important;[\s\S]*font-size: var\(--font-4xl\) !important;/);
@@ -158,6 +161,12 @@ function testSettingsReportEditorUsesSharedTypeScale() {
   assert.match(settingsReportEditorCss, /\.settings-report-page \.editor-modal-label\{[\s\S]*font-size:var\(--font-md\);/);
   assert.match(settingsReportEditorCss, /\.settings-report-page \.editor-modal-help\{[\s\S]*font-size:var\(--font-sm\);/);
   assert.match(settingsReportEditorCss, /\.settings-report-page \.editor-check\{[\s\S]*font-size:var\(--font-md\);/);
+}
+
+function testSwUpdateBannerStacksOnMobile() {
+  assert.match(swUpdateUi, /#\$\{BANNER_ID\} \.msg\{flex:1 1 auto;min-width:0;\}/);
+  assert.match(swUpdateUi, /#\$\{BANNER_ID\} \.btn\{[\s\S]*display:inline-flex;[\s\S]*justify-content:center;[\s\S]*flex:0 0 auto;/);
+  assert.match(swUpdateUi, /@media \(max-width: 767px\)\{[\s\S]*#\$\{BANNER_ID\}\{[\s\S]*flex-wrap:wrap;[\s\S]*align-items:flex-start;[\s\S]*#\$\{BANNER_ID\} \.msg\{[\s\S]*flex:1 0 100%;[\s\S]*#\$\{BANNER_ID\} \.btn\{[\s\S]*flex:1 1 0;[\s\S]*min-width:0;/);
 }
 
 function testHeaderActionGrammarIsUnified() {
@@ -260,6 +269,7 @@ function runTests() {
     ["主要画面の重複シェル削減", testPagesNoLongerCarryUnifiedShellBlocks],
     ["画面幅修飾", testPageWidthModifiersExist],
     ["設定 editor typography", testSettingsReportEditorUsesSharedTypeScale],
+    ["SW 更新バナー mobile stack", testSwUpdateBannerStacksOnMobile],
     ["ヘッダー右上アクション文法", testHeaderActionGrammarIsUnified],
     ["主要画面の状態表示文法", testPagesUseSharedStateDisplayGrammar],
     ["設定ハブページ追加", testSettingsHubPagesExist],
