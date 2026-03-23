@@ -105,15 +105,15 @@
 
 /* ── Unified Scale v1 (文字/余白/線/高さ) ── */
 --font-2xs: 10px;
---font-xs:  11px;
---font-sm:  12px;
---font-md:  13px;
---font-lg:  14px;
---font-xl:  15px;
---font-2xl: 16px;
---font-3xl: 18px;
---font-4xl: 20px;
---font-5xl: 26px;
+--font-xs:  12px;
+--font-sm:  14px;
+--font-md:  16px;
+--font-lg:  18px;
+--font-xl:  20px;
+--font-2xl: 20px;
+--font-3xl: 24px;
+--font-4xl: 28px;
+--font-5xl: 32px;
 
 --space-1: 4px;
 --space-2: 8px;
@@ -226,7 +226,7 @@ body:where(.settings-report-legacy-page) {
 }
 
 :where(.report-entry-page) .note {
-  font-size: 13px;
+  font-size: var(--font-sm);
   color: var(--legacy-page-muted);
   line-height: 1.35;
   margin: 8px 0;
@@ -244,7 +244,7 @@ body:where(.settings-report-legacy-page) {
   align-items: center;
   gap: 10px;
   font-weight: 800;
-  font-size: 16px;
+  font-size: var(--font-2xl);
   margin: 0 0 8px 0;
   text-align: left;
 }
@@ -257,7 +257,7 @@ body:where(.settings-report-legacy-page) {
 }
 
 :where(.report-entry-page) .wf-subnote {
-  font-size: 12px;
+  font-size: var(--font-sm);
   color: var(--legacy-page-muted);
   margin: -2px 0 8px 0;
 }
@@ -275,7 +275,7 @@ body:where(.settings-report-legacy-page) {
   background: #fff;
   border-radius: 0;
   padding: 14px 8px;
-  font-size: 16px;
+  font-size: var(--font-lg);
   min-height: 56px;
 }
 
@@ -305,7 +305,7 @@ body:where(.settings-report-legacy-page) {
 }
 
 :where(.report-entry-page) .wf-field-label {
-  font-size: 13px;
+  font-size: var(--font-md);
   color: var(--legacy-page-muted);
 }
 
@@ -355,11 +355,11 @@ body:where(.settings-report-legacy-page) {
   border-radius: 0;
   background: #fff;
   min-height: 60px;
-  font-size: 22px;
+  font-size: var(--font-3xl);
 }
 
 :where(.report-entry-page) .key.small {
-  font-size: 16px;
+  font-size: var(--font-lg);
 }
 
 :where(.report-entry-page) .confirm-modal-bg {
@@ -385,7 +385,7 @@ body:where(.settings-report-legacy-page) {
 }
 
 :where(.report-entry-page) .confirm-modal-title {
-  font-size: 18px;
+  font-size: var(--font-3xl);
   font-weight: 900;
   margin: 0 0 10px;
 }
@@ -400,7 +400,7 @@ body:where(.settings-report-legacy-page) {
   display: grid;
   grid-template-columns: 110px 1fr;
   gap: 8px;
-  font-size: 14px;
+  font-size: var(--font-md);
   line-height: 1.4;
   border-bottom: 1px solid var(--border,#ddd);
   padding-bottom: 4px;
@@ -441,7 +441,7 @@ body:where(.settings-report-legacy-page) {
 :where(.report-entry-page) .submit-confirm-modal-step {
   margin: 0;
   color: #c8ddff;
-  font-size: 28px;
+  font-size: var(--font-xl);
   line-height: 1;
   font-weight: 900;
   letter-spacing: .01em;
@@ -450,7 +450,7 @@ body:where(.settings-report-legacy-page) {
 :where(.report-entry-page) .submit-confirm-modal-card .confirm-modal-title {
   margin: 0;
   color: #eaf3ff;
-  font-size: clamp(26px,6.8vw,36px);
+  font-size: clamp(26px, 6vw, 28px);
   line-height: 1.1;
 }
 
@@ -465,7 +465,7 @@ body:where(.settings-report-legacy-page) {
 :where(.report-entry-page) .submit-confirm-modal-card .confirm-modal-item {
   grid-template-columns: 132px 1fr;
   gap: 10px;
-  font-size: 18px;
+  font-size: var(--font-md);
   line-height: 1.45;
   border-bottom: 1px solid rgba(125,164,230,.34);
   color: #e8f2ff;
@@ -484,7 +484,7 @@ body:where(.settings-report-legacy-page) {
 :where(.report-entry-page) .submit-confirm-modal-card .confirm-modal-actions .btn {
   min-height: 58px;
   border-radius: 10px;
-  font-size: 21px;
+  font-size: var(--font-lg);
   font-weight: 900;
 }
 
@@ -512,7 +512,7 @@ body:where(.settings-report-legacy-page) {
 :where(.report-entry-page) .voice-input-modal-head .confirm-modal-title {
   margin: 0;
   color: #eaf3ff;
-  font-size: clamp(22px,6.2vw,30px);
+  font-size: clamp(24px, 6vw, 28px);
   line-height: 1.1;
   white-space: nowrap;
   overflow: hidden;
@@ -522,7 +522,7 @@ body:where(.settings-report-legacy-page) {
 :where(.report-entry-page) .voice-input-modal-step {
   margin: 0;
   color: #c8ddff;
-  font-size: 24px;
+  font-size: var(--font-xl);
   line-height: 1;
   font-weight: 900;
   letter-spacing: .01em;
@@ -539,7 +539,7 @@ body:where(.settings-report-legacy-page) {
 
 :where(.report-entry-page) .voice-input-modal-prompt {
   margin: 0 0 8px;
-  font-size: 15px;
+  font-size: var(--font-md);
   color: #d3e6ff;
   font-weight: 900;
   line-height: 1.35;
@@ -547,7 +547,7 @@ body:where(.settings-report-legacy-page) {
 
 :where(.report-entry-page) .voice-input-modal-status {
   margin: 0 0 8px;
-  font-size: 13px;
+  font-size: var(--font-sm);
   color: #bdd6fa;
   line-height: 1.3;
 }
@@ -559,7 +559,7 @@ body:where(.settings-report-legacy-page) {
   border-radius: 8px;
   background: rgba(11,23,44,.9);
   padding: 8px 10px;
-  font-size: 14px;
+  font-size: var(--font-md);
   color: #e8f2ff;
   line-height: 1.35;
   word-break: break-word;
@@ -575,7 +575,7 @@ body:where(.settings-report-legacy-page) {
 :where(.report-entry-page) .voice-choice-guide,
 :where(.report-entry-page) .voice-amount-guide {
   margin: 0;
-  font-size: 13px;
+  font-size: var(--font-sm);
   color: #bdd6fa;
   font-weight: 700;
 }
@@ -612,7 +612,7 @@ body:where(.settings-report-legacy-page) {
   border: 1px solid #7ea6df;
   border-radius: 999px;
   color: #d6e8ff;
-  font-size: 14px;
+  font-size: var(--font-md);
   font-weight: 900;
   line-height: 1;
   background: rgba(10,20,40,.75);
@@ -620,7 +620,7 @@ body:where(.settings-report-legacy-page) {
 
 :where(.report-entry-page) .voice-choice-label {
   color: #f1f7ff;
-  font-size: clamp(20px,5.8vw,30px);
+  font-size: clamp(20px, 5.4vw, 24px);
   font-weight: 900;
   line-height: 1.05;
   white-space: nowrap;
@@ -652,13 +652,13 @@ body:where(.settings-report-legacy-page) {
 
 :where(.report-entry-page) .voice-amount-label {
   margin: 0 0 6px;
-  font-size: 12px;
+  font-size: var(--font-sm);
   color: #bdd6fa;
   font-weight: 700;
 }
 
 :where(.report-entry-page) .voice-amount-value {
-  font-size: clamp(32px,10vw,54px);
+  font-size: clamp(32px, 9.5vw, 40px);
   font-weight: 900;
   line-height: 1.05;
   text-align: right;
@@ -684,7 +684,7 @@ body:where(.settings-report-legacy-page) {
 :where(.report-entry-page) .voice-input-modal-actions .btn {
   min-height: 52px;
   border-radius: 10px;
-  font-size: 17px;
+  font-size: var(--font-lg);
   font-weight: 900;
 }
 
@@ -765,7 +765,7 @@ body:where(.settings-report-legacy-page) {
   border: 2px solid #9d1111;
   background: #d93025;
   color: #fff;
-  font-size: 22px;
+  font-size: var(--font-xl);
   font-weight: 900;
   text-align: center;
   letter-spacing: .04em;
@@ -773,7 +773,7 @@ body:where(.settings-report-legacy-page) {
 
 :where(.settings-report-legacy-page) .settings-top-note {
   margin: 0 0 12px;
-  font-size: 13px;
+  font-size: var(--font-sm);
   color: #f7fbff;
   line-height: 1.6;
 }
@@ -785,7 +785,7 @@ body:where(.settings-report-legacy-page) {
 }
 
 :where(.settings-report-legacy-page) .save-note {
-  font-size: 13px;
+  font-size: var(--font-sm);
   color: var(--legacy-page-muted);
   line-height: 1.5;
   white-space: pre-line;
@@ -831,14 +831,14 @@ body:where(.settings-report-legacy-page) {
 :where(.settings-report-legacy-page) .editor-modal-title {
   margin: 0;
   color: #eaf3ff;
-  font-size: clamp(22px,6.2vw,30px);
+  font-size: clamp(24px, 5.8vw, 28px);
   line-height: 1.1;
 }
 
 :where(.settings-report-legacy-page) .editor-modal-step {
   margin: 0;
   color: #c8ddff;
-  font-size: 24px;
+  font-size: var(--font-lg);
   line-height: 1;
   font-weight: 900;
   letter-spacing: .01em;
@@ -864,7 +864,7 @@ body:where(.settings-report-legacy-page) {
 }
 
 :where(.settings-report-legacy-page) .editor-modal-label {
-  font-size: 13px;
+  font-size: var(--font-md);
   color: #bdd6fa;
   font-weight: 800;
 }
@@ -875,7 +875,7 @@ body:where(.settings-report-legacy-page) {
   border: 1px solid rgba(125,164,230,.42);
   border-radius: 8px;
   padding: 14px 10px;
-  font-size: 20px;
+  font-size: var(--font-xl);
   min-height: 56px;
   background: rgba(11,23,44,.9);
   color: #e8f2ff;
@@ -888,7 +888,7 @@ body:where(.settings-report-legacy-page) {
 
 :where(.settings-report-legacy-page) .editor-modal-help {
   margin: 0;
-  font-size: 12px;
+  font-size: var(--font-sm);
   color: #bdd6fa;
   line-height: 1.5;
 }
@@ -911,7 +911,7 @@ body:where(.settings-report-legacy-page) {
   border: 1px solid rgba(125,164,230,.42);
   border-radius: 8px;
   padding: 0 12px;
-  font-size: 16px;
+  font-size: var(--font-md);
   font-weight: 800;
   background: rgba(11,23,44,.9);
   color: #e8f2ff;
@@ -938,7 +938,7 @@ body:where(.settings-report-legacy-page) {
 :where(.settings-report-legacy-page) .editor-modal-actions .btn {
   min-height: 52px;
   border-radius: 10px;
-  font-size: 17px;
+  font-size: var(--font-lg);
   font-weight: 900;
 }
 
@@ -1001,7 +1001,7 @@ body:where(.settings-report-legacy-page) {
 
   :where(.report-entry-page) .btn,
   :where(.settings-report-legacy-page) .btn {
-    font-size: 15px;
+    font-size: var(--font-md);
     min-height: 52px;
     padding: 12px 6px;
   }
@@ -1010,7 +1010,7 @@ body:where(.settings-report-legacy-page) {
 @media (min-width: 768px) {
   body:where(.report-entry-page),
   body:where(.settings-report-legacy-page) {
-    font-size: 20px;
+    font-size: var(--font-lg);
   }
 
   :where(.report-entry-page) .main,
@@ -1021,24 +1021,24 @@ body:where(.settings-report-legacy-page) {
 
   :where(.report-entry-page) .btn,
   :where(.settings-report-legacy-page) .btn {
-    font-size: 18px;
+    font-size: var(--font-lg);
     min-height: 64px;
   }
 
   :where(.report-entry-page) .input,
   :where(.settings-report-legacy-page) .input {
-    font-size: 22px;
+    font-size: var(--font-xl);
     min-height: 64px;
   }
 
   :where(.report-entry-page) .key {
     min-height: 72px;
-    font-size: 26px;
+    font-size: var(--font-3xl);
   }
 
   :where(.settings-report-legacy-page) .editor-check {
     min-height: 58px;
-    font-size: 18px;
+    font-size: var(--font-lg);
   }
 }
 
@@ -1063,7 +1063,7 @@ html, body {
   color: var(--text-primary) !important;
   font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Hiragino Sans",
                "BIZ UDPGothic", Meiryo, sans-serif;
-  font-size: var(--font-2xl);
+  font-size: var(--font-md);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -1469,7 +1469,7 @@ textarea {
   align-items: center;
   gap: var(--space-3);
   font-weight: 900;
-  font-size: var(--font-lg);
+  font-size: var(--font-2xl);
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--text-muted) !important;
@@ -1489,7 +1489,7 @@ textarea {
 
 /* 詳細確認ページのタイトルは少し大きめに */
 .main .title {
-  font-size: var(--font-sm);
+  font-size: var(--font-xl);
 }
 
 /* Note テキスト */
@@ -1558,7 +1558,7 @@ select.input {
 
 .label,
 .wf-field-label {
-  font-size: var(--font-sm) !important;
+  font-size: var(--font-md) !important;
   color: var(--text-muted) !important;
   font-weight: 700;
   line-height: 1.3;
@@ -1580,7 +1580,7 @@ select.input {
   background: var(--surface-2) !important;
   color: var(--text-primary) !important;
   font: inherit;
-  font-size: var(--font-xl);
+  font-size: var(--font-lg);
   font-weight: 800;
   padding: var(--space-3) 14px;
   min-height: var(--control-h-md);
@@ -1668,7 +1668,7 @@ select.input {
 /* Small ボタン */
 .btn.small,
 .btn.btn-mini {
-  font-size: var(--font-md);
+  font-size: var(--font-sm);
   font-weight: 700;
   min-height: var(--control-h-sm);
   padding: 7px 12px;
@@ -1796,7 +1796,7 @@ select.input {
   font-weight: 700;
 }
 .kv .value {
-  font-size: var(--font-xl);
+  font-size: var(--font-md);
   font-weight: 800;
   word-break: break-word;
   color: var(--text-primary);
@@ -2202,7 +2202,7 @@ td.muted,
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: var(--font-xs);
+  font-size: var(--font-sm);
   color: var(--text-muted) !important;
   margin: 0 0 8px 0;
   font-weight: 900;
@@ -2274,7 +2274,7 @@ main > .section {
 
 .section .title {
   font-weight: 900;
-  font-size: 17px !important;
+  font-size: var(--font-xl) !important;
   letter-spacing: 0;
   text-transform: none;
   color: var(--text-primary) !important;
@@ -2629,10 +2629,10 @@ button[data-group]:active {
    25. Responsive — Small Mobile (≤ 375px)
    ============================================================ */
 @media (max-width: 375px) {
-  html, body { font-size: 15px; }
+  html, body { font-size: var(--font-md); }
 
   .tsms-header,
-  .header { font-size: 18px; }
+  .header { font-size: var(--font-lg); }
 
   .header-to-report,
   .header-manual-edit {
@@ -2640,20 +2640,20 @@ button[data-group]:active {
     padding: 6px 8px !important;
   }
 
-  .k { width: 120px; font-size: 12px; }
-  .v { font-size: 15px; }
+  .k { width: 120px; font-size: var(--font-sm); }
+  .v { font-size: var(--font-md); }
 
   .main .content .k { width: 110px; }
-  .main .content .v { font-size: 18px; }
+  .main .content .v { font-size: var(--font-lg); }
 
-  .btn { font-size: 14px; min-height: 46px; padding: 10px 10px; }
-  .btn.action-main { min-height: 118px; font-size: 18px; }
+  .btn { font-size: var(--font-md); min-height: 46px; padding: 10px 10px; }
+  .btn.action-main { min-height: 118px; font-size: var(--font-lg); }
   .btn.reset-final { min-height: 128px; }
 
   .actions { gap: 8px; }
 
   .kv { grid-template-columns: 80px 1fr; }
-  .kv .value { font-size: 14px; }
+  .kv .value { font-size: var(--font-md); }
 
   .tsms-bottom-nav a,
   .tsms-bottom-nav button {
@@ -2671,9 +2671,9 @@ button[data-group]:active {
    ============================================================ */
 @media (min-width: 376px) and (max-width: 767px) {
   .k { width: 140px; }
-  .v { font-size: 16px; }
-  .main .content .v { font-size: 20px; }
-  .btn.action-main { min-height: 124px; font-size: 19px; }
+  .v { font-size: var(--font-lg); }
+  .main .content .v { font-size: var(--font-xl); }
+  .btn.action-main { min-height: 124px; font-size: var(--font-xl); }
   .btn.reset-final { min-height: 136px; }
 }
 
@@ -2681,27 +2681,27 @@ button[data-group]:active {
    27. Responsive — Tablet / iPad (768px ～ 1023px)
    ============================================================ */
 @media (min-width: 768px) {
-  html, body { font-size: 16px; }
+  html, body { font-size: var(--font-md); }
 
   .main,
   .container { padding: 16px 20px; }
 
   /* ヘッダー */
   .tsms-header,
-  .header { font-size: 21px; height: 64px; }
+  .header { font-size: var(--font-xl); height: 64px; }
 
   /* テーブル key/value */
-  .k { width: 170px; font-size: 14px; }
-  .v { font-size: 18px; }
+  .k { width: 170px; font-size: var(--font-md); }
+  .v { font-size: var(--font-xl); }
 
   /* Detail の v */
   .main .content .k { width: 160px; }
-  .main .content .v { font-size: 22px; }
+  .main .content .v { font-size: var(--font-3xl); }
 
   /* Actions グリッド */
   .actions { grid-template-columns: 1fr 1fr 1fr 1fr; }
   .btn.wide { grid-column: auto; }
-  .btn.action-main { min-height: 132px; font-size: 20px; }
+  .btn.action-main { min-height: 132px; font-size: var(--font-xl); }
   .btn.reset-final { min-height: 144px; }
 
   /* ボトムナビ: タブレットで少し広く */
@@ -2717,7 +2717,7 @@ button[data-group]:active {
   .panel { margin: 12px 0; }
 
   /* Sales テーブル */
-  table { font-size: 12px; }
+  table { font-size: var(--font-xs); }
   th, td { padding: 5px 4px; }
 }
 
@@ -2732,10 +2732,10 @@ button[data-group]:active {
   .header { height: 68px; font-size: 22px; }
 
   .k { width: 190px; }
-  .v { font-size: 19px; }
+  .v { font-size: var(--font-xl); }
 
-  .btn { font-size: 16px; }
-  .btn.action-main { min-height: 136px; font-size: 20px; }
+  .btn { font-size: var(--font-lg); }
+  .btn.action-main { min-height: 136px; font-size: var(--font-xl); }
   .btn.reset-final { min-height: 148px; }
 
   /* Sales page: テーブルをフル幅に */
@@ -3076,7 +3076,7 @@ select,
   color: var(--text-primary) !important;
   min-height: var(--control-h-md);
   padding: 10px 12px;
-  font-size: var(--font-2xl) !important;
+  font-size: var(--font-lg) !important;
   font-weight: 900;
 }
 
@@ -3094,7 +3094,7 @@ select,
   .page-block-unified .btn.action-main,
   .page-block-unified .actionBtn.action-main {
     min-height: 124px !important;
-    font-size: 19px !important;
+    font-size: var(--font-xl) !important;
   }
 
   .page-block-unified .btn.reset-final {
@@ -3106,7 +3106,7 @@ select,
   .page-block-unified .btn.action-main,
   .page-block-unified .actionBtn.action-main {
     min-height: 132px !important;
-    font-size: 20px !important;
+    font-size: var(--font-xl) !important;
   }
 
   .page-block-unified .btn.reset-final {
@@ -3118,7 +3118,7 @@ select,
   .page-block-unified .btn.action-main,
   .page-block-unified .actionBtn.action-main {
     min-height: 136px !important;
-    font-size: 20px !important;
+    font-size: var(--font-xl) !important;
   }
 
   .page-block-unified .btn.reset-final {
@@ -3159,7 +3159,7 @@ select,
   border-bottom: var(--line-strong) solid var(--border) !important;
   background: var(--surface-1) !important;
   color: var(--text-primary) !important;
-  font-size: var(--font-4xl);
+  font-size: var(--font-xl);
 }
 
 .page-block-unified .header-to-report,
@@ -3451,13 +3451,12 @@ select,
 }
 
 :where(.confirm-page) .confirm-summary-modal-card {
-  --confirm-summary-modal-type-scale: 1.34;
-  --confirm-summary-modal-title-size: calc(var(--font-3xl) * var(--confirm-summary-modal-type-scale));
-  --confirm-summary-modal-subtitle-size: calc(var(--font-md) * var(--confirm-summary-modal-type-scale));
-  --confirm-summary-modal-countdown-size: calc(var(--font-md) * var(--confirm-summary-modal-type-scale));
-  --confirm-summary-modal-label-size: calc(var(--font-md) * var(--confirm-summary-modal-type-scale));
-  --confirm-summary-modal-value-size: calc(var(--font-2xl) * var(--confirm-summary-modal-type-scale));
-  --confirm-summary-modal-emphasis-size: calc(24px * var(--confirm-summary-modal-type-scale));
+  --confirm-summary-modal-title-size: var(--font-3xl);
+  --confirm-summary-modal-subtitle-size: var(--font-md);
+  --confirm-summary-modal-countdown-size: var(--font-md);
+  --confirm-summary-modal-label-size: var(--font-md);
+  --confirm-summary-modal-value-size: var(--font-xl);
+  --confirm-summary-modal-emphasis-size: var(--font-5xl);
 }
 
 :where(.confirm-page) .confirm-summary-modal-head,
@@ -3473,6 +3472,7 @@ select,
   font-weight: 900;
   color: var(--text-primary);
   line-height: 1.08;
+  white-space: nowrap;
 }
 
 :where(.confirm-page) .confirm-summary-modal-subtitle {
@@ -3481,6 +3481,7 @@ select,
   font-weight: 700;
   color: var(--text-muted);
   line-height: 1.2;
+  white-space: nowrap;
 }
 
 :where(.confirm-page) .confirm-summary-modal-countdown {
@@ -3489,6 +3490,7 @@ select,
   font-weight: 800;
   color: var(--value-highlight);
   line-height: 1.15;
+  white-space: nowrap;
 }
 
 :where(.confirm-page) .confirm-summary-modal-list,
@@ -3506,9 +3508,9 @@ select,
   font-size: var(--confirm-summary-modal-value-size) !important;
   font-weight: 900;
   line-height: 1.15 !important;
-  white-space: normal;
+  white-space: nowrap;
   word-break: normal;
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
 }
 
 :where(.confirm-page) .confirm-summary-modal-list .k {
@@ -3516,6 +3518,7 @@ select,
   font-weight: 800;
   color: var(--text-muted) !important;
   line-height: 1.2 !important;
+  white-space: nowrap;
 }
 
 :where(.confirm-page) .confirm-summary-modal-list .v .value-number.emphasis,
@@ -3530,11 +3533,11 @@ select,
 
 /* Keep the report submit modal on the shared shell while isolating typography. */
 :where(.report-entry-page) .report-submit-confirm-modal-card {
-  --report-submit-confirm-title-size: clamp(32px, 6.2vw, 36px);
-  --report-submit-confirm-subtitle-size: clamp(22px, 4.6vw, 24px);
-  --report-submit-confirm-label-size: clamp(24px, 5vw, 28px);
-  --report-submit-confirm-value-size: clamp(28px, 5.6vw, 32px);
-  --report-submit-confirm-button-size: clamp(28px, 5.4vw, 30px);
+  --report-submit-confirm-title-size: clamp(26px, 6vw, 28px);
+  --report-submit-confirm-subtitle-size: clamp(18px, 4.2vw, 20px);
+  --report-submit-confirm-label-size: clamp(16px, 4.1vw, 18px);
+  --report-submit-confirm-value-size: clamp(20px, 4.8vw, 22px);
+  --report-submit-confirm-button-size: clamp(18px, 4.4vw, 20px);
   border: var(--line-strong) solid var(--modal-shell-border) !important;
   border-radius: var(--radius-lg);
 }
@@ -3545,6 +3548,7 @@ select,
   font-weight: 900;
   color: var(--text-primary);
   line-height: 1.08;
+  white-space: nowrap;
 }
 
 :where(.report-entry-page) .report-submit-confirm-modal-subtitle {
@@ -3553,13 +3557,15 @@ select,
   font-weight: 800;
   color: var(--text-primary);
   line-height: 1.18;
+  white-space: nowrap;
 }
 
 :where(.report-entry-page) .report-submit-confirm-modal-list .k {
   font-size: var(--report-submit-confirm-label-size) !important;
   font-weight: 800;
-  color: var(--text-primary) !important;
+  color: var(--text-muted) !important;
   line-height: 1.2;
+  white-space: nowrap;
 }
 
 :where(.report-entry-page) .report-submit-confirm-modal-list .v {

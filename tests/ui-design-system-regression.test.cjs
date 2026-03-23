@@ -4,6 +4,7 @@ const assert = require("assert");
 
 const ROOT = path.resolve(__dirname, "..");
 const css = fs.readFileSync(path.join(ROOT, "tsms-design.css"), "utf8");
+const settingsReportEditorCss = fs.readFileSync(path.join(ROOT, "settings-report-editor.css"), "utf8");
 
 function read(name) {
   return fs.readFileSync(path.join(ROOT, name), "utf8");
@@ -62,10 +63,10 @@ function testSharedShellRulesExist() {
   assert.match(css, /\.btn\.reset-final \{[\s\S]*min-height: 128px;/);
   assert.match(css, /\.page-block-unified \.btn\.action-main,[\s\S]*min-height: 118px !important;[\s\S]*font-size: var\(--font-4xl\) !important;/);
   assert.match(css, /\.page-block-unified \.btn\.reset-final \{[\s\S]*min-height: 128px !important;/);
-  assert.match(css, /@media \(min-width: 376px\) and \(max-width: 767px\) \{[\s\S]*\.btn\.action-main \{ min-height: 124px; font-size: 19px; \}[\s\S]*\.btn\.reset-final \{ min-height: 136px; \}/);
-  assert.match(css, /@media \(min-width: 768px\) \{[\s\S]*\.btn\.action-main \{ min-height: 132px; font-size: 20px; \}[\s\S]*\.btn\.reset-final \{ min-height: 144px; \}/);
-  assert.match(css, /@media \(min-width: 376px\) and \(max-width: 767px\) \{[\s\S]*\.page-block-unified \.btn\.action-main,[\s\S]*min-height: 124px !important;[\s\S]*font-size: 19px !important;[\s\S]*\.page-block-unified \.btn\.reset-final \{[\s\S]*min-height: 136px !important;/);
-  assert.match(css, /@media \(min-width: 768px\) \{[\s\S]*\.page-block-unified \.btn\.action-main,[\s\S]*min-height: 132px !important;[\s\S]*font-size: 20px !important;[\s\S]*\.page-block-unified \.btn\.reset-final \{[\s\S]*min-height: 144px !important;/);
+  assert.match(css, /@media \(min-width: 376px\) and \(max-width: 767px\) \{[\s\S]*\.btn\.action-main \{ min-height: 124px; font-size: var\(--font-xl\); \}[\s\S]*\.btn\.reset-final \{ min-height: 136px; \}/);
+  assert.match(css, /@media \(min-width: 768px\) \{[\s\S]*\.btn\.action-main \{ min-height: 132px; font-size: var\(--font-xl\); \}[\s\S]*\.btn\.reset-final \{ min-height: 144px; \}/);
+  assert.match(css, /@media \(min-width: 376px\) and \(max-width: 767px\) \{[\s\S]*\.page-block-unified \.btn\.action-main,[\s\S]*min-height: 124px !important;[\s\S]*font-size: var\(--font-xl\) !important;[\s\S]*\.page-block-unified \.btn\.reset-final \{[\s\S]*min-height: 136px !important;/);
+  assert.match(css, /@media \(min-width: 768px\) \{[\s\S]*\.page-block-unified \.btn\.action-main,[\s\S]*min-height: 132px !important;[\s\S]*font-size: var\(--font-xl\) !important;[\s\S]*\.page-block-unified \.btn\.reset-final \{[\s\S]*min-height: 144px !important;/);
   assert.match(css, /@media \(max-width: 375px\) \{[\s\S]*\.tsms-bottom-nav a,[\s\S]*--bottom-nav-label-size: calc\(15px \* var\(--bottom-nav-size-scale\)\);[\s\S]*--bottom-nav-icon-size: calc\(28px \* var\(--bottom-nav-size-scale\)\);[\s\S]*--bottom-nav-item-gap: 1px;[\s\S]*--bottom-nav-item-pad-top: calc\(7px \* var\(--bottom-nav-size-scale\)\);[\s\S]*--bottom-nav-item-pad-bottom: calc\(8px \* var\(--bottom-nav-size-scale\)\);[\s\S]*min-height: calc\(54px \* var\(--bottom-nav-size-scale\)\);/);
   assert.match(css, /@media \(min-width: 768px\) \{[\s\S]*\.tsms-bottom-nav a,[\s\S]*--bottom-nav-label-size: calc\(17px \* var\(--bottom-nav-size-scale\)\);[\s\S]*--bottom-nav-icon-size: calc\(31px \* var\(--bottom-nav-size-scale\)\);/);
   assert.match(css, /\.main\[style\*="justify-content:center"\],\s*\.auth-main \{/);
@@ -123,22 +124,22 @@ function testPageWidthModifiersExist() {
   assert.match(read("report.html"), /<div class="line"><div class="k">支払方法<\/div><div class="v value-highlight" id="confirmPayMethod">-<\/div><\/div>/);
   assert.doesNotMatch(read("report.html"), /submit-confirm-modal-step/);
   assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-card,\s*:where\(\.report-entry-page\) \.report-submit-confirm-modal-card \{/);
-  assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-card \{[\s\S]*--confirm-summary-modal-type-scale: 1\.34;[\s\S]*--confirm-summary-modal-title-size: calc\(var\(--font-3xl\) \* var\(--confirm-summary-modal-type-scale\)\);[\s\S]*--confirm-summary-modal-subtitle-size: calc\(var\(--font-md\) \* var\(--confirm-summary-modal-type-scale\)\);[\s\S]*--confirm-summary-modal-countdown-size: calc\(var\(--font-md\) \* var\(--confirm-summary-modal-type-scale\)\);[\s\S]*--confirm-summary-modal-label-size: calc\(var\(--font-md\) \* var\(--confirm-summary-modal-type-scale\)\);[\s\S]*--confirm-summary-modal-value-size: calc\(var\(--font-2xl\) \* var\(--confirm-summary-modal-type-scale\)\);[\s\S]*--confirm-summary-modal-emphasis-size: calc\(24px \* var\(--confirm-summary-modal-type-scale\)\);/);
-  assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-title \{[\s\S]*font-size: var\(--confirm-summary-modal-title-size\);[\s\S]*line-height: 1\.08;/);
-  assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-subtitle \{[\s\S]*font-size: var\(--confirm-summary-modal-subtitle-size\);[\s\S]*line-height: 1\.2;/);
+  assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-card \{[\s\S]*--confirm-summary-modal-title-size: var\(--font-3xl\);[\s\S]*--confirm-summary-modal-subtitle-size: var\(--font-md\);[\s\S]*--confirm-summary-modal-countdown-size: var\(--font-md\);[\s\S]*--confirm-summary-modal-label-size: var\(--font-md\);[\s\S]*--confirm-summary-modal-value-size: var\(--font-xl\);[\s\S]*--confirm-summary-modal-emphasis-size: var\(--font-5xl\);/);
+  assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-title \{[\s\S]*font-size: var\(--confirm-summary-modal-title-size\);[\s\S]*line-height: 1\.08;[\s\S]*white-space: nowrap;/);
+  assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-subtitle \{[\s\S]*font-size: var\(--confirm-summary-modal-subtitle-size\);[\s\S]*line-height: 1\.2;[\s\S]*white-space: nowrap;/);
   assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-countdown \{/);
-  assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-countdown \{[\s\S]*font-size: var\(--confirm-summary-modal-countdown-size\);[\s\S]*line-height: 1\.15;/);
-  assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-list \.k \{[\s\S]*font-size: var\(--confirm-summary-modal-label-size\) !important;[\s\S]*font-weight: 800;[\s\S]*line-height: 1\.2 !important;/);
-  assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-list \.v \{[\s\S]*font-size: var\(--confirm-summary-modal-value-size\) !important;[\s\S]*font-weight: 900;[\s\S]*line-height: 1\.15 !important;[\s\S]*white-space: normal;[\s\S]*overflow-wrap: anywhere;/);
+  assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-countdown \{[\s\S]*font-size: var\(--confirm-summary-modal-countdown-size\);[\s\S]*line-height: 1\.15;[\s\S]*white-space: nowrap;/);
+  assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-list \.k \{[\s\S]*font-size: var\(--confirm-summary-modal-label-size\) !important;[\s\S]*font-weight: 800;[\s\S]*line-height: 1\.2 !important;[\s\S]*white-space: nowrap;/);
+  assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-list \.v \{[\s\S]*font-size: var\(--confirm-summary-modal-value-size\) !important;[\s\S]*font-weight: 900;[\s\S]*line-height: 1\.15 !important;[\s\S]*white-space: nowrap;[\s\S]*overflow-wrap: normal;/);
   assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-list \.v \.value-number\.emphasis,\s*:where\(\.report-entry-page\) \.report-submit-confirm-modal-list \.v \.value-number\.emphasis \{/);
   assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-list \.v \.value-number\.emphasis \{[\s\S]*font-size: var\(--confirm-summary-modal-emphasis-size\);/);
   assert.doesNotMatch(css, /:where\(\.confirm-page\) \.confirm-summary-modal-title,\s*:where\(\.report-entry-page\) \.report-submit-confirm-modal-card \.confirm-summary-modal-title \{/);
   assert.doesNotMatch(css, /:where\(\.confirm-page\) \.confirm-summary-modal-subtitle,\s*:where\(\.report-entry-page\) \.report-submit-confirm-modal-card \.confirm-summary-modal-subtitle \{/);
   assert.doesNotMatch(css, /:where\(\.confirm-page\) \.confirm-summary-modal-list \.v,\s*:where\(\.report-entry-page\) \.report-submit-confirm-modal-list \.v \{/);
-  assert.match(css, /:where\(\.report-entry-page\) \.report-submit-confirm-modal-card \{[\s\S]*--report-submit-confirm-title-size: clamp\(32px, 6\.2vw, 36px\);[\s\S]*--report-submit-confirm-subtitle-size: clamp\(22px, 4\.6vw, 24px\);[\s\S]*--report-submit-confirm-label-size: clamp\(24px, 5vw, 28px\);[\s\S]*--report-submit-confirm-value-size: clamp\(28px, 5\.6vw, 32px\);[\s\S]*--report-submit-confirm-button-size: clamp\(28px, 5\.4vw, 30px\);[\s\S]*border: var\(--line-strong\) solid var\(--modal-shell-border\) !important;[\s\S]*border-radius: var\(--radius-lg\);/);
-  assert.match(css, /:where\(\.report-entry-page\) \.report-submit-confirm-modal-title \{[\s\S]*font-size: var\(--report-submit-confirm-title-size\);[\s\S]*line-height: 1\.08;/);
-  assert.match(css, /:where\(\.report-entry-page\) \.report-submit-confirm-modal-subtitle \{[\s\S]*font-size: var\(--report-submit-confirm-subtitle-size\);[\s\S]*line-height: 1\.18;/);
-  assert.match(css, /:where\(\.report-entry-page\) \.report-submit-confirm-modal-list \.k \{[\s\S]*font-size: var\(--report-submit-confirm-label-size\) !important;[\s\S]*font-weight: 800;/);
+  assert.match(css, /:where\(\.report-entry-page\) \.report-submit-confirm-modal-card \{[\s\S]*--report-submit-confirm-title-size: clamp\(26px, 6vw, 28px\);[\s\S]*--report-submit-confirm-subtitle-size: clamp\(18px, 4\.2vw, 20px\);[\s\S]*--report-submit-confirm-label-size: clamp\(16px, 4\.1vw, 18px\);[\s\S]*--report-submit-confirm-value-size: clamp\(20px, 4\.8vw, 22px\);[\s\S]*--report-submit-confirm-button-size: clamp\(18px, 4\.4vw, 20px\);[\s\S]*border: var\(--line-strong\) solid var\(--modal-shell-border\) !important;[\s\S]*border-radius: var\(--radius-lg\);/);
+  assert.match(css, /:where\(\.report-entry-page\) \.report-submit-confirm-modal-title \{[\s\S]*font-size: var\(--report-submit-confirm-title-size\);[\s\S]*line-height: 1\.08;[\s\S]*white-space: nowrap;/);
+  assert.match(css, /:where\(\.report-entry-page\) \.report-submit-confirm-modal-subtitle \{[\s\S]*font-size: var\(--report-submit-confirm-subtitle-size\);[\s\S]*line-height: 1\.18;[\s\S]*white-space: nowrap;/);
+  assert.match(css, /:where\(\.report-entry-page\) \.report-submit-confirm-modal-list \.k \{[\s\S]*font-size: var\(--report-submit-confirm-label-size\) !important;[\s\S]*font-weight: 800;[\s\S]*color: var\(--text-muted\) !important;[\s\S]*white-space: nowrap;/);
   assert.match(css, /:where\(\.report-entry-page\) \.report-submit-confirm-modal-list \.v \{[\s\S]*font-size: var\(--report-submit-confirm-value-size\) !important;[\s\S]*font-weight: 900;[\s\S]*white-space: normal;[\s\S]*word-break: normal;[\s\S]*overflow-wrap: anywhere;[\s\S]*line-height: 1\.2 !important;/);
   assert.match(css, /:where\(\.report-entry-page\) \.report-submit-confirm-modal-actions \.btn \{[\s\S]*min-height: 58px !important;[\s\S]*font-size: var\(--report-submit-confirm-button-size\) !important;/);
   assert.match(css, /\.result-modal-card \{[\s\S]*border: var\(--line-strong\) solid var\(--modal-shell-border\) !important;[\s\S]*box-shadow: var\(--modal-shell-shadow\);/);
@@ -146,6 +147,17 @@ function testPageWidthModifiersExist() {
   assert.match(css, /:where\(\.report-entry-page\) \.confirm-modal-card,\s*:where\(\.report-entry-page\) \.result-modal-card \{[\s\S]*border: var\(--line-strong\) solid var\(--modal-shell-border\);[\s\S]*box-shadow: var\(--modal-shell-shadow\);/);
   assert.match(css, /:where\(\.report-entry-page\),[\s\S]*--legacy-page-border: #999;/);
   assert.match(css, /body:where\(\.report-entry-page\),[\s\S]*background: var\(--bg\);[\s\S]*color: var\(--text-primary\);/);
+}
+
+function testSettingsReportEditorUsesSharedTypeScale() {
+  assert.match(settingsReportEditorCss, /\.settings-report-page \.settings-mode-banner\{[\s\S]*font-size:var\(--font-xl\);/);
+  assert.match(settingsReportEditorCss, /\.settings-report-page \.settings-top-note\{[\s\S]*font-size:var\(--font-sm\);/);
+  assert.match(settingsReportEditorCss, /\.settings-report-page \.wf-label\{[\s\S]*font-size:var\(--font-md\);/);
+  assert.match(settingsReportEditorCss, /\.settings-report-page \.editor-modal-title\{[\s\S]*font-size:clamp\(24px, 5\.8vw, 28px\);/);
+  assert.match(settingsReportEditorCss, /\.settings-report-page \.editor-modal-step\{[\s\S]*font-size:var\(--font-lg\);/);
+  assert.match(settingsReportEditorCss, /\.settings-report-page \.editor-modal-label\{[\s\S]*font-size:var\(--font-md\);/);
+  assert.match(settingsReportEditorCss, /\.settings-report-page \.editor-modal-help\{[\s\S]*font-size:var\(--font-sm\);/);
+  assert.match(settingsReportEditorCss, /\.settings-report-page \.editor-check\{[\s\S]*font-size:var\(--font-md\);/);
 }
 
 function testHeaderActionGrammarIsUnified() {
@@ -247,6 +259,7 @@ function runTests() {
     ["共通状態表示定義", testSharedStateDisplayRulesExist],
     ["主要画面の重複シェル削減", testPagesNoLongerCarryUnifiedShellBlocks],
     ["画面幅修飾", testPageWidthModifiersExist],
+    ["設定 editor typography", testSettingsReportEditorUsesSharedTypeScale],
     ["ヘッダー右上アクション文法", testHeaderActionGrammarIsUnified],
     ["主要画面の状態表示文法", testPagesUseSharedStateDisplayGrammar],
     ["設定ハブページ追加", testSettingsHubPagesExist],

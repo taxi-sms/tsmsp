@@ -71,7 +71,7 @@ body{padding-bottom:78px;}
   box-shadow:0 10px 24px rgba(0,0,0,.3);
 }
 .header-title{
-  font-size:36px;
+  font-size:clamp(32px,7.8vw,40px);
   line-height:1;
   letter-spacing:.02em;
 }
@@ -79,7 +79,7 @@ body{padding-bottom:78px;}
   display:flex;
   gap:6px;
   align-items:center;
-  font-size:13px;
+  font-size:var(--font-md);
   color:var(--text-secondary);
   font-weight:700;
   text-align:right;
@@ -107,7 +107,7 @@ body{padding-bottom:78px;}
   align-items:center;
   gap:10px;
   margin:0 0 8px;
-  font-size:26px;
+  font-size:var(--font-3xl);
   font-weight:900;
 }
 .group-title::after{
@@ -118,7 +118,7 @@ body{padding-bottom:78px;}
 }
 .group-note{
   margin:0 0 8px;
-  font-size:13px;
+  font-size:var(--font-md);
   color:var(--text-muted);
   font-weight:700;
 }
@@ -191,7 +191,7 @@ body{padding-bottom:78px;}
   top:50%;
   z-index:1;
   transform:translateY(-50%);
-  font-size:26px;
+  font-size:var(--font-4xl);
   font-weight:900;
   color:var(--text-secondary);
   white-space:nowrap;
@@ -211,7 +211,7 @@ body{padding-bottom:78px;}
   background:var(--accent);
   color:#fff;
   font:inherit;
-  font-size:26px;
+  font-size:var(--font-3xl);
   font-weight:900;
   line-height:1;
   display:flex;
@@ -255,7 +255,7 @@ body{padding-bottom:78px;}
 }
 .calendar-month{
   margin:0;
-  font-size:18px;
+  font-size:var(--font-lg);
   font-weight:900;
   color:var(--text-secondary);
 }
@@ -273,7 +273,7 @@ body{padding-bottom:78px;}
   background:var(--surface-2);
   color:var(--text-primary);
   font:inherit;
-  font-size:20px;
+  font-size:var(--font-xl);
   line-height:1;
   font-weight:900;
   display:grid;
@@ -291,7 +291,7 @@ body{padding-bottom:78px;}
 }
 .calendar-week span{
   text-align:center;
-  font-size:13px;
+  font-size:var(--font-md);
   color:var(--text-muted);
   font-weight:800;
 }
@@ -306,7 +306,7 @@ body{padding-bottom:78px;}
   justify-content:center;
   gap:2px;
   font:inherit;
-  font-size:13px;
+  font-size:var(--font-md);
   font-weight:800;
   color:var(--text-primary);
   padding:2px;
@@ -334,7 +334,7 @@ body{padding-bottom:78px;}
   border-radius:8px;
   background:var(--surface-2);
   padding:8px;
-  font-size:13px;
+  font-size:var(--font-md);
   color:var(--text-secondary);
 }
 :root[data-theme="dark"] .calendar-info{
@@ -376,7 +376,7 @@ body{padding-bottom:78px;}
 .event-arrow{
   margin-left:auto;
   color:var(--text-muted);
-  font-size:20px;
+  font-size:var(--font-xl);
   line-height:1;
 }
 :root[data-theme="dark"] .event-arrow{ color:#7fb9ff; }
@@ -386,7 +386,7 @@ body{padding-bottom:78px;}
   background:var(--surface-2);
   color:var(--text-secondary);
   padding:10px;
-  font-size:14px;
+  font-size:var(--font-sm);
 }
 .modal-bg{
   position:fixed;
@@ -412,8 +412,8 @@ body{padding-bottom:78px;}
 :root[data-theme="dark"] .modal{
   background:linear-gradient(180deg, rgba(19,38,70,.96), rgba(10,24,45,.96));
 }
-.modal h3{margin:0 0 8px;font-size:20px;}
-.modal p{margin:0 0 10px;font-size:14px;color:var(--text-secondary);}
+.modal h3{margin:0 0 8px;font-size:var(--font-3xl);}
+.modal p{margin:0 0 10px;font-size:var(--font-lg);color:var(--text-secondary);}
 .modal-kv{
   display:grid;
   grid-template-columns:84px 1fr;
@@ -461,10 +461,10 @@ body{padding-bottom:78px;}
   cursor:pointer;
 }
 @media (max-width:460px){
-  .header-title{font-size:30px;}
-  .header-meta{font-size:12px;}
-  .group-title{font-size:22px;}
-  .swipe-label{font-size:22px;}
+  .header-title{font-size:clamp(30px,7.5vw,32px);}
+  .header-meta{font-size:var(--font-xs);}
+  .group-title{font-size:var(--font-3xl);}
+  .swipe-label{font-size:var(--font-3xl);}
 
 }
 </style>
@@ -524,7 +524,7 @@ body{padding-bottom:78px;}
       width:50px;
       height:50px;
       border:var(--line-strong) solid var(--accent);
-      font-size:24px;
+      font-size:var(--font-3xl);
     }
     .calendar-head{
       margin-bottom:var(--space-2);
@@ -619,7 +619,7 @@ body{padding-bottom:78px;}
       font-size:var(--font-2xl);
     }
     @media (max-width:460px){
-      .header-title{font-size:30px;}
+      .header-title{font-size:clamp(30px,7.5vw,32px);}
       .header-meta{font-size:var(--font-sm);}
       .main{gap:var(--space-2);}
       .group-title{font-size:var(--font-3xl);}
