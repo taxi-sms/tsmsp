@@ -2494,11 +2494,9 @@ main .wf-panel {
 }
 
 .wf-row > .btn .btn-label {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  overflow: hidden;
+  display: block;
+  max-inline-size: 4em;
+  margin: 0 auto;
   text-align: center;
   text-wrap: balance;
   word-break: normal;
@@ -2507,11 +2505,11 @@ main .wf-panel {
 }
 
 .wf-row > .btn.is-label-long .btn-label {
-  font-size: calc(var(--font-2xl) - 1px);
+  font-size: calc(var(--font-lg) - 1px);
 }
 
 .wf-row > .btn.is-label-xlong .btn-label {
-  font-size: calc(var(--font-2xl) - 2px);
+  font-size: var(--font-md);
   line-height: 1.15;
 }
 
