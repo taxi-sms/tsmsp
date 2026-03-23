@@ -59,7 +59,7 @@ function testSharedShellRulesExist() {
   assert.match(css, /\.table-wrap thead th \{[\s\S]*position: sticky;[\s\S]*top: 0;[\s\S]*z-index: 3;/);
   assert.match(css, /:root\[data-theme="dark"\] \.table-wrap thead th \{[\s\S]*box-shadow:/);
   assert.match(css, /\.wf-row > \.btn \{[\s\S]*aspect-ratio: var\(--choice-btn-ratio\);[\s\S]*min-height: var\(--choice-btn-min-h\);/);
-  assert.match(css, /\.wf-row > \.btn \.btn-label \{[\s\S]*display: block;[\s\S]*inline-size: min\(100%, 4em\);[\s\S]*margin: 0 auto;[\s\S]*font-size: calc\(var\(--font-lg\) - 1px\);[\s\S]*text-wrap: wrap;[\s\S]*word-break: break-all;[\s\S]*overflow-wrap: normal;[\s\S]*line-height: 1\.15;[\s\S]*letter-spacing: -0\.02em;/);
+  assert.match(css, /\.wf-row > \.btn \.btn-label \{[\s\S]*display: block;[\s\S]*inline-size: min\(100%, 4em\);[\s\S]*margin: 0 auto;[\s\S]*font-size: calc\(var\(--font-lg\) - 1px\);[\s\S]*white-space: pre-line;[\s\S]*word-break: normal;[\s\S]*overflow-wrap: normal;[\s\S]*line-height: 1\.15;[\s\S]*letter-spacing: -0\.02em;/);
   assert.match(css, /\.wf-row > \.btn\.is-label-long \.btn-label \{[\s\S]*font-size: var\(--font-md\);/);
   assert.match(css, /\.wf-row > \.btn\.is-label-xlong \.btn-label \{[\s\S]*font-size: calc\(var\(--font-md\) - 1px\);[\s\S]*line-height: 1\.1;/);
   assert.match(css, /:where\(\.report-entry-page\) \.keypad-grid \{[\s\S]*grid-template-columns: repeat\(4, 1fr\);/);
@@ -123,7 +123,10 @@ function testPageWidthModifiersExist() {
   assert.match(read("confirm.html"), /id="confirmSummaryModalBg"/);
   assert.match(read("confirm.html"), /id="confirmSummaryModalCountdown"/);
   assert.match(read("report.html"), /id="submitConfirmModalBg"/);
-  assert.match(read("report.html"), /label\.textContent = labelMeta\.text\.replace\(\/ \/g, "\\u00A0"\);/);
+  assert.match(read("report.html"), /function formatButtonLabelText\(text\) \{/);
+  assert.match(read("report.html"), /return lines\.join\("\\n"\);/);
+  assert.match(read("report.html"), /const first = dense\.slice\(0, 4\)\.join\(""\);/);
+  assert.match(read("report.html"), /label\.textContent = formatButtonLabelText\(labelMeta\.text\);/);
   assert.match(read("report.html"), /<button class="key small key-utility" type="button" data-key="back" aria-label="1文字削除">⌫<\/button>/);
   assert.match(read("report.html"), /<button class="key small key-utility" type="button" data-key="clear" aria-label="現在の金額をクリア">C<\/button>/);
   assert.match(read("report.html"), /<button class="key key-tall key-submit" type="button" data-key="submit">確定<\/button>/);

@@ -274,6 +274,43 @@
   let voiceSubmitSuccessAutoRedirectSeconds = 0;
   let suppressVoicePromptOnOpen = false;
 
+  function countChars(text) {
+    return Array.from(String(text || "")).length;
+  }
+
+  function formatButtonLabelText(text) {
+    const normalized = String(text || "").trim().replace(/\s+/g, " ");
+    if (!normalized) return "";
+
+    const words = normalized.split(" ");
+    if (words.length > 1) {
+      const lines = [];
+      let current = "";
+      for (const word of words) {
+        if (!current) {
+          current = word;
+          continue;
+        }
+        const candidate = `${current} ${word}`;
+        if (countChars(candidate) <= 4) {
+          current = candidate;
+          continue;
+        }
+        lines.push(current);
+        current = word;
+      }
+      if (current) lines.push(current);
+      if (lines.length <= 2 && lines.every((line) => countChars(line) <= 4)) {
+        return lines.join("\n");
+      }
+    }
+
+    const dense = Array.from(normalized.replace(/\s+/g, ""));
+    const first = dense.slice(0, 4).join("");
+    const second = dense.slice(4, 8).join("");
+    return second ? `${first}\n${second}` : first;
+  }
+
   function renderButtonGroup(container, group, values) {
     if (!container) return;
     container.innerHTML = "";
@@ -290,7 +327,7 @@
       if (labelMeta.sizeClass) btn.classList.add(labelMeta.sizeClass);
       const label = document.createElement("span");
       label.className = "btn-label";
-      label.textContent = labelMeta.text.replace(/ /g, "\u00A0");
+      label.textContent = formatButtonLabelText(labelMeta.text);
       btn.appendChild(label);
       container.appendChild(btn);
     });
