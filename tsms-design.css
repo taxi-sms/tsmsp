@@ -346,7 +346,7 @@ body:where(.settings-report-legacy-page) {
 
 :where(.report-entry-page) .keypad-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 8px;
 }
 
@@ -360,6 +360,24 @@ body:where(.settings-report-legacy-page) {
 
 :where(.report-entry-page) .key.small {
   font-size: var(--font-lg);
+}
+
+:where(.report-entry-page) .key-wide {
+  grid-column: span 2;
+}
+
+:where(.report-entry-page) .key-tall {
+  grid-row: span 2;
+}
+
+:where(.report-entry-page) .key-utility {
+  font-size: var(--font-2xl);
+}
+
+:where(.report-entry-page) .key-submit {
+  font-size: var(--font-xl);
+  font-weight: 900;
+  line-height: 1.15;
 }
 
 :where(.report-entry-page) .confirm-modal-bg {
