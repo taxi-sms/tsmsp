@@ -196,12 +196,13 @@ function testPageWidthModifiersExist() {
   assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-subtitle \{[\s\S]*font-size: var\(--confirm-summary-modal-subtitle-size\);[\s\S]*line-height: 1\.2;[\s\S]*white-space: nowrap;/);
   assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-countdown \{/);
   assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-countdown \{[\s\S]*font-size: var\(--confirm-summary-modal-countdown-size\);[\s\S]*line-height: 1\.15;[\s\S]*white-space: nowrap;/);
-  assert.match(css, /:where\(\.confirm-page\) \.confirm-goal-card \{[\s\S]*overflow: hidden;[\s\S]*background:[\s\S]*linear-gradient\(90deg, rgba\(88, 194, 255, 0\.12\) 0%, rgba\(255, 255, 255, 0\.04\) 48%, rgba\(88, 194, 255, 0\.16\) 100%\),[\s\S]*linear-gradient\(180deg, #101827 0%, #121b31 48%, #0b1020 100%\) !important;/);
-  assert.match(css, /:where\(\.confirm-page\) \.confirm-goal-card::before \{[\s\S]*background: linear-gradient\(110deg, transparent 18%, rgba\(255, 255, 255, 0\.10\) 29%, transparent 42%\);/);
-  assert.match(css, /:where\(\.confirm-page\) \.confirm-goal-card::after \{[\s\S]*border: 1px solid var\(--goal-frame-stroke\);[\s\S]*box-shadow:[\s\S]*0 0 0 1px var\(--goal-frame-shadow\);/);
+  assert.match(css, /:where\(\.confirm-page\) \.confirm-goal-card \{[\s\S]*overflow: visible;[\s\S]*padding: 18px 18px 16px !important;[\s\S]*background: linear-gradient\(180deg, #101827 0%, #121b31 48%, #0b1020 100%\) !important;/);
+  assert.match(css, /:where\(\.confirm-page\) \.confirm-goal-card::before \{[\s\S]*inset: 12px 14px 14px;[\s\S]*border-radius: 18px;[\s\S]*linear-gradient\(110deg, transparent 18%, rgba\(255, 255, 255, 0\.10\) 29%, transparent 42%\)/);
+  assert.doesNotMatch(css, /:where\(\.confirm-page\) \.confirm-goal-card::after \{/);
   assert.doesNotMatch(css, /:where\(\.confirm-page\) \.confirm-goal-card::before \{[\s\S]*repeating-linear-gradient/);
   assert.match(css, /:where\(\.confirm-page\) \.confirm-goal-card\[data-goal-stage="rainbow"\] \{[\s\S]*--goal-fill-bg: linear-gradient\(90deg, #4fd6ff 0%, #4f76ff 18%, #ffd84a 36%, #54f485 54%, #ff5878 72%, #ff63f1 88%, #4fd6ff 100%\);/);
   assert.match(css, /:where\(\.confirm-page\) \.confirm-goal-track \{[\s\S]*height: 28px;[\s\S]*border-radius: 999px;/);
+  assert.match(css, /:where\(\.confirm-page\) \.confirm-goal-thresholds \{[\s\S]*display: none;/);
   assert.match(css, /:where\(\.confirm-page\) \.confirm-goal-shot \{[\s\S]*top: -32px;[\s\S]*border-radius: 999px;/);
   assert.match(css, /:where\(\.confirm-page\) \.confirm-goal-shot\.is-active \{[\s\S]*animation: confirmGoalShotFlight 1\.1s cubic-bezier\(0\.2, 0\.88, 0\.32, 1\) both;/);
   assert.match(css, /@keyframes confirmGoalRainbowFlow \{/);
