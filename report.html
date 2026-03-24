@@ -127,17 +127,17 @@
 <div class="result-modal-bg" id="submitConfirmModalBg" aria-hidden="true">
   <div class="result-modal-card confirm-summary-modal-card report-submit-confirm-modal-card" role="dialog" aria-modal="true" aria-labelledby="submitConfirmTitle">
     <div class="confirm-summary-modal-head report-submit-confirm-modal-head">
-      <p class="confirm-summary-modal-title report-submit-confirm-modal-title" id="submitConfirmTitle">今回の入力内容</p>
-      <p class="confirm-summary-modal-subtitle report-submit-confirm-modal-subtitle" id="submitConfirmModalSubtitle">この内容で登録しますか？</p>
+      <p class="confirm-summary-modal-title report-submit-confirm-modal-title" id="submitConfirmTitle">登録内容確認</p>
+      <p class="confirm-summary-modal-subtitle report-submit-confirm-modal-subtitle" id="submitConfirmModalSubtitle" hidden></p>
     </div>
     <div class="confirm-summary-modal-list report-submit-confirm-modal-list">
-      <div class="line"><div class="k">乗車種別</div><div class="v" id="confirmRideType">-</div></div>
-      <div class="line"><div class="k">支払方法</div><div class="v value-highlight" id="confirmPayMethod">-</div></div>
-      <div class="line"><div class="k">チケット種別</div><div class="v" id="confirmTicketSub">-</div></div>
-      <div class="line"><div class="k">現収</div><div class="v" id="confirmCash">0</div></div>
-      <div class="line"><div class="k">未収</div><div class="v" id="confirmCredit">0</div></div>
-      <div class="line"><div class="k">障害割引</div><div class="v" id="confirmDiscount">なし</div></div>
-      <div class="line"><div class="k">備考</div><div class="v" id="confirmNote">-</div></div>
+      <div class="line" id="confirmRideTypeLine"><div class="k">乗車種別</div><div class="v" id="confirmRideType">-</div></div>
+      <div class="line" id="confirmPayMethodLine"><div class="k">支払方法</div><div class="v value-highlight" id="confirmPayMethod">-</div></div>
+      <div class="line" id="confirmTicketSubLine" hidden><div class="k">チケット種別</div><div class="v" id="confirmTicketSub">-</div></div>
+      <div class="line" id="confirmCashLine"><div class="k">現収</div><div class="v" id="confirmCash">0</div></div>
+      <div class="line" id="confirmCreditLine"><div class="k">未収</div><div class="v" id="confirmCredit">0</div></div>
+      <div class="line" id="confirmDiscountLine" hidden><div class="k">障害割引</div><div class="v" id="confirmDiscount">なし</div></div>
+      <div class="line" id="confirmNoteLine" hidden><div class="k">備考</div><div class="v" id="confirmNote">-</div></div>
     </div>
     <div class="confirm-modal-actions report-submit-confirm-modal-actions">
       <button class="btn" type="button" id="confirmNoBtn">いいえ</button>
@@ -243,12 +243,19 @@
   const btnSubmit = document.getElementById("btn_submit");
   const submitConfirmModalBg = document.getElementById("submitConfirmModalBg");
   const confirmRideType = document.getElementById("confirmRideType");
+  const confirmRideTypeLine = document.getElementById("confirmRideTypeLine");
   const confirmPayMethod = document.getElementById("confirmPayMethod");
+  const confirmPayMethodLine = document.getElementById("confirmPayMethodLine");
   const confirmTicketSub = document.getElementById("confirmTicketSub");
+  const confirmTicketSubLine = document.getElementById("confirmTicketSubLine");
   const confirmCash = document.getElementById("confirmCash");
+  const confirmCashLine = document.getElementById("confirmCashLine");
   const confirmCredit = document.getElementById("confirmCredit");
+  const confirmCreditLine = document.getElementById("confirmCreditLine");
   const confirmDiscount = document.getElementById("confirmDiscount");
+  const confirmDiscountLine = document.getElementById("confirmDiscountLine");
   const confirmNote = document.getElementById("confirmNote");
+  const confirmNoteLine = document.getElementById("confirmNoteLine");
   const confirmNoBtn = document.getElementById("confirmNoBtn");
   const confirmYesBtn = document.getElementById("confirmYesBtn");
   const resultModalBg = document.getElementById("resultModalBg");
@@ -641,16 +648,35 @@
     return n.toLocaleString("ja-JP");
   }
 
+  function setSubmitConfirmLineVisibility(line, visible) {
+    if (!line) return;
+    line.hidden = !visible;
+  }
+
   function showSubmitConfirmModal(opts) {
     const options = (opts && typeof opts === "object") ? opts : {};
     if (!submitConfirmModalBg) return Promise.resolve(true);
-    confirmRideType.textContent = getRideTypeValue() || "-";
-    confirmPayMethod.textContent = getPayMethodValue() || "-";
-    confirmTicketSub.textContent = state.payMethodBase === "チケット他" ? (state.ticketSub || "-") : "-";
+    const rideTypeValue = getRideTypeValue() || "-";
+    const payMethodValue = getPayMethodValue() || "-";
+    const ticketSubValue = state.payMethodBase === "チケット他" ? String(state.ticketSub || "").trim() : "";
+    const discountValue = state.disabilityDiscount ? "あり" : "";
+    const noteValue = String(inNote.value || "").trim();
+
+    confirmRideType.textContent = rideTypeValue;
+    confirmPayMethod.textContent = payMethodValue;
+    confirmTicketSub.textContent = ticketSubValue || "-";
     confirmCash.textContent = formatAmountText(inCash.value);
     confirmCredit.textContent = formatAmountText(inCredit.value);
-    confirmDiscount.textContent = state.disabilityDiscount ? "あり" : "なし";
-    confirmNote.textContent = (inNote.value || "").trim() || "-";
+    confirmDiscount.textContent = discountValue || "なし";
+    confirmNote.textContent = noteValue || "-";
+
+    setSubmitConfirmLineVisibility(confirmRideTypeLine, true);
+    setSubmitConfirmLineVisibility(confirmPayMethodLine, true);
+    setSubmitConfirmLineVisibility(confirmCashLine, true);
+    setSubmitConfirmLineVisibility(confirmCreditLine, true);
+    setSubmitConfirmLineVisibility(confirmTicketSubLine, !!ticketSubValue);
+    setSubmitConfirmLineVisibility(confirmDiscountLine, !!discountValue);
+    setSubmitConfirmLineVisibility(confirmNoteLine, !!noteValue);
 
     return new Promise((resolve) => {
       let closed = false;
