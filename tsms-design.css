@@ -4497,8 +4497,9 @@ body.index-page .modal .btn {
   border: 1px solid rgba(117, 163, 255, 0.58) !important;
   border-radius: 22px !important;
   background:
-    radial-gradient(circle at 14% 18%, rgba(88, 194, 255, 0.19), transparent 30%),
-    radial-gradient(circle at 84% 16%, rgba(167, 91, 255, 0.18), transparent 24%),
+    radial-gradient(circle at 14% 18%, rgba(88, 194, 255, 0.22), transparent 42%),
+    radial-gradient(circle at 84% 16%, rgba(167, 91, 255, 0.20), transparent 36%),
+    linear-gradient(90deg, rgba(88, 194, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 48%, rgba(88, 194, 255, 0.16) 100%),
     linear-gradient(180deg, #101827 0%, #121b31 48%, #0b1020 100%) !important;
   box-shadow:
     0 20px 44px rgba(0, 0, 0, 0.34) !important,
@@ -4512,9 +4513,7 @@ body.index-page .modal .btn {
   content: "";
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(110deg, transparent 18%, rgba(255, 255, 255, 0.10) 29%, transparent 42%),
-    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.018) 0 2px, transparent 2px 14px);
+  background: linear-gradient(110deg, transparent 18%, rgba(255, 255, 255, 0.10) 29%, transparent 42%);
   mix-blend-mode: screen;
   opacity: 0.92;
   pointer-events: none;
