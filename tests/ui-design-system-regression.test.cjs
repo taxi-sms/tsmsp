@@ -64,7 +64,7 @@ function testSharedShellRulesExist() {
   assert.match(css, /:where\(\.report-entry-page\) \.wf-inline \{[\s\S]*grid-template-columns: minmax\(0, 7fr\) minmax\(0, 3fr\);/);
   assert.match(css, /:where\(\.report-entry-page\) \.wf-row > \.btn,[\s\S]*:where\(\.report-entry-page\) \.wf-inline > \*,[\s\S]*min-width: 0;/);
   assert.match(css, /\.wf-row > \.btn \.btn-label \{[\s\S]*display: grid;[\s\S]*justify-items: center;[\s\S]*align-content: center;[\s\S]*inline-size: min\(100%, 4em\);[\s\S]*margin: 0 auto;[\s\S]*font-size: calc\(var\(--font-lg\) - 1px\);[\s\S]*word-break: normal;[\s\S]*overflow-wrap: normal;[\s\S]*line-height: 1\.15;[\s\S]*letter-spacing: -0\.02em;/);
-  assert.match(css, /\.wf-row > \.btn \.btn-label-line \{[\s\S]*display: block;[\s\S]*white-space: nowrap;/);
+  assert.match(css, /\.wf-row > \.btn \.btn-label-line \{[\s\S]*display: block;[\s\S]*inline-size: 100%;[\s\S]*text-align: center;[\s\S]*white-space: nowrap;/);
   assert.match(css, /\.wf-row > \.btn\.is-label-long \.btn-label \{[\s\S]*font-size: var\(--font-md\);/);
   assert.match(css, /\.wf-row > \.btn\.is-label-xlong \.btn-label \{[\s\S]*font-size: calc\(var\(--font-md\) - 1px\);[\s\S]*line-height: 1\.1;/);
   assert.match(css, /:where\(\.report-entry-page\) \.keypad-grid \{[\s\S]*grid-template-columns: repeat\(4, 1fr\);/);

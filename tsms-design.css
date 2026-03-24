@@ -2538,6 +2538,8 @@ main .wf-panel {
 
 .wf-row > .btn .btn-label-line {
   display: block;
+  inline-size: 100%;
+  text-align: center;
   white-space: nowrap;
 }
 
