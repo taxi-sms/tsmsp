@@ -196,7 +196,7 @@ function testPageWidthModifiersExist() {
   assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-subtitle \{[\s\S]*font-size: var\(--confirm-summary-modal-subtitle-size\);[\s\S]*line-height: 1\.2;[\s\S]*white-space: nowrap;/);
   assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-countdown \{/);
   assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-countdown \{[\s\S]*font-size: var\(--confirm-summary-modal-countdown-size\);[\s\S]*line-height: 1\.15;[\s\S]*white-space: nowrap;/);
-  assert.match(css, /:where\(\.confirm-page\) \.confirm-goal-card \{[\s\S]*overflow: visible;[\s\S]*padding: 18px 18px 16px !important;[\s\S]*background: linear-gradient\(180deg, #101827 0%, #121b31 48%, #0b1020 100%\) !important;/);
+  assert.match(css, /:where\(\.confirm-page\) \.confirm-goal-card \{[\s\S]*--goal-stage-main: #eef3fb;[\s\S]*--goal-stage-accent: #c9d3e2;[\s\S]*--goal-stage-glow: rgba\(255, 255, 255, 0\.18\);[\s\S]*--goal-fill-bg: linear-gradient\(90deg, #d7e0ed 0%, #edf3fa 54%, #ffffff 100%\);[\s\S]*overflow: visible;[\s\S]*padding: 18px 18px 16px !important;[\s\S]*background: linear-gradient\(180deg, #101827 0%, #121b31 48%, #0b1020 100%\) !important;/);
   assert.doesNotMatch(css, /:where\(\.confirm-page\) \.confirm-goal-card::before \{/);
   assert.doesNotMatch(css, /:where\(\.confirm-page\) \.confirm-goal-card::after \{/);
   assert.doesNotMatch(css, /:where\(\.confirm-page\) \.confirm-goal-card\[data-goal-stage="rainbow"\] \{[\s\S]*0 0 32px rgba\(255, 255, 255, 0\.20\) !important/);
@@ -205,6 +205,8 @@ function testPageWidthModifiersExist() {
   assert.doesNotMatch(css, /:where\(\.confirm-page\) \.confirm-goal-current \{[\s\S]*text-shadow:/);
   assert.match(css, /:where\(\.confirm-page\) \.confirm-goal-track \{[\s\S]*height: 28px;[\s\S]*border-radius: 999px;/);
   assert.match(css, /:where\(\.confirm-page\) \.confirm-goal-thresholds \{[\s\S]*display: none;/);
+  assert.match(read("confirm.html"), /<div class="confirm-goal-stage" id="confirmGoalStage">NORMAL ZONE<\/div>/);
+  assert.match(read("confirm.html"), /return hit \? hit\.label : "NORMAL ZONE";/);
   assert.match(read("confirm.html"), /<span class="confirm-goal-marker" style="--goal-marker-pct: 95%;"><\/span>/);
   assert.doesNotMatch(read("confirm.html"), /<span class="confirm-goal-marker" style="--goal-marker-pct: 100%;"><\/span>/);
   assert.match(css, /:where\(\.confirm-page\) \.confirm-goal-shot \{[\s\S]*top: -32px;[\s\S]*border-radius: 999px;/);
