@@ -197,12 +197,12 @@ function testPageWidthModifiersExist() {
   assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-countdown \{/);
   assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-countdown \{[\s\S]*font-size: var\(--confirm-summary-modal-countdown-size\);[\s\S]*line-height: 1\.15;[\s\S]*white-space: nowrap;/);
   assert.match(css, /:where\(\.confirm-page\) \.confirm-goal-card \{[\s\S]*overflow: visible;[\s\S]*padding: 18px 18px 16px !important;[\s\S]*background: linear-gradient\(180deg, #101827 0%, #121b31 48%, #0b1020 100%\) !important;/);
-  assert.match(css, /:where\(\.confirm-page\) \.confirm-goal-card::before \{[\s\S]*inset: 12px 14px 14px;[\s\S]*border-radius: 18px;[\s\S]*linear-gradient\(110deg, transparent 18%, rgba\(255, 255, 255, 0\.10\) 29%, transparent 42%\)/);
+  assert.doesNotMatch(css, /:where\(\.confirm-page\) \.confirm-goal-card::before \{/);
   assert.doesNotMatch(css, /:where\(\.confirm-page\) \.confirm-goal-card::after \{/);
-  assert.doesNotMatch(css, /:where\(\.confirm-page\) \.confirm-goal-card::before \{[\s\S]*linear-gradient\(90deg, rgba\(88, 194, 255, 0\.10\) 0%, rgba\(255, 255, 255, 0\.03\) 48%, rgba\(88, 194, 255, 0\.13\) 100%\)/);
-  assert.doesNotMatch(css, /:where\(\.confirm-page\) \.confirm-goal-card::before \{[\s\S]*linear-gradient\(180deg, rgba\(24, 35, 52, 0\.62\), rgba\(10, 18, 32, 0\.04\) 70%\)/);
-  assert.doesNotMatch(css, /:where\(\.confirm-page\) \.confirm-goal-card::before \{[\s\S]*repeating-linear-gradient/);
+  assert.doesNotMatch(css, /:where\(\.confirm-page\) \.confirm-goal-card\[data-goal-stage="rainbow"\] \{[\s\S]*0 0 32px rgba\(255, 255, 255, 0\.20\) !important/);
   assert.match(css, /:where\(\.confirm-page\) \.confirm-goal-card\[data-goal-stage="rainbow"\] \{[\s\S]*--goal-fill-bg: linear-gradient\(90deg, #4fd6ff 0%, #4f76ff 18%, #ffd84a 36%, #54f485 54%, #ff5878 72%, #ff63f1 88%, #4fd6ff 100%\);/);
+  assert.match(css, /:where\(\.confirm-page\) \.confirm-goal-current \{[\s\S]*line-height: 0\.96;[\s\S]*\}/);
+  assert.doesNotMatch(css, /:where\(\.confirm-page\) \.confirm-goal-current \{[\s\S]*text-shadow:/);
   assert.match(css, /:where\(\.confirm-page\) \.confirm-goal-track \{[\s\S]*height: 28px;[\s\S]*border-radius: 999px;/);
   assert.match(css, /:where\(\.confirm-page\) \.confirm-goal-thresholds \{[\s\S]*display: none;/);
   assert.match(read("confirm.html"), /<span class="confirm-goal-marker" style="--goal-marker-pct: 95%;"><\/span>/);
