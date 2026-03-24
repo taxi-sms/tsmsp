@@ -2543,6 +2543,23 @@ main .wf-panel {
   white-space: nowrap;
 }
 
+.wf-row > .btn .btn-label.is-balanced-4plus1 .btn-label-line {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: center;
+  justify-content: center;
+}
+
+.wf-row > .btn .btn-label.is-balanced-4plus1 .btn-label-char {
+  display: block;
+  text-align: center;
+}
+
+.wf-row > .btn .btn-label.is-balanced-4plus1 .btn-label-line.is-single-char .btn-label-char {
+  grid-column: 2 / span 2;
+  justify-self: center;
+}
+
 .wf-row > .btn.is-label-long .btn-label {
   font-size: var(--font-md);
 }

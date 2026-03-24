@@ -311,13 +311,41 @@
     return second ? `${first}\n${second}` : first;
   }
 
+  function isBalancedFourPlusOneLines(lines) {
+    return Array.isArray(lines) &&
+      lines.length === 2 &&
+      countChars(lines[0]) === 4 &&
+      countChars(lines[1]) === 1;
+  }
+
+  function appendBalancedLabelChars(line, lineText, lineIndex) {
+    const chars = Array.from(String(lineText || ""));
+    if (lineIndex === 1 && chars.length === 1) {
+      line.classList.add("is-single-char");
+      const char = document.createElement("span");
+      char.className = "btn-label-char";
+      char.textContent = chars[0];
+      line.appendChild(char);
+      return;
+    }
+    chars.forEach((charText) => {
+      const char = document.createElement("span");
+      char.className = "btn-label-char";
+      char.textContent = charText;
+      line.appendChild(char);
+    });
+  }
+
   function applyButtonLabelText(label, text) {
     const lines = String(formatButtonLabelText(text) || "").split("\n").filter(Boolean);
     label.textContent = "";
-    lines.forEach((lineText) => {
+    const balancedFourPlusOne = isBalancedFourPlusOneLines(lines);
+    label.classList.toggle("is-balanced-4plus1", balancedFourPlusOne);
+    lines.forEach((lineText, lineIndex) => {
       const line = document.createElement("span");
       line.className = "btn-label-line";
-      line.textContent = lineText;
+      if (balancedFourPlusOne) appendBalancedLabelChars(line, lineText, lineIndex);
+      else line.textContent = lineText;
       label.appendChild(line);
     });
   }
