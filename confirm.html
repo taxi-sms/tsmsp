@@ -47,6 +47,53 @@
 <section class="date-switcher wf-panel">
   <select id="confirmDateSelect" aria-label="表示日付"></select>
 </section>
+<section class="card wf-panel confirm-goal-card" id="confirmGoalCard" data-goal-stage="standby" hidden>
+  <div class="confirm-goal-head">
+    <div class="confirm-goal-copy">
+      <p class="confirm-goal-eyebrow">概算収入ベース</p>
+      <p class="confirm-goal-title">目標ゲージ</p>
+    </div>
+    <div class="confirm-goal-stage" id="confirmGoalStage">STANDBY</div>
+  </div>
+  <div class="confirm-goal-values">
+    <div class="confirm-goal-main">
+      <span class="confirm-goal-current"><span id="confirmGoalCurrentValue">0</span><span class="confirm-goal-unit">円</span></span>
+      <span class="confirm-goal-separator">/</span>
+      <span class="confirm-goal-target"><span id="confirmGoalTargetValue">0</span><span class="confirm-goal-unit">円</span></span>
+    </div>
+    <div class="confirm-goal-percent" id="confirmGoalPercent">0.0%</div>
+  </div>
+  <div class="confirm-goal-track-wrap">
+    <div class="confirm-goal-track" id="confirmGoalTrack">
+      <div class="confirm-goal-fill" id="confirmGoalFill"></div>
+      <div class="confirm-goal-flare" id="confirmGoalFlare"></div>
+      <div class="confirm-goal-shot" id="confirmGoalShot" aria-hidden="true"></div>
+      <span class="confirm-goal-marker" style="--goal-marker-pct: 80%;"></span>
+      <span class="confirm-goal-marker" style="--goal-marker-pct: 85%;"></span>
+      <span class="confirm-goal-marker" style="--goal-marker-pct: 90%;"></span>
+      <span class="confirm-goal-marker" style="--goal-marker-pct: 95%;"></span>
+      <span class="confirm-goal-marker" style="--goal-marker-pct: 100%;"></span>
+    </div>
+    <div class="confirm-goal-thresholds" aria-hidden="true">
+      <span>80%</span>
+      <span>85%</span>
+      <span>90%</span>
+      <span>95%</span>
+      <span>100%</span>
+    </div>
+  </div>
+  <div class="confirm-goal-meta">
+    <div class="confirm-goal-meta-chip">
+      <span class="confirm-goal-meta-label" id="confirmGoalRemainLabel">残り</span>
+      <span class="confirm-goal-meta-value" id="confirmGoalRemainValue">0円</span>
+    </div>
+    <div class="confirm-goal-meta-chip" id="confirmGoalDeltaChip" hidden>
+      <span class="confirm-goal-meta-label">今回加算</span>
+      <span class="confirm-goal-meta-value" id="confirmGoalDeltaValue">+0円</span>
+    </div>
+  </div>
+  <p class="confirm-goal-note" id="confirmGoalNote">月間管理の日別目標を参照します</p>
+</section>
 <div id="cards"></div>
 </main>
 
@@ -72,7 +119,16 @@
   const VIEW_DAY_KEY = "tsms_confirm_selected_day";
   const CONFIRM_FORCE_EMPTY_KEY = "tsms_confirm_force_empty";
   const SETTINGS_KEY = "tsms_settings";
+  const PLAN_KEY = "tsms_sales_plan";
   const CONFIRM_SUMMARY_MODAL_KEY = "tsms_confirm_summary_modal_v1";
+  const ACTIVE_SHIFT_SET = new Set(["work", "part", "furidashi"]);
+  const GOAL_ZONE_STEPS = [
+    { ratio: 1, stage: "rainbow", label: "RAINBOW BONUS" },
+    { ratio: 0.95, stage: "red", label: "RED ZONE" },
+    { ratio: 0.9, stage: "green", label: "GREEN ZONE" },
+    { ratio: 0.85, stage: "yellow", label: "YELLOW ZONE" },
+    { ratio: 0.8, stage: "blue", label: "BLUE ZONE" }
+  ];
   let allData = [];
   let selectedDayId = "";
   let hasUserPickedDay = false;
@@ -80,11 +136,26 @@
   let reportSummaryCountdownTimer = 0;
   let reportSummaryModalBgHandler = null;
   let reportSummaryModalEscHandler = null;
+  let pendingGoalAnimationPayload = null;
+  let goalMetricAnimationFrame = 0;
   const reportSummaryModalBg = document.getElementById("confirmSummaryModalBg");
   const reportSummaryModalCard = document.getElementById("confirmSummaryModalCard");
   const reportSummaryModalSubtitle = document.getElementById("confirmSummaryModalSubtitle");
   const reportSummaryModalCountdown = document.getElementById("confirmSummaryModalCountdown");
   const reportSummaryModalList = document.getElementById("confirmSummaryModalList");
+  const confirmGoalCard = document.getElementById("confirmGoalCard");
+  const confirmGoalStage = document.getElementById("confirmGoalStage");
+  const confirmGoalCurrentValue = document.getElementById("confirmGoalCurrentValue");
+  const confirmGoalTargetValue = document.getElementById("confirmGoalTargetValue");
+  const confirmGoalPercent = document.getElementById("confirmGoalPercent");
+  const confirmGoalFill = document.getElementById("confirmGoalFill");
+  const confirmGoalFlare = document.getElementById("confirmGoalFlare");
+  const confirmGoalShot = document.getElementById("confirmGoalShot");
+  const confirmGoalRemainLabel = document.getElementById("confirmGoalRemainLabel");
+  const confirmGoalRemainValue = document.getElementById("confirmGoalRemainValue");
+  const confirmGoalDeltaChip = document.getElementById("confirmGoalDeltaChip");
+  const confirmGoalDeltaValue = document.getElementById("confirmGoalDeltaValue");
+  const confirmGoalNote = document.getElementById("confirmGoalNote");
 
   function showAlert(message){
     if (window.tsmsAlert) return window.tsmsAlert(message);
@@ -149,6 +220,42 @@
     }catch(_){
       return fallback;
     }
+  }
+
+  function clamp(v, min, max){
+    return Math.min(max, Math.max(min, v));
+  }
+
+  function easeOutCubic(t){
+    return 1 - Math.pow(1 - clamp(t, 0, 1), 3);
+  }
+
+  function goalStageLabel(stage){
+    const hit = GOAL_ZONE_STEPS.find((step) => step.stage === stage);
+    return hit ? hit.label : "STANDBY";
+  }
+
+  function resolveGoalStage(ratio){
+    const n = Number(ratio || 0);
+    if(n >= 1) return "rainbow";
+    if(n >= 0.95) return "red";
+    if(n >= 0.9) return "green";
+    if(n >= 0.85) return "yellow";
+    if(n >= 0.8) return "blue";
+    return "standby";
+  }
+
+  function loadGoalPlan(dayId){
+    const plan = loadJson(localStorage, PLAN_KEY, {});
+    const row = plan && typeof plan === "object" ? plan[dayId] : null;
+    const shift = String((row && row.shift) || "work");
+    const targetValue = Number(String((row && row.target) || "").replace(/[^0-9]/g, "")) || 0;
+    const active = ACTIVE_SHIFT_SET.has(shift);
+    return {
+      shift,
+      active,
+      target: active ? targetValue : 0
+    };
   }
 
   function load(){
@@ -282,7 +389,207 @@
     };
   }
 
-  function closeReportSummaryModal(){
+  function buildGoalProgress(dayId){
+    const targetDayId = String(dayId || "").trim();
+    if(!targetDayId) return null;
+    const summary = buildReportSummary(targetDayId);
+    const plan = loadGoalPlan(targetDayId);
+    const currentIncome = Math.max(0, Math.round(summary ? summary.takeHome : 0));
+    const targetIncome = Math.max(0, Math.round(plan.target));
+    const ratioRaw = targetIncome > 0 ? (currentIncome / targetIncome) : 0;
+    const fillRatio = clamp(ratioRaw, 0, 1);
+    const remainIncome = Math.max(0, targetIncome - currentIncome);
+    const overIncome = Math.max(0, currentIncome - targetIncome);
+    const stage = targetIncome > 0 ? resolveGoalStage(ratioRaw) : "standby";
+    const nextZone = targetIncome > 0
+      ? GOAL_ZONE_STEPS.slice().reverse().find((step) => ratioRaw < step.ratio)
+      : null;
+    const nextZoneNeed = nextZone
+      ? Math.max(0, Math.ceil(targetIncome * nextZone.ratio) - currentIncome)
+      : 0;
+    return {
+      dayId: targetDayId,
+      targetIncome,
+      currentIncome,
+      ratioRaw,
+      fillRatio,
+      remainIncome,
+      overIncome,
+      stage,
+      nextZone,
+      nextZoneNeed,
+      hasTarget: targetIncome > 0
+    };
+  }
+
+  function cancelGoalMetricAnimation(){
+    if(goalMetricAnimationFrame){
+      cancelAnimationFrame(goalMetricAnimationFrame);
+      goalMetricAnimationFrame = 0;
+    }
+  }
+
+  function resetGoalShot(){
+    if(!confirmGoalCard || !confirmGoalShot || !confirmGoalFlare) return;
+    confirmGoalCard.classList.remove("is-goal-animating", "is-goal-animating-negative");
+    confirmGoalShot.classList.remove("is-active", "is-negative");
+    confirmGoalFlare.classList.remove("is-active");
+  }
+
+  function setGoalDelta(deltaIncome){
+    if(!confirmGoalDeltaChip || !confirmGoalDeltaValue) return;
+    const rounded = Math.round(num(deltaIncome));
+    if(!rounded){
+      confirmGoalDeltaChip.hidden = true;
+      confirmGoalDeltaValue.textContent = "+0円";
+      return;
+    }
+    confirmGoalDeltaChip.hidden = false;
+    confirmGoalDeltaValue.textContent = `${rounded > 0 ? "+" : "-"}${yenNumber(Math.abs(rounded))}円`;
+  }
+
+  function updateGoalCardMetrics(progress, currentIncomeOverride, ratioOverride){
+    if(!confirmGoalCard || !confirmGoalStage || !confirmGoalCurrentValue || !confirmGoalTargetValue || !confirmGoalPercent || !confirmGoalFill || !confirmGoalRemainLabel || !confirmGoalRemainValue || !confirmGoalNote) return;
+    if(!progress) return;
+    const targetIncome = Math.max(0, Math.round(progress && progress.targetIncome));
+    const currentIncome = Math.max(0, Math.round(currentIncomeOverride == null ? progress.currentIncome : currentIncomeOverride));
+    const ratioRaw = targetIncome > 0
+      ? (ratioOverride == null ? num(progress.ratioRaw) : num(ratioOverride))
+      : 0;
+    const fillPct = clamp(targetIncome > 0 ? ratioRaw * 100 : 0, 0, 100);
+    const stage = targetIncome > 0 ? resolveGoalStage(ratioRaw) : "standby";
+    const remainIncome = Math.max(0, targetIncome - currentIncome);
+    const overIncome = Math.max(0, currentIncome - targetIncome);
+    const nextZone = targetIncome > 0
+      ? GOAL_ZONE_STEPS.slice().reverse().find((step) => ratioRaw < step.ratio)
+      : null;
+    const nextZoneNeed = nextZone
+      ? Math.max(0, Math.ceil(targetIncome * nextZone.ratio) - currentIncome)
+      : 0;
+
+    confirmGoalCard.dataset.goalStage = stage;
+    confirmGoalStage.textContent = goalStageLabel(stage);
+    confirmGoalCurrentValue.textContent = yenNumber(currentIncome);
+    confirmGoalTargetValue.textContent = targetIncome > 0 ? yenNumber(targetIncome) : "--";
+    confirmGoalPercent.textContent = `${Math.max(0, ratioRaw * 100).toFixed(1)}%`;
+    confirmGoalFill.style.width = `${fillPct}%`;
+    confirmGoalFill.style.setProperty("--goal-fill-progress", `${fillPct}%`);
+    confirmGoalFlare.style.left = `${fillPct}%`;
+    confirmGoalFlare.style.opacity = targetIncome > 0 ? "1" : "0";
+
+    if(!targetIncome){
+      confirmGoalRemainLabel.textContent = "待機";
+      confirmGoalRemainValue.textContent = "目標未設定";
+      confirmGoalNote.textContent = "月間管理でこの日の目標額を入れるとゲージが点灯します";
+      return;
+    }
+
+    if(ratioRaw >= 1){
+      confirmGoalRemainLabel.textContent = "超過";
+      confirmGoalRemainValue.textContent = `+${yenNumber(overIncome)}円`;
+      confirmGoalNote.textContent = "RAINBOW BONUS 突入。目標超過ぶんまで概算収入で伸びています";
+      return;
+    }
+
+    confirmGoalRemainLabel.textContent = "残り";
+    confirmGoalRemainValue.textContent = `${yenNumber(remainIncome)}円`;
+    if(nextZone && nextZoneNeed > 0){
+      confirmGoalNote.textContent = `あと ${yenNumber(nextZoneNeed)}円 で ${nextZone.label}`;
+    }else{
+      confirmGoalNote.textContent = "概算収入ベースで日別目標へ進行中";
+    }
+  }
+
+  function renderGoalProgressCard(dayId){
+    if(!confirmGoalCard){
+      return null;
+    }
+    const targetDayId = String(dayId || "").trim();
+    if(!targetDayId){
+      cancelGoalMetricAnimation();
+      resetGoalShot();
+      confirmGoalCard.hidden = true;
+      return null;
+    }
+    const progress = buildGoalProgress(targetDayId);
+    if(!progress){
+      cancelGoalMetricAnimation();
+      resetGoalShot();
+      confirmGoalCard.hidden = true;
+      return null;
+    }
+    confirmGoalCard.hidden = false;
+    resetGoalShot();
+    setGoalDelta(0);
+    updateGoalCardMetrics(progress);
+    return progress;
+  }
+
+  function animateGoalProgress(progress, deltaIncome){
+    if(!confirmGoalCard){
+      return;
+    }
+    const roundedDelta = Math.round(num(deltaIncome));
+    if(!progress || !progress.hasTarget || !roundedDelta){
+      setGoalDelta(0);
+      updateGoalCardMetrics(progress || buildGoalProgress(selectedDayId));
+      return;
+    }
+
+    const currentIncome = Math.max(0, Math.round(progress.currentIncome));
+    const targetIncome = Math.max(0, Math.round(progress.targetIncome));
+    const startIncome = Math.max(0, currentIncome - roundedDelta);
+    const startRatio = targetIncome > 0 ? (startIncome / targetIncome) : 0;
+    const endRatio = targetIncome > 0 ? (currentIncome / targetIncome) : 0;
+    const duration = 1100;
+    const shotFromPct = clamp(startRatio * 100, 6, 94);
+    const shotToPct = clamp(endRatio * 100, 6, 94);
+
+    cancelGoalMetricAnimation();
+    confirmGoalCard.hidden = false;
+    confirmGoalCard.classList.toggle("is-goal-animating-negative", roundedDelta < 0);
+    confirmGoalCard.classList.add("is-goal-animating");
+    confirmGoalShot.classList.toggle("is-negative", roundedDelta < 0);
+    confirmGoalShot.classList.add("is-active");
+    confirmGoalShot.textContent = `${roundedDelta > 0 ? "+" : "-"}${yenNumber(Math.abs(roundedDelta))}円`;
+    confirmGoalShot.style.setProperty("--goal-shot-from-pct", `${shotFromPct}%`);
+    confirmGoalShot.style.setProperty("--goal-shot-to-pct", `${shotToPct}%`);
+    setGoalDelta(roundedDelta);
+    updateGoalCardMetrics(progress, startIncome, startRatio);
+
+    const startedAt = performance.now();
+    const step = (now) => {
+      const elapsed = now - startedAt;
+      const eased = easeOutCubic(duration > 0 ? elapsed / duration : 1);
+      const income = startIncome + (currentIncome - startIncome) * eased;
+      const ratio = startRatio + (endRatio - startRatio) * eased;
+      updateGoalCardMetrics(progress, income, ratio);
+      if(elapsed < duration){
+        goalMetricAnimationFrame = requestAnimationFrame(step);
+        return;
+      }
+      goalMetricAnimationFrame = 0;
+      updateGoalCardMetrics(progress, currentIncome, endRatio);
+      confirmGoalFlare.classList.add("is-active");
+      window.setTimeout(() => {
+        if(confirmGoalFlare) confirmGoalFlare.classList.remove("is-active");
+        resetGoalShot();
+      }, 820);
+    };
+    goalMetricAnimationFrame = requestAnimationFrame(step);
+  }
+
+  function flushPendingGoalAnimation(){
+    if(!pendingGoalAnimationPayload) return;
+    if(reportSummaryModalBg && reportSummaryModalBg.classList.contains("show")) return;
+    if(String(pendingGoalAnimationPayload.dayId || "") !== String(selectedDayId || "")) return;
+    const progress = renderGoalProgressCard(selectedDayId);
+    animateGoalProgress(progress, pendingGoalAnimationPayload.deltaTakeHome);
+    pendingGoalAnimationPayload = null;
+  }
+
+  function closeReportSummaryModal(opts){
+    const options = (opts && typeof opts === "object") ? opts : {};
     if(reportSummaryAutoCloseTimer){
       clearTimeout(reportSummaryAutoCloseTimer);
       reportSummaryAutoCloseTimer = 0;
@@ -302,6 +609,9 @@
     if(!reportSummaryModalBg) return;
     reportSummaryModalBg.classList.remove("show");
     reportSummaryModalBg.setAttribute("aria-hidden", "true");
+    if(!options.skipGoalAnimation){
+      flushPendingGoalAnimation();
+    }
   }
 
   function showReportSummaryModal(dayId){
@@ -319,7 +629,7 @@
       line("時給換算", yenMarkup(summary.hourly, true), false, true)
     ].join("");
 
-    closeReportSummaryModal();
+    closeReportSummaryModal({ skipGoalAnimation: true });
     reportSummaryModalBg.classList.add("show");
     reportSummaryModalBg.setAttribute("aria-hidden", "false");
     reportSummaryModalBgHandler = (e) => {
@@ -360,6 +670,10 @@
     const ts = Number((payload && payload.ts) || 0);
     if(!dayId) return;
     if(ts > 0 && Math.abs(Date.now() - ts) > 60000) return;
+    pendingGoalAnimationPayload = {
+      dayId,
+      deltaTakeHome: Math.round(num(payload && payload.deltaTakeHome))
+    };
     showReportSummaryModal(dayId);
   }
 
@@ -442,6 +756,7 @@
   function render(){
     const root = document.getElementById("cards");
     if(!root) return;
+    renderGoalProgressCard(selectedDayId);
 
     if(!selectedDayId){
       root.innerHTML = '<div class="card wf-panel"><div class="empty">選択してください</div></div>';
@@ -479,6 +794,7 @@
         </div>`;
       root.appendChild(card);
     });
+    flushPendingGoalAnimation();
   }
 
   document.addEventListener("click", async (e)=>{
