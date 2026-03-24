@@ -4443,6 +4443,11 @@ body.index-page .modal .btn {
   align-items: flex-start;
 }
 
+:where(.confirm-page) .confirm-summary-modal-list .line[hidden],
+:where(.report-entry-page) .report-submit-confirm-modal-list .line[hidden] {
+  display: none !important;
+}
+
 :where(.confirm-page) .confirm-summary-modal-list .v {
   font-size: var(--confirm-summary-modal-value-size) !important;
   font-weight: 900;
