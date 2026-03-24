@@ -198,6 +198,7 @@ function testPageWidthModifiersExist() {
   assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-countdown \{[\s\S]*font-size: var\(--confirm-summary-modal-countdown-size\);[\s\S]*line-height: 1\.15;[\s\S]*white-space: nowrap;/);
   assert.match(css, /:where\(\.confirm-page\) \.confirm-goal-card \{[\s\S]*overflow: hidden;[\s\S]*background:[\s\S]*linear-gradient\(90deg, rgba\(88, 194, 255, 0\.12\) 0%, rgba\(255, 255, 255, 0\.04\) 48%, rgba\(88, 194, 255, 0\.16\) 100%\),[\s\S]*linear-gradient\(180deg, #101827 0%, #121b31 48%, #0b1020 100%\) !important;/);
   assert.match(css, /:where\(\.confirm-page\) \.confirm-goal-card::before \{[\s\S]*background: linear-gradient\(110deg, transparent 18%, rgba\(255, 255, 255, 0\.10\) 29%, transparent 42%\);/);
+  assert.match(css, /:where\(\.confirm-page\) \.confirm-goal-card::after \{[\s\S]*border: 1px solid var\(--goal-frame-stroke\);[\s\S]*box-shadow:[\s\S]*0 0 0 1px var\(--goal-frame-shadow\);/);
   assert.doesNotMatch(css, /:where\(\.confirm-page\) \.confirm-goal-card::before \{[\s\S]*repeating-linear-gradient/);
   assert.match(css, /:where\(\.confirm-page\) \.confirm-goal-card\[data-goal-stage="rainbow"\] \{[\s\S]*--goal-fill-bg: linear-gradient\(90deg, #4fd6ff 0%, #4f76ff 18%, #ffd84a 36%, #54f485 54%, #ff5878 72%, #ff63f1 88%, #4fd6ff 100%\);/);
   assert.match(css, /:where\(\.confirm-page\) \.confirm-goal-track \{[\s\S]*height: 28px;[\s\S]*border-radius: 999px;/);
