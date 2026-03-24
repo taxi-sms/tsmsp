@@ -65,6 +65,8 @@ function testSharedShellRulesExist() {
   assert.match(css, /:where\(\.report-entry-page\) \.wf-row > \.btn,[\s\S]*:where\(\.report-entry-page\) \.wf-inline > \*,[\s\S]*min-width: 0;/);
   assert.match(css, /\.wf-row > \.btn \.btn-label \{[\s\S]*display: grid;[\s\S]*justify-items: center;[\s\S]*align-content: center;[\s\S]*inline-size: min\(100%, 4em\);[\s\S]*margin: 0 auto;[\s\S]*font-size: calc\(var\(--font-lg\) - 1px\);[\s\S]*word-break: normal;[\s\S]*overflow-wrap: normal;[\s\S]*line-height: 1\.15;[\s\S]*letter-spacing: -0\.02em;/);
   assert.match(css, /\.wf-row > \.btn \.btn-label-line \{[\s\S]*display: block;[\s\S]*inline-size: 100%;[\s\S]*text-align: center;[\s\S]*white-space: nowrap;/);
+  assert.match(css, /\.wf-row > \.btn \.btn-label\.is-balanced-4plus1 \.btn-label-line \{[\s\S]*display: grid;[\s\S]*grid-template-columns: repeat\(4, minmax\(0, 1fr\)\);[\s\S]*align-items: center;[\s\S]*justify-content: center;/);
+  assert.match(css, /\.wf-row > \.btn \.btn-label\.is-balanced-4plus1 \.btn-label-line\.is-single-char \.btn-label-char \{[\s\S]*grid-column: 2 \/ span 2;[\s\S]*justify-self: center;/);
   assert.match(css, /\.wf-row > \.btn\.is-label-long \.btn-label \{[\s\S]*font-size: var\(--font-md\);/);
   assert.match(css, /\.wf-row > \.btn\.is-label-xlong \.btn-label \{[\s\S]*font-size: calc\(var\(--font-md\) - 1px\);[\s\S]*line-height: 1\.1;/);
   assert.match(css, /:where\(\.report-entry-page\) \.keypad-grid \{[\s\S]*grid-template-columns: repeat\(4, 1fr\);/);
@@ -144,9 +146,12 @@ function testPageWidthModifiersExist() {
   assert.match(read("confirm.html"), /id="confirmSummaryModalCountdown"/);
   assert.match(read("report.html"), /id="submitConfirmModalBg"/);
   assert.match(read("report.html"), /function formatButtonLabelText\(text\) \{/);
+  assert.match(read("report.html"), /function isBalancedFourPlusOneLines\(lines\) \{/);
+  assert.match(read("report.html"), /function appendBalancedLabelChars\(line, lineText, lineIndex\) \{/);
   assert.match(read("report.html"), /function applyButtonLabelText\(label, text\) \{/);
   assert.match(read("report.html"), /return lines\.join\("\\n"\);/);
   assert.match(read("report.html"), /const first = dense\.slice\(0, 4\)\.join\(""\);/);
+  assert.match(read("report.html"), /label\.classList\.toggle\("is-balanced-4plus1", balancedFourPlusOne\);/);
   assert.match(read("report.html"), /btn\.setAttribute\("aria-label", labelMeta\.text\);/);
   assert.match(read("report.html"), /applyButtonLabelText\(label, labelMeta\.text\);/);
   assert.match(read("report.html"), /<button class="key small key-utility" type="button" data-key="back" aria-label="1文字削除">⌫<\/button>/);
