@@ -4489,20 +4489,14 @@ body.index-page .modal .btn {
   --goal-stage-main: #58c2ff;
   --goal-stage-accent: #386bff;
   --goal-stage-glow: rgba(88, 194, 255, 0.38);
-  --goal-frame-stroke: rgba(154, 191, 255, 0.24);
-  --goal-frame-shadow: rgba(5, 10, 18, 0.64);
   --goal-fill-bg: linear-gradient(90deg, #3a7dff 0%, #5ad4ff 52%, #c9f4ff 100%);
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   margin: 12px 0 10px !important;
-  padding: 16px 16px 14px !important;
+  padding: 18px 18px 16px !important;
   border: 1px solid rgba(117, 163, 255, 0.58) !important;
   border-radius: 22px !important;
-  background:
-    radial-gradient(circle at 14% 18%, rgba(88, 194, 255, 0.22), transparent 42%),
-    radial-gradient(circle at 84% 16%, rgba(167, 91, 255, 0.20), transparent 36%),
-    linear-gradient(90deg, rgba(88, 194, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 48%, rgba(88, 194, 255, 0.16) 100%),
-    linear-gradient(180deg, #101827 0%, #121b31 48%, #0b1020 100%) !important;
+  background: linear-gradient(180deg, #101827 0%, #121b31 48%, #0b1020 100%) !important;
   box-shadow:
     0 20px 44px rgba(0, 0, 0, 0.34) !important,
     inset 0 1px 0 rgba(255, 255, 255, 0.08) !important,
@@ -4514,26 +4508,18 @@ body.index-page .modal .btn {
 :where(.confirm-page) .confirm-goal-card::before {
   content: "";
   position: absolute;
-  inset: 0;
+  inset: 12px 14px 14px;
   z-index: 0;
-  background: linear-gradient(110deg, transparent 18%, rgba(255, 255, 255, 0.10) 29%, transparent 42%);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 18% 20%, rgba(88, 194, 255, 0.20), transparent 34%),
+    radial-gradient(circle at 82% 18%, rgba(167, 91, 255, 0.18), transparent 28%),
+    radial-gradient(circle at 24% 74%, rgba(88, 194, 255, 0.14), transparent 24%),
+    linear-gradient(90deg, rgba(88, 194, 255, 0.10) 0%, rgba(255, 255, 255, 0.03) 48%, rgba(88, 194, 255, 0.13) 100%),
+    linear-gradient(110deg, transparent 18%, rgba(255, 255, 255, 0.10) 29%, transparent 42%),
+    linear-gradient(180deg, rgba(24, 35, 52, 0.62), rgba(10, 18, 32, 0.04) 70%);
   mix-blend-mode: screen;
   opacity: 0.92;
-  pointer-events: none;
-}
-
-:where(.confirm-page) .confirm-goal-card::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  border-radius: inherit;
-  border: 1px solid var(--goal-frame-stroke);
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.05),
-    inset 0 0 26px rgba(255, 255, 255, 0.025),
-    inset 0 20px 28px rgba(255, 255, 255, 0.018),
-    0 0 0 1px var(--goal-frame-shadow);
   pointer-events: none;
 }
 
@@ -4541,7 +4527,6 @@ body.index-page .modal .btn {
   --goal-stage-main: #5dd0ff;
   --goal-stage-accent: #386bff;
   --goal-stage-glow: rgba(88, 194, 255, 0.48);
-  --goal-frame-stroke: rgba(132, 204, 255, 0.26);
   --goal-fill-bg: linear-gradient(90deg, #2f6dff 0%, #43acff 55%, #b8f5ff 100%);
 }
 
@@ -4549,7 +4534,6 @@ body.index-page .modal .btn {
   --goal-stage-main: #ffd84a;
   --goal-stage-accent: #ff9800;
   --goal-stage-glow: rgba(255, 211, 74, 0.48);
-  --goal-frame-stroke: rgba(255, 218, 94, 0.28);
   --goal-fill-bg: linear-gradient(90deg, #ff9d00 0%, #ffd84a 52%, #fff3b2 100%);
 }
 
@@ -4557,7 +4541,6 @@ body.index-page .modal .btn {
   --goal-stage-main: #48f38d;
   --goal-stage-accent: #1fb86f;
   --goal-stage-glow: rgba(72, 243, 141, 0.46);
-  --goal-frame-stroke: rgba(101, 246, 161, 0.27);
   --goal-fill-bg: linear-gradient(90deg, #139b66 0%, #45ef8a 50%, #dcffe8 100%);
 }
 
@@ -4565,7 +4548,6 @@ body.index-page .modal .btn {
   --goal-stage-main: #ff5878;
   --goal-stage-accent: #ffb248;
   --goal-stage-glow: rgba(255, 88, 120, 0.52);
-  --goal-frame-stroke: rgba(255, 130, 152, 0.30);
   --goal-fill-bg: linear-gradient(90deg, #ff3c5b 0%, #ff7a47 42%, #ffd25d 100%);
 }
 
@@ -4573,7 +4555,6 @@ body.index-page .modal .btn {
   --goal-stage-main: #ffffff;
   --goal-stage-accent: #ff48d9;
   --goal-stage-glow: rgba(255, 255, 255, 0.58);
-  --goal-frame-stroke: rgba(255, 255, 255, 0.34);
   --goal-fill-bg: linear-gradient(90deg, #4fd6ff 0%, #4f76ff 18%, #ffd84a 36%, #54f485 54%, #ff5878 72%, #ff63f1 88%, #4fd6ff 100%);
   box-shadow:
     0 22px 48px rgba(0, 0, 0, 0.36) !important,
@@ -4811,7 +4792,7 @@ body.index-page .modal .btn {
 }
 
 :where(.confirm-page) .confirm-goal-thresholds {
-  display: grid;
+  display: none;
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 6px;
   margin-top: 6px;
@@ -4919,8 +4900,13 @@ body.index-page .modal .btn {
 
 @media (max-width: 420px) {
   :where(.confirm-page) .confirm-goal-card {
-    padding: 14px 14px 13px !important;
+    padding: 16px 16px 14px !important;
     border-radius: 20px !important;
+  }
+
+  :where(.confirm-page) .confirm-goal-card::before {
+    inset: 11px 12px 12px;
+    border-radius: 16px;
   }
 
   :where(.confirm-page) .confirm-goal-head,
