@@ -53,7 +53,7 @@
       <p class="confirm-goal-eyebrow">概算収入ベース</p>
       <p class="confirm-goal-title">目標ゲージ</p>
     </div>
-    <div class="confirm-goal-stage" id="confirmGoalStage">STANDBY</div>
+    <div class="confirm-goal-stage" id="confirmGoalStage">NORMAL ZONE</div>
   </div>
   <div class="confirm-goal-values">
     <div class="confirm-goal-main">
@@ -231,7 +231,7 @@
 
   function goalStageLabel(stage){
     const hit = GOAL_ZONE_STEPS.find((step) => step.stage === stage);
-    return hit ? hit.label : "STANDBY";
+    return hit ? hit.label : "NORMAL ZONE";
   }
 
   function resolveGoalStage(ratio){

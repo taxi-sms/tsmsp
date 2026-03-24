@@ -4486,10 +4486,10 @@ body.index-page .modal .btn {
 }
 
 :where(.confirm-page) .confirm-goal-card {
-  --goal-stage-main: #58c2ff;
-  --goal-stage-accent: #386bff;
-  --goal-stage-glow: rgba(88, 194, 255, 0.38);
-  --goal-fill-bg: linear-gradient(90deg, #3a7dff 0%, #5ad4ff 52%, #c9f4ff 100%);
+  --goal-stage-main: #eef3fb;
+  --goal-stage-accent: #c9d3e2;
+  --goal-stage-glow: rgba(255, 255, 255, 0.18);
+  --goal-fill-bg: linear-gradient(90deg, #d7e0ed 0%, #edf3fa 54%, #ffffff 100%);
   position: relative;
   overflow: visible;
   margin: 12px 0 10px !important;
