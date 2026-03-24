@@ -264,7 +264,7 @@ body:where(.settings-report-legacy-page) {
 
 :where(.report-entry-page) .wf-row {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 8px;
 }
 
@@ -302,6 +302,7 @@ body:where(.settings-report-legacy-page) {
 :where(.report-entry-page) .wf-field {
   display: grid;
   gap: 6px;
+  min-width: 0;
 }
 
 :where(.report-entry-page) .wf-field-label {
@@ -311,6 +312,7 @@ body:where(.settings-report-legacy-page) {
 
 :where(.report-entry-page) .input {
   width: 100%;
+  min-width: 0;
   box-sizing: border-box;
   border: 2px solid var(--legacy-page-border);
   border-radius: 0;
@@ -322,16 +324,23 @@ body:where(.settings-report-legacy-page) {
 
 :where(.report-entry-page) .wf-actions {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
   margin-top: 6px;
 }
 
 :where(.report-entry-page) .wf-inline {
   display: grid;
-  grid-template-columns: 7fr 3fr;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 3fr);
   gap: 8px;
   align-items: end;
+}
+
+:where(.report-entry-page) .wf-row > .btn,
+:where(.report-entry-page) .wf-actions > .btn,
+:where(.report-entry-page) .wf-inline > *,
+:where(.report-entry-page) .wf-field > * {
+  min-width: 0;
 }
 
 .is-hidden {
@@ -1014,7 +1023,7 @@ body:where(.settings-report-legacy-page) {
 @media (max-width: 420px) {
   :where(.report-entry-page) .wf-row,
   :where(.settings-report-legacy-page) .wf-row {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
   :where(.report-entry-page) .btn,

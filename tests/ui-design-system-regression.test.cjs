@@ -59,6 +59,10 @@ function testSharedShellRulesExist() {
   assert.match(css, /\.table-wrap thead th \{[\s\S]*position: sticky;[\s\S]*top: 0;[\s\S]*z-index: 3;/);
   assert.match(css, /:root\[data-theme="dark"\] \.table-wrap thead th \{[\s\S]*box-shadow:/);
   assert.match(css, /\.wf-row > \.btn \{[\s\S]*aspect-ratio: var\(--choice-btn-ratio\);[\s\S]*min-height: var\(--choice-btn-min-h\);/);
+  assert.match(css, /:where\(\.report-entry-page\) \.wf-row \{[\s\S]*grid-template-columns: repeat\(4, minmax\(0, 1fr\)\);/);
+  assert.match(css, /:where\(\.report-entry-page\) \.wf-actions \{[\s\S]*grid-template-columns: repeat\(2, minmax\(0, 1fr\)\);/);
+  assert.match(css, /:where\(\.report-entry-page\) \.wf-inline \{[\s\S]*grid-template-columns: minmax\(0, 7fr\) minmax\(0, 3fr\);/);
+  assert.match(css, /:where\(\.report-entry-page\) \.wf-row > \.btn,[\s\S]*:where\(\.report-entry-page\) \.wf-inline > \*,[\s\S]*min-width: 0;/);
   assert.match(css, /\.wf-row > \.btn \.btn-label \{[\s\S]*display: grid;[\s\S]*justify-items: center;[\s\S]*align-content: center;[\s\S]*inline-size: min\(100%, 4em\);[\s\S]*margin: 0 auto;[\s\S]*font-size: calc\(var\(--font-lg\) - 1px\);[\s\S]*word-break: normal;[\s\S]*overflow-wrap: normal;[\s\S]*line-height: 1\.15;[\s\S]*letter-spacing: -0\.02em;/);
   assert.match(css, /\.wf-row > \.btn \.btn-label-line \{[\s\S]*display: block;[\s\S]*white-space: nowrap;/);
   assert.match(css, /\.wf-row > \.btn\.is-label-long \.btn-label \{[\s\S]*font-size: var\(--font-md\);/);
@@ -75,6 +79,7 @@ function testSharedShellRulesExist() {
   assert.match(css, /@media \(min-width: 768px\) \{[\s\S]*\.btn\.action-main \{ min-height: 132px; font-size: var\(--font-xl\); \}[\s\S]*\.btn\.reset-final \{ min-height: 144px; \}/);
   assert.match(css, /@media \(min-width: 376px\) and \(max-width: 767px\) \{[\s\S]*\.page-block-unified \.btn\.action-main,[\s\S]*min-height: 124px !important;[\s\S]*font-size: var\(--font-xl\) !important;[\s\S]*\.page-block-unified \.btn\.reset-final \{[\s\S]*min-height: 136px !important;/);
   assert.match(css, /@media \(min-width: 768px\) \{[\s\S]*\.page-block-unified \.btn\.action-main,[\s\S]*min-height: 132px !important;[\s\S]*font-size: var\(--font-xl\) !important;[\s\S]*\.page-block-unified \.btn\.reset-final \{[\s\S]*min-height: 144px !important;/);
+  assert.match(css, /@media \(max-width: 420px\) \{[\s\S]*:where\(\.report-entry-page\) \.wf-row,[\s\S]*grid-template-columns: repeat\(4, minmax\(0, 1fr\)\);/);
   assert.match(css, /@media \(max-width: 375px\) \{[\s\S]*\.tsms-bottom-nav a,[\s\S]*--bottom-nav-label-size: calc\(15px \* var\(--bottom-nav-size-scale\)\);[\s\S]*--bottom-nav-icon-size: calc\(28px \* var\(--bottom-nav-size-scale\)\);[\s\S]*--bottom-nav-item-gap: 1px;[\s\S]*--bottom-nav-item-pad-top: calc\(7px \* var\(--bottom-nav-size-scale\)\);[\s\S]*--bottom-nav-item-pad-bottom: calc\(8px \* var\(--bottom-nav-size-scale\)\);[\s\S]*min-height: calc\(54px \* var\(--bottom-nav-size-scale\)\);/);
   assert.match(css, /@media \(min-width: 768px\) \{[\s\S]*\.tsms-bottom-nav a,[\s\S]*--bottom-nav-label-size: calc\(17px \* var\(--bottom-nav-size-scale\)\);[\s\S]*--bottom-nav-icon-size: calc\(31px \* var\(--bottom-nav-size-scale\)\);/);
   assert.match(css, /\.main\[style\*="justify-content:center"\],\s*\.auth-main \{/);
