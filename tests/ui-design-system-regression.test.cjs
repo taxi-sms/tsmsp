@@ -110,14 +110,28 @@ function testPagesNoLongerCarryUnifiedShellBlocks() {
   assert.doesNotMatch(read("confirm.html"), /<style/);
   assert.doesNotMatch(read("detail.html"), /<style/);
   assert.doesNotMatch(read("settings2.html"), /<style/);
-  assert.doesNotMatch(read("sales.html"), /<style>\s*:root/);
+  assert.doesNotMatch(read("sales.html"), /<style/);
+  assert.doesNotMatch(read("ops.html"), /<style/);
+  assert.doesNotMatch(read("index.html"), /<style/);
+  assert.doesNotMatch(read("login.html"), /<style/);
+  assert.doesNotMatch(read("signup.html"), /<style/);
+  assert.doesNotMatch(read("reset-password.html"), /<style/);
+  assert.doesNotMatch(read("auth-callback.html"), /<style/);
+  assert.doesNotMatch(read("signup-check-email.html"), /<style/);
   assert.doesNotMatch(read("confirm.html"), /confirm-page-tweaks/);
   assert.doesNotMatch(read("detail.html"), /date-switcher label/);
 }
 
 function testPageWidthModifiersExist() {
-  assert.match(read("sales.html"), /<body class="page-block-unified page-main-xl">/);
   assert.match(read("settings.html"), /<body class="page-block-unified page-main-wide">/);
+  assert.match(read("index.html"), /<body class="page-block-unified index-page">/);
+  assert.match(read("ops.html"), /<body class="page-block-unified ops-page">/);
+  assert.match(read("sales.html"), /<body class="page-block-unified page-main-xl sales-page">/);
+  assert.match(read("login.html"), /<body class="auth-flow-page login-page">/);
+  assert.match(read("signup.html"), /<body class="auth-flow-page signup-page">/);
+  assert.match(read("reset-password.html"), /<body class="auth-flow-page reset-password-page">/);
+  assert.match(read("auth-callback.html"), /<body class="auth-flow-page auth-callback-page">/);
+  assert.match(read("signup-check-email.html"), /<body class="auth-flow-page signup-check-email-page">/);
   assert.match(read("index.html"), /<section class="card section-boxed" aria-label="勤務カレンダー">/);
   assert.match(read("confirm.html"), /<body class="page-block-unified confirm-page">/);
   assert.match(css, /:where\(\.confirm-page\) \.actions\.entry-actions \.actionBtn \{[\s\S]*min-height: 32px;[\s\S]*padding: 6px 10px;[\s\S]*font-size: var\(--font-md\);/);
@@ -134,7 +148,11 @@ function testPageWidthModifiersExist() {
   assert.match(read("report.html"), /<button class="key small key-utility" type="button" data-key="clear" aria-label="現在の金額をクリア">C<\/button>/);
   assert.match(read("report.html"), /<button class="key key-tall key-submit" type="button" data-key="submit">確定<\/button>/);
   assert.match(read("report.html"), /<button class="key key-wide" type="button" data-key="0">0<\/button>/);
-  assert.match(read("index.html"), /\.modal\{\s*width:min\(560px,100%\);[\s\S]*border:2px solid var\(--modal-shell-border\);[\s\S]*box-shadow:var\(--modal-shell-shadow\);/);
+  assert.match(css, /body\.index-page \.modal \{[\s\S]*width: min\(560px, 100%\);[\s\S]*border: var\(--line-strong\) solid var\(--modal-shell-border\);[\s\S]*box-shadow: var\(--modal-shell-shadow\);/);
+  assert.match(css, /body\.index-page \{[\s\S]*--work: #1c9b2d;[\s\S]*--holiday: #f0ad00;[\s\S]*--danger: #d64545;/);
+  assert.match(css, /body\.ops-page #btn_depart,[\s\S]*body\.ops-page #btn_return \{[\s\S]*font-size: clamp\(24px, 6vw, 28px\) !important;/);
+  assert.match(css, /body\.sales-page \.table-wrap \.target-input,[\s\S]*body\.sales-page \.table-wrap \.manual-input \{[\s\S]*font-size: 12px !important;/);
+  assert.match(css, /body\.auth-flow-page \.auth-main \{[\s\S]*min-height: calc\(100dvh - var\(--header-h\)\);[\s\S]*display: flex;/);
   assert.match(read("report.html"), /class="result-modal-card confirm-summary-modal-card report-submit-confirm-modal-card"/);
   assert.match(read("report.html"), /class="confirm-summary-modal-title report-submit-confirm-modal-title"/);
   assert.match(read("report.html"), /class="confirm-summary-modal-subtitle report-submit-confirm-modal-subtitle"/);

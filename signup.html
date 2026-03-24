@@ -9,82 +9,8 @@
   <meta name="theme-color" content="#ffffff">
   <script>(function(){try{var t=localStorage.getItem("tsms_theme")==="dark"?"dark":"light";document.documentElement.setAttribute("data-theme",t);var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content",t==="dark"?"#0F1417":"#F3F6F8");}catch(e){}})();</script>
   <link rel="stylesheet" href="./tsms-design.css?v=20260227-3">
-  <style id="signup-layout-tweaks">
-    main.auth-main{
-      max-width:520px;
-      min-height:calc(100dvh - var(--header-h));
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      gap:var(--space-2);
-    }
-    .auth-card{
-      border:var(--line-regular) solid var(--border)!important;
-      background:var(--surface-1)!important;
-      border-radius:var(--radius-md);
-      padding:var(--space-3)!important;
-      margin:0!important;
-      box-shadow:var(--shadow-sm);
-    }
-    .auth-title{
-      margin:0 0 var(--space-2);
-      font-size:var(--font-3xl);
-      line-height:1.35;
-      font-weight:900;
-      color:var(--text-primary);
-      text-transform:none;
-      letter-spacing:0;
-    }
-    .auth-muted{
-      font-size:var(--font-md);
-      color:var(--text-muted);
-      line-height:1.45;
-      margin:0 0 var(--space-3);
-    }
-    .auth-card .field{
-      border-bottom:0;
-      padding:0;
-      margin:0 0 var(--space-3);
-    }
-    .auth-card .label{font-size:var(--font-md)!important;}
-    .auth-card .input{font-size:var(--font-2xl)!important;}
-    .auth-card .btn{width:100%;}
-    .auth-msg{
-      margin-top:var(--space-3);
-      border:var(--line-regular) solid var(--border);
-      background:var(--surface-2);
-      border-radius:var(--radius-sm);
-      padding:var(--space-3);
-      white-space:pre-wrap;
-      font-size:var(--font-lg);
-      line-height:1.45;
-      min-height:44px;
-    }
-    .auth-links{
-      display:flex;
-      gap:var(--space-3);
-      margin-top:var(--space-3);
-      flex-wrap:wrap;
-      font-size:var(--font-lg);
-    }
-    .auth-consent{
-      display:flex;
-      gap:8px;
-      align-items:flex-start;
-      margin:0 0 var(--space-3);
-      font-size:var(--font-md);
-      color:var(--text-secondary);
-      line-height:1.45;
-    }
-    .auth-consent input{
-      margin-top:3px;
-      width:18px;
-      height:18px;
-      flex:0 0 auto;
-    }
-  </style>
 </head>
-<body>
+<body class="auth-flow-page signup-page">
   <header class="header">新規登録</header>
   <main class="main auth-main">
     <section class="auth-card">
