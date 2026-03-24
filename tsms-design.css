@@ -4438,7 +4438,13 @@ body.index-page .modal .btn {
   gap: 0;
 }
 
-:where(.confirm-page) .confirm-summary-modal-list .line,
+:where(.confirm-page) .confirm-summary-modal-list .line {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  align-items: baseline;
+  column-gap: var(--space-3);
+}
+
 :where(.report-entry-page) .report-submit-confirm-modal-list .line {
   align-items: flex-start;
 }
@@ -4452,9 +4458,12 @@ body.index-page .modal .btn {
   font-size: var(--confirm-summary-modal-value-size) !important;
   font-weight: 900;
   line-height: 1.15 !important;
-  white-space: nowrap;
+  min-width: 0;
+  max-width: 100%;
+  justify-self: end;
+  white-space: normal;
   word-break: normal;
-  overflow-wrap: normal;
+  overflow-wrap: anywhere;
 }
 
 :where(.confirm-page) .confirm-summary-modal-list .k {
@@ -4462,6 +4471,7 @@ body.index-page .modal .btn {
   font-weight: 800;
   color: var(--text-muted) !important;
   line-height: 1.2 !important;
+  min-width: 0;
   white-space: nowrap;
 }
 
