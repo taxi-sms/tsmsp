@@ -184,6 +184,7 @@
   const CURRENT_DAY_KEY = "tsms_report_current_day";
   const CONFIRM_FORCE_EMPTY_KEY = "tsms_confirm_force_empty";
   const CONFIRM_SUMMARY_MODAL_KEY = "tsms_confirm_summary_modal_v1";
+  const SETTINGS_KEY = "tsms_settings";
   const reportFieldSettingsApi = window.tsmsReportFieldSettings || null;
   const reportFieldConfig = reportFieldSettingsApi
     ? reportFieldSettingsApi.runtime()
@@ -503,6 +504,24 @@
     } catch (_) {
       return fallback;
     }
+  }
+
+  function estimateEntryTakeHome(entryLike) {
+    const entry = entryLike && typeof entryLike === "object" ? entryLike : {};
+    const settings = Object.assign({ taxRate: 10, feeRate: 4, goFeeYen: 100, walkRate: 50 }, loadJson(SETTINGS_KEY, {}));
+    const cash = Number(entry.cash) || 0;
+    const credit = Number(entry.credit) || 0;
+    const gross = cash + credit;
+    const payMethod = String(entry.payMethod || "");
+    const rideType = String(entry.rideType || "");
+    const feeBase = ["QR", "クレカ", "電子M"].includes(payMethod) ? gross : 0;
+    const fee = feeBase * (Number(settings.feeRate) || 0) / 100;
+    const goFee = rideType === "GO" && !["GO pay", "GO Pay"].includes(payMethod)
+      ? (Number(settings.goFeeYen) || 0)
+      : 0;
+    const salesInTax = gross - fee - goFee;
+    const salesExTax = salesInTax / (1 + (Number(settings.taxRate) || 0) / 100);
+    return Math.round(salesExTax * (Number(settings.walkRate) || 0) / 100);
   }
 
   function getCurrentDayId() {
@@ -2131,6 +2150,7 @@ ${remaining}秒後に${countdownLabel}`;
     const editId = params.get("edit");
     const editTestId = params.get("editTest");
     const saveAsTest = !!editTestId || (!editId && !hasLiveWorkState());
+    const entryTakeHome = estimateEntryTakeHome(entry);
 
     if (saveAsTest && !editTestId) {
       if (!(await window.tsmsConfirm("まだ出庫していません。テストデータとして保存しますか？"))) return;
@@ -2138,10 +2158,12 @@ ${remaining}秒後に${countdownLabel}`;
 
     let list = saveAsTest ? loadTestReports() : loadReports();
     const targetEditId = saveAsTest ? editTestId : editId;
+    let previousEntryTakeHome = 0;
 
     if (targetEditId) {
       const idx = list.findIndex((x) => x.id === targetEditId);
       if (idx >= 0) {
+        previousEntryTakeHome = estimateEntryTakeHome(list[idx]);
         entry.id = targetEditId;
         list[idx] = entry;
       } else {
@@ -2172,7 +2194,8 @@ ${remaining}秒後に${countdownLabel}`;
       try{
         sessionStorage.setItem(CONFIRM_SUMMARY_MODAL_KEY, JSON.stringify({
           dayId: entry.dayId,
-          ts: Date.now()
+          ts: Date.now(),
+          deltaTakeHome: entryTakeHome - previousEntryTakeHome
         }));
       }catch(_){}
       await showResultModal(saveAsTest ? "テストデータを保存しました" : "登録が完了しました", successAutoRedirectSeconds > 0 ? { autoCloseSeconds: successAutoRedirectSeconds, countdownLabel: "入力確認画面へ移動します" } : undefined);
