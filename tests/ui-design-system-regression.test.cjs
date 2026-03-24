@@ -182,6 +182,7 @@ function testPageWidthModifiersExist() {
   assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-subtitle \{[\s\S]*font-size: var\(--confirm-summary-modal-subtitle-size\);[\s\S]*line-height: 1\.2;[\s\S]*white-space: nowrap;/);
   assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-countdown \{/);
   assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-countdown \{[\s\S]*font-size: var\(--confirm-summary-modal-countdown-size\);[\s\S]*line-height: 1\.15;[\s\S]*white-space: nowrap;/);
+  assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-list \.line\[hidden\],\s*:where\(\.report-entry-page\) \.report-submit-confirm-modal-list \.line\[hidden\] \{[\s\S]*display: none !important;/);
   assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-list \.k \{[\s\S]*font-size: var\(--confirm-summary-modal-label-size\) !important;[\s\S]*font-weight: 800;[\s\S]*line-height: 1\.2 !important;[\s\S]*white-space: nowrap;/);
   assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-list \.v \{[\s\S]*font-size: var\(--confirm-summary-modal-value-size\) !important;[\s\S]*font-weight: 900;[\s\S]*line-height: 1\.15 !important;[\s\S]*white-space: nowrap;[\s\S]*overflow-wrap: normal;/);
   assert.match(css, /:where\(\.confirm-page\) \.confirm-summary-modal-list \.v \.value-number\.emphasis,\s*:where\(\.report-entry-page\) \.report-submit-confirm-modal-list \.v \.value-number\.emphasis \{/);
