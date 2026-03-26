@@ -83,6 +83,10 @@
   </div>
   <div class="confirm-goal-meta">
     <div class="confirm-goal-meta-chip">
+      <span class="confirm-goal-meta-label" id="confirmGoalCountLabel">件数</span>
+      <span class="confirm-goal-meta-value" id="confirmGoalCountValue">0件</span>
+    </div>
+    <div class="confirm-goal-meta-chip">
       <span class="confirm-goal-meta-label" id="confirmGoalRemainLabel">残り</span>
       <span class="confirm-goal-meta-value" id="confirmGoalRemainValue">0円</span>
     </div>
@@ -150,6 +154,8 @@
   const confirmGoalFill = document.getElementById("confirmGoalFill");
   const confirmGoalFlare = document.getElementById("confirmGoalFlare");
   const confirmGoalShot = document.getElementById("confirmGoalShot");
+  const confirmGoalCountLabel = document.getElementById("confirmGoalCountLabel");
+  const confirmGoalCountValue = document.getElementById("confirmGoalCountValue");
   const confirmGoalRemainLabel = document.getElementById("confirmGoalRemainLabel");
   const confirmGoalRemainValue = document.getElementById("confirmGoalRemainValue");
   const confirmGoalDeltaChip = document.getElementById("confirmGoalDeltaChip");
@@ -410,6 +416,7 @@
       dayId: targetDayId,
       targetIncome,
       currentIncome,
+      tripCount: Math.max(0, Math.round(summary ? summary.tripCount : 0)),
       ratioRaw,
       fillRatio,
       remainIncome,
@@ -448,10 +455,11 @@
   }
 
   function updateGoalCardMetrics(progress, currentIncomeOverride, ratioOverride){
-    if(!confirmGoalCard || !confirmGoalStage || !confirmGoalCurrentValue || !confirmGoalTargetValue || !confirmGoalPercent || !confirmGoalFill || !confirmGoalRemainLabel || !confirmGoalRemainValue || !confirmGoalNote) return;
+    if(!confirmGoalCard || !confirmGoalStage || !confirmGoalCurrentValue || !confirmGoalTargetValue || !confirmGoalPercent || !confirmGoalFill || !confirmGoalCountLabel || !confirmGoalCountValue || !confirmGoalRemainLabel || !confirmGoalRemainValue || !confirmGoalNote) return;
     if(!progress) return;
     const targetIncome = Math.max(0, Math.round(progress && progress.targetIncome));
     const currentIncome = Math.max(0, Math.round(currentIncomeOverride == null ? progress.currentIncome : currentIncomeOverride));
+    const tripCount = Math.max(0, Math.round(progress && progress.tripCount));
     const ratioRaw = targetIncome > 0
       ? (ratioOverride == null ? num(progress.ratioRaw) : num(ratioOverride))
       : 0;
@@ -470,6 +478,8 @@
     confirmGoalStage.textContent = goalStageLabel(stage);
     confirmGoalCurrentValue.textContent = yenNumber(currentIncome);
     confirmGoalTargetValue.textContent = targetIncome > 0 ? yenNumber(targetIncome) : "--";
+    confirmGoalCountLabel.textContent = "件数";
+    confirmGoalCountValue.textContent = `${tripCount}件`;
     confirmGoalPercent.textContent = `${Math.max(0, ratioRaw * 100).toFixed(1)}%`;
     confirmGoalFill.style.width = `${fillPct}%`;
     confirmGoalFill.style.setProperty("--goal-fill-progress", `${fillPct}%`);
