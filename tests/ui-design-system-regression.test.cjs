@@ -349,6 +349,9 @@ function testOpsBreakTimerPlacementAndButtonSizing() {
 
   assert.match(ops, /<button class="btn action-main" type="button" id="btn_breakStart">休憩開始<\/button>[\s\S]*<button class="btn action-main" type="button" id="btn_breakEnd">休憩解除<\/button>[\s\S]*<div class="ops-break-timer ops-stack-gap" aria-live="polite">/);
   assert.doesNotMatch(ops, /<div class="line"><div class="k">休憩タイマー<\/div><div class="v"><span id="v_breakTimer" class="ops-timer-value">0:00<\/span><\/div><\/div>/);
+  assert.doesNotMatch(ops, /実働（参考）/);
+  assert.doesNotMatch(ops, /id="v_work"/);
+  assert.doesNotMatch(ops, /function calcWorkMinutes\(d\)/);
   assert.match(css, /body\.ops-page \.ops-break-timer \{[\s\S]*display: flex;[\s\S]*justify-content: space-between;[\s\S]*padding: 16px 18px;/);
   assert.match(css, /body\.ops-page \.ops-timer-value \{[\s\S]*font-size: clamp\(24px, 6\.4vw, 30px\);[\s\S]*color: var\(--accent\);/);
   assert.match(css, /body\.ops-page #btn_depart,[\s\S]*body\.ops-page #btn_return,[\s\S]*body\.ops-page #btn_breakStart,[\s\S]*body\.ops-page #btn_breakEnd \{[\s\S]*line-height: 1\.15;/);
