@@ -69,7 +69,6 @@
 
     <div class="content ops-stack-gap">
       <div class="line"><div class="k">休憩合計</div><div class="v" id="v_break">--</div></div>
-      <div class="line"><div class="k">実働（参考）</div><div class="v" id="v_work">--</div></div>
       <div class="line"><div class="k">休憩状態</div><div class="v"><span class="pill" id="v_breakState">未休憩</span></div></div>
     </div>
 
@@ -307,17 +306,9 @@ function calcBreakTotal(d){
   return (d.breakSessions||[]).reduce((s,x)=>s+(Number(x.minutes)||0),0);
 }
 
-function calcWorkMinutes(d){
-  if(!d.departAt || !d.returnAt) return null;
-  const total = minDiff(d.departAt, d.returnAt);
-  const br = calcBreakTotal(d);
-  return Math.max(0, total - br);
-}
-
 const vDepart = document.getElementById("v_depart");
 const vReturn = document.getElementById("v_return");
 const vBreak = document.getElementById("v_break");
-const vWork = document.getElementById("v_work");
 const vBreakState = document.getElementById("v_breakState");
 const vBreakTimer = document.getElementById("v_breakTimer");
 const breakList = document.getElementById("breakList");
@@ -420,9 +411,6 @@ function render(){
 
   const brMin = calcBreakTotal(d);
   vBreak.textContent = fmtMin(brMin);
-
-  const workMin = calcWorkMinutes(d);
-  vWork.textContent = (workMin === null) ? "--" : fmtMin(workMin);
 
   if(d.breakActive){
     vBreakState.textContent = "休憩中";
