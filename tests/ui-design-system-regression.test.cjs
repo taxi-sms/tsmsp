@@ -174,7 +174,7 @@ function testPageWidthModifiersExist() {
   assert.match(read("report.html"), /<button class="key key-wide" type="button" data-key="0">0<\/button>/);
   assert.match(css, /body\.index-page \.modal \{[\s\S]*width: min\(560px, 100%\);[\s\S]*border: var\(--line-strong\) solid var\(--modal-shell-border\);[\s\S]*box-shadow: var\(--modal-shell-shadow\);/);
   assert.match(css, /body\.index-page \{[\s\S]*--work: #1c9b2d;[\s\S]*--holiday: #f0ad00;[\s\S]*--danger: #d64545;/);
-  assert.match(css, /body\.ops-page #btn_depart,[\s\S]*body\.ops-page #btn_return \{[\s\S]*font-size: clamp\(24px, 6vw, 28px\) !important;/);
+  assert.match(css, /body\.ops-page #btn_depart,[\s\S]*body\.ops-page #btn_return,[\s\S]*body\.ops-page #btn_breakStart,[\s\S]*body\.ops-page #btn_breakEnd \{[\s\S]*line-height: 1\.15;/);
   assert.match(css, /body\.sales-page \.table-wrap \.target-input,[\s\S]*body\.sales-page \.table-wrap \.manual-input \{[\s\S]*font-size: 12px !important;/);
   assert.match(css, /body\.auth-flow-page \.auth-main \{[\s\S]*min-height: calc\(100dvh - var\(--header-h\)\);[\s\S]*display: flex;/);
   assert.match(read("report.html"), /class="result-modal-card confirm-summary-modal-card report-submit-confirm-modal-card"/);
@@ -344,6 +344,17 @@ function testDesignSystemDocExists() {
   assert.match(doc, /Forbidden Patterns/);
 }
 
+function testOpsBreakTimerPlacementAndButtonSizing() {
+  const ops = read("ops.html");
+
+  assert.match(ops, /<button class="btn action-main" type="button" id="btn_breakStart">休憩開始<\/button>[\s\S]*<button class="btn action-main" type="button" id="btn_breakEnd">休憩解除<\/button>[\s\S]*<div class="ops-break-timer ops-stack-gap" aria-live="polite">/);
+  assert.doesNotMatch(ops, /<div class="line"><div class="k">休憩タイマー<\/div><div class="v"><span id="v_breakTimer" class="ops-timer-value">0:00<\/span><\/div><\/div>/);
+  assert.match(css, /body\.ops-page \.ops-break-timer \{[\s\S]*display: flex;[\s\S]*justify-content: space-between;[\s\S]*padding: 16px 18px;/);
+  assert.match(css, /body\.ops-page \.ops-timer-value \{[\s\S]*font-size: clamp\(24px, 6\.4vw, 30px\);[\s\S]*color: var\(--accent\);/);
+  assert.match(css, /body\.ops-page #btn_depart,[\s\S]*body\.ops-page #btn_return,[\s\S]*body\.ops-page #btn_breakStart,[\s\S]*body\.ops-page #btn_breakEnd \{[\s\S]*line-height: 1\.15;/);
+  assert.doesNotMatch(css, /body\.ops-page #btn_depart,[\s\S]*body\.ops-page #btn_return \{[\s\S]*font-size:/);
+}
+
 function runTests() {
   const tests = [
     ["共通シェル定義", testSharedShellRulesExist],
@@ -356,7 +367,8 @@ function runTests() {
     ["主要画面の状態表示文法", testPagesUseSharedStateDisplayGrammar],
     ["設定ハブページ追加", testSettingsHubPagesExist],
     ["設定導線のハブ化", testSettingsNavigationPointsToHub],
-    ["デザインルール文書", testDesignSystemDocExists]
+    ["デザインルール文書", testDesignSystemDocExists],
+    ["OPS 休憩タイマー配置", testOpsBreakTimerPlacementAndButtonSizing]
   ];
 
   let passed = 0;

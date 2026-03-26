@@ -62,11 +62,15 @@
       <button class="btn action-main" type="button" id="btn_breakEnd">休憩解除</button>
     </div>
 
+    <div class="ops-break-timer ops-stack-gap" aria-live="polite">
+      <span class="ops-break-timer-label">休憩タイマー</span>
+      <span id="v_breakTimer" class="ops-timer-value">0:00</span>
+    </div>
+
     <div class="content ops-stack-gap">
       <div class="line"><div class="k">休憩合計</div><div class="v" id="v_break">--</div></div>
       <div class="line"><div class="k">実働（参考）</div><div class="v" id="v_work">--</div></div>
       <div class="line"><div class="k">休憩状態</div><div class="v"><span class="pill" id="v_breakState">未休憩</span></div></div>
-      <div class="line"><div class="k">休憩タイマー</div><div class="v"><span id="v_breakTimer" class="ops-timer-value">0:00</span></div></div>
     </div>
 
     <div class="actions">
