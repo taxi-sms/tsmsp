@@ -153,6 +153,8 @@ function testPageWidthModifiersExist() {
   assert.match(read("confirm.html"), /function buildGoalProgress\(dayId\)\{/);
   assert.match(read("confirm.html"), /tripCount: Math\.max\(0, Math\.round\(summary \? summary\.tripCount : 0\)\),/);
   assert.match(read("confirm.html"), /confirmGoalCountValue\.textContent = `\$\{tripCount\}件`;/);
+  assert.match(read("confirm.html"), /confirmGoalRemainLabel\.textContent = "上乗せ";/);
+  assert.doesNotMatch(read("confirm.html"), /confirmGoalRemainLabel\.textContent = "超過";/);
   assert.match(read("confirm.html"), /function renderGoalProgressCard\(dayId\)\{/);
   assert.match(read("confirm.html"), /function animateGoalProgress\(progress, deltaIncome\)\{/);
   assert.match(read("confirm.html"), /pendingGoalAnimationPayload = \{\s*dayId,\s*deltaTakeHome: Math\.round\(num\(payload && payload\.deltaTakeHome\)\)\s*\};/);
