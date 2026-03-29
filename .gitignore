@@ -1,3 +1,10 @@
 .DS_Store
 supabase/env/stg.env
 supabase/env/prod.env
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example
